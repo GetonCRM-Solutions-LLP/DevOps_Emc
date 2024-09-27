@@ -1,0 +1,69 @@
+# Lines starting with '#' are comments.
+# Each line is a file pattern followed by one or more owners.
+# The '*' pattern is global owners.
+
+# These are the default owners for the whole content of the `EMC_DevOps_Project` repository. The default owners are automatically added as reviewers when you open a pull request, unless different owners are specified in the file.
+*         @MeghaS-mobio @harsitagetoncrm
+
+# github folder owner
+*/.github/  @MeghaS-mobio @harsitagetoncrm
+
+# Review for all pull requests
+*         @MeghaS-mobio @harsitagetoncrm
+
+# JavaScript files require approval from the JS team.
+*.js      @MeghaS-mobio
+
+# Any changes in the `/aura` directory will require approval from lwc-dev-team.
+force-app/main/default/aura/*               @MeghaS-mobio 
+
+# Any changes in the `/components` directory will require approval from lwc-dev-team.
+force-app/main/default/components/*               @MeghaS-mobio
+
+# Any changes in the `/lwc` directory will require approval from lwc-dev-team.
+force-app/main/default/lwc/*               @MeghaS-mobio
+
+# Any changes in the `/flow` directory will require approval from lwc-dev-team.
+force-app/main/default/flow/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/classes` directory will require approval from lwc-dev-team.
+force-app/main/default/classes/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/objects` directory will require approval.
+force-app/main/default/objects/*               @harsitagetoncrm
+
+# Any changes in the `/profile` directory will require approval.
+force-app/main/default/profile/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/permissionsets` directory will require approval.
+force-app/main/default/permissionsets/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/triggers` directory will require approval.
+force-app/main/default/triggers/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/customMetadata` directory will require approval.
+force-app/main/default/customMetadata/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/labels` directory will require approval.
+force-app/main/default/labels/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/workflows` directory will require approval.
+force-app/main/default/workflows/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/remoteSiteSettings` directory will require approval.
+force-app/main/default/remoteSiteSettings/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/reports` directory will require approval.
+force-app/main/default/reports/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/connectedApps` directory will require approval.
+force-app/main/default/connectedApps/*               @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/email` directory is owned by the media team.
+force-app/main/default/email/*   @MeghaS-mobio @harsitagetoncrm
+
+# Any changes in the `/staticresources` directory is owned by the media team.
+force-app/main/default/staticresources/*   @MeghaS-mobio @harsitagetoncrm
+
+# All .page files
+force-app/main/default/pages/*   @MeghaS-mobio
