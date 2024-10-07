@@ -1,0 +1,347 @@
+<template>
+    <c-file-upload-spinner show-spinner={isSpinner}></c-file-upload-spinner>
+    <template lwc:if={promiseError}>
+        <c-m-burse-error message={errorMessage}></c-m-burse-error>
+    </template>
+    <template lwc:if={isUploadShow}>
+        <div class="transition">
+            <div>
+                <c-m-burse-header-text head-text="Step 2">
+                    <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Upload Insurance</div>
+                </c-m-burse-header-text>
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style">Please <strong>upload your
+                    Insurance Declaration Page</strong><br/>
+                not your Insurance Card.
+            </div>
+            <div class="m-left m-right">
+                <form class="box has-advanced-upload" enctype="multipart/form-data" method="post" action=""  ondragover={onDrag} ondragleave={onDragLeave}  ondrop={handleDropFile}>
+                    <div 
+                        class="box__input" id="box__input">
+                        <template  lwc:if={isVisible}>
+                            <div class="box__img">
+                                <img  src={fileSuccess} >
+                            </div>
+                        </template>
+                        <template  lwc:else>
+                            <div class="file-upload-img">
+                                <img  src={fileUpload} >
+                            </div>
+                        </template>
+                        <!-- <svg height="43" viewBox="0 0 566.93 566.93" width="50" class="box__icon" lwc:else={isVisible}>
+                            <path class="b"
+                                d="M51.12,332.94c-10.67,.11-20.45,9.83-20.24,20.47v139.22c0,10.57,9.64,20.18,20.24,20.18h464.68c10.59,0,20.24-9.62,20.24-20.18v-139.22c.16-10.67-9.54-20.47-20.24-20.47s-20.39,9.8-20.24,20.47v119.03H71.36v-119.03c.24-10.78-9.43-20.58-20.24-20.47Z">
+                            </path>
+                            <path class="b"
+                                d="M283.44,38.12c-4.82,.18-10.41,2.19-13.91,5.48l-114.67,107.93c-6.56,7.32-9.27,21.34-1.69,29.51,7.48,8.06,22,7.8,29.51-.21l80.53-75.89V394.14c0,11.17,9.06,20.24,20.24,20.24s20.24-9.06,20.24-20.24V104.94l80.53,75.89c6.93,6.9,21.95,8.19,29.51,.21,7.56-7.96,5.14-22.5-1.69-29.51l-114.67-107.93c-3.93-3.69-8.54-5.48-13.91-5.48h0Z">
+                            </path>
+                        </svg> -->
+                        <template  lwc:if={isVisible}>
+                            <div class="box__upload">
+                                <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-blue waves-light" onclick={uploadFileInChunk}>
+                                    Upload
+                                </button>
+                            </div>
+                        </template>
+                        <template  lwc:else>
+                            <div class="box__container slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light">
+                                <span>Choose file to upload</span>
+                                <input accept="application/pdf"
+                                class="box__file" id="file" name="file" type="file" onchange={fileChanged}/>
+                            </div>
+                        </template>
+                        <div>
+                            <label class="w-100 text-center pd-10 file-message" for="file">{fileName}
+                                <span style="color: #6C6C6C; margin-left: 14px;">{fSize}</span>
+                            </label>
+                            <label class="w-100 text-center error-text" for="file-error" lwc:if={isError}>
+                                <i class="fa-solid fa-circle-exclamation"></i>  {errorUploading}
+                            </label>
+                        </div>
+                    </div>
+                    <span class="box__dragndrop slds-align_absolute-center"> or drag and drop files here</span>
+                </form>
+            </div>
+        
+            <div class="slds-clearfix slds-p-top_x-large slds-p-bottom_small" style="display: flex;">
+                <div class="footer-button slds-float_left mright-0 m-left">
+                    <!-- <template lwc:if={nextPacketShow}>
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"
+                            onclick={nextDriverPacket} lwc:else={isVisible}>
+                            Next Sign Driver Packet
+                        </button>
+                    </template> -->
+                    <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                        <template  lwc:if={isVisible}>
+                            <li class="slds-item navigate">
+                                <a title="Back"
+                                name="buttonBackwards"
+                                label="Previous" 
+                                onclick={backToPage}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </template>
+                        <template  lwc:else>
+                            <li class="slds-item navigate">
+                                <a 
+                                name="buttonBackwards"
+                                label="Previous" 
+                                title="Back" 
+                                onclick={backToPrevious}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                    <!-- <div class="back_to_previous" lwc:if={isVisible}>
+                        <a class="font-s" onclick={backToPage}><i class="fa-solid fa-angle-left"></i> Back</a>
+                    </div> -->
+                    <!-- <div  lwc:else={isVisible}>
+                         <div class="back_to_previous slds-float_left">
+                            <a class="font-ms" onclick={backToPrevious}><i class="fa-solid fa-angle-left"></i> Back</a>
+                        </div>
+                        <div class="back_to_previous marginl-px slds-float_right" lwc:else={nextShow}>
+                            <a class="font-ms" onclick={skipToPage}>Skip<i class="fa-solid fa-angle-right"></i></a>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="footer-text m-left">
+                    <div class="slds-col slds-size_4-of-4">
+                        <div class="insurance slds-p-horizontal_x-large slds-p-bottom_small slds-p-top_large">
+                            <div class="insurance-header">My policy auto insurance minimums are:</div>
+                            <div class="slds-m-top_medium">
+                                <table
+                                    class="slds-table slds-table_cell-buffer slds-table_header-hidden bordered-table">
+                                    <template lwc:if={client.bodilyInjury}>
+                                        <tr>
+                                            <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                            <td>Bodily Injury</td>
+                                            <td>
+                                             ${client.bodilyInjury}
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template lwc:if={client.unInsuranceMotorist}>
+                                        <tr>
+                                            <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                            <td>Uninsured Motorist</td>
+                                            <td>
+                                                ${client.unInsuranceMotorist}
+                                                <!-- <lightning-formatted-number value={client.unInsuranceMotorist}
+                                                    format-style="currency" currency-code="USD">
+                                                </lightning-formatted-number> -->
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Property Damage</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.propertyDamage}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Comprehensive Deductible</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.comprehensive}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Collision Deductible</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.collision}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <template lwc:if={client.umbrella}>
+                                        <tr>
+                                            <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                            <td>Umbrella Coverage</td>
+                                            <td>
+                                                <lightning-formatted-number value={client.umbrella}
+                                                    format-style="currency" currency-code="USD"
+                                                    minimum-fraction-digits="0">
+                                                </lightning-formatted-number>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <template lwc:if={isVisible}>
+                </template>
+                <template lwc:else>
+                    <div class="footer-button slds-float_right m-left m-right">
+                        <template lwc:if={nextShow}>
+                        </template>
+                        <template lwc:else>
+                            <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item navigate">
+                                    <a title="Skip this step"
+                                    name="buttonBackwards"
+                                    label="Previous"  
+                                    onclick={skipToPage}  >
+                                    <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </template>
+                    </div>
+                </template>
+                <!-- <div class="back_to_previous marginl-px slds-float_right" lwc:else={nextShow}>
+                    <a class="font-ms" onclick={skipToPage}>Skip this step<i class="fa-solid fa-angle-right"></i></a>
+                </div> -->
+            </div>
+            <!-- <div class="slds-clearfix slds-p-top_x-large m-left m-right">
+                <div class="insurance-text slds-p-bottom_small font-color"><strong>Make sure your insurance information includes your name, insured vehicle, level of insurance,
+                        and coverage dates.</strong>
+                </div> 
+                <div class="footer-text slds-float_left">
+                    <div class="font-color"><strong>Your company insurance minimums are:</strong>
+                        <table class="slds-m-top_x-small">
+                            <tbody>
+                            <tr>
+                                <td>Bodily Injury</td>
+                                <td>${client.bodilyInjury}</td>
+                            </tr>
+                            <tr>
+                                <td>Uninsured Motorist</td>
+                                <td>${client.unInsuranceMotorist}</td>
+                            </tr>
+                            <tr>
+                                <td>Property Damage</td>
+                                <td>$<lightning-formatted-number value={client.propertyDamage}></lightning-formatted-number></td>
+                            </tr>
+                            <tr>
+                                <td>Comprehensive Deductible</td>
+                                <td>$<lightning-formatted-number value={client.comprehensive}></lightning-formatted-number></td>
+                            </tr>
+                            <tr>
+                                <td>Collision Deductible</td>
+                                <td>$<lightning-formatted-number value={client.collision}></lightning-formatted-number></td>
+                            </tr>
+                            <tr lwc:if={client.umbrella}>
+                                <td>Umbrella Coverage</td>
+                                <td>$<lightning-formatted-number value={client.umbrella}></lightning-formatted-number></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>-->
+    </div>
+
+    </template>
+    <template lwc:elseif={isUploadSkip}>
+        <div class="transition">
+            <div>
+                <c-m-burse-header-text head-text="Step 2">
+                    <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Skipped Upload Insurance</div>
+                </c-m-burse-header-text>
+                <div class="slds-text-heading_small slds-text-align_center slds-p-top_small slds-p-bottom_x-large font-style">An email was sent summarizing <strong>below</strong> 
+                </div>
+            </div>
+            <div class="m-left m-right p_top summary">
+                <lightning-layout horizontal-align="space">
+                    <lightning-layout-item padding="around-large" size="6">
+                        <div>
+                            <div class="slds-p-bottom_x-small font"><strong>You can upload your insurance at a later date:</strong></div>
+                            <ul class="slds-list_dotted font-color">
+                                <li>Here in the portal</li>
+                                <li>By providing the documentation to your plan administrator</li>
+                                <li>By sending them to Driver Services</li>
+                            </ul>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="slds-p-vertical_large">
+                        <div class="text-divider"></div>
+                    </lightning-layout-item>
+                    <lightning-layout-item class="slds-p-left_xx-large slds-p-top_large slds-p-bottom_large slds-p-right_large">
+                        <div>
+                            <div class="slds-size_9-of-12 slds-p-bottom_small right-text">You have 30 days from today to submit your vehicle car insurance documentation.</div>
+                            <div class="slds-size_9-of-12 slds-p-bottom_small right-text">If you do not submit your insurance information you will forfeit your fixed amount (car allowance) until you do so.</div>
+                        </div>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </div>
+          
+            <div class="slds-clearfix slds-p-top_x-large m-left m-right">
+                <div class="footer-button mright-0 mleft-0" style="display:flex">
+                    <div>
+                        <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                            <li class="slds-item navigate">
+                                <a title="Back"
+                                name="buttonBackwards"
+                                label="Previous" 
+                                onclick={backToPrevious}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- <div class="back_to_previous slds-float_left">
+                            <a class="font-ms" onclick={backToPrevious}><i class="fa-solid fa-angle-left"></i> <span>  Back</span></a>
+                        </div> -->
+                    </div>
+                    <div class="slds-align_absolute-center">
+                        <template lwc:if={packet}>
+                            <template lwc:if={dPacket}>
+                                <!-- <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={redirectToDashboard} lwc:else={afterRegister}>
+                                    {renderText}
+                                </button> -->
+                                <template lwc:if={allowRedirect}>
+                                    <button class="slds-btn bc-outline slds-btn-sm waves-effect bc-blue waves-light packet_btn"
+                                    onclick={takeMeToDashboard}>
+                                        Go to Dashboard
+                                    </button>
+                                </template>
+                            </template>
+                            <template lwc:else>
+                                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"
+                                    onclick={nextmLog}>
+                                    Go to mLog Preview
+                                </button>
+                            </template>
+                        </template>
+                        <template lwc:else>
+                                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"
+                                    onclick={nextDriverPacket}>
+                                    Go to Driver Packet
+                                </button>
+                        </template>
+                    </div>
+                   
+                  
+                </div>
+            </div>
+        </div>
+    </template>
+    <template lwc:elseif={isUploaded}>
+        <div class="transition modal-content">
+            <div class="thanksImg"><img  src={thanksUploading} /></div>
+            <div class="slds-text-heading_large slds-text-align_center slds-p-top_large slds-p-bottom_x-large font-style">
+                Thank you for uploading <br/> your insurance.
+            </div>
+            <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_x-large font-style font-width">
+                A team member will review your insurance shortly and contact you with any questions.
+             </div>
+             <div class="footer-button slds-text-align_center">
+                 <button class="slds-btn slds-btn-primary slds-btn-done waves-effect bc-blue waves-light"
+                             onclick={nextDoneUpload}>
+                             Done
+                 </button>
+             </div>
+        </div>
+    </template>
+</template>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>Query List</label>
+    <protected>false</protected>
+    <values>
+        <field>Test_Query__c</field>
+        <value xsi:type="xsd:string">SELECT Id,Name, Email, Role__c,Account.Name from Contact where Account.Name =: accName</value>
+    </values>
+    <values>
+        <field>revertReimVal__c</field>
+        <value xsi:type="xsd:string">Select id,Name,Month__c,Status__c,Prev_Approved_Date_Value__c,Prev_Status_Value__c, Approved_Date__c,Mileage_Lock_Date__c,Contact_Id__r.Account.isUsingTriplog__c from Employee_Reimbursement__c where Month__c IN: months and Contact_Id__r.Account.isUsingTriplog__c = true and Contact_Id__r.Account.Name IN : lstLblValue and Prev_Approved_Date_Value__c != null and Prev_Status_Value__c != null</value>
+    </values>
+    <values>
+        <field>savePrevMonthVal__c</field>
+        <value xsi:type="xsd:string">Select id,Name,Month__c,Status__c,Prev_Approved_Date_Value__c,Prev_Status_Value__c, Approved_Date__c,Mileage_Lock_Date__c,Contact_Id__r.Account.isUsingTriplog__c from Employee_Reimbursement__c where Month__c IN: months and Contact_Id__r.Account.isUsingTriplog__c = true and Contact_Id__r.Account.Name IN : lstLblValue and (Status__c = &apos;Approved&apos; OR Mileage_Lock_Date__c != null)</value>
+    </values>
+</CustomMetadata>

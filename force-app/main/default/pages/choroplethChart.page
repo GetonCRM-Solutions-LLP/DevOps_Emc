@@ -1,0 +1,417 @@
+<apex:page showHeader="false" lightningStylesheets="true" standardStylesheets="false" sidebar="false" applyHtmlTag="false"
+    applyBodyTag="false" docType="html-5.0">
+     <head>
+        <style>
+            #container{
+                margin: 0;
+            }
+            .chart {
+                margin: 0;
+            }
+            .highcharts-title {
+                fill: #434348;
+                font-weight: 700;
+                font-size: 16px !important;
+                font-family: 'Proxima Nova'
+            }
+
+            .highcharts-point-select {
+                fill: #00AFE8 !important;
+            }               
+            .highcharts-subtitle{
+                 font-weight: 400;
+                 font-size: 14px;
+                 font-family: 'Proxima Nova'
+            }
+            .highcharts-label.highcharts-tooltip{
+                font-family: 'Proxima Nova' !important;
+            }
+        </style>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/main.css')}"/>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/proj4js/2.3.6/proj4.js"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/highmaps.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/data.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/exporting.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/offline-exporting.js')}"></script>
+        <script>
+             var lexOrigin = location.origin;
+             var postData, chartData, states, chartstates = [], chloChart, typeBasedUrl, multipleUS, actionTaken, drivingState = [], selectedList = [];
+            window.addEventListener("message", function (event) {
+                if (event.origin !== lexOrigin) {
+                    return;
+                }
+                postData = JSON.parse(event.data)
+                chartData = JSON.parse(postData.modal);
+                multipleUS = (postData.actionType === 'add') ? 'https://code.highcharts.com/mapdata/countries/us/custom/us-small.topo.json' : 'https://code.highcharts.com/mapdata/countries/us/us-all.topo.json'
+                typeBasedUrl = (postData.mapType === 'CANADA') ? 'https://code.highcharts.com/mapdata/countries/ca/ca-all.topo.json' : multipleUS ;
+                if(chartData.length > 0){
+                    if(postData.actionType === 'add'){
+                        chartstates = [];
+                        selectedList = [];
+                        drivingState = [];
+                        let drivingList = chartData
+                        const canadaDrivingState = postData.arrayList;
+                        states = (postData.mapType === 'CANADA') ? canadaDrivingState : drivingList;
+                        selectedList = (postData.mapType === 'CANADA') ? (postData.canada) ? postData.canada : '' : (postData.us) ? postData.us : '';
+                        subtitle = states.join(', ')
+                        states.forEach((item, index) =>{
+                            let object = {}
+                            let val = index + 1
+                            object.value = val
+                            object.code = item
+                            if(selectedList !== '' && selectedList.includes(item)){
+                                object.selected = true;
+                                drivingState.push(item);
+                            }
+                            chartstates.push(object)
+                        })
+                    }else{
+                        if(chartData[0].Driving_States__c !== undefined){
+                            chartstates = []
+                            let drivingList = chartData[0].Driving_States__c.split(';')
+                            const canadaDrivingState = drivingList.filter(value => postData.arrayList.includes(value));
+                            states = (postData.mapType === 'CANADA') ? canadaDrivingState : drivingList;
+                            subtitle = states.join(', ')
+                            states.forEach((item, index) =>{
+                                let object = {}
+                                let val = index + 1
+                                object.value = val
+                                object.code = item
+                                chartstates.push(object)
+                            })
+                        }else{
+                            chartstates = [];
+                        }
+                    }
+                  
+                }
+              
+                let containerChart = document.getElementById('container');
+                actionTaken = postData.actionType;
+                Highcharts.getJSON(typeBasedUrl, function (topology) {
+                    if(actionTaken === 'add'){
+                        chloChart =  Highcharts.mapChart(containerChart, {
+                            chart: {
+                                renderTo: 'container',
+                                map: topology,
+                                borderColor:postData.border,
+                                backgroundColor: postData.background,
+                            //  height: postData.height, //250
+                                height: (3 / 4 * 100) + '%',
+                            // width: 300, // 360
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                spacingTop: 0,
+                                spacingBottom: 0,
+                                spacingLeft: 0,
+                                spacingRight: 0,
+                            },
+                            
+                            responsive:{
+                                rules:[{
+                                condition:{
+                                maxWidth: 1000
+                                }
+                                }]
+                            },
+
+                            title: {
+                                text: ''
+                            },
+
+                            exporting: {
+                                enabled: false,
+                                sourceWidth: 600,
+                                sourceHeight: 500
+                            },
+
+                            legend: {
+                                enabled: false,
+                                layout: 'horizontal',
+                                borderWidth: 0,
+                                backgroundColor: 'rgb(122, 187, 74)',
+                                verticalAlign: 'top',
+                                y: 25
+                            },
+
+                            mapNavigation: {
+                                enabled: false
+                            },
+
+                            colorAxis: [{
+                                minColor: '#7abb4a',
+                                maxColor: '#7abb4a',
+                                stops: [
+                                  [0, '#D9D9D9'],
+                                  [0.67, '#D9D9D9'],
+                                  [1, '#D9D9D9']
+                                ]
+                            }, {
+                                minColor: '#FFFFFF',
+                                maxColor: '#FFFFFF',
+                                stops: [
+                                  [0, '#FFFFFF'],
+                                  [0.67, '#FFFFFF'],
+                                  [1, '#FFFFFF']
+                                ]
+                            }],
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            tooltip: {
+                                    backgroundColor: '#ffffff',
+                                    style:{
+                                        color: "#1d1d1d",
+                                        fontFamily: 'Proxima Nova'
+                                    },
+                                    headerFormat: null,
+                                    pointFormatter: function() {
+                                        return '<span style="font-weight: bold; font-size:14px;margin: 0 0 16px 0">'+ this.name + '</span><br/>Click to add<br/>driving state.<br/>' 
+                                    }
+                            },
+
+                            plotOptions: {
+                                series: {
+                                    cursor: 'pointer',
+                                    point: {
+                                        events: {
+                                            click: function () {
+                                                const clickedPoint = this,
+                                                    chart = this.series.chart;
+                                                    chart.series.forEach(function(s) {
+                                                        s.points.forEach(function(p) {
+                                                            if (p.x == clickedPoint.x) {
+                                                                p.select(null, true);
+                                                                if(p.selected){
+                                                                    const inx = drivingState.indexOf(p.code);
+                                                                    if(inx === -1){
+                                                                        drivingState.push(p.code);
+                                                                    }
+                                                                }else{
+                                                                    const index = drivingState.indexOf(p.code);
+                                                                    if (index > -1) { // only splice array when item is found
+                                                                        drivingState.splice(index, 1); // 2nd parameter means remove one item only
+                                                                    }
+                                                                }
+                                                            }
+                                                        });
+                                                    });
+                                                let messgaeToLWC = {
+                                                    message: drivingState
+                                                }
+                                                window.parent.postMessage( messgaeToLWC, lexOrigin )
+                                            }
+                                        }
+                                    },
+                                    pointPadding: 8
+                                }
+                            },
+
+                            series: [{
+                                name: '',
+                                borderColor: '#FFFFFF',
+                                color: 'grey',
+                                borderWidth: 0.2,
+                                animation: {
+                                    duration: 1000
+                                },
+                                data: chartstates,
+                                joinBy: ['hc-a2', 'code', 'selected'],
+                                dataLabels: {
+                                    // x: 2,
+                                    // y: -5,
+                                    enabled: true,
+                                   // format: '{point.code}'
+                                    formatter: function(){
+                                        if(this.point.options.code === "PR"){
+                                            return
+                                        }
+                                        else{
+                                            return this.point.options.code; 
+                                        }
+                                    },
+                                    states: {
+                                        select: {
+                                            color: '#EFFFEF',
+                                            borderColor: 'black',
+                                            dashStyle: 'dot'
+                                        }
+                                    }, style: {
+                                        fontSize: '10px'
+                                    }
+                                },
+                                
+                                states: {
+                                    hover: {
+                                        borderWidth: 1,
+                                        color: '#7ABB4A'
+                                    },
+                                    select: {
+                                        dashStyle: 'dot'
+                                    }
+                                }
+                               
+                            }, {
+                                name: 'Separators',
+                                type: 'mapline',
+                                data: Highcharts.geojson(topology, 'mapline'),
+                                lineWidth: 2,
+                                dataLabels: {
+                                    padding: 18
+                                },
+                                colorAxis: 1,
+                                showInLegend: false,
+                                enableMouseTracking: false
+                             }]
+                        });
+                    }else{
+                        chloChart =  Highcharts.mapChart(containerChart, {
+                            chart: {
+                                renderTo: 'container',
+                                map: topology,
+                                borderColor:postData.border,
+                                backgroundColor: postData.background,
+                            //  height: postData.height, //250
+                                height: (3 / 4 * 100) + '%',
+                            // width: 300, // 360
+                                marginTop: 0,
+                                marginBottom: 0,
+                                marginLeft: 0,
+                                marginRight: 0,
+                                spacingTop: 0,
+                                spacingBottom: 0,
+                                spacingLeft: 0,
+                                spacingRight: 0,
+                            },
+                            
+                            responsive:{
+                                rules:[{
+                                condition:{
+                                maxWidth: 1000
+                                }
+                                }]
+                            },
+
+                            title: {
+                                text: ''
+                                // align: 'left',
+                                // fontSize: '16px',
+                                // color: '#1D1D1D'
+                            },
+
+                            //  subtitle: {
+                            //     text: subtitle,
+                            //     align: 'left',
+                            //     fontSize: '14px',
+                            //     color: '#6C6C6C'
+                            // },
+
+                            exporting: {
+                                enabled: false,
+                                sourceWidth: 600,
+                                sourceHeight: 500
+                            },
+
+                            legend: {
+                                enabled: false,
+                                layout: 'horizontal',
+                                borderWidth: 0,
+                                backgroundColor: 'rgba(255,255,255,0.85)',
+                                floating: true,
+                                verticalAlign: 'top',
+                                y: 25
+                            },
+
+                            mapNavigation: {
+                                enabled: false
+                            },
+
+                            colorAxis: {
+                                min: 1,
+                                type: 'logarithmic',
+                                minColor: '#7abb4a',
+                                maxColor: '#7abb4a',
+                                stops: [
+                                    [0, '#7abb4a'],
+                                    [0.67, '#7abb4a'],
+                                    [1, '#7abb4a']
+                                ]
+                            },
+
+                            credits: {
+                                enabled: false
+                            },
+
+                            series: [{
+                                borderColor: '#FFFFFF',
+                                nullColor: '#d9d9d9',
+                                nullInteraction: true,
+                                borderWidth: 0.2,
+                                animation: {
+                                    duration: 1000
+                                },
+                                data: chartstates,
+                                joinBy: ['hc-a2', 'code'],
+                                dataLabels: {
+                                    allowOverlap: false,
+                                    enabled: true,
+                                    formatter: function(){
+                                        if(this.point.options.code === "DC")
+                                            return this.point.options.code;
+                                    },
+                                    color: '#FFFFFF'
+                                },
+                                name: '', //  'Population density'
+                                states: {
+                                    hover: {
+                                        borderWidth: 1
+                                    }
+                                },
+                                tooltip: {
+                                    style:{
+                                        color: "#1d1d1d",
+                                        fontFamily: 'Proxima Nova'
+                                    },
+                                    nullFormatter: function(){
+                                        return '<span style="font-weight: bold; font-size:12px">NOT A DRIVING TERRITORY</span><br/>Trips traveled here will<br/>display as an Uncategorized<br/>or Personal trip in mLog.<br/>'
+                                    },
+                                    headerFormat: null,
+                                    pointFormatter: function() {
+                                        return '<span style="font-weight: bold; font-size:14px">'+ this.name + '</span><br/>Business mileage &<br/>gas prices are based<br/>on this state.<br/>' 
+                                    }
+                                }
+                            }],
+
+                            navigation: {
+                                menuItemStyle:{
+                                    fontFamily: 'Proxima Nova',
+                                    fontSize: 15,
+                                    padding: '10px',
+                                },
+                                menuItemHoverStyle: {
+                                    background: '#7abb4a',
+                                    color: '#FFFFFF'
+                                }
+                            }
+                        });
+                    }
+                })
+            })
+            
+            // function reportWindowSize() {
+            //     console.log(document.getElementById('container').style)
+            // }
+
+            // window.onresize = reportWindowSize;
+        </script>
+        </head>
+        <div id="container" class="chart"></div>
+        <!-- <div style="width: 100%;" id="mapDiv">
+          
+             <button id="large">Large</button> 
+        </div> -->
+</apex:page>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Select_Monthly_or_Biweekly_Reim</fullName>
+    <active>true</active>
+    <description>This is used prevent to select both Monthly Reim and BiWeekly Reim check box at a time. This is not used for driver role for &apos;Manager&apos; or &apos;Admin&apos;.</description>
+    <errorConditionFormula>AND( CASE(Role__c, &quot;Manager&quot; ,0,
+						             &quot;Admin&quot;, 0,
+						1) = 1,  
+			OR(AND(Biweek_Reimbursement__c = True , Monthly_Reimbursement__c = True ))
+			)</errorConditionFormula>
+    <errorMessage>Please only one Check box either Biweekly Reimbursement or Monthly Reimbursement.</errorMessage>
+</ValidationRule>

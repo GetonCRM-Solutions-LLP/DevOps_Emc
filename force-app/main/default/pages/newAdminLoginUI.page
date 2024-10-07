@@ -1,0 +1,68 @@
+<apex:page showHeader="false" sidebar="false" lightningStylesheets="true" standardStylesheets="false">
+    <apex:includeLightning />    
+    <div id="LightningComponentid" />    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        body{
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            object-fit: contain;
+            /* background-attachment: fixed; */
+            /* background-image: url('{!URLFOR($Resource.adminLoginImages)}') */
+        }
+        .toast-info {
+                        background-color: #002366;
+                    }
+        .toast-error {
+            background-color: #FF0000 !important;
+        }
+        #toast-container > div {
+            opacity: 5.8 !important;
+            border-radius: 3px 3px 3px 3px !important;
+            width: 100% !important;
+            margin: 10px;
+        }
+
+    </style>
+    
+    <script>
+    
+    this.setOptions = function () {
+                    toastr.options.positionClass = "toast-bottom-right";
+                    toastr.options.closeButton = true;
+                    toastr.options.progressBar = true;
+    };
+
+    this.setOptions();
+    this.clear = function () {
+        toastr.clear();
+    };
+
+    $Lightning.use("c:LWCLightningApp", function() {
+        $Lightning.createComponent("c:adminLoginNew",
+          { 
+          },
+          "LightningComponentid",
+          function(cmp) {
+             console.log('LWC Componenet added in VF page');
+
+        document.querySelector('c-admin-login-new').addEventListener('toastErr', (e) => {
+            console.log('e.detail',e.detail);
+                if(e.detail != null){
+                    toastr.error(e.detail);
+                }
+        });
+        document.querySelector('c-admin-login-new').addEventListener('toastInfo', (e) => {
+                        if(e.detail != null){
+                            toastr.info(e.detail);
+                        }
+        });
+          });
+
+    });
+
+    </script>
+</apex:page>

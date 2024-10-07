@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Total_BiWeek_Mileage__c</fullName>
+    <label>Total BiWeek Mileage</label>
+    <summarizedField>Bi_Weekly_Reimbursement__c.Total_Mileage__c</summarizedField>
+    <summaryFilterItems>
+        <field>Bi_Weekly_Reimbursement__c.Year__c</field>
+        <operation>equals</operation>
+        <value>2022</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Bi_Weekly_Reimbursement__c.Contact__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

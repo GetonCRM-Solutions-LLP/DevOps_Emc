@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Monthyear__c</fullName>
+    <externalId>false</externalId>
+    <formula>CASE(TEXT(Month(Trip_Date__c)), &apos;1&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;2&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;3&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;4&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;5&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;6&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;7&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;8&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+&apos;9&apos;, &apos;0&apos;+TEXT(Month(Trip_Date__c)),
+TEXT(Month(Trip_Date__c))) + &apos;-&apos;+ TEXT(year(Trip_Date__c))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Monthyear</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,426 @@
+<apex:page showHeader="false" lightningStylesheets="true" standardStylesheets="false" sidebar="false" applyHtmlTag="false"
+    applyBodyTag="false" docType="html-5.0">
+     <head>
+        <style>
+            #container{
+                margin: 0 auto;
+            }
+        </style>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/main.css')}"/>
+        <script src="{!URLFOR($Resource.HighChart,'/highcharts.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/exporting.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/export-data.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/accessibility.js')}"></script>
+        <script>
+             var lexOrigin = location.origin;
+             var chartData, chartView, options, doughnutOpt, barOpt;
+            window.addEventListener("message", function (event) {
+                console.log('Origin ' + event.origin);
+                console.log('data ' ,  event.data);
+                console.log('data-- ' , JSON.parse(event.data));
+                    if (event.origin !== lexOrigin) {
+                        return;
+                    }
+                    chartData = JSON.parse(event.data);
+                    let containerChart = document.getElementById('container');
+                    if(containerChart){
+                        options = {
+                                chart: {
+                                    plotBackgroundColor: null,
+                                    plotBorderWidth: null,
+                                    plotShadow: false,
+                                    height: 220,
+                                   // height: (3 / 5 * 100) + '%',
+                                    marginTop: 0,
+                                    marginBottom: 0,
+                                    marginLeft: 0,
+                                    marginRight: 140,
+                                    spacingTop: 0,
+                                    spacingBottom: 0,
+                                    type: 'pie',
+                                    // events: {
+                                    //     load: function() {
+                                    //         var chart = this,
+                                    //         legend = chart.legend
+                                    //         for (var i = 0, len = legend.allItems.length; i < len; i++) {
+                                    //         (function(i) {
+                                    //             var item = legend.allItems[i].legendItem
+                                    //             item
+                                    //             .on('mouseover', function(e) {
+                                    //                 //show custom tooltip here
+                                    //                 console.log('mouseover' + i)
+                                    //                 chart.tooltip.refresh(chart.series[len-1-i].points[0])
+                                    //             })
+                                    //             .on('mouseout', function(e) {
+                                    //                 //hide tooltip
+                                    //                 console.log('mouseout' + i)
+                                    //             })
+                                    //         })(i)
+                                    //         }
+                                    //     },
+                                    // }
+                                },
+                                title: {
+                                    text: ''
+                                },
+                                exporting: {
+                                    enabled: false
+                                },
+                                accessibility: {
+                                    point: {
+                                        valueSuffix: '%'
+                                    }
+                                },
+                                responsive:{
+                                    rules:[{
+                                        condition:{
+                                            maxWidth: 1000
+                                        }
+                                    }]
+                                },
+                                legend:{
+                                    reversed: true,
+                                    align: 'right',
+                                    layout: 'vertical',
+                                   // itemMarginLeft: 30,
+                                    itemMarginTop: 5,
+                                    itemMarginBottom: 5,
+                                    symbolHeight: 15,
+                                    symbolWidth: 15,
+                                    symbolPadding: 9,
+                                    symbolRadius: 8,
+                                    verticalAlign: 'middle',
+                                    labelFormatter: function() {
+                                        var words = this.name.split(/[\s]+/);
+                                        var numWordsPerLine = 3;
+                                        var str = [];
+
+                                        for (var word in words) {
+                                            if (word > 0 && word % numWordsPerLine == 0)
+                                                str.push('<br>');
+
+                                            str.push(words[word]);
+                                        }
+
+                                        return str.join(' ');
+                                    },
+                                    itemStyle: {
+                                        color: '#000000',
+                                        fontSize: '12px',
+                                        fontWeight: 500,
+                                        fontFamily: 'Proxima Nova',
+                                    },
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        borderWidth: 0,
+                                        cursor: 'pointer',
+                                       // center: ['50%', '50%'],
+                                      //  size: 180,
+                                        colors: [ '#7abb4a' ,'#37C1EE', '#404b5a', "#d9d9d9"],
+                                        dataLabels: {
+                                            enabled: true,
+                                            padding: 0,
+                                            connectorPadding: 0,
+                                            connectorWidth: 0,
+                                            // x: 5,
+                                            //y: -8,
+                                            verticalAlign: 'middle',
+                                            color: '#000',
+                                            style: {
+                                                fontSize: '12px',
+                                                fontFamily: 'Proxima Nova',
+                                                textOverflow: 'ellipsis'
+                                            },
+                                            formatter: function () {
+                                                // display only if larger than 1
+                                                return (this.y != 0) ? '<b>' + Highcharts.numberFormat(this.percentage, 1) + '%'  + '</b>' : ''
+                                            },
+                                            //format: '{point.percentage:.1f} %',
+                                            distance: 10
+                                            //distance: -42
+                                        },
+                                        showInLegend: true
+                                    }
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
+                                    name: '',
+                                    states: {
+                                        inactive: {
+                                            enabled: false
+                                        },
+                                        hover: {
+                                            enabled: false,
+                                            brightness: -0.3
+                                        }
+                                    },
+                                    colorByPoint: true,
+                                    data: [{
+                                        name: 'Complete',
+                                        y: chartData.Complete
+                                    },{
+                                        name: 'Missing Packet & Insurance',
+                                        y: chartData.missingPacketandmissingInsurance
+                                    }, {
+                                        name: 'Missing Insurance',
+                                        y: chartData.missingInsurance
+                                    },  {
+                                        name: 'Missing Packet',
+                                        y: chartData.missingpacket
+                                    }]
+                                }],
+                                tooltip: {
+                                    borderRadius: 0,
+                                    padding: 10,
+                                    useHTML: true,
+                                    headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
+                                    pointFormat: '<tr style="border-top: 1px solid"><td style="text-align: center"><b>{point.percentage:.1f} %</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    style: {
+                                        fontSize : '12px'
+                                    }
+                                }
+                        }
+
+                        doughnutOpt = {
+                                chart: {
+                                   // height: (3 / 5 * 100) + '%',
+                                    height: 220,
+                                    marginTop: 0,
+                                    marginBottom: 0,
+                                    marginLeft: 0,
+                                    marginRight: 110,
+                                    spacingTop: 0,
+                                    spacingBottom: 0,
+                                    type: 'pie'
+                                },
+                                title: {
+                                    text: ''
+                                },
+                                exporting: {
+                                    enabled: false
+                                },
+                                plotOptions: {
+                                    pie: {
+                                        allowPointSelect: true,
+                                        borderWidth: 0,
+                                        cursor: 'pointer',
+                                        colors: [ '#d9d9d9' ,'#78bc42', '#37C1EE'],
+                                        showInLegend: true,
+                                        dataLabels: {
+                                            enabled: true,
+                                            padding: 0,
+                                            connectorPadding: 0,
+                                            connectorWidth: 0,
+                                            verticalAlign: 'middle',
+                                            color: '#000',
+                                            style: {
+                                                fontSize: '12px',
+                                                fontFamily: 'Proxima Nova',
+                                                textOverflow: 'ellipsis'
+                                            },
+                                            formatter: function () {
+                                                return (this.y != 0) ? '<b>' + Highcharts.numberFormat(this.percentage, 1) + '%'  + '</b>' : ''
+                                            },
+                                            distance: 10
+
+                                            // alignTo: 'plotEdges',
+                                            // overflow: 'allow',
+                                            // style: {
+                                            //     fontSize: '14px'
+                                            // }
+                                        }
+                                    }
+                                },
+                                legend:{
+                                    align: 'right',
+                                    verticalAlign: 'middle',
+                                    layout: 'vertical',
+                                    itemMarginTop: 5,
+                                    itemMarginBottom: 5,
+                                    symbolHeight: 14,
+                                    symbolWidth: 14,
+                                    symbolRadius: 8,
+                                    itemStyle: {
+                                        color: '#000000',
+                                        fontSize: '12px',
+                                        fontWeight: 500,
+                                        fontFamily: 'Proxima Nova'
+                                    }
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                series: [{
+                                    name: '',
+                                    states: {
+                                        inactive: {
+                                            enabled: false
+                                        },
+                                        hover: {
+                                            enabled: false,
+                                            brightness: -0.3
+                                        }
+                                    },
+                           
+                                    size: '90%',
+                                    innerSize: '70%',
+                                    colorByPoint: true,
+                                    data: [{
+                                        name: 'Non Compliant',
+                                        //y:100
+                                        y: chartData.NonCompliant
+                                    }, {
+                                        name: 'Compliant',
+                                        //y: 0
+                                        y: chartData.Compliant
+                                    }, {
+                                        name: 'Pending',
+                                        //y: 0
+                                        y: chartData.Pending
+                                    }],
+                                    // dataLabels: {
+                                    //     connectorShape: 'crookedLine',
+                                    //     connectorWidth: 0,
+                                    //     //distance: 10,
+                                    //     padding: 0,
+                                    //     connectorPadding: 0,
+                                    //     distance: -30,
+                                    //    // x: 2,
+                                    //    // y: 15,
+                                    //     style: {
+                                    //             fontSize: '14px',
+                                    //             fontFamily: 'Proxima Nova',
+                                    //             textOverflow: 'ellipsis'
+                                    //     },
+                                    //     formatter: function () {
+                                    //       // display only if larger than 1
+                                    //       return (this.y != 0) ? '<b>' + this.y + '%'  + '</b>' : ''
+                                    //     }
+                                    //   }
+                                }],
+                                tooltip: {
+                                    valueSuffix: '%',
+                                    borderRadius: 0,
+                                    padding: 10,
+                                    useHTML: true,
+                                    headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
+                                    pointFormat: '<tr style="border-top: 1px solid"><td style="text-align: center"><b>{point.percentage:.1f} %</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    style: {
+                                        fontSize : '12px'
+                                    }
+                                }
+                        }
+
+                        barOpt = {
+                                colors: ['#7abb4a', '#7abb4a','#7abb4a', '#7abb4a', '#7abb4a', '#7abb4a'],
+                                chart: {
+                                  //  height: (3 / 5 * 100) + '%',
+                                    height: 220,
+                                    marginTop: 0,
+                                    spacingTop: 0,
+                                    spacingBottom: 0,
+                                    type: 'bar'
+                                },
+                                title: {
+                                    text: ''
+                                },
+                                exporting: {
+                                    enabled: false
+                                },
+                                credits: {
+                                    enabled: false
+                                },
+                                xAxis: {
+                                    categories: chartData?.missingUmbrellaPolicy ? 
+                                    ["Yes", "Not Submitted", "Insurance Card", "Not Meeting Minimum", "Expired Insurance", "No Expiration Date", "Missing Umbrella Policy", "Missing Insurance Dec Page", "Under Review"] 
+                                    : ["Yes", "Not Submitted", "Insurance Card", "Not Meeting Minimum", "Expired Insurance", "No Expiration Date", "Missing Insurance Dec Page", "Under Review"],
+                                    labels:{
+                                        style:{
+                                            color: "#000000",
+                                            fontSize: '13px',
+                                            fontFamily: 'Proxima Nova'
+                                        },
+                                    }
+                                },
+                                yAxis:{
+                                    min: 0,
+                                    title: {
+                                        text: null
+                                    },
+                                    tickInterval: 50,
+                                    labels:{
+                                        style:{
+                                            color: "#000000",
+                                            fontSize: '13px',
+                                            fontWeight: 'bold',
+                                            fontFamily: 'Proxima Nova'
+                                        }
+                                    }
+                                },
+                                plotOptions: {
+                                    series: {
+                                        states: {
+                                            inactive: {
+                                                enabled: false
+                                            },
+                                            hover: {
+                                                enabled: false,
+                                                brightness: -0.3
+                                            }
+                                        },
+                                        colorByPoint: true
+                                    }
+                                },
+                                series: [{
+                                    name: '',
+                                    data: chartData?.missingUmbrellaPolicy ? 
+                                    [chartData.Yes, chartData.NotSubmitted, chartData.InsuranceCard, chartData.NotMeetingMinimum, chartData.ExpiredInsurance, chartData.noExpirationDate,  chartData.missingUmbrellaPolicy,  chartData.missingInsuranceDecPage, chartData.UnderReview] 
+                                    : [chartData.Yes, chartData.NotSubmitted, chartData.InsuranceCard, chartData.NotMeetingMinimum, chartData.ExpiredInsurance, chartData.noExpirationDate,  chartData.missingInsuranceDecPage, chartData.UnderReview],
+                                    pointWidth: 20,
+                                    groupPadding: 0,
+                                    pointPadding: 0
+                               }],
+                               legend: {
+                                 enabled: false
+                               },
+                                tooltip: {
+                                    // pointFormatter :  function () {
+                                    //       // display only if larger than 1
+                                    //       console.log(this)
+                                    // },
+                                    borderRadius: 0,
+                                    padding: 10,
+                                    useHTML: true,
+                                    headerFormat: '<table><tr><th colspan="2">{point.key}</th></tr>',
+                                    pointFormat: '<tr style="border-top: 1px solid"><td style="text-align: center"><b>{point.y}</b></td></tr>',
+                                    footerFormat: '</table>',
+                                    style: {
+                                        fontSize : '12px'
+                                    }
+                                }
+                        }
+
+                        chartView = (chartData.view === 'Onboarding') ? Highcharts.chart(containerChart, options) : (chartData.view === 'Compliance') ? Highcharts.chart(containerChart, doughnutOpt) : Highcharts.chart(containerChart, barOpt);      
+                        console.log('chartView', chartView)                  
+                    }
+            })
+            let wide = false;
+         //   console.log('chartView', chartView)
+            window.onresize = function(){
+                document.getElementById('container').style.width = wide ? window.innerWidth - 8 + 'px' : window.innerWidth - 8 + 'px';
+                wide = !wide;
+               // document.getElementById('container').style.width = '500px';
+                // chartView.options.plotOptions.pie.size = 100;
+                // chartView.redraw();
+                // console.log(chartView.options.plotOptions, chartView.options.plotOptions.pie.size)
+            }
+        </script>
+        </head>
+        <div id="container" class="chart"></div>
+</apex:page>

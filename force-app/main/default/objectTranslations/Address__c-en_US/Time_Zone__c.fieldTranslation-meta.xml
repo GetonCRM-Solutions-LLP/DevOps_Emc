@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Time Zone --></label>
+    <name>Time_Zone__c</name>
+    <picklistValues>
+        <masterLabel>(GMT-05:00) Central Daylight Time (America/Chicago)</masterLabel>
+        <translation><!-- (GMT-05:00) Central Daylight Time (America/Chicago) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>(GMT-06:00) Central Standard Time (America/El_Salvador)</masterLabel>
+        <translation><!-- (GMT-06:00) Central Standard Time (America/El_Salvador) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>(GMT-07:00) Mountain Standard Time (America/Phoenix)</masterLabel>
+        <translation><!-- (GMT-07:00) Mountain Standard Time (America/Phoenix) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>(GMT-08:00) Alaska Daylight Time (America/Anchorage)</masterLabel>
+        <translation><!-- (GMT-08:00) Alaska Daylight Time (America/Anchorage) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>(GMT-08:00) Pitcairn Time (Pacific/Pitcairn)</masterLabel>
+        <translation><!-- (GMT-08:00) Pitcairn Time (Pacific/Pitcairn) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>(GMT-10:00) Hawaii-Aleutian Standard Time (Pacific/Honolulu)</masterLabel>
+        <translation><!-- (GMT-10:00) Hawaii-Aleutian Standard Time (Pacific/Honolulu) --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

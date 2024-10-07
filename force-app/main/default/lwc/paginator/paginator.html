@@ -1,0 +1,30 @@
+<template>
+   <!-- <template  if:true={paginateLen}> -->
+      <div class="slds-pagination">
+         <ul class="slds-button-group-row">
+            <template if:true={hasPrev}>
+               <li class="slds-button-group-item">
+                  <a class="slds_link" onclick={onPrev}> Previous
+                  </a>
+               </li>
+            </template>
+            <template for:each={pagesList} for:item="pageNumber">
+               <!-- <template if:true={hasBreak}>
+                  <li class="slds-button-group-item disable" key={pageNumber}>
+                     <span>...</span>
+                  </li>
+               </template> -->
+               <li class="slds-button-group-item" key={pageNumber}>
+                  <a data-id={pageNumber} class="slds_link" onclick={onPageClick}>{pageNumber}</a>
+               </li>
+            </template>
+          
+            <template if:true={hasNext}>
+               <li class="slds-button-group-item">
+                  <a class="slds_link" onclick={onNext}>Next</a>
+               </li>
+            </template>
+         </ul>
+      </div>
+   <!-- </template> -->
+</template>

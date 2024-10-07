@@ -1,0 +1,323 @@
+<template>
+    <div class="animate__animated animate__slideInLeft animate__faster main_div">
+        <div class="preview">
+            <div class="preview-container"></div>
+            <div class="preview-header">
+                <div class="slds-grid slds-wrap header-content">
+                    <!-- <slot name="filter"> -->
+                    <div class="slds-col slds-size_12-of-12">
+                        <div class="slds-grid slds-wrap page-header">
+                            <div class="slds-col slds-size_3-of-12 row operation-header">
+                                <c-dropdown-select style="width: 105px" data-id="list" options={monthList}
+                                    selected-value={selectedMonth.label}
+                                    onchange={handleMonthChange}
+                                    main-class="default-box-input slds-truncate">
+                                </c-dropdown-select>
+                                <div class="tripButton">
+                                    <button class="slds-button slds-p-left_x-small slds-approvebtn" onclick={handleCreateTrip}>
+                                        Add Trip
+                                    </button>
+                                </div>
+                                <div class="tripButton">
+                                    <template lwc:if={isDeleteAllVisivble}>
+                                        <button class="slds-button slds-approvebtn bc-red" onclick={handleMassDeleteTrips}>
+                                            Delete Trips
+                                        </button>
+                                    </template>
+                                </div>
+                            </div>
+                            <!-- </slot> -->
+                            <template lwc:if={allTrips}>
+                                <div class="slds-col slds-size_6-of-12 slds-align_absolute-center paginate-block">
+                                    <template lwc:if={noTrips}> </template>
+                                    <template lwc:else>
+                                        <span>
+                                            <ul class="slds-list_horizontal slds-has-block-links_space border-radius">
+                                                <li class="slds-item">
+                                                    <a name="buttonBackwards" label="Previous" title="" onclick={onPrev} class={pagePreviousClass} disabled={disabledPreviousButton}>
+                                                        <i class="fa-solid fa-chevron-left fa-lg slds-p-horizontal_x-small slds-p-vertical_x-small navigate-icon"></i>
+                                                    </a>
+                                                </li>
+                                                <li class="slds-item">
+                                                    <div class="slds-p-horizontal_xx-small slds-p-vertical_xx-small pageEdit">
+                                                        <template for:each={pages} for:item="page">
+                                                            <div class="flow-block" key={page}>
+                                                                <a data-id={page} class="page-num-block" onclick={onPageClick}>{page}</a>
+                                                            </div>
+                                                        </template>
+                                                    </div>
+                                                </li>
+                                                <li class="slds-item">
+                                                    <a name="buttonForwards" label="Next" title="" onclick={onNext} class={pageNextClass} disabled={disabledNextButton}>
+                                                        <i class="fa-solid fa-chevron-right fa-lg slds-p-horizontal_x-small slds-p-vertical_x-small navigate-icon"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </span>
+                                    </template>
+                                </div>
+                            </template>
+                            <!-- <slot name="header"> -->
+                            <div class="slds-col slds-size_3-of-12 slds-clearfix">
+                                <template lwc:if={searchVisible}>
+                                    <div class="slds-input-has-icon slds-input-has-icon_right slds-float_right search-holder">
+                                        <div class="search-icon-block">
+                                            <img class="search-icon" src={searchIcon} />
+                                        </div>
+                                        <div class="close-btn" lwc:if={isSearchEnable} onclick={handleClearInput}>
+                                            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                        </div>
+                                        <input class="slds-input filter-input" type="text" placeholder="Search" value={searchkey} onkeyup={handleSearchChange}/>
+                                    </div>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </slot> -->
+                </div>
+            </div>
+            <div class="slds-p-left_medium slds-p-right_medium table-container">
+                <div class='fixed-container'>
+                    <div class='scrollable_wrapper slds-p-right_x-small'>
+                        <table class={tableClass}>
+                            <thead class="">
+                                <tr class="slds-line-height_reset">
+                                    <template lwc:if={noTrips}></template>
+                                    <template lwc:else>
+                                        <th class="header-checkbox">
+                                            <template lwc:if={isMainCheckBoxVisible}>
+                                                <div class="checkbox-toggle select-all-checkbox slds-m-top_small">
+                                                    <div class="slds-checkbox">
+                                                        <input type="checkbox" data-id="selectAll-edit" id="selectAll-edit" onchange={handleAllCheckbox} class="checkbox-input selectAll-edit" />
+                                                        <label class="slds-checkbox__label" for="selectAll-edit">
+                                                            <span class="slds-checkbox_faux"></span>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </th>
+                                    </template>
+                                    <template for:each={headerData} for:item="head">
+                                        <th class="header-title" scope="col" key={head.fieldlabel} >
+                                            <div title={head.fieldlabel} data-name={head.fieldName} data-sort={head.fieldType} onclick={handleSort}>
+                                                <a data-name={head.fieldName}
+                                                    class="head-sort">
+                                                    {head.fieldlabel}
+                                                    <template lwc:if={noTrips}>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div class="sort-container" data-name={head.fieldName} >
+                                                            <template lwc:if={head.isUp}>
+                                                                <i class="fa-solid fa-sort-up green_icon" data-name={head.fieldName} data-sort={head.fieldType}></i>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <i class="fa-solid fa-sort-up sort_icon" data-name={head.fieldName} data-sort={head.fieldType}></i>
+                                                            </template>
+                                                            <template lwc:if={head.isDown}>
+                                                                <i class="fa-solid fa-sort-down green_icon" data-name={head.fieldName} data-sort={head.fieldType}></i>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <i class="fa-solid fa-sort-down sort_icon" data-name={head.fieldName} data-sort={head.fieldType}></i>
+                                                            </template>
+                                                        </div>
+                                                    </template>
+                                                </a>
+                                            </div>
+                                        </th>
+                                    </template>
+                                </tr>
+                            </thead>
+                            <tbody class="content-body">
+                                <template lwc:if={showNewTrip}>
+                                    <template lwc:if={noTrips}>
+                                        <tr class="norecord">
+                                            <template for:each={headerData} for:item="head">
+                                                <td  key={head.fieldlabel}>----</td>
+                                            </template>
+                                        </tr>
+                                        <tr class="norecord">
+                                            <td colspan="100%">
+                                                <div class="slds-align_absolute-center">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                                        viewBox="0 0 30 30" fill="none">
+                                                        <g clip-path="url(#clip0_1230_6278)">
+                                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                                d="M5.00298 2C4.38433 2 3.88281 2.50151 3.88281 3.12016V3.77839H4.09168H4.50943H4.7183V3.12016C4.7183 2.96294 4.84575 2.83549 5.00298 2.83549H5.67615V2.62662V2.20887V2H5.00298ZM8.36882 2H7.02249V2.20887V2.62662V2.83549H8.36882V2.62662V2.20887V2ZM11.0615 2H9.71516V2.20887V2.62662V2.83549H11.0615V2.62662V2.20887V2ZM13.7542 2H12.4078V2.20887V2.62662V2.83549H13.7542V2.62662V2.20887V2ZM16.4469 2H15.1005V2.20887V2.62662V2.83549H16.4469V2.62662V2.20887V2ZM18.4664 2H17.7932V2.20887V2.62662V2.83549H18.4664V2.62662V2.20887V2ZM3.88281 5.09483V6.41127H4.09168H4.50943H4.7183V5.09483H4.50943H4.09168H3.88281ZM3.88281 7.72772V9.04416H4.09168H4.50943H4.7183V7.72772H4.50943H4.09168H3.88281ZM25.5942 9.51994V8.87934H25.3854H24.9676H24.7587V9.51994H24.9676H25.3854H25.5942ZM3.88281 10.3606V11.677H4.09168H4.50943H4.7183V10.3606H4.50943H4.09168H3.88281ZM25.5942 12.0823V10.8011H25.3854H24.9676H24.7587V12.0823H24.9676H25.3854H25.5942ZM3.88281 12.9935V14.3099H4.09168H4.50943H4.7183V12.9935H4.50943H4.09168H3.88281ZM25.5942 14.6447V13.3635H25.3854H24.9676H24.7587V14.6447H24.9676H25.3854H25.5942ZM3.88281 15.6264V16.9428H4.09168H4.50943H4.7183V15.6264H4.50943H4.09168H3.88281ZM25.5942 17.2071V15.9259H25.3854H24.9676H24.7587V17.2071H24.9676H25.3854H25.5942ZM3.88281 18.2593V19.5757H4.09168H4.50943H4.7183V18.2593H4.50943H4.09168H3.88281ZM25.5942 19.7695V18.4883H25.3854H24.9676H24.7587V19.7695H24.9676H25.3854H25.5942ZM3.88281 20.8922V22.2086H4.09168H4.50943H4.7183V20.8922H4.50943H4.09168H3.88281ZM25.5942 22.3319V21.0507H25.3854H24.9676H24.7587V22.3319H24.9676H25.3854H25.5942ZM3.88281 23.525V24.8415H4.09168H4.50943H4.7183V23.525H4.50943H4.09168H3.88281ZM25.5942 24.8943V23.6131H25.3854H24.9676H24.7587V24.8943H24.9676H25.3854H25.5942ZM3.88281 26.1579V26.8161C3.88281 27.4348 4.38433 27.9363 5.00298 27.9363H5.61145V27.7274V27.3097V27.1008H5.00298C4.84575 27.1008 4.7183 26.9734 4.7183 26.8161V26.1579H4.50943H4.09168H3.88281ZM25.5942 26.298V26.1755H25.4883L25.5942 26.298ZM24.2917 27.9363L23.8656 27.4438V27.7274V27.9363H24.2917ZM6.82839 27.9363H8.04534V27.7274V27.3097V27.1008H6.82839V27.3097V27.7274V27.9363ZM9.26228 27.9363H10.4792V27.7274V27.3097V27.1008H9.26228V27.3097V27.7274V27.9363ZM11.6962 27.9363H12.9131V27.7274V27.3097V27.1008H11.6962V27.3097V27.7274V27.9363ZM14.1301 27.9363H15.347V27.7274V27.3097V27.1008H14.1301V27.3097V27.7274V27.9363ZM16.5639 27.9363H17.7809V27.7274V27.3097V27.1008H16.5639V27.3097V27.7274V27.9363ZM18.9978 27.9363H20.2148V27.7274V27.3097V27.1008H18.9978V27.3097V27.7274V27.9363ZM21.4317 27.9363H22.6487V27.7274V27.3097V27.1008H21.4317V27.3097V27.7274V27.9363Z"
+                                                                fill="#7ABB4A" />
+                                                            <path
+                                                                d="M18.0823 3.75447H18.5V5.09605H18.0823V6.43762H18.5V7.7792H18.0823V8.44998C18.0823 8.91141 18.4563 9.28547 18.9177 9.28547H19.635V8.86773H21.0695V9.28547H22.504V8.86773H23.9385V9.28547H24.6557C25.2238 9.28547 25.4987 8.59023 25.0843 8.20171L24.5887 7.73712L24.303 8.04188L23.3119 7.11268L23.5976 6.80792L22.6064 5.87873L22.3207 6.18349L21.3296 5.25429L21.6153 4.94953L20.6242 4.02034L20.3384 4.3251L19.3473 3.39591L19.633 3.09115L19.1374 2.62655C18.7372 2.25136 18.0823 2.53512 18.0823 3.08369V3.75447Z"
+                                                                stroke="#7ABB4A" stroke-width="0.835488"
+                                                                stroke-dasharray="1.3 1.3" />
+                                                            <circle cx="18.3181" cy="19.3394" r="4.84877"
+                                                                transform="rotate(49.1347 18.3181 19.3394)" stroke="#7ABB4A"
+                                                                stroke-width="1.12791" />
+                                                            <rect x="23.3359" y="23.6875" width="5.68178" height="2.05694"
+                                                                rx="1.02847" transform="rotate(49.1347 23.3359 23.6875)"
+                                                                stroke="#7ABB4A" stroke-width="1.12791" />
+                                                            <path d="M21.1172 22.625L22.807 24.5781" stroke="#7ABB4A"
+                                                                stroke-width="0.960812" />
+                                                        </g>
+                                                        <defs>
+                                                            <clipPath id="clip0_1230_6278">
+                                                                <rect width="30" height="30" fill="white" />
+                                                            </clipPath>
+                                                        </defs>
+                                                    </svg>
+                                                </div>
+                                                <div
+                                                    class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-small no-data-message">
+                                                    {norecordMessagenew}
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                    <template lwc:else>
+                                        <template for:each={allTrips} for:item="trip">
+                                            <tr key={trip.id} class={trip.mileageClass} data-id={trip.id} onclick={handleTripAccordian}>
+                                                <td class="modal-content" onclick={handlePreventAccordion}>
+                                                    <template lwc:if={trip.isCheckbox}>
+                                                        <div class="checkbox-toggle">
+                                                            <div class="slds-checkbox">
+                                                                <input type="checkbox" id={trip.id} data-input-type="checkbox" checked={trip.isChecked} data-name="checkbox" onchange={handleIndividualCheckbox} class="checkbox-input" data-id={trip.id} />
+                                                                <label class="slds-checkbox__label" for={trip.id}>
+                                                                    <span class="slds-checkbox_faux"></span>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div></div>
+                                                    </template>
+                                                </td>
+                                                <template for:each={trip.keyFields} for:item="column">
+                                                    <template lwc:if={column.isTooltip}>
+                                                        <td class="tooltipText" key={column.key}>
+                                                            {column.value}<span class="tooltipValue">
+                                                            <div>
+                                                                <p style="overflow:auto">
+                                                                    {column.tooltipText}
+                                                                </p>
+                                                            </div>
+                                                            </span>
+                                                        </td>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <td key={column.key} data-id={trip.id}>
+                                                            {column.value}
+                                                        </td>
+                                                    </template>
+                                                </template>
+                                            </tr>
+                                            <template lwc:if={trip.isEditMode}>
+                                                <tr class="createTrip" key={trip.id}>
+                                                    <td colspan="8" style="padding-left: 0!important;padding-right: 0 !important;padding-top: 0 !important;">
+                                                        <div class="tripEditContainer">
+                                                            <c-trip-accordian-view data-id={trip.id} contact-id={contactId} account-id={accountId} map-country={mapCountry} trip-fields={trip} is-add-trip={addTrip} selected-month={selectedMonth} month-difference={monthDifference} onhidetrip={handleCloseTrip} ontoast={handleToast} onloading={showSpinner} onloaded={hideSpinner} ontripupdate={dynamicUpdateTrip} ontripdelete={dynamicDeleteTrip} ondistance={distancePopUp} onclearmileage={deletePopUp}></c-trip-accordian-view>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                                <template lwc:else>
+                                    <tr class="createTrip">
+                                        <td colspan="8" style="padding-left: 0!important;padding-right: 0 !important">
+                                            <div>
+                                                <c-trip-accordian-view data-id="newOne" contact-id={contactId} account-id={accountId} map-country={mapCountry} trip-fields={tripDetail} is-add-trip={addTrip} selected-month={selectedMonth} month-difference={monthDifference} onhidetrip={handleCloseTrip} ontoast={handleToast} onloading={showSpinner} onloaded={hideSpinner} ontripinsert={dynamicAddTrip} ondistance={distancePopUp}></c-trip-accordian-view>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="slds-p-top_small slds-p-bottom_small">
+                <div style="border-top: 1px solid #E4E4E4;" class="slds-p-top_small slds-p-top_small">
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_12-of-12">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_6-of-12">
+                                </div>
+                                <div style="display: flex; align-items: center;" class="slds-col slds-size_6-of-12">
+                                    <div class="slds-col slds-size_3-of-6">
+                                        <div class="slds-grid slds-grid_vertical total-mileages">
+                                            <div style="font-size: 20px;" class="slds-col milnum">
+                                                <span style="color: #1D1D1D;"><lightning-formatted-number value={displayMileage} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                                <span style="color: rgb(108 108 108 / 38%);">/<lightning-formatted-number value={totalMileage} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                            </div>
+                                            <div style="font-size: 14px;" class="slds-col miltext">
+                                                <span>Total Mileage</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="slds-col slds-size_3-of-6 sdls-clearfix">
+                                        <template lwc:if={isExportTotalVisible}>
+                                            <button
+                                                class="slds-btn slds-btn-primary slds-btn-sm slds-float_right waves-effect bc-green waves-light mleft-0 btn-trip download-button"
+                                                onclick={handleDownloadTrips}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none" class="download-icon">
+                                                <path d="M3.42685 5.66718L3.42684 5.66717C3.1633 5.40363 3.1633 4.97864 3.42685 4.71511C3.69039 4.45156 4.11538 4.45156 4.37891 4.71511L6.28511 6.62131V0.816062C6.28511 0.444945 6.5864 0.143652 6.95752 0.143652C7.32864 0.143652 7.62993 0.444945 7.62993 0.816062V6.62131L9.53613 4.71511C9.79967 4.45156 10.2247 4.45156 10.4882 4.71511C10.7517 4.97865 10.7517 5.40364 10.4882 5.66717L7.43365 8.72173C7.40101 8.75436 7.36607 8.78115 7.33186 8.80475L7.33131 8.80512C7.32183 8.8114 7.31252 8.81605 7.3052 8.81971L7.30461 8.82001C7.29674 8.82394 7.29103 8.82684 7.28549 8.83051L7.28471 8.83103L7.28471 8.83102L7.28383 8.83156C7.26428 8.84381 7.241 8.85839 7.21403 8.86748C7.21383 8.86755 7.21362 8.86762 7.21342 8.86769L7.20202 8.8335C7.18994 8.83802 7.17792 8.84167 7.16537 8.84547C7.15671 8.8481 7.1478 8.8508 7.13845 8.85392L3.42685 5.66718ZM3.42685 5.66718L6.48211 8.72173L6.48219 8.72181C6.51154 8.75097 6.54645 8.78071 6.58467 8.80527M3.42685 5.66718L6.58467 8.80527M6.58467 8.80527C6.58459 8.80522 6.58452 8.80517 6.58445 8.80512L6.60436 8.77508M6.58467 8.80527C6.58474 8.80531 6.58482 8.80536 6.58489 8.80541L6.60436 8.77508M6.60436 8.77508C6.56867 8.75218 6.53564 8.72412 6.50759 8.69625L6.69829 8.86607C6.69799 8.86592 6.69769 8.86577 6.69739 8.86562L6.71373 8.8335C6.69974 8.82732 6.68667 8.82014 6.67401 8.81318C6.66594 8.80875 6.65804 8.80441 6.65017 8.80047C6.63489 8.79283 6.61962 8.7852 6.60436 8.77508ZM7.28849 8.78778C7.29612 8.78396 7.30376 8.78014 7.31139 8.77508L7.28849 8.78778ZM7.28849 8.78778C7.28085 8.7916 7.27322 8.79541 7.26559 8.80047L7.28849 8.78778ZM12.9508 11.1841V11.184C12.9506 10.8128 12.6497 10.5117 12.2784 10.5117H1.63637C1.26526 10.5117 0.963965 10.8129 0.963965 11.1841C0.963965 11.5552 1.26526 11.8565 1.63637 11.8565H12.2784C12.6495 11.8565 12.9508 11.5552 12.9508 11.1841Z" fill="white" stroke="white" stroke-width="0.0720703"/>
+                                                </svg>Download
+                                            </button>
+                                        </template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-m-top_medium slds-m-left_small">
+        <lightning-icon class="back_button" icon-name="utility:back" size="xx-small" onclick={handleRedirect} ></lightning-icon>
+    </div>
+    <c-add-update-location trip-log-api={tripLogApi} account-id={accountId} user-triplog-id={userTriplogId} map-country={mapCountry} ontoast={handleToast} onloading={showSpinner} onloaded={hideSpinner} onclose={handleCloseModal} onlocationadd={dynamicAddLoc} onlocationupdate={dynamicUpdtLoc}></c-add-update-location>
+    <c-user-profile-modal data-id='mileageCalc'
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass}>
+        <div class="modal_header">
+            <h2 class="modal_content-class">Maps suggests the driving distance between "<span class="spanMessage">{distanceTripOrigin}</span>" and "<span class="spanMessage">{distanceTripDestination}</span>" is <span class="spanMessage">{calculatedMileage} miles</span> and the driving time is <span class="spanMessage">{calculatedTime} mins</span>.</h2>
+            <h2 class="modal_content-class">{mileageConfirmMessage}</h2>
+        </div>
+        <div class="button_class slds-align_absolute-center" >
+            <button type="button" onclick={handleDistanceOk}
+            class="slds-btn slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-modal">
+            Continue</button>
+            <button type="button" onclick={handleDistanceCancel}
+            class="slds-btn slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-modal">
+            Cancel</button>
+        </div>
+    </c-user-profile-modal>
+    <c-user-profile-modal data-id='deleteMileage'
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass}>
+        <div class="modal_header">
+            <template lwc:if={isMassDeleteMode}>
+                <h2 class="modal_content-class">Are you sure you want to delete selected trips?</h2>
+            </template>
+            <template lwc:else>
+                <h2 class="modal_content-class">Are you sure you want to delete this trip that was completed <span class="spanMessage">{deleteTripDate}</span> having mileage <span class="spanMessage">{deleteTripMileage} miles</span> and origin &amp; destination are "<span class="spanMessage">{deleteTripOrigin}</span>" &amp; "<span class="spanMessage">{deleteTripDestination}</span>" respectively?</h2>
+            </template>
+        </div>
+        <div class="button_class slds-align_absolute-center" >
+            <button type="button" onclick={handleDeleteOk}
+            class="slds-btn slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-modal">
+            Continue</button>
+            <button type="button" onclick={handleDeleteCancel}
+            class="slds-btn slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-modal">
+            Cancel</button>
+        </div>
+    </c-user-profile-modal>
+    <c-export-excel></c-export-excel>
+</template>

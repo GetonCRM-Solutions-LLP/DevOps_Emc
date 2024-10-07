@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- This Field is used in RG_CreateNewUserPageClass for creating new user for community page --></help>
+    <label><!-- IsCreatedFromCommunity --></label>
+    <name>IsCreatedFromCommunity__c</name>
+</CustomFieldTranslation>

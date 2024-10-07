@@ -1,0 +1,165 @@
+<template>
+    <c-file-upload-spinner show-spinner={isSpinner}></c-file-upload-spinner>
+    <div class="transition"  lwc:if={isUploadShow}>
+            <div>
+                <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_medium font-bold">Upload Insurance</div>
+                <!-- <c-m-burse-header-text head-text="Upload Insurance"></c-m-burse-header-text> -->
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style">Please <span style="font-family: 'Proxima Nova Bold' !important;
+                font-size: 16px; color: #1d1d1d;
+                ">upload your
+                    Insurance Declaration Page</span><br/>
+                not your Insurance Card.
+            </div>
+            <div class="m-left m-right">
+                <form class="box has-advanced-upload" enctype="multipart/form-data" method="post" action=""  ondragover={onDrag} ondragleave={onDragLeave}  ondrop={handleDropFile}>
+                    <div 
+                        class="box__input" id="box__input">
+                        <template lwc:if={isError}>
+                            <div class="file-upload-img">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="66" height="66" viewBox="0 0 66 66" fill="none"><mask id="path-1-outside-1_1027_7006" maskUnits="userSpaceOnUse" x="4" y="2" width="22" height="25" fill="black"><path fill="white" x="4" y="2" width="22" height="25" d="M8.8 4.4h48.4v55H8.8v-55z"/><path d="M54.978 19.528c-0.006 -0.036 -0.022 -0.066 -0.03 -0.1l-0.036 -0.116c-0.018 -0.04 -0.04 -0.074 -0.06 -0.11 -0.016 -0.03 -0.028 -0.062 -0.048 -0.088a1.206 1.206 0 0 0 -0.146 -0.178L42.592 6.94a1.122 1.122 0 0 0 -0.176 -0.146c-0.028 -0.02 -0.06 -0.03 -0.088 -0.048 -0.038 -0.022 -0.072 -0.044 -0.112 -0.06 -0.04 -0.016 -0.08 -0.022 -0.116 -0.036l-0.102 -0.03a1.17 1.17 0 0 0 -0.228 -0.022H13.326A2.324 2.324 0 0 0 11 8.911v47.028a2.32 2.32 0 0 0 2.326 2.312h39.35a2.32 2.32 0 0 0 2.326 -2.31V19.752a1.186 1.186 0 0 0 -0.022 -0.226ZM41.77 9.394l10.424 10.362H41.77V9.394Zm10.906 46.548h-39.35V8.912h26.12v10.844a2.32 2.32 0 0 0 2.326 2.312h10.906v33.874Z"/></mask><path d="M54.978 19.528c-0.006 -0.036 -0.022 -0.066 -0.03 -0.1l-0.036 -0.116c-0.018 -0.04 -0.04 -0.074 -0.06 -0.11 -0.016 -0.03 -0.028 -0.062 -0.048 -0.088a1.206 1.206 0 0 0 -0.146 -0.178L42.592 6.94a1.122 1.122 0 0 0 -0.176 -0.146c-0.028 -0.02 -0.06 -0.03 -0.088 -0.048 -0.038 -0.022 -0.072 -0.044 -0.112 -0.06 -0.04 -0.016 -0.08 -0.022 -0.116 -0.036l-0.102 -0.03a1.17 1.17 0 0 0 -0.228 -0.022H13.326A2.324 2.324 0 0 0 11 8.911v47.028a2.32 2.32 0 0 0 2.326 2.312h39.35a2.32 2.32 0 0 0 2.326 -2.31V19.752a1.186 1.186 0 0 0 -0.022 -0.226ZM41.77 9.394l10.424 10.362H41.77V9.394Zm10.906 46.548h-39.35V8.912h26.12v10.844a2.32 2.32 0 0 0 2.326 2.312h10.906v33.874Z" fill="#FA7800"/><path d="m54.978 19.528 0.646 -0.126V19.4l-0.646 0.128Zm-0.03 -0.1 0.634 -0.184 -0.002 -0.012 -0.632 0.198Zm-0.036 -0.116 0.612 -0.246v-0.002l-0.612 0.248Zm-0.06 -0.11 -0.58 0.312 0.008 0.016 0.572 -0.33Zm-0.048 -0.088 -0.55 0.366 0.004 0.006 0.546 -0.374Zm-0.146 -0.178 0.468 -0.464 -0.004 -0.004 -0.464 0.468ZM42.592 6.94l-0.468 0.462 0.004 0.004 0.464 -0.466Zm-0.176 -0.146 -0.374 0.544 0.006 0.006 0.366 -0.55Zm-0.088 -0.048 0.326 -0.572v-0.002l-0.326 0.574Zm-0.112 -0.06 -0.256 0.61 0.006 0.002 0.248 -0.612ZM42.1 6.65l0.19 -0.634h-0.008l-0.18 0.634Zm-0.102 -0.03 -0.13 0.648h0.008l0.122 -0.648ZM55 55.94h-0.66Zm0 -36.184h0.66ZM41.77 9.394l0.466 -0.468 -1.126 -1.118v1.586h0.66Zm10.424 10.362v0.66h1.6l-1.136 -1.128 -0.464 0.468Zm-10.424 0h-0.66v0.66h0.66v-0.66Zm10.906 36.186v0.66h0.66v-0.66h-0.66Zm-39.35 0h-0.66v0.66h0.66v-0.66Zm0 -47.028v-0.66h-0.66v0.66h0.66Zm26.118 0h0.66v-0.66h-0.66v0.66ZM41.77 22.07v-0.66Zm10.906 0h0.66v-0.66h-0.66v0.66Zm2.948 -2.668a1.034 1.034 0 0 0 -0.034 -0.128l-0.004 -0.018a0.224 0.224 0 0 1 -0.004 -0.008v-0.002l-1.268 0.372 0.016 0.046 0.004 0.014 0.002 0.008 -0.006 -0.026 1.296 -0.258Zm-0.044 -0.168 -0.016 -0.046a1.248 1.248 0 0 0 -0.04 -0.121l-1.226 0.492c-0.004 -0.012 -0.004 -0.018 0 -0.004a1.262 1.262 0 0 0 0.022 0.07l1.258 -0.392Zm-0.058 -0.17c-0.038 -0.092 -0.09 -0.18 -0.096 -0.192l-1.144 0.66 0.008 0.016 0.006 0.012 0.008 0.016 -0.004 -0.012 1.222 -0.5Zm-0.088 -0.176 -0.004 -0.006a0.872 0.872 0 0 0 -0.082 -0.14l-1.09 0.748 -0.014 -0.022v-0.004a1.752 1.752 0 0 0 0.026 0.052l1.162 -0.624Zm-0.082 -0.14a1.854 1.854 0 0 0 -0.224 -0.276l-0.938 0.928a0.558 0.558 0 0 1 0.066 0.08l1.096 -0.732Zm-0.228 -0.28L43.059 6.474l-0.93 0.934 12.064 11.997 0.93 -0.938ZM43.061 6.478a1.774 1.774 0 0 0 -0.282 -0.234l-0.73 1.1a0.412 0.412 0 0 1 0.074 0.062l0.938 -0.93Zm-0.276 -0.226a1.034 1.034 0 0 0 -0.116 -0.068l-0.014 -0.006 -0.006 -0.004 0.004 0.002 -0.652 1.148 0.048 0.026 0.016 0.006 0.008 0.004h-0.004a0.368 0.368 0 0 1 -0.028 -0.02l0.744 -1.09Zm-0.132 -0.078c-0.006 -0.002 -0.102 -0.06 -0.192 -0.096l-0.496 1.224 -0.014 -0.004 0.018 0.008 0.034 0.02 0.646 -1.15Zm-0.184 -0.094a1.166 1.166 0 0 0 -0.132 -0.044l-0.048 -0.014 -0.38 1.262 0.044 0.014 0.024 0.006c0.012 0.002 0 0 -0.016 -0.006l0.506 -1.218Zm-0.188 -0.06h-0.004l-0.008 -0.004a1.496 1.496 0 0 0 -0.152 -0.042l-0.24 1.298a0.354 0.354 0 0 1 -0.028 -0.004h-0.002l0.016 0.004 0.048 0.016 0.364 -1.268Zm-0.154 -0.044a1.832 1.832 0 0 0 -0.358 -0.036v1.32c0.03 0 0.066 0.002 0.1 0.012l0.258 -1.296Zm-0.358 -0.036H13.326v1.32h28.446V5.94Zm-28.444 0a2.979 2.979 0 0 0 -2.986 2.971h1.32c0 -0.906 0.744 -1.652 1.666 -1.652V5.94ZM10.34 8.912V55.94h1.32V8.912h-1.32Zm0 47.028a2.98 2.98 0 0 0 2.986 2.972v-1.32a1.662 1.662 0 0 1 -1.666 -1.65h-1.32Zm2.986 2.972h39.35v-1.32h-39.35v1.32Zm39.35 0a2.98 2.98 0 0 0 2.986 -2.97h-1.32a1.662 1.662 0 0 1 -1.666 1.65v1.32Zm2.986 -2.97v-36.19h-1.32v36.186h1.32Zm0 -36.188a1.87 1.87 0 0 0 -0.036 -0.352l-1.296 0.25a0.538 0.538 0 0 1 0.012 0.102h1.32ZM41.306 9.86l10.422 10.362 0.93 -0.938L42.236 8.922l-0.93 0.938Zm10.888 9.234H41.77v1.32h10.424v-1.32Zm-9.764 0.66V9.394h-1.32v10.362h1.32ZM52.676 55.28h-39.35v1.32h39.35v-1.32Zm-38.69 0.66V8.912h-1.32V55.94h1.32Zm-0.66 -46.368h26.12v-1.32h-26.12v1.32Zm25.458 -0.66v10.844h1.32V8.912h-1.32Zm0 10.842a2.98 2.98 0 0 0 2.986 2.972v-1.32a1.662 1.662 0 0 1 -1.666 -1.65h-1.32Zm2.986 2.972h10.906v-1.32H41.77v1.32Zm10.246 -0.66V55.94h1.32V22.066h-1.32Z" fill="#FA7800" mask="url(#path-1-outside-1_1027_7006)"/><path d="m25.076 43.486 15.842 -15.842" stroke="#FA7800" stroke-width="3.9600000000000004" stroke-linecap="round"/><path d="M40.924 43.486 25.08 27.644" stroke="#FA7800" stroke-width="3.9600000000000004" stroke-linecap="round"/></svg>
+                            </div>
+                        </template>
+                        <template lwc:else>
+                            <div class="box__img" lwc:if={isVisible}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="63" height="63" viewBox="0 0 63 63" fill="none"><path d="M54.575 17.818c-0.009 -0.037 -0.022 -0.071 -0.03 -0.104 -0.013 -0.041 -0.022 -0.08 -0.038 -0.123 -0.016 -0.041 -0.041 -0.077 -0.063 -0.117 -0.016 -0.03 -0.029 -0.063 -0.05 -0.092a1.26 1.26 0 0 0 -0.152 -0.188L41.571 4.558a1.181 1.181 0 0 0 -0.188 -0.152c-0.029 -0.022 -0.062 -0.034 -0.09 -0.05 -0.039 -0.022 -0.077 -0.047 -0.121 -0.063 -0.038 -0.016 -0.079 -0.025 -0.123 -0.038 -0.037 -0.01 -0.071 -0.024 -0.104 -0.029a1.226 1.226 0 0 0 -0.236 -0.025H10.844a2.441 2.441 0 0 0 -2.443 2.436v49.541a2.44 2.44 0 0 0 2.442 2.435h41.315a2.441 2.441 0 0 0 2.442 -2.435V18.058a1.263 1.263 0 0 0 -0.024 -0.239ZM40.709 7.141l10.941 10.921h-10.945V7.141Zm11.45 49.037H10.844V6.639h27.422v11.419a2.44 2.44 0 0 0 2.442 2.435h11.45v35.681Z" fill="#7ABB4A"/><path d="M54.575 17.818c-0.009 -0.037 -0.022 -0.071 -0.03 -0.104 -0.013 -0.041 -0.022 -0.08 -0.038 -0.123 -0.016 -0.041 -0.041 -0.077 -0.063 -0.117 -0.016 -0.03 -0.029 -0.063 -0.05 -0.092a1.26 1.26 0 0 0 -0.152 -0.188L41.571 4.558a1.181 1.181 0 0 0 -0.188 -0.152c-0.029 -0.022 -0.062 -0.034 -0.09 -0.05 -0.039 -0.022 -0.077 -0.047 -0.121 -0.063 -0.038 -0.016 -0.079 -0.025 -0.123 -0.038 -0.037 -0.01 -0.071 -0.024 -0.104 -0.029a1.226 1.226 0 0 0 -0.236 -0.025H10.844a2.441 2.441 0 0 0 -2.443 2.436v49.541a2.44 2.44 0 0 0 2.442 2.435h41.315a2.441 2.441 0 0 0 2.442 -2.435V18.058a1.263 1.263 0 0 0 -0.024 -0.239ZM40.709 7.141l10.941 10.921h-10.945V7.141Zm11.45 49.037H10.844V6.639h27.422v11.419a2.44 2.44 0 0 0 2.442 2.435h11.45v35.681Z" fill="#7ABB4A"/><path d="m29.686 36.734 -4.964 -5.032a1.214 1.214 0 0 0 -1.742 0 1.273 1.273 0 0 0 0 1.773l5.838 5.927a1.214 1.214 0 0 0 1.742 0l0.003 -0.003 10.483 -11.655a1.273 1.273 0 0 0 -0.002 -1.769 1.214 1.214 0 0 0 -1.742 0l-0.008 0.003 -9.612 10.758Z" fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.3080007"/></svg>
+                            </div>
+                            <div class="file-upload-img" lwc:else>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="63" height="63" viewBox="0 0 63 63" fill="none"><path d="M54.576 17.818c-0.009 -0.035 -0.021 -0.068 -0.031 -0.105 -0.013 -0.042 -0.021 -0.081 -0.037 -0.122 -0.017 -0.042 -0.042 -0.078 -0.063 -0.117 -0.017 -0.031 -0.03 -0.063 -0.05 -0.093a1.26 1.26 0 0 0 -0.154 -0.187L41.571 4.559a1.18 1.18 0 0 0 -0.187 -0.154c-0.03 -0.021 -0.061 -0.033 -0.091 -0.05 -0.04 -0.021 -0.078 -0.046 -0.119 -0.063 -0.037 -0.017 -0.08 -0.026 -0.122 -0.037 -0.035 -0.011 -0.068 -0.023 -0.105 -0.03a1.227 1.227 0 0 0 -0.24 -0.025H10.843a2.44 2.44 0 0 0 -2.443 2.435v49.541a2.442 2.442 0 0 0 2.442 2.436h41.315a2.442 2.442 0 0 0 2.443 -2.435V18.058a1.264 1.264 0 0 0 -0.023 -0.239ZM40.709 7.14l10.944 10.921H40.71V7.14Zm11.449 49.037H10.843V6.638h27.423v11.42a2.44 2.44 0 0 0 2.442 2.436h11.449v35.682Z" fill="#7ABB4A"/><path d="M19.107 41.817c0 0.672 0.546 1.218 1.22 1.218h21.525a1.218 1.218 0 1 0 0 -2.436H20.328a1.218 1.218 0 0 0 -1.22 1.218Z" fill="#7ABB4A"/><path d="M23.382 32.298a1.218 1.218 0 0 0 0.828 -0.319l5.661 -5.199v11.382a1.218 1.218 0 0 0 2.442 0V26.78l5.659 5.197a1.218 1.218 0 0 0 1.729 -0.072 1.218 1.218 0 0 0 -0.074 -1.722l-7.707 -7.078 -0.052 -0.04 -0.08 -0.063 -0.042 -0.028a0.536 0.536 0 0 0 -0.08 -0.042 0.664 0.664 0 0 0 -0.084 -0.046c-0.015 -0.009 -0.031 -0.013 -0.046 -0.017a0.648 0.648 0 0 0 -0.091 -0.03c-0.03 -0.009 -0.059 -0.021 -0.091 -0.028l-0.048 -0.009 -0.091 -0.011a0.746 0.746 0 0 0 -0.1 -0.009l-0.023 -0.002h-0.026l-0.084 0.009 -0.106 0.013 -0.048 0.011c-0.028 0.004 -0.05 0.013 -0.078 0.021l-0.1 0.033 -0.046 0.017c-0.026 0.011 -0.05 0.028 -0.076 0.04a0.894 0.894 0 0 0 -0.091 0.05l-0.042 0.026 -0.072 0.059c-0.018 0.017 -0.04 0.028 -0.056 0.043l-7.712 7.082a1.215 1.215 0 0 0 0.828 2.114Z" fill="#7ABB4A"/></svg>
+                            </div>
+                        </template>
+
+                        <!-- <svg height="43" viewBox="0 0 566.93 566.93" width="50" class="box__icon" >
+                            <path class="b"
+                                d="M51.12,332.94c-10.67,.11-20.45,9.83-20.24,20.47v139.22c0,10.57,9.64,20.18,20.24,20.18h464.68c10.59,0,20.24-9.62,20.24-20.18v-139.22c.16-10.67-9.54-20.47-20.24-20.47s-20.39,9.8-20.24,20.47v119.03H71.36v-119.03c.24-10.78-9.43-20.58-20.24-20.47Z">
+                            </path>
+                            <path class="b"
+                                d="M283.44,38.12c-4.82,.18-10.41,2.19-13.91,5.48l-114.67,107.93c-6.56,7.32-9.27,21.34-1.69,29.51,7.48,8.06,22,7.8,29.51-.21l80.53-75.89V394.14c0,11.17,9.06,20.24,20.24,20.24s20.24-9.06,20.24-20.24V104.94l80.53,75.89c6.93,6.9,21.95,8.19,29.51,.21,7.56-7.96,5.14-22.5-1.69-29.51l-114.67-107.93c-3.93-3.69-8.54-5.48-13.91-5.48h0Z">
+                            </path>
+                        </svg> -->
+                        <div class="box__upload"  lwc:if={isVisible}>
+                            <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-blue waves-light" onclick={uploadFileInChunk}>
+                                Upload
+                            </button>
+                        </div>
+                        <div class="box__container slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" lwc:else>
+                            <span style="font-family: 'Proxima Nova Bold' !important">Choose file to upload</span>
+                            <input accept="application/pdf"
+                            class="box__file" id="file" name="file" type="file" onchange={fileChanged}/>
+                        </div>
+                        <div>
+                            <label class="w-100 text-center pd-10 file-message" for="file">{fileName}
+                                <span style="color: #6C6C6C; margin-left: 14px;">{fSize}</span>
+                            </label>
+                            <label class="w-100 text-center error-text" for="file-error" lwc:if={isError}>
+                                <i class="fa-solid fa-circle-exclamation"></i>  {errorUploading}
+                            </label>
+                        </div>
+                    </div>
+                    <span class="box__dragndrop slds-align_absolute-center"> or drag and drop files here</span>
+                </form>
+            </div>
+            <div class="slds-btn slds-btn-sm waves-effect bc-blue waves-light back_to_previous">
+                <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                    <li class="slds-item navigate">
+                        <a name="buttonBackwards"  label="Previous" title="Back"
+                            onclick={backToPrevious}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                                <path d="M5.27083 0.518159L5.23057 0.477898C5.6416 0.0668681 6.30443 0.0668665 6.71544 0.477899C7.12647 0.888928 7.12647 1.55176 6.71543 1.96277L3.746 4.93219L14.0082 4.9322C14.587 4.9322 15.0569 5.4021 15.0569 5.9809C15.0569 6.55971 14.587 7.02961 14.0082 7.02961L3.746 7.02961L6.71544 9.99904C7.12647 10.4101 7.12647 11.0729 6.71543 11.4839C6.3044 11.8949 5.64158 11.8949 5.23057 11.4839L0.470134 6.72348C0.419224 6.67257 0.377458 6.61808 0.340662 6.56474L0.340063 6.56387L0.340071 6.56386C0.330253 6.54905 0.322986 6.53451 0.317282 6.5231L0.316818 6.52217C0.310691 6.50992 0.306186 6.50105 0.300501 6.49247L0.299683 6.49124L0.2997 6.49123L0.298833 6.48984C0.279756 6.45938 0.256998 6.42303 0.242799 6.38092C0.235564 6.36144 0.228728 6.33906 0.222278 6.31794C0.218253 6.30476 0.214378 6.29207 0.21065 6.28089L0.209939 6.27875L0.209981 6.27874C0.20712 6.26887 0.203734 6.25909 0.199711 6.24746C0.198801 6.24483 0.197858 6.2421 0.196881 6.23926C0.191834 6.22458 0.186218 6.20769 0.181699 6.18929L0.180949 6.18624L0.181035 6.18622C0.168689 6.12048 0.160134 6.04931 0.160134 5.98146C0.160134 5.91361 0.168689 5.84243 0.181035 5.77669L0.18168 5.77325L0.181785 5.77327C0.189579 5.74237 0.197798 5.71243 0.210502 5.68192C0.211025 5.67982 0.211559 5.67764 0.212108 5.67541C0.218947 5.6476 0.228105 5.61036 0.245014 5.57659M5.27083 0.518159L0.296489 5.60096M5.27083 0.518159L5.23056 0.477903L0.47013 5.23944L0.470007 5.23956C0.42453 5.28533 0.378151 5.33978 0.33984 5.3994M5.27083 0.518159L0.510395 5.27969C0.466948 5.32342 0.423227 5.37488 0.38753 5.43051M0.245014 5.57659C0.245255 5.57611 0.245498 5.57562 0.245744 5.57514L0.296489 5.60096M0.245014 5.57659C0.244812 5.57704 0.244611 5.5775 0.244409 5.57795L0.296489 5.60096M0.245014 5.57659C0.253735 5.55701 0.263352 5.5389 0.27224 5.52261C0.281685 5.5053 0.28975 5.491 0.297034 5.47644L0.297599 5.47531C0.309131 5.45224 0.32227 5.42596 0.33984 5.3994M0.296489 5.60096C0.306126 5.57915 0.317312 5.55879 0.328155 5.53905C0.335059 5.52648 0.341823 5.51417 0.347959 5.5019L0.347982 5.50186C0.359874 5.47807 0.371767 5.45429 0.38753 5.43051M0.33984 5.3994C0.339764 5.39952 0.339688 5.39964 0.339613 5.39975L0.38753 5.43051M0.33984 5.3994C0.339917 5.39928 0.339994 5.39917 0.340071 5.39905L0.38753 5.43051" fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.113874"></path>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+           
+
+           
+            <div class="insurance-container slds-align_absolute-center">
+                <div class="footer-text">
+                    <div class="slds-col slds-size_4-of-4">
+                        <div class="insurance slds-p-horizontal_x-large slds-p-bottom_small slds-p-top_large">
+                            <div class="insurance-header">My company insurance minimums are:</div>
+                            <div class="slds-m-top_medium">
+                                <table
+                                    class="slds-table slds-table_cell-buffer slds-table_header-hidden bordered-table">
+                                    <tr lwc:if={client.bodilyInjury}>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Bodily Injury</td>
+                                        <td>
+                                         ${client.bodilyInjury}
+                                        </td>
+                                    </tr>
+                                    <tr lwc:if={client.unInsuranceMotorist}>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Uninsured Motorist</td>
+                                        <td>
+                                            ${client.unInsuranceMotorist}
+                                            <!-- <lightning-formatted-number value={client.unInsuranceMotorist}
+                                                format-style="currency" currency-code="USD">
+                                            </lightning-formatted-number> -->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Property Damage</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.propertyDamage}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Comprehensive Deductible</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.comprehensive}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Collision Deductible</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.collision}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                    <tr lwc:if={client.umbrella}>
+                                        <td><i class="fa-solid fa-2x fa-check"></i></td>
+                                        <td>Umbrella Coverage</td>
+                                        <td>
+                                            <lightning-formatted-number value={client.umbrella}
+                                                format-style="currency" currency-code="USD"
+                                                minimum-fraction-digits="0">
+                                            </lightning-formatted-number>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+    <div class="transition modal-content" lwc:if={isUploaded}>
+        <div class="thanksImg"><img  src={thanksUploading} /></div>
+        <div class="slds-text-heading_large slds-text-align_center slds-p-top_large slds-p-bottom_x-large font-style">
+            Thank you for uploading <br/> your insurance.
+        </div>
+        <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_x-large font-style font-width">
+           A team member will review your insurance shortly and contact you with any questions.
+        </div>
+        <div class="footer-button slds-text-align_center">
+            <button class="slds-btn slds-btn-primary slds-btn-done waves-effect bc-blue waves-light"
+                        onclick={nextDoneUpload}>
+                        Done
+            </button>
+        </div>
+    </div>
+</template>

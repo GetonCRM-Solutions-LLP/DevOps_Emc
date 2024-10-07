@@ -1,0 +1,8 @@
+<template>
+    <figure class="highcharts-figure">
+        <div class="chart" lwc:dom="manual" style="position: relative;" lwc:ref="chartRef"></div>
+    </figure>
+    <template lwc:if={error}>
+        {error}
+    </template>
+</template>

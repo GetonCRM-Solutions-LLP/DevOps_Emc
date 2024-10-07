@@ -1,0 +1,84 @@
+<apex:page controller="RG_Charting" cache="false">
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+    
+    <div id="mtitle"><b>Monthly Mileage</b></div>
+    
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/amcharts.js')}"></script>
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/serial.js')}"></script>
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/plugins/export/export.min.js')}"></script>
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/plugins/export/export.css')}" type="text/css" media="all" />
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/themes/none.js')}"></script>
+    
+    <div id="chartdiv"></div>
+    <div id="legend" style="">
+        <div class="litem">
+            <div id="icn_reimburse"></div>
+            <div class="legendti">- mileage</div>
+        </div>
+    </div>
+    
+    <script>
+    var chart = AmCharts.makeChart( "chartdiv", {
+    "type": "serial",
+    "addClassNames": true,
+    "theme": "none",
+    "autoMargins": false,
+    "marginLeft": 50,
+    "marginRight": 8,
+    "marginTop": 10,
+    "marginBottom": 26,
+    "balloon": {
+    "adjustBorderColor": false,
+    "horizontalPadding": 10,
+    "verticalPadding": 8,
+    "color": "#ffffff"
+    },
+    
+    "dataProvider": [ {!getdata} ] ,
+    "valueAxes": [ {
+    
+    //"axisAlpha": 0,
+    "position": "left",
+    "unitPosition":"left"
+    } ],
+    "startDuration": 1,
+    "graphs": [ {
+    "alphaField": "alpha",
+    "balloonText": "<span align='center' style='font-size:14px;font-family:\"proxima-nova\",sans-serif;padding-left:80px;'>[[title]]:<br/><span style='font-family:\"proxima-nova\",sans-serif;font-size:20px;padding-left:100px;'>[[value]]</span> [[additional]]</span>",
+    "fillAlphas": 1,
+    "title": "Mileage",
+    "fillColors":"#76BD1D",
+    "lineColor":"#518726",
+    "type": "column",
+    "valueField": "Mileage",
+    "dashLengthField": "dashLengthColumn"
+    }, {
+    "id": "graph2",
+    "balloonText": "<span align='center' style='font-family:\"proxima-nova\",sans-serif;font-size:12px;padding-left:50px;'>[[title]]:<br/><span style='font-family:\"proxima-nova\",sans-serif;font-size:20px;'>$[[value]]</span> [[additional]]</span>",
+    "bullet": "round",
+    "lineThickness": 3,
+    "bulletSize": 7,
+    "bulletBorderAlpha": 1,
+    "bulletColor": "#FFFFFF",
+    "useLineColorForBulletBorder": true,
+    "bulletBorderThickness": 3,
+    "lineColor":"#2d8bca",
+    "fillAlphas": 0,
+    "lineAlpha": 1,
+    "title": "Fuel Price",
+    "valueField": "Fuel Price",
+    "dashLengthField": "dashLengthLine"
+    } ],
+    "categoryField": "Month",
+    "categoryAxis": {
+    "gridPosition": "start",
+    "gridAlpha": 0,
+    "tickLength": 2,
+    "dashLength":7
+    },
+    "export": {
+    "enabled": true
+    }
+    } );
+    </script>
+</apex:page>

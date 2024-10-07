@@ -1,0 +1,262 @@
+<apex:page docType="html-5.0" standardStylesheets="false" showHeader="false" controller="UpdateMileageByContactController">
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+         <apex:stylesheet value="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"/>
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
+       <!-- <link rel="stylesheet" type="text/css" href="select2-bootstrap.css"/> -->
+        <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+        <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+        <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <apex:includeScript value="{!URLFOR($Resource.Tablesorter, '/jquery-latest.js')}"/> 
+       <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script>
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> -->
+        <meta charset="utf-8"/>   
+        
+        <meta name="description" content="Bootstrap."/>  
+        <!--<link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>   
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+        <link rel="stylesheet" href="http://cdn.datatables.net/1.10.2/css/jquery.dataTables.min.css"/>
+        <script type="text/javascript" src="http://cdn.datatables.net/1.10.2/js/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+
+    </head>   
+    <style>
+        table {
+            width: 100%;
+        }
+        th {
+            height: 50px;
+        }
+        .alert.alert-success {
+            margin-bottom: 0px !important;
+        }
+        .panel-group .panel-footer {
+            float: left;
+            width: 100%;
+        }
+        .panel.panel-default {
+            float: left;
+            width: 100%;
+        }
+        .form-control{
+            padding:0px;
+        }
+        .select2-container {
+            box-sizing: border-box;
+            display: inline-block;
+            margin: 0;
+            position: relative;
+            vertical-align: middle;
+            display: block;
+            width: 100%;
+            height:34px;
+            padding: 0px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555;
+            background-color: #fff;
+            background-image: none;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        }
+        .select2-container .select2-selection--single {
+            height: 34px;
+        }
+        .select2-container .select2-selection--single .select2-selection__rendered {
+            padding: 6px 0 0 5px;
+        }
+        select[multiple], select[size] {
+            height:34px; 
+        }
+    </style>
+    <script>
+        $(document).ready(function(){
+        
+            initdatatable();
+                
+         }); 
+         function initdatatable()
+                {
+                    
+                   $('#myTable').dataTable({
+                    "pageLength": 100,
+                     searching: false});
+               }
+        
+    </script>
+    <script type="text/javascript">
+        function cvCheckAllOrNone(allOrNoneCheckbox) {
+            var inputElem = document.getElementsByTagName("input");
+            for(var i=0; i<inputElem.length; i++) {
+                if(inputElem[i].id.indexOf("checkedone")!=-1)
+                    inputElem[i].checked = allOrNoneCheckbox.checked;
+            }
+        }
+        $(document).ready(function () {
+            $(".dff").select2.defaults.set("theme", "bootstrap");
+            $(".dff").select2({
+                width: null
+            })
+        });
+        function updateInfo(){
+            jQuery(".generatConfirmDiv").show();
+        }
+    </script>
+
+    <apex:form id="frm">
+        <apex:actionStatus id="spinner">
+                <apex:facet name="start">
+                    <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                    <div style="top: 40%;padding: 10px;left: 43%;  width: 15%;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                        <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                        <span style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Please Wait...</span>
+                    </div>
+                </apex:facet>
+        </apex:actionStatus>
+        <apex:actionFunction action="{!getMileages}" name="fillMainDataList" status="spinner" reRender="open_Mileages,opnl_reimbersments_To,buttonUpdate" oncomplete="initdatatable();"/>
+        <apex:actionFunction action="{!getReimbersments}" name="getReimbersmentsjs" status="spinner"  reRender="opnl_reimbersments,opnl_reimbersments_To" oncomplete="fillMainDataList();">
+        </apex:actionFunction>
+        <div class="container">
+            <div class="row">
+                <div class="panel-group">
+                   <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="blockquote text-center"><b>Mass Update Mileages</b></h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-1">
+                                                <label>
+                                                    Account
+                                                </label>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <apex:selectList styleClass="form-control selectpicker dff" id="slctlst__Contact_for_Reimbersment" size="1" multiselect="false" value="{!selected_account_id}" onchange="getReimbersmentsjs();">
+                                                    <apex:selectOptions value="{!obj_account_options}"></apex:selectOptions>
+                                                </apex:selectList>
+                                            </div>
+                                            <apex:outputPanel id="opnl_reimbersments">
+                                                <apex:outputPanel rendered="{!flagtoshow}">
+                                                    <div class="col-md-1">
+                                                        <label>
+                                                            From
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <apex:selectList styleClass="form-control dummyReimClass" id="slctlst__reimbersments" size="1" multiselect="false" value="{!Selected_reimbersments}" onchange="fillMainDataList();">
+                                                            <apex:selectOptions value="{!obj_reimbersments}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>  
+                                            <apex:outputPanel id="opnl_reimbersments_To">
+                                                <apex:outputPanel rendered="{!flagtoshowforToReim}">
+                                                    <div class="col-md-1">
+                                                        <label>
+                                                            To
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <apex:selectList styleClass="form-control dummyReimClass" id="slctlst__reimbersments_To" size="1" multiselect="false" value="{!Transfer_reimbersment}" >
+                                                            <apex:selectOptions value="{!transfer_obj_reimbersments}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel> 
+                                            <apex:outputPanel id="buttonUpdate">
+                                                <apex:outputPanel rendered="{!buttonShow}">
+                                                    <div class="col-md-2">
+                                                        <apex:commandButton styleClass="form-control btn btn-primary" id="updateButton" action="{!updateMileage}" value="Update" disabled="{!If(isPRSelected == false,true,false)}" status="spinner" reRender="open_Mileages" oncomplete="updateInfo();"/>
+                                                    </div>
+                                                    <br/>
+                                                    <div class="generatConfirmDiv"  style="display:none;">
+                                                        <!-- <div class="form-group row"> -->
+                                                            <div style="text-align: center;">
+                                                                <span style="color:green">Update Successfully!</span>
+                                                            </div>
+                                                        <!-- </div> -->
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>        
+                                        </div>
+                                    </div>
+                                </div>       
+                            </div>
+                            <div class="row">
+                            <apex:outputPanel id="open_Mileages"> 
+                                <apex:outputPanel id="myTablePanel" rendered="{!myTablePanelShow}">
+                                    <table class="table table-striped table-bordered" style="width:100%" id="myTable">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <apex:inputCheckbox >
+                                                        <apex:actionSupport event="onclick" action="{!getIsPRSelected}" onsubmit="cvCheckAllOrNone(this)" rerender="opnl_reimbersments_To,buttonUpdate" status="spinner" />
+                                                    </apex:inputCheckbox>
+                                                </th>
+                                                <th><b>Mileage Name</b></th>
+                                                <th><b>Reimbursement Id</b></th>
+                                                <th><b>Employee Reimbursement</b></th>
+                                                <th><b>Reimbursement Status</b></th>
+                                                <th><b>Reim.Approved Date</b></th> 
+                                                <th><b>Fuel Price</b></th>
+                                                <th><b>Mileage</b></th>
+                                                <!-- <th><b>MPG</b></th> -->
+                                                <th><b>Maintenance and Tires</b></th>
+                                                <!-- <th><b>Approved Date</b></th>  -->
+                                                <th><b>Trip Date</b></th>
+                                                <th><b>Trip Origin</b></th>
+                                                <th><b>Trip Dest.</b></th>
+                                            </tr>
+                                        </thead>
+                                        <apex:repeat id="rpt_mileages" value="{!maintableDataList}" var="obj_current_mileage">
+                                            <tr>
+                                                <td>
+                                                    <apex:inputCheckbox value="{!obj_current_mileage.isPRSelected}" id="checkedone" >
+                                                        <apex:actionSupport event="onclick" action="{!getIsPRSelected}" reRender="opnl_reimbersments_To,buttonUpdate" status="spinner"/>
+                                                    </apex:inputCheckbox>
+                                                </td>
+                                                <td>{!obj_current_mileage.name}</td>
+                                                <td>{!obj_current_mileage.Id}</td>
+                                                <td>{!obj_current_mileage.employeeName}</td>
+                                                <td>{!obj_current_mileage.reimbursementStatus}</td>
+                                                <td>{!obj_current_mileage.approvedDate}</td>
+                                                <td>{!obj_current_mileage.fuelPrice}</td>
+                                                <td>{!obj_current_mileage.mileage}</td>
+                                                <!-- <td>{!obj_current_mileage.MPG}</td> -->
+                                                <td>{!obj_current_mileage.maintenanceAndTires}</td>
+                                                <td>{!obj_current_mileage.tripDate}</td>
+                                                <td>{!obj_current_mileage.tripOrigin}</td>
+                                                <td>{!obj_current_mileage.tripDestination}</td>
+                                            </tr>
+                                        </apex:repeat>
+                                    </table>
+                                    
+                                   
+                                </apex:outputPanel>
+
+                            </apex:outputPanel>
+                        </div>
+                        </div>
+                        
+                        <div class="panel-footer">
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+</apex:page>

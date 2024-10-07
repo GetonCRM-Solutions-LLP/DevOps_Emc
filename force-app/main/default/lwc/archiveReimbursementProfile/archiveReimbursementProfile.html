@@ -1,0 +1,21 @@
+<template>
+    <div class="slds-p-horizontal_x-large animate__animated animate__slideInLeft animate__delay-1s">
+        <template lwc:if={lengthOfContact}>
+            <c-accordion-view accordion-data={accordionList} is-download-all={hrBorder} is-irs={isIRS}  hr-class={hrBorder} contact-id={contactId} account-id={accountId} contact-info={contact} onnavigate={fromAccordion} is-tand-a={timeAttendance} 
+                ontoast={onToast} onshow={getSpinner} show-arrow-icon={isIcon}>
+            </c-accordion-view>
+        </template>
+        <!-- <div class="input-action"><c-select2-dropdown 
+            label="Searchable Combobox"
+            options={selectViewList}
+            default-option="Select Location"
+            selected-value="Lake Park Plaza, 4353 Franklin St, Michigan City, IN  46360"
+            value={value}
+            onchange={handleChange}
+            main-class="default-box-input slds-truncate"></c-select2-dropdown> </div> -->
+        <div>
+            <button class="slds-btn waves-effect btn-back" onclick={backToReimbursement}><i
+                class="fas fa-arrow-left"></i></button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Driver Packet Status --></label>
+    <name>Driver_Packet_Status__c</name>
+    <picklistValues>
+        <masterLabel>Resent</masterLabel>
+        <translation><!-- Resent --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Resent Again</masterLabel>
+        <translation><!-- Resent Again --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Sent</masterLabel>
+        <translation><!-- Sent --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Skip</masterLabel>
+        <translation><!-- Skip --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uploaded</masterLabel>
+        <translation><!-- Uploaded --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

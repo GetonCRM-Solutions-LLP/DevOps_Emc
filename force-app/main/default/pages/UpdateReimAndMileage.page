@@ -1,0 +1,545 @@
+<apex:page Controller="UpdateReimAndMileageController" docType="html-5.0" standardStylesheets="false" showHeader="false">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/css/select2.min.css" />
+<link rel="stylesheet" type="text/css" href="select2-bootstrap.css"/>
+
+<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.2/js/select2.min.js"></script>
+    
+    
+    <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+    <style>
+        .panel-group .panel-footer
+        {
+            float: left;
+            width: 100%;
+        }
+        .panel.panel-default
+        {
+            float: left;
+            width: 100%;
+        }
+       .alert.alert-success
+        {
+            margin-bottom: 0px !important;
+        }
+        .form-control{
+            padding:0px;
+        }
+        .select2-container {
+    box-sizing: border-box;
+    display: inline-block;
+    margin: 0;
+    position: relative;
+    vertical-align: middle;
+    display: block;
+    width: 100%;
+    height:34px;
+    padding: 0px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+}
+.select2-container .select2-selection--single {
+    
+    height: 34px;
+    
+}
+.select2-container .select2-selection--single .select2-selection__rendered {
+   
+        padding: 6px 0 0 5px;
+}
+select[multiple], select[size] {
+     height:34px; 
+}
+    </style>
+    <apex:form id="frm">
+        <apex:actionStatus id="spinner" >
+            <apex:facet name="start">
+                <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+                    &nbsp;
+                </div>
+                <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 50%">
+                    <div style="display: inline-block; padding: 2px; background-color: #fff; width: 125px;">
+                        <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                        <span  style="display: inline-block; padding: 10px 0px;">Please Wait...</span>
+                    </div>
+                </div>
+            </apex:facet>
+        </apex:actionStatus>
+        <apex:actionFunction action="{!getContacts}" name="getContactsjs" status="spinner" reRender="opnl_contact,opnl_reimbersments,opnl_reimbersments_details,opnl_success_msg,opnl_error_msg">
+        </apex:actionFunction>
+        <apex:actionFunction action="{!getReimbersments}" name="getReimbersmentsjs" status="spinner" reRender="opnl_reimbersments,opnl_reimbersments_details,opnl_success_msg,opnl_error_msg">
+        </apex:actionFunction>
+        <apex:actionFunction action="{!getReimbersmentDetails}" name="getReimbersmentDetailsjs" status="spinner" reRender="opnl_reimbersments_details,opnl_success_msg,opnl_error_msg">
+        </apex:actionFunction>
+        <apex:actionFunction action="{!updateReimbersment}" name="updateReimbersmentjs" status="spinner" reRender="opnl_reimbersments,opnl_reimbersments_details,opnl_success_msg,opnl_error_msg">
+        </apex:actionFunction> 
+        
+        <apex:actionFunction action="{!getContactsMileages}" name="getContactsMileagesjs" status="spinner" reRender="opnl_contact_mileages,opnl_reimbersments_mileages,opnl_mileages_updateing,opnl_error_mileage_msg,opnl_success_mileage_msg">
+        </apex:actionFunction>
+        <apex:actionFunction action="{!getReimbersmentsmileages}" name="getReimbersmentsmileagesjs" status="spinner" reRender="opnl_reimbersments_mileages,opnl_mileages_updateing,opnl_error_mileage_msg,opnl_success_mileage_msg">
+        </apex:actionFunction>        
+        <apex:actionFunction action="{!showDetailofMileages}" name="showDetailofMileagesjs" status="spinner" reRender="opnl_mileages_updateing,opnl_error_mileage_msg,opnl_success_mileage_msg"/>       
+        <apex:actionFunction action="{!updatemileages}" name="updatemileagesjs" status="spinner" reRender="opnl_mileages_updateing,opnl_error_mileage_msg,opnl_success_mileage_msg"/>       
+        <apex:actionFunction action="{!cancelall}" name="cancelalljs" status="spinner" reRender="opnl_reimbersments_mileages,opnl_reimbersments,opnl_reimbersments_details,opnl_success_msg,opnl_error_msg,opnl_mileages_updateing,opnl_error_mileage_msg,opnl_success_mileage_msg"/>
+        
+        <div class="container">
+            <!-- Modal for Update Mileages -->
+            <!-- Modal Starts -->
+                <div class="modal fade" id="myModal" role="dialog">
+                    <div class="modal-dialog">                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" onclick="closemodal();">&times;</button>
+                                
+                            </div>
+                            <div class="modal-body">
+                                <p><font color="red">Some Values are Blank. Are you sure you want to Update with Blank values ? </font></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" onclick="updatemileagesjs();" data-dismiss="modal">ok</button> 
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closemodal();">Close</button>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+             <!-- Modal Ends-->
+            
+            <!-- Modal for Update Reimbersment-->
+            <!-- Modal Starts -->
+                <div class="modal fade" id="myModalforReim" role="dialog">
+                    <div class="modal-dialog">                    
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" onclick="closemodal();">&times;</button>
+                                
+                            </div>
+                            <div class="modal-body">
+                                <p><font color="red">Some Values are Blank. Are you sure you want to Update with Blank values ? </font></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-success" onclick="updateReimbersmentjs();" data-dismiss="modal">ok</button> 
+                                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="closemodal();">Close</button>
+                            </div>
+                        </div>                    
+                    </div>
+                </div>
+             <!-- Modal Ends-->
+        
+        
+            <div class="row">
+                <div class="panel-group">
+                   <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Update Reimbersment</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-2">
+                                                <label>
+                                                    Account
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <apex:selectList styleClass="form-control selectpicker dff" id="slctlst__Contact_for_Reimbersment" size="1" multiselect="false" value="{!selected_account_id}" onchange="callingFunction();">
+                                                    <apex:selectOptions value="{!obj_account_options}"></apex:selectOptions>
+                                                </apex:selectList>
+                                            </div>
+                                            <apex:outputPanel id="opnl_contact">
+                                                <apex:outputPanel rendered="{!contactflagtoshow}">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Contact
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control selectpicker dff" size="1" multiselect="false" value="{!Selected_contact_id}" onchange="getReimbersmentsjs();">
+                                                            <apex:selectOptions value="{!obj_contact_options}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel id="opnl_reimbersments">
+                                                <apex:outputPanel rendered="{!flagtoshow}">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Reimbersments
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control dummyReimClass" id="slctlst__reimbersments" size="1" multiselect="false" value="{!Selected_reimbersments}" onchange="getReimbersmentDetailsjs();">
+                                                            <apex:selectOptions value="{!obj_reimbersments}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>     
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <apex:outputPanel id="opnl_reimbersments_details">
+                                <apex:outputPanel rendered="{!flagtoshowdetails}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Status
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control dummyReimStatusClass" id="slctlst__reimbersments_status" size="1" multiselect="false" value="{!Status}" onchange="reimStatus()">
+                                                            <apex:selectOptions value="{!obj_reimbersments_status}"></apex:selectOptions>
+                                                        </apex:selectList>                                                        
+                                                    </div>  
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Approved Date
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:input type="date" styleClass="form-control dummyReimDateClass" value="{!selectedApprovedDate}" onchange="reimDate()"/>
+                                                    </div> 
+                                                      
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                            </apex:outputPanel>                            
+                        </div>
+                        <div class="panel-footer"> 
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a id="updateReimbersment" class="btn btn-success" onclick="showmodalForReim();">Update Reimbersments</a>
+                                    <a class="btn btn-primary" onclick="cancelalljs();">Cancel</a>
+                                </div>
+                                <div class="col-md-9">
+                                    <apex:outputPanel id="opnl_error_msg">
+                                        <apex:outputPanel rendered="{!flagforerror}">
+                                            <div class="alert alert-danger">
+                                                {!errormsg}
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="opnl_success_msg">
+                                        <apex:outputPanel rendered="{!flagforsuccess}">
+                                            <div class="alert alert-success">
+                                            <strong>{!errormsg}</strong> Updated Successfully !!
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>                                    
+                                </div>
+                            </div>                       
+                        </div>  
+                   </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="panel-group">
+                   <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4>Mass Update Mileages</h4>
+                        </div>
+                        <div class="panel-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-horizontal">
+                                        <div class="form-group">
+                                            <div class="col-md-2">
+                                                <label>
+                                                    Account
+                                                </label>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <apex:selectList styleClass="form-control selectpicker dff" id="slctlst__Contact_for_mileages" size="1" multiselect="false" value="{!Selectedaccountid_mileages}" onchange="getContactsMileagesjs();">
+                                                    <apex:selectOptions value="{!obj_account_options}"></apex:selectOptions>
+                                                </apex:selectList>
+                                            </div>
+                                            <apex:outputPanel id="opnl_contact_mileages">
+                                                <apex:outputPanel rendered="{!flagtoshow_contact_mileages}">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Contact
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control col-md-2 dummyReimForMileages" size="1" multiselect="false" value="{!Selectedcontactid_mileages}" onchange="getReimbersmentsmileagesjs();">
+                                                            <apex:selectOptions value="{!obj_contact_mileages}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                            <apex:outputPanel id="opnl_reimbersments_mileages">
+                                                <apex:outputPanel rendered="{!flagtoshow_mileages}">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Reimbersments
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control col-md-2 dummyReimForMileages" size="1" multiselect="false" value="{!Selected_reimbersments_mileages}" onchange="showDetailofMileagesjs();">
+                                                            <apex:selectOptions value="{!obj_reimbersments_mileages}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <apex:outputPanel id="opnl_mileages_updateing">
+                                <apex:outputPanel rendered="{!flagtoshowdetails_mileages}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Trip Status
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:selectList styleClass="form-control col-md-2 dummystatusclass" size="1" multiselect="false" value="{!selectedTripStatus}" id="trip_status" onchange="tripStatus();">
+                                                            <apex:selectOptions value="{!obj_trip_status}"></apex:selectOptions>
+                                                        </apex:selectList>
+                                                    </div>  
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Mileage Approval Date
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:input type="date" styleClass="form-control col-md-2 dummydateclass" value="{!selectedmileageApprovedDate}" onchange="dummyDate();"/>
+                                                    </div>
+                                                              
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            MPG
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:inputText styleClass="form-control dummympgclass" value="{!selectedmileagempg}" id="mpgValue" onKeypress="javascript:return isDecimal(event)"/>
+                                                        <span id="error" style="color: Red; display: none">* Input digits should be decimal </span>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <label>
+                                                            Maintenance And Tires
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <apex:inputText styleClass="form-control dummymaintannacetiersclass" value="{!selectedmileagetiers}" onKeypress="javascript:return isDecimal(event)"/>
+                                                    </div>              
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </div>
+                        <div class="panel-footer">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <a class="btn btn-success" onclick="showmodal();" id="update_Mileage">Update Mileages</a>
+                                    <a class="btn btn-primary" onclick="cancelalljs();">Cancel</a>
+                                </div>
+                                <div class="col-md-9">
+                                    <apex:outputPanel id="opnl_error_mileage_msg">
+                                        <apex:outputPanel rendered="{!flagforerror_mileages}">
+                                            <div class="alert alert-danger">
+                                                {!errormsg_mileages}
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="opnl_success_mileage_msg">
+                                        <apex:outputPanel rendered="{!flagforsuccess_mileages}">
+                                            <div class="alert alert-success">
+                                             Mileages for <strong>{!errormsg_mileages}</strong> are Updated Successfully !!
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </div>
+                            </div>                    
+                        </div>  
+                   </div>
+                </div>
+            </div>
+        </div> 
+    </apex:form>
+    <script>
+        function reimStatus(){
+            var selectedReimStatus = $('.dummyReimStatusClass').val();
+            var reimApprovedDate = $('.dummyReimDateClass').val();
+            if(selectedReimStatus == 'Approved' || selectedReimStatus == 'Rejected' || selectedReimStatus == ''){
+                
+                if(reimApprovedDate == "" || reimApprovedDate == null){
+                    $('#updateReimbersment').attr('disabled','disabled');
+                }
+                else{
+                    $('#updateReimbersment').removeAttr('disabled');
+                }
+            }
+            else{
+                    $('#updateReimbersment').removeAttr('disabled');
+            }
+        }
+        function tripStatus(){
+            var selectedTrip = $('.dummystatusclass').val(); 
+            console.log(selectedTrip);
+            var mileageApproveDate = $('.dummydateclass').val();
+            if(selectedTrip =='Approved' || selectedTrip == 'Rejected' || selectedTrip == ''){
+                if(mileageApproveDate == "" || mileageApproveDate == null){
+                    $('#update_Mileage').attr('disabled','disabled');
+                }
+                else{
+                    $('#update_Mileage').removeAttr('disabled');
+                }
+            }
+            else{
+               
+               // document.getElementById('update_Mileage').style.display = "inline-block";
+               $('#update_Mileage').removeAttr('disabled');
+            
+            }
+        }
+        function dummyDate(){
+            var selectedTrip = $('.dummystatusclass').val(); 
+            var mileageApproveDate = $('.dummydateclass').val();
+            var mileageBtn = document.getElementById('update_Mileage');
+            if(mileageApproveDate == "" || mileageApproveDate == null){
+                if(selectedTrip =='Approved' || selectedTrip == 'Rejected'){
+                    $('#update_Mileage').attr('disabled','disabled');
+                }
+                else{
+                    $('#update_Mileage').removeAttr('disabled');
+                }
+            }
+            else{
+                $('#update_Mileage').removeAttr('disabled');
+            }
+        }
+        function reimDate(){
+            var selectedReimStatus = $('.dummyReimStatusClass').val();
+            var reimApprovedDate = $('.dummyReimDateClass').val();
+            if(reimApprovedDate == "" || reimApprovedDate == null){
+                if(selectedReimStatus == 'Approved' || selectedReimStatus == 'Rejected'){
+                    $('#updateReimbersment').attr('disabled','disabled');
+                }
+                else{
+                    $('#updateReimbersment').removeAttr('disabled');
+                }
+            }
+            else{
+                    $('#updateReimbersment').removeAttr('disabled');
+            }
+        }
+        function showmodal()
+        {    
+            if((($(".dff").val()!=undefined) && ($(".dff").val()!="") && ($(".dff").val()!= null) && ($(".dff").val()!= "None") && (($(".dff").val()).length>0)) && (($(".dummyReimForMileages").val()!="") && ($(".dummyReimForMileages").val()!= null) && ($(".dummyReimForMileages").val()!= undefined) && ($(".dummyReimForMileages").val()!= "None") && (($(".dummyReimForMileages").val()).length>0 ))) 
+            { 
+                
+            
+                if(($(".dummydateclass").val()=="")||($(".dummydateclass").val()==null)||($(".dummystatusclass").val()=="")||($(".dummystatusclass").val()==null)||($(".dummympgclass").val()=="")||($(".dummympgclass").val()==null)||($(".dummymaintannacetiersclass").val()=="")||($(".dummymaintannacetiersclass").val()==null))
+                {
+                    $('#myModal').modal('show');
+                    
+                }
+                else
+                {
+                    updatemileagesjs();
+                }
+            }
+            else
+            {
+                updatemileagesjs();
+            }   
+        
+        }
+        function showmodalForReim()
+        {
+            if((($(".dff").val()!=undefined) && ($(".dff").val()!="") && ($(".dff").val()!= null) && ($(".dff").val()!= "None") && (($(".dff").val()).length>0)) && (($(".dummyReimClass").val()!="") && ($(".dummyReimClass").val()!= null) && ($(".dummyReimClass").val()!= undefined) && ($(".dummyReimClass").val()!= "None") && (($(".dummyReimClass").val()).length>0 ))) 
+            { 
+                
+                
+                if(($(".dummyReimDateClass").val()=="")||($(".dummyReimDateClass").val()==null)||($(".dummyReimStatusClass").val()=="")||($(".dummyReimStatusClass").val()==null))
+                {
+                    $('#myModalforReim').modal('show');
+                
+                }
+                else
+                {
+                    updateReimbersmentjs();
+                }
+            }
+            else
+            {
+                updateReimbersmentjs();
+            }
+            
+            
+          
+               
+        }
+        
+        function closemodal()
+        {
+            cancelalljs();
+            $('#myModal').modal('hide');
+            
+        }
+        function closemodalForReim()
+        {
+            cancelalljs();
+            $('#myModalforReim').modal('hide');
+            
+        }
+        function isDecimal(evt) {
+        var iKeyCode = (evt.which) ? evt.which : evt.keyCode
+        if (iKeyCode != 46 && iKeyCode > 31 && (iKeyCode < 48 || iKeyCode > 57))
+            return false;
+
+        return true;
+        }  
+        
+        
+        function callingFunction()
+        {
+            $.fn.select2.defaults.set("theme", "bootstrap");
+            $(".dff").select2({
+            width: null
+            });
+            getContactsjs();
+        }
+        $(document).ready(function () {
+        $.fn.select2.defaults.set("theme", "bootstrap");
+        $(".dff").select2({
+         width: null
+        })
+        });
+    </script>
+</apex:page>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ConnectedApp xmlns="http://soap.sforce.com/2006/04/metadata">
+    <canvasConfig>
+        <accessMethod>Post</accessMethod>
+        <canvasUrl>https://prod-apnortheast-a.online.tableau.com/vaulted</canvasUrl>
+        <locations>Visualforce</locations>
+        <samlInitiationMethod>None</samlInitiationMethod>
+    </canvasConfig>
+    <contactEmail>william@askemc.com</contactEmail>
+    <label>Tableau_Embed</label>
+    <samlConfig>
+        <acsUrl>https://sso.online.tableau.com/public/sp/SSO/fcfeda32-6eb1-4eb7-a1b0-d1b7897b0d84</acsUrl>
+        <encryptionType>AES_128</encryptionType>
+        <entityUrl>https://sso.online.tableau.com/public/sp/metadata/fcfeda32-6eb1-4eb7-a1b0-d1b7897b0d84</entityUrl>
+        <samlNameIdFormat>Unspecified</samlNameIdFormat>
+        <samlSigningAlgoType>SHA256</samlSigningAlgoType>
+        <samlSubjectType>Username</samlSubjectType>
+    </samlConfig>
+    <startUrl>https://prod-apnortheast-a.online.tableau.com/#/site/ridgeant/home</startUrl>
+</ConnectedApp>

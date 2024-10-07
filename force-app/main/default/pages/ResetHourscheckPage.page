@@ -1,0 +1,10 @@
+<apex:page standardController="Bi_Weekly_Reimbursement__c" extensions="ResetHourscheckController" action="{!resetFields}">
+    <apex:pageMessages />
+    <script>
+        window.onload = function() {
+            if({!refreshPage}) {
+                window.top.location.href = '/{!$CurrentPage.parameters.id}';
+            }
+        }
+    </script>
+</apex:page>

@@ -1,0 +1,1244 @@
+<apex:page standardStylesheets="false" Controller="RG_MyMonthlyReimbursment" showHeader="false">
+
+    <apex:includescript value="https://code.jquery.com/jquery-1.11.1.min.js" / >
+    <apex:includescript value="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" />
+    <apex:stylesheet value="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+
+    <!--Drive Status Panel -->
+    <!-- Start -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}" type='text/css' media='all'/>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+    <!-- Finish -->
+
+    <html lang="en-US" class="no-js">
+        <head>
+            <apex:variable value="{!860}" var="key" />
+            <apex:variable value="{!0}" var="i" />
+            <title>Your Reimbursement</title>
+
+            <apex:variable value="{!0}" var="j"/>
+            <link rel='stylesheet'
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}"
+                type='text/css' media='all' />
+            <link rel='stylesheet' id='rcap-style-css'
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}"
+                type='text/css' media='all' />
+
+            <link rel="stylesheet"
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}" />
+                
+            <style type="text/css">
+            #profile #cardetails {height: 199px;background-image: url({!if(con.Car_Image__c!=null,con.Car_Image__c,"https://www.dropbox.com/s/trc3pfwadw2w2wf/mburse-dashboard5_06.jpg?raw=1")});background-size: 79%;background-repeat: no-repeat;background-position: left bottom;}
+            </style>
+
+            <style type="text/css">
+                .custPopup{
+                    background-color: white;
+                    border-width: 2px;
+                    border-style: solid;
+                    z-index: 9999;
+                    left: 50%;
+                    padding:10px;
+                    position: absolute;
+                    width: 500px;
+                    margin-left: -250px;
+                    top:100px;
+                }
+                .popupBackground{
+                    background-color:black;
+                    opacity: 0.20;
+                    filter: alpha(opacity = 20);
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    z-index: 9998;
+                }
+                .backButton {
+                    float: right;
+                    padding: 5px 25px 5px 25px !important;
+                    margin-top: -40px;
+                }
+                .messageTable tr:nth-child(1) { display: none;}
+                .messageTable tr:nth-child(2) td:nth-child(1) { display: none;
+                    height:50px;
+                }
+                .btn-disable {display: none;}
+                .dheader > span
+                {
+                    padding-left: 0px !important; 
+                    padding-right: 0px !important;
+                }
+                #specialtable > span {
+    
+                    padding-left: 0px !important; 
+                    padding-right: 0px !important; 
+                }
+                //Driver Status Panel
+                //-----Start----------
+                .panel-group .panel-footer
+                {
+                    float: left;
+                    width: 100%;
+                }
+                .panel.panel-default
+                {
+                    float: left;
+                    width: 100%;
+                }
+                .widthundred
+                {
+                    width: 100%;
+                }
+                .displaynone
+                {
+                    display:none !important;
+                }
+                .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {   
+                    background-color: #5bc0de !important;    
+                }
+                .nav-justified>li>a:focus, .nav>li>a:hover {
+                    text-decoration: none;
+                    background-color: #e5e5e5 !important;
+                }
+               .nav-justified>li>a {
+                   background-color: #eeeeee !important;
+               }
+               .nav > li > a {
+                   padding: 10px !important;
+               }
+               button, input[type="button"], input[type="reset"], input[type="submit"] {
+                    background-image: url(images/tr-btn.png);
+                    background-repeat: repeat-x;
+                    background-color: #00a5f9;
+                    background-size: contain;
+                    text-shadow: none;
+                    border: none;
+                    -webkit-border-radius: 3px;
+                    -moz-border-radius: 3px;
+                    border-radius: 3px;
+                    text-transform: uppercase;
+                    //letter-spacing: 1px;
+                    font-size: 65%;
+                    line-height: 1.6;
+                    border: none;
+                    padding: 10px 30px 10px 30px;
+                    color: #ffffff;
+                    -webkit-transition: none;
+                    transition: none;
+                    font-weight: bold;
+                }
+               //----Finish------
+            </style>
+        </head>
+
+        <body>
+            <apex:form enctype="multipart/form-data">
+            <apex:actionFunction action="{!showPopup1}" name="showpop"/>
+            <apex:actionFunction name="uploadfileActionFun" action="{!savePDF}" status="fileuploading">
+            </apex:actionFunction>
+            <apex:actionStatus id="fileuploading">
+                <apex:facet name="start">
+                    <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                    <div style="top: 40%;padding: 10px;left: 43%;  width: 15%;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                        <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                        <span style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">File Uploading...</span>
+                    </div>
+                </apex:facet>
+            </apex:actionStatus> 
+                <div id="wrapper">
+                
+                
+                
+                    <div id="header">
+                        <img src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/images/mBurse.png')}" alt="mBurse" />
+                        <apex:outputPanel rendered="{!isSuperManager}" >
+                            <apex:outputpanel rendered="{!imMan}">
+                                <apex:outputpanel rendered="{!man!=null}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                    <apex:outputLink style="float: right;" >Logged in as {!conman}</apex:outputLink>
+                                </apex:outputpanel>
+                                <apex:outputpanel rendered="{!man==null}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                    <apex:outputLink style="float: right;" >Logged in as {!con.Name}</apex:outputLink>
+                                </apex:outputpanel>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!imManDr}">
+                                <apex:outputpanel rendered="{!man!=null}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                    <apex:outputLink style="float: right;" >Logged in as {!conman}</apex:outputLink>
+                                </apex:outputpanel>
+                                <apex:outputpanel rendered="{!man==null}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                    <apex:outputLink style="float: right;" >Logged in as {!con.Name}</apex:outputLink>
+                                </apex:outputpanel>
+                            </apex:outputpanel>
+                            <apex:outputPanel rendered="{!imSuper}"> 
+                                <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                                <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/>
+                                <apex:outputPanel rendered="{!EnableReports}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!isSuperManagerDriver}" >
+                            <apex:outputpanel rendered="{!imMan}">
+                                <apex:outputpanel rendered="{!man!=null}">
+                                    <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                    <apex:outputLink style="float: right;" >Logged in as {!conman}</apex:outputLink>
+                                </apex:outputpanel>
+                            <apex:outputpanel rendered="{!man==null}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                <apex:outputLink style="float: right;" >Logged in as {!con.Name}</apex:outputLink>
+                            </apex:outputpanel>
+                        </apex:outputpanel>
+                        
+                        <apex:outputpanel rendered="{!imManDr}">
+                            <apex:outputpanel rendered="{!man!=null}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out</apex:outputLink><br/>
+                                <apex:outputLink style="float: right;" >Logged in as {!conman}</apex:outputLink>
+                            </apex:outputpanel>
+                            <apex:outputpanel rendered="{!man==null}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                <apex:outputLink style="float: right;" >Logged in as {!con.Name}</apex:outputLink>
+                            </apex:outputpanel>
+                        </apex:outputpanel>
+                         
+                        <apex:outputPanel rendered="{!imSupDr}"> 
+                            <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                            <!--<apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/>-->
+                            <apex:outputPanel rendered="{!EnableReports}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink></apex:outputPanel>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                         
+                        <apex:outputpanel rendered="{!isManager}">
+                            <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                            <apex:outputPanel rendered="{!EnableReports}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                            </apex:outputPanel>
+                        </apex:outputpanel>
+                         
+                        <apex:outputpanel rendered="{!isManagerDriver}">
+                            <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                            <apex:commandButton value="Upload Insurance" action="{!showPopup}" style="float: right; padding: 6px;font-size: 10px;" rerender="tstpopup"/>
+                            <apex:outputPanel rendered="{!EnableReports}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                            </apex:outputPanel>
+                        </apex:outputpanel>
+                         
+                        <apex:outputpanel rendered="{!isDriver}">
+                            <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                            <apex:commandButton styleclass="backButton" value="Back" rendered="{!IF($CurrentPage.parameters.redirect == 'true',true,false)}" action="{!backMethod}"/>
+                            <apex:commandButton value="Upload Insurance" action="{!showPopup}" style="float: right; padding: 6px;font-size: 10px;" rerender="tstpopup" rendered="{!isDriver}" disabled="{!If($CurrentPage.parameters.redirect == 'true',true,false)}"/>
+                            <br/>
+                            <apex:outputPanel rendered="{!EnableReports}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                            </apex:outputPanel>
+                        </apex:outputpanel>
+
+                        <apex:outputPanel rendered="{!log}">
+                            <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                            <!--<apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page">Create New User</apex:outputLink><br/>-->
+                            <apex:outputPanel rendered="{!EnableReports}">
+                                <apex:outputLink style="float: right; display:{!IF($CurrentPage.parameters.redirect == 'true','none','')}" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!!log}">
+                            <div id="mtitle">
+                                mBursement Summary <span>for {!con.Name}</span>
+                            </div>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel id="tstpopup" >
+                            <apex:outputPanel styleClass="popupBackground" layout="block" rendered="{!displayPopUp}"/>
+                            <apex:outputPanel id="panel1" styleClass="custPopup" layout="block" rendered="{!displayPopUp}">
+                                <apex:pageMessages id="messageId"/>
+                                <apex:outputText >Choose pdf file only :</apex:outputText><br/><br/>
+                                <!-- <apex:inputFile value="{!fileUpload}" fileName="{!fileUploadName}" onchange="check(this)" contentType="MIME" accept=".pdf"/><br/> -->
+                                <apex:inputFile value="{!fileUpload}" fileName="{!fileUploadName}" onchange="check(this);" contentType="MIME" accept=".pdf" id="selectedUploadFile" /><br/><!-- onfocus="checkFile(this);" -->
+                                <button type="button" class="btn-disable" onclick="showpop();" id="uploadfilebtn" >Upload file</button>
+                                <div class="generatConfirmDiv"  style="display:none;">
+                                    <div class="form-group row">
+                                         <div class="col-sm-7" style="text-align: left;">
+                                             <span style="color:red">Are you sure you want to upload file?</span>
+                                         </div>
+                                         <div class="col-sm-5">
+                                              <button type="button" onclick="cancelUploadFile();">Cancel</button>
+                                              <button type="button" onclick="continueUploadFile();">continue</button>              
+                                         </div>
+                                    </div>
+                                </div>
+                                <br/><br/>
+                                <apex:commandButton value="Close" action="{!closePopup}" style="width:60px;height:30px;padding:5px 5px 5px 5px;text-align:center;"/>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                        
+                    </div>
+                    
+                    <div>
+                        <apex:outputPanel rendered="{!!log}">
+                        <div id="profile">
+                            <div>
+                                <div id="uprofile">
+                                    <div id="uname">{!con.Name}</div>
+                                    <div id="address">
+                                        <apex:outputText value="{!con.MailingStreet} "
+                                            rendered="{!if(con.MailingStreet!=null,true,false)}" />
+                                        <apex:outputText value="{!con.MailingCity} "
+                                            rendered="{! if(con.MailingCity!=null,true,false)}" />
+                                        <apex:outputText value="{!con.MailingState} "
+                                            rendered="{! if(con.MailingState!=null,true,false)}" />
+                                        <apex:outputText value="{!con.MailingPostalCode} "
+                                            rendered="{! if(con.MailingPostalCode!=null,true,false)}" />
+                                        <apex:outputText value="{!con.MailingCountry} "
+                                            rendered="{! if(con.MailingCountry!=null,true,false)}" />
+                                    </div>
+
+                                </div>
+                                <div id="cardetails">
+                                    <div id="compliance">
+                                        <div id="carname">{!con.Vehicle_Type__c}</div>
+                                        <div id="odo">
+                                            <div id="odotitle">Starting Odometer Reading</div>
+                                            <div id="thecars">
+                                                <div>
+                                                    Vehicle 1<br />{!con.Vehicle1Odometer__c}
+                                                </div>
+                                                <div>
+                                                    Vehicle 2<br />{!con.Vehicle2Odometer__c}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="monthlyrates">
+                                        <div>
+                                            Monthly Fixed Rate: <br />
+                                            <span> $ {!con.Fixed_Amount__c}</span>
+                                        </div>
+                                          
+                                        <div>
+                                           <apex:outputPanel rendered="{!con.account.Show_Hide_Historical_Allowance__c}">
+                                            <b>Historical monthly auto allowance:</b> <br />
+                                            <span>$ {!con.Pre_Auto_Allowance_Amount__c}</span>
+                                            </apex:outputPanel>
+                                        </div>
+                                        
+                                        <div>
+                                            Compliance: <span>{!con.compliancestatus__c}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="image" style="width: 25% !important; height: 18%; background-color: white;">
+                                <img  src="{!con.account.Logo_Document_Id__c}" alt="" style="width: 72%; margin: 3% 14%; height: 84%;"/>
+                            </div>
+                        </div>
+                        <div id="chart">
+                            <apex:outputPanel rendered="{!!me}">
+                                <div id="mtitle">
+                                    <b>Historical Mileage vs Fuel Prices</b>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!me}">
+                                <div id="mtitle">
+                                    <b>Monthly Mileage vs Fuel Price</b>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:include pageName="RG_Charting_MyRecords" />
+                            <br/>
+                            <apex:outputPanel rendered="{!man!=null}" >
+                    <apex:outputPanel rendered="{!Delta}">
+                                    <a style="float: right;" target="_blank" href="{!currentuserurl}">Compliance Details</a>
+                                    </apex:outputPanel>
+                                     </apex:outputPanel>
+                        </div>
+                    </apex:outputPanel>
+                    
+                                     
+                    <style>             
+                        .tdefault {
+                            display: table-row;
+                        }
+                        .thfault {
+                            display: none;
+                        }
+
+                        .selmonth {
+                            float: left;
+                            width: 123px;
+                            text-align: center;
+                            text-transform: none;
+                            font-size: 9px !important;
+                            font-weight: 100;
+                        }
+                    </style>
+
+                    <script type = "text/javascript">
+                        function check(obj) {
+                            var path = obj.value;
+                            var ext = path.substring(path.lastIndexOf('.') + 1)
+                            if((ext !="pdf")&&(ext !="PDF")) {
+                                var element = document.getElementById("uploadfilebtn");
+                                element.classList.add("btn-disable");
+                                obj.value = null;
+                                
+                                window.alert("Please select only pdf");
+                                return false;
+                            }
+                            else {
+                                if((ext !="" || ext !=null)) {
+                                      EnabledBtn();
+                                }   
+                            }                          
+                        }  
+                        
+                        function redirect(){
+                            alert('>>>>>');
+                            alert(window.location.href);
+                            var v = window.location.href;
+                            window.location = v;
+                            setTimeout(function() {window.location.href = v;}, 3000);
+                            
+                        }  
+/*
+                        function checkFile(path) {
+                        //    var path = obj.value;
+                            var ext = path.substring(path.lastIndexOf('.') + 1)
+                            if((ext !="" || ext !=null)) {
+                                 alert('file not select ');
+                            }
+                            else
+                            {
+                                EnabledBtn();
+                            }   
+                        }*/
+                        function EnabledBtn() {
+                            //alert('file EnabledBtn');
+                            var element = document.getElementById("uploadfilebtn");
+                            element.classList.remove("btn-disable");
+                        }
+
+                        function showpop() {
+                            jQuery(".generatConfirmDiv").show();
+                        }
+
+                        function cancelUploadFile(){
+                            jQuery('.tstpopup').show();
+                            jQuery('.generatConfirmDiv').hide();
+                        }
+
+                        function continueUploadFile(){
+                           // alert('Continue.....');
+                            uploadfileActionFun();
+
+                        }  
+                    </script>
+
+                    <div id="data">
+                        <apex:outputpanel rendered="{!isDriver}">
+                            <apex:outputPanel rendered="{!Delta}">
+                                <a style="float: right;" target="_blank" href="{!currentuserurl}">My Compliance Details</a>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!log}"> <div id="dtitle">List of Managers</div></apex:outputPanel> 
+                        <apex:outputPanel rendered="{!!isDriver}">
+                        <apex:outputPanel rendered="{!isSuperManager}"> 
+                        <apex:outputPanel rendered="{!imSuper}" >
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                        <ul class="nav nav-pills nav-justified">
+                                    <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li class="active">
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                            
+                          
+                                </ul> 
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel rendered="{!man!=null}" >
+                                
+                                <ul class="nav nav-pills nav-justified">
+                                    <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                                </ul>
+                                </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!imSuper}" >
+                        <apex:outputPanel rendered="{!imSupDr}">
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                            <ul class="nav nav-pills nav-justified">
+                                <li>
+                                <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                <apex:param name="supid" value="{!con.id}"/>
+                                </apex:outputLink>
+                                </li>
+                                <li class="active">
+                                <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                <apex:param name="id" value="{!con.id}"/>
+                                </apex:outputlink>
+                                </li>
+                                <li>
+                                <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                 <apex:param name="un" value="ap" />
+                                </apex:outputlink>
+                                </li>
+                                        <li class="active"><apex:outputlink >Login As
+                                <apex:param name="l" value="xyz" />
+                                </apex:outputlink></li>  
+                                    
+                            </ul>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!man!=null}" >
+                            <ul class="nav nav-pills nav-justified">
+                                <li>
+                                <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                <apex:param name="supid" value="{!man}"/>
+                                </apex:outputLink>
+                                </li>
+                                <li class="active">
+                                <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                <apex:param name="id" value="{!man}"/>
+                                </apex:outputlink>
+                                </li>
+                                <li>
+                                <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                 <apex:param name="un" value="ap" />
+                                </apex:outputlink>
+                                </li>
+                                        <li class="active"><apex:outputlink >Login As
+                                <apex:param name="l" value="xyz" />
+                                </apex:outputlink></li>      
+                            </ul>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!imSupDr}" >
+                        <apex:outputPanel rendered="{!imMan}">
+                        <apex:outputPanel rendered="{!conid!=null}">
+                        <ul class="nav nav-pills nav-justified">
+                        <li class="active">
+                            <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                            <apex:param name="supid" value="{!con.id}"/>
+                            </apex:outputLink>
+                            </li>
+                            </ul>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!man!=null}">
+                        <ul class="nav nav-pills nav-justified">
+                        <li class="active">
+                            <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                            <apex:param name="supid" value="{!man}"/>
+                            </apex:outputLink>
+                            </li>
+                            </ul>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!imMan}">
+                        <apex:outputPanel rendered="{!imManDr}">
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                        <ul class="nav nav-pills nav-justified">
+                        <li>
+                            <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                            <apex:param name="supid" value="{!con.id}"/>
+                            </apex:outputLink>
+                            </li>
+                            <li class="active">
+                            <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                            <apex:param name="id" value="{!con.id}"/>
+                            </apex:outputlink>
+                            </li>
+                            </ul>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!man!=null}" >
+                        <ul class="nav nav-pills nav-justified">
+                        <li class="active">
+                            <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                            <apex:param name="supid" value="{!man}"/>
+                            </apex:outputLink>
+                            </li>
+                            <li>
+                            <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                            <apex:param name="id" value="{!man}"/>
+                            </apex:outputlink>
+                            </li>
+                            </ul>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputpanel rendered="{!isManager}">
+                        <apex:outputpanel rendered="{!conid!=null}">
+                            <ul class="nav nav-pills nav-justified">
+                                <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    </ul></apex:outputpanel>
+                        <apex:outputpanel rendered="{!man!=null}">
+                            <ul class="nav nav-pills nav-justified">
+                                <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    </ul></apex:outputpanel>
+                        </apex:outputpanel>
+                        <apex:outputPanel rendered="{!isManagerDriver}" >
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                         <ul class="nav nav-pills nav-justified">
+                                <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li class="active">
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!con.id}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    </ul>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!man!=null}" >
+                         <ul class="nav nav-pills nav-justified">
+                                <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!man}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    </ul>
+                                    </apex:outputPanel>
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!log}">
+                         <apex:outputPanel rendered="{!isSuperManager}">
+                         
+                         <ul class="nav nav-pills nav-justified">
+                                    <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li class="active"><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                                </ul>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!isSuperManagerDriver}">
+                        
+                        <ul class="nav nav-pills nav-justified">
+                                    <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!con.id}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li class="active"><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                                </ul>
+                                
+                            
+                        </apex:outputPanel>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!isSuperManagerDriver}" >
+                        <apex:outputPanel rendered="{!imMan}">
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                        <ul class="nav nav-pills nav-justified">
+                                    <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                        </ul>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!man!=null}" >
+                        <ul class="nav nav-pills nav-justified">
+                                    <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                        </ul>
+                        </apex:outputPanel>
+                        </apex:outputPanel> 
+                        <apex:outputPanel rendered="{!!imMan}" >
+                        <apex:outputPanel rendered="{!imManDr}" >
+                        <apex:outputPanel rendered="{!conid!=null}" >
+                         <ul class="nav nav-pills nav-justified">
+                                <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li class="active">
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!con.id}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    </ul>
+                                    </apex:outputPanel>
+                        <apex:outputPanel rendered="{!man!=null}" >
+                         <ul class="nav nav-pills nav-justified">
+                                <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!man}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    </ul>
+                                    </apex:outputPanel>
+                                    </apex:outputPanel> 
+                                    <apex:outputPanel rendered="{!!imManDr}" >
+                                    <apex:outputPanel rendered="{!imSupDr}">
+                                    <apex:outputPanel rendered="{!conid!=null}">
+                                    <ul class="nav nav-pills nav-justified">
+                                    <li>
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 1
+                                    <apex:param name="supid" value="{!con.id}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li class="active">
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!con.id}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                                </ul>
+                                </apex:outputPanel>
+                                    <apex:outputPanel rendered="{!man!=null}">
+                                    <ul class="nav nav-pills nav-justified">
+                                    <li class="active">
+                                    <apex:outputLink value="/apex/RG_DashboardAdmin1">My Team Records 2
+                                    <apex:param name="supid" value="{!man}"/>
+                                    </apex:outputLink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                    <apex:param name="id" value="{!man}"/>
+                                    </apex:outputlink>
+                                    </li>
+                                    <li>
+                                    <apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                     <apex:param name="un" value="ap" />
+                                    </apex:outputlink>
+                                    </li>
+                                            <li><apex:outputlink >Login As
+                                    <apex:param name="l" value="xyz" />
+                                    </apex:outputlink></li> 
+                                    
+                                </ul>
+                                </apex:outputPanel>
+                                    </apex:outputPanel>
+                                    </apex:outputPanel>
+                                        </apex:outputPanel>
+                                        
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!!log}" >
+                        <!--Driver Status Panel -->
+                        <!--Start-->
+                       <!--  <apex:actionFunction name="updatestatus_function" action="{!updatestatus}" reRender="">
+            <apex:param id="status" name="status" value="" assignTo="{!obj_status}" />
+            <apex:param id="category" name="category" value="" assignTo="{!obj_category}" />
+        </apex:actionFunction> -->
+        <!-- <a data-toggle="collapse" data-target="#tableForcollapse" href="#">My Driver Information</a> -->
+       <!--  <button type="button" class="btn btn-success" data-toggle="collapse" data-target="#tableForcollapse">My Driver Information</button> -->
+        
+                        <!--Finish-->
+
+                        <div id="table">
+                            <table id="d2" style="text-align: center;" class="table table-striped">
+                                <tr id="theMainader">
+                                    <apex:outputPanel rendered="{!IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE)}">
+                                        <th class="approval">Approve </th>
+                                    </apex:outputPanel>
+                                    <th class="month">Month</th>
+                                    <th class="variablerate">Variable Rate</th>
+                                    <th class="fuelprice">Fuel</th>
+                                    <th class="mileage">Mileage</th>
+                                    <th class="variablefixedreimb">Variable<span>+</span>Fixed<br />Reimbursement
+                                    </th>
+                                    <th class="totalreimb">Total Reimbursement</th>
+                                </tr>
+                            
+                                <apex:repeat value="{!yearlist}" var="y">
+                                    <tr class="yearuncollapse_{!y} tdefault" >
+                                      <td colspan="7"><a href="javascript:void(0)"
+                                                    onclick="shdetails({!y},{!2})">{!y}</a></td>
+                                    </tr>
+                                    <tr class="yearcollapse_{!y} tdefault" style="display: none;">
+                                        <td colspan="7">
+                                            <div><h4>{!y} reimbursement details</h4> <span class="selmonth"><a
+                                                    href="javascript:void(0)" onclick="shdetails({!y},{!3})"><h4>{!y}</h4></a></span>
+                                            </div>
+
+                                    <!-- <table id="table" class="tableCls"> -->
+                                        <div id="tableForcollapse" class="collapse in">
+                                            <table id="table" class="table table-striped"> 
+                                                <apex:variable value="{!0}" var="TotalMil" />
+                                                <apex:variable value="{!0}" var="TotalReim" />
+                                                <tr id="theader">
+                                                    <apex:outputPanel rendered="{!IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE)}">
+                                                        <th class="approval">Approve </th>
+                                                    </apex:outputPanel>
+                                                    <th class="month">Month</th>
+                                                    <th class="variablerate">Variable Rate</th>
+                                                    <th class="fuelprice">Fuel</th>
+                                                    <th class="mileage">Mileage</th>
+                                                    <th class="variablefixedreimb">Variable<span>+</span>Fixed<br />Reimbursement
+                                                    </th>
+                                                    <th class="totalreimb">Total Reimbursement</th>
+                                            
+                                                </tr>
+                                                <apex:repeat value="{!wlist}" var="rm">
+                                                <apex:variable value="{!key+1}" var="key" />
+                                                <apex:variable value="{!0}" var="i" />
+
+                                                <apex:outputPanel rendered="{!IF(rm.year == y,'true','false')}">
+                                                    <apex:variable value="{!TotalMil + rm.SM}" var="TotalMil" ></apex:variable>
+                                                    <apex:variable value="{!TotalReim + rm.TotalReimbursement}" var="TotalReim" ></apex:variable>
+                                                    <tr class="summary_{!key} tdefault">
+                                                    <apex:outputPanel rendered="{!IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE)}">
+                                                    
+                                                        <td class="approval" style="float: right;">
+                                                            <apex:inputCheckBox rendered="{!rm.reimbursement.Status__c!='Approved' && rm.reimbursement.Status__c!='In Process'}" value="{!rm.isSelected}" onclick="reimSelected(this);"/>
+                                                            <apex:outputpanel rendered="{!rm.reimbursement.Status__c=='Approved' || rm.reimbursement.Status__c=='In Process'}">
+                                                            <apex:variable value="{!j+1}" var="j"/>
+                                                            <span style="color: #76BD1D">{!rm.reimbursement.Status__c}<apex:outputText value="{0, date, MM/dd/yy}">
+                                                                    <apex:param value="{!rm.reimbursement.Approved_Date__c}" />
+                                                            </apex:outputText></span>
+                                                            </apex:outputpanel>
+                                                        </td>
+                                                    </apex:outputPanel>
+                                                        <td class="month"><a href="javascript:void(0)"
+                                                            onclick="shdetails({!key},{!i+1})">{!rm.Month}</a></td>
+                                                        <td class="variablerate">${!rm.Variable}</td>
+                                                        <td id="fuel" class="fuelprice">$<apex:outputText value="{0,number,###,###,###,##0.00}">
+                                                            <apex:param value="{!rm.reimbursement.Fuel_Price__c}" />
+                                                            </apex:outputText></td>
+                                                        <td class="mileage">{!rm.SM}</td>
+                                                        <td class="variablefixedreimb">${!rm.VariableReimbursement}<span>+</span>$<apex:outputText value="{0,number,###,###,###,##0.00}"> <!-- {!rm.VariableReimbursement}-->
+                                                            <apex:param value="{!rm.reimbursement.Fixed_Amount__c}" />
+                                                            </apex:outputText>
+                                                        </td>
+                                                        <td class="totalreimb">${!rm.TotalReimbursement}</td>
+                                                    </tr>
+                                                <tr class="details_{!key}" style="display: none;">
+                                                    <td colspan="7">
+                                                        <div class="detailtitle">
+                                                            {!rm.Month} reimbursement details <span class="selmonth"><a
+                                                                href="javascript:void(0)" onclick="shdetails({!key},{!i})">{!rm.Month}</a></span>
+                                                        </div>
+                                                        <apex:variable value="{!rm.Month}-{!y}" var="showCheckBox" />
+                                                        <table class="dheader" id="specialtable" style="padding-left: 0px; padding-right: 0px;">
+                                                            <tr id="detailheader">
+                                                            <!--    <apex:outputPanel rendered="{!}"> -->
+                                                                <apex:outputPanel rendered="{!AND(IF(previousMonthRecord == showCheckBox,true,false),IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE))}" style="padding-left: 0px; padding-right: 0px;">
+                                                                    <th class="approval">Flagged<br/>
+                                                                        <apex:inputCheckbox styleClass="rejectAll_{!key}" id="rejectAll" onclick="checkRejectAll(this,{!key})" disabled="{!IF(rm.isEditable == true,false,true)}"/></th>
+                                                                    <th class="isApprove">
+                                                                    Approve<br/>
+                                                                    <apex:inputCheckbox styleClass="approveAll_{!key}" id="approveAll_" onclick="checkApproveAll(this,{!key})" disabled="{!IF(rm.isEditable == true,false,true)}"/></th>
+                                                                </apex:outputPanel>
+                                                               <!-- </apex:outputPanel> -->
+                                                                <th class="ddate">date</th>
+                                                                <!--<th class="dtype">type</th> -->
+                                                                <th class="dorigin">origin</th>
+                                                                <th class="ddestination">destination</th>
+                                                                <!--<th class="dcontact">contact</th> -->
+                                                                <th class="dsubmitted">submitted</th>
+                                                                <th class="dapproved">approved</th>
+                                                                <th class="dmaintires">maint/tires
+                                                                </th>
+                                                                <th class="dfuel">fuel Rate</th>
+                                                                <th class="dvariable">variable</th>
+                                                                <th class="dmileage">mileage</th>
+                                                                <th class="dvariable_reimb">variable<br />reimbursement
+                                                                </th>
+                                                                <!-- <th>Flagged</th>  -->
+                                                                <th>Reason For Rejection</th>
+                                                            </tr>
+                                                            <apex:repeat value="{!rm.milageWrapperList}" var="mil">
+                                                                <tr>
+                                                                    <apex:outputPanel rendered="{!AND(IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE),IF(wlist[0].reimbursement.Id == rm.reimbursement.Id,true,false))}" style="padding-left: 0px; padding-right: 0px;">
+                                                                   <!-- <apex:outputPanel rendered="{!}"> -->
+                                                                        <td class="approval">
+                                                                            <apex:inputCheckbox value="{!mil.isRejected}" styleClass="mileageReject_{!key}" onclick="singleReject(this,{!key})" disabled="{!IF(rm.isEditable == true,false,true)}"/>
+                                                                        </td>
+                                                                        <td class="isApprovel">
+                                                                            <apex:inputCheckbox value="{!mil.isApproved}" styleClass="mileageApprove_{!key}" onclick="singleApprove(this,{!key})" disabled="{!IF(rm.isEditable == true,false,true)}"/>
+                                                                        </td>
+                                                                   <!-- </apex:outputPanel> -->
+                                                                    </apex:outputPanel>
+                                                                    <td class="ddate"><apex:outputText value="{0, date, MM/dd/yy}">
+                                                                            <apex:param value="{!mil.milage.Trip_Date__c}" />  
+                                                                        </apex:outputText></td>
+                                                                    
+                                                                    <td class="dorigin">{!mil.milage.Trip_Origin__c}</td>
+                                                                    <td class="ddestination">{!mil.milage.Trip_Destination__c}</td>
+                                                                    <!--<td class="dcontact">???</td> -->
+                                                                    <td class="dsubmitted"><apex:outputText value="{0, date, MM/dd/yy}">
+                                                                            <apex:param value="{!mil.milage.CreatedDate}" />
+                                                                        </apex:outputText></td>
+                                                                    <td class="dapproved"><apex:outputText value="{0, date, MM/dd/yy}" styleClass="approvalDate_{!key}">
+                                                                            <apex:param value="{!mil.milage.Approved_Date__c}" />
+                                                                        </apex:outputText></td>
+                                                                    <td class="dmaintires">${!mil.mainttire}</td>
+                                                                    <td class="dfuel">
+                                                                        <apex:outputText value="{0, number, ####0.0000}">
+                                                                              <apex:param value="{!mil.fuel}" />
+                                                                        </apex:outputText>
+                                                                    </td>
+                                                                    <td class="dvariable">${!mil.variable}</td>
+                                                                    <td class="dmileage">{!mil.milage.Mileage__c}</td>
+                                                                    <td class="dvariable_reimb">${!mil.VariableReimbursement2}</td>
+                                                                    <!-- <td><apex:outputtext value="{!if(mil.m.Rejected__c==true,'YES','NO')}" /></td>  -->
+                                                                    <td>
+                                                                    <apex:outputPanel rendered="{!AND(IF(AND(isManager||isManagerDriver||isSuperManager||isSuperManagerDriver,conid==null), TRUE, FALSE),IF(wlist[0].reimbursement.Id == rm.reimbursement.Id,true,false))}" style="padding-left: 0px; padding-right: 0px;">
+                                                                   <!-- <apex:outputPanel rendered="{!}"> -->
+                                                                            <apex:outputPanel rendered="{!mil.milage.Approved_Date__c==null}" style="padding-left: 0px; padding-right: 0px;">
+                                                                                <apex:inputText value="{!mil.milage.Reason_for_Rejection__c}" />
+                                                                            </apex:outputPanel>
+                                                                            
+                                                                            <apex:outputPanel rendered="{!mil.milage.Approved_Date__c!=null}" style="padding-left: 0px; padding-right: 0px;">
+                                                                                <apex:outputText value="{!mil.milage.Reason_for_Rejection__c}" />
+                                                                            </apex:outputPanel>
+                                                                       <!-- </apex:outputPanel>   -->
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!AND((mil.milage.Approved_Date__c!=null),(conid!=null))}" style="padding-left: 0px; padding-right: 0px;">
+                                                                            <apex:outputText value="{!mil.milage.Reason_for_Rejection__c}" />
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!AND((conid==null&&dr==null),(mil.milage.Approved_Date__c!=null))}" style="padding-left: 0px; padding-right: 0px;">       
+                                                                            <apex:outputText value="{!mil.milage.Reason_for_Rejection__c}" />
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputpanel rendered="{!isDriver}" style="padding-left: 0px; padding-right: 0px;">
+                                                                        <apex:outputText value="{!mil.milage.Reason_for_Rejection__c}" /> 
+                                                                        </apex:outputpanel>
+                                                                        </td>
+                                                                    </tr>
+                                                                </apex:repeat>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputpanel>
+                                            </apex:repeat>
+                                        <tr>
+                                          <td colspan="3">
+                                              Total Mileage: {!TotalMil}
+                                          </td>
+                                          <td colspan="3">
+                                              Total Reimbursement: {!TotalReim}
+                                          </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                              </td>
+                            </tr>
+                          </apex:repeat>
+                        </table>
+
+                             
+                         
+                            
+        <!--<apex:outputPanel rendered="{!(wlist.size!=j)}" >
+                    <apex:outputPanel rendered="{!!isDriver}">
+                       <apex:outputPanel rendered="{!conid==null}">-->
+                        <apex:commandButton Value="Submit" action="{!updateByMonth}" style="align:Center;padding: 0px;width: 104px;height: 30px; margin-bottom:10px;" styleClass="hideButton" rendered="{!!isDriver}" id="commandButtonSave"/>
+
+                    <!--</apex:outputPanel>
+                    </apex:outputPanel>
+                    </apex:outputPanel>-->
+                        </div>
+                        </apex:outputPanel>
+                        <apex:outputPanel rendered="{!log}" >
+                        <div id="table">
+                            <table id="contacttable" class="display">
+
+                            <thead>
+                                            
+                            <tr><th  >Name</th>
+                            <th>Phone</th>
+                            <th>Email</th></tr>
+                            </thead>
+                            <tbody>
+                            <apex:repeat value="{!userlist}" var="item">
+                            <tr><td>
+                            <apex:outputLink value="/apex/RG_DashboardAdmin1" >{!item.Name}
+                            <apex:param name="supid" value="{!item.contactid}"/>
+                            </apex:outputLink>
+                            </td>
+                            <td>{!item.Phone}</td>
+                            <td>{!item.Email}</td>
+                            </tr>
+                            </apex:repeat>
+                            </tbody>
+                            </table>
+                        </div>
+
+                        
+                        </apex:outputPanel>
+                        
+                         <apex:outputPanel rendered="{!(isSuperManager || isSuperManagerDriver)}"  >
+                            
+                            <apex:include pageName="RG_AttachmentforContact"  />
+                            
+                            </apex:outputPanel> 
+                        
+                    </div>
+                
+                </div>
+                <script>
+    shdetails=function(obj,vis){
+        if(vis == 0){
+            jQuery('.summary_'+obj).css('display','table-row');
+            jQuery('.details_'+obj).css('display','none');
+        } else if (vis == 2){
+          jQuery('.yearcollapse_'+obj).css('display','table-row');
+          jQuery('.yearuncollapse_'+obj).css('display','none');
+        } else if(vis == 3){
+          jQuery('.yearuncollapse_'+obj).css('display','table-row');
+          jQuery('.yearcollapse_'+obj).css('display','none');
+        } else {
+            jQuery('.summary_'+obj).css('display','none');
+            jQuery('.details_'+obj).css('display','table-row');
+        }
+        var element = document.getElementById("theMainader");
+        element.classList.add("thfault");
+    }
+
+
+    jQuery(".tdefault:odd").css( "background-color", "#f2f2f2" );
+    </script>
+
+     <script>
+                window.onload=function()
+                {
+                    var btnApproved = document.getElementsByClassName("hideButton")[0];
+                    btnApproved.disabled = true;
+                };
+               
+                $(document).ready( function () {
+                    /*var contactTable = $("#contacttable").DataTable({
+                    });*/
+                    shdetails('{!lastYear}','2');
+                    /*$("#table span[id*='445']").remove();
+                    $("#table span[id*='441']").remove();*/
+                });
+                 j$ = jQuery.noConflict();
+                var today = new Date();
+
+                function fixTime(time){
+                    if(time < 10) {time = "0" + time};
+                    return time;
+                }      
+
+                function reimSelected(element) {
+                    var btnApproved = document.getElementsByClassName("hideButton")[0];
+                    if(element.checked) {
+                        btnApproved.disabled = false;
+                    }else {
+                        btnApproved.disabled = true;
+                    }
+                }          
+
+                function fixDate(date){
+                  var Month = fixTime(date.getMonth() + 1);
+                  var Day = fixTime(date.getDate());
+                  var UTC = date.toUTCString();
+                  var Time = UTC.substring(UTC.indexOf(':')-2, UTC.indexOf(':')+6);
+                  var Minutes = fixTime(date.getMinutes());
+                  var Seconds = fixTime(date.getSeconds());
+                  return Month + '/' + Day + "/" + date.getFullYear();// + "T" + Time;
+                }
+                function checkRejectAll(element,key) {
+                    var tableCheckReject = document.getElementsByClassName("rejectAll_"+key);
+                    var tableCheckApprove = document.getElementsByClassName("approveAll_"+key);
+                    var btnApproved = document.getElementsByClassName("hideButton");
+                    for(var i=0, n=tableCheckReject.length;i<n;i++) {
+                        if(tableCheckReject[i].checked == true){
+                            tableCheckApprove[i].checked = false;
+                            btnApproved[i].disabled = false;
+                        }
+                    }
+                    var mileageReject  = document.getElementsByClassName("mileageReject_"+key);
+                    var mileageApprove = document.getElementsByClassName("mileageApprove_"+key);
+                    var approvalDateValue =  document.getElementsByClassName("approvalDate_"+key);
+                    for(var i=0, n=mileageReject.length;i<n;i++) {
+                        mileageReject[i].checked = element.checked;
+                        mileageApprove[i].checked = false;
+                        if(approvalDateValue[i].innerHTML.length !== 0) {
+                            approvalDateValue[i].innerHTML = null;
+                        }
+                    }
+                }
+
+                function checkApproveAll(element,key) {
+                    var tableCheckReject = document.getElementsByClassName("rejectAll_"+key);
+                    var tableCheckApprove = document.getElementsByClassName("approveAll_"+key);
+                    var btnApproved = document.getElementsByClassName("hideButton");
+                    for(var i=0, n=tableCheckApprove.length;i<n;i++) {
+                        if(tableCheckApprove[i].checked == true){
+                            tableCheckReject[i].checked = false;
+                            btnApproved[i].disabled = false;
+                        } 
+                    }
+                    var mileageReject  = document.getElementsByClassName("mileageReject_"+key);
+                    var mileageApprove = document.getElementsByClassName("mileageApprove_"+key);
+                    var approvalDateValue =  document.getElementsByClassName("approvalDate_"+key);
+                    for(var i=0, n=mileageApprove.length;i<n;i++) {
+                        if(element.checked == true) {
+                            mileageApprove[i].checked = element.checked;
+                            mileageReject[i].checked = false;
+                            if(approvalDateValue[i].innerHTML.length === 0) {
+                                approvalDateValue[i].innerHTML = fixDate(today);
+                            }
+                        } else {
+                            mileageApprove[i].checked = element.checked;
+                            if(approvalDateValue[i].innerHTML.length !== 0) {
+                                approvalDateValue[i].innerHTML = null;
+                            }
+                        }
+                    }
+                }
+
+                function singleReject(element,key) {
+                    var mileageReject  = document.getElementsByClassName("mileageReject_"+key);
+                    var mileageApprove = document.getElementsByClassName("mileageApprove_"+key);
+                    var count = 0;
+                    var approvalDateValue =  document.getElementsByClassName("approvalDate_"+key);
+                    var btnApproved = document.getElementsByClassName("hideButton")[0];
+                    btnApproved.disabled = false;
+                    for(var i=0, n=mileageReject.length;i<n;i++) {
+                        if(mileageReject[i].checked == false) {
+                            count++;
+                        }else{
+                            mileageApprove[i].checked = false;
+                            if(approvalDateValue[i].innerHTML.length !== 0) {
+                                approvalDateValue[i].innerHTML = null;
+                            }
+                        }
+                    }
+                    var tableCheckReject = document.getElementsByClassName("rejectAll_"+key);
+                    var tableCheckApprove = document.getElementsByClassName("approveAll_"+key);
+                    
+                    for(var i=0, n=tableCheckReject.length;i<n;i++) {
+                        if(count > 0) {
+                            tableCheckReject[i].checked = false;
+                            tableCheckApprove[i].checked = false;
+                        }else {
+                            tableCheckReject[i].checked = true;
+                            tableCheckApprove[i].checked = false;
+                        } 
+                    }
+                }
+
+                function singleApprove(element,key) {
+                    var mileageReject  = document.getElementsByClassName("mileageReject_"+key);
+                    var mileageApprove = document.getElementsByClassName("mileageApprove_"+key);
+                    var approvalDateValue =  document.getElementsByClassName("approvalDate_"+key);
+                    var btnApproved = document.getElementsByClassName("hideButton")[0];
+                    btnApproved.disabled = false;
+                    var count = 0;
+                    for(var i=0, n=mileageApprove.length;i<n;i++) {
+                        if(mileageApprove[i].checked == false) {
+                            count++;
+                            if(approvalDateValue[i].innerHTML.length !== 0) {
+                                approvalDateValue[i].innerHTML = null;
+                            }
+                        }else{
+                            mileageReject[i].checked = false;
+                            if(approvalDateValue[i].innerHTML.length === 0) {
+                                approvalDateValue[i].innerHTML = fixDate(today);
+                            }
+                        }
+                    }
+                    var tableCheckReject = document.getElementsByClassName("rejectAll_"+key);
+                    var tableCheckApprove = document.getElementsByClassName("approveAll_"+key);
+                    for(var i=0, n=tableCheckApprove.length;i<n;i++) {
+                        if(count > 0) {
+                            tableCheckApprove[i].checked = false;
+                            tableCheckReject[i].checked = false;
+                        }else {
+                            tableCheckApprove[i].checked = true;
+                            tableCheckReject[i].checked = false;
+                        } 
+                    }
+                }
+
+               
+            </script>
+
+            </div>
+            </apex:form>
+            
+            
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,162 @@
+<apex:page showHeader="false" sidebar="false">
+	<footer>
+	    
+	</footer>
+	<script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/jquery.min.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/bootstrap.min.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/popper.min.js')}"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/bootstrap.bundle.min.js')}"></script>
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+	<script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/bootstrap-datepicker.min.js')}"></script>
+	<script src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/tagsinput.js')}"></script>
+	<script src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/toastcustom.js')}"></script>
+	<script src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/file-ulpoad.js')}"></script>
+	<!-- <script src="https://b1fe367f.ngrok.io/file-ulpoad.js"></script> -->
+	
+	<!-- <script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/chart.min.js')}"></script> -->
+	<!-- <script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/columnbar-chart.js')}"></script> -->
+	<!-- <script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/common.js')}"></ script>-->
+	<script>
+		// sticky header
+		/*$(window).scroll(function(){
+		    if ($(window).scrollTop() >= 100) {
+		        $('header').addClass('sticky');
+		    }
+		    else {
+		        $('header').removeClass('sticky');
+		    }
+		});*/
+		// sticky header
+		
+				
+		// Admin roster data table js start
+		$(document).ready(function() {
+		    
+		} );
+		
+		// Admin roster tag remove js
+		closeBtn = $('.tagclose');
+		imageHolder = $('.adminroster-driverstatus');
+		closeOnClick();
+		function closeOnClick() {
+		    closeBtn.on('click', function () {
+		        $(this).parent().remove();
+		    });
+		}
+		// Admin roster data table js end
+
+
+		// Example starter JavaScript for disabling form submissions if there are invalid fields
+		(function () {
+		    'use strict';
+		    window.addEventListener('load', function () {
+		        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+		        var forms = document.getElementsByClassName('needs-validation');
+		        // Loop over them and prevent submission
+		        var validation = Array.prototype.filter.call(forms, function (form) {
+		            form.addEventListener('submit', function (event) {
+		            	
+		                if (form.checkValidity() === false) {
+		                    event.preventDefault();
+		                    event.stopPropagation();
+
+		                }
+		                form.classList.add('was-validated');
+		            }, false);
+		        });
+		    }, false);
+		})();
+
+		// tooltip 
+		$(document).ready(function () {
+
+		    $('[data-toggle="tooltip"]').tooltip();
+		    //datepicker
+		    $('#addeddate_0,#addeddate_1').datepicker({
+		        format: "mm/dd/yy",
+		        //uiLibrary: 'bootstrap4',
+		        autoclose: true,
+		        todayHighlight: true
+		    });
+		    $('#activedate_0,#activedate_1,#adminroster-deactivationdatepicker,#adminroster-lastpaydatepicker').datepicker({
+		        format: "mm/dd/yy",
+		        //uiLibrary: 'bootstrap4',
+		        autoclose: true,
+		        todayHighlight: true
+		    }).on('changeDate', function(e) {
+		    	//e.target.value = e.format();
+		    	//set date in input box
+		    	angular.element($(this)).triggerHandler('input');
+
+			});
+			
+
+			$('#adminreport-from,#adminreport-to').datepicker({
+		        format: "mm/dd/yy",
+		        //uiLibrary: 'bootstrap4',
+		        autoclose: true,
+		        todayHighlight: true
+		    }).on('changeDate', function(e) {
+		    	//e.target.value = e.format();
+		    	//set date in input box
+		    	angular.element($(this)).triggerHandler('input');
+
+			});
+
+			
+		});
+
+		// Admin dashboard js
+		$(document).ready(function() {
+		    /*ar table = $('#admin-dashbord').DataTable();
+		    $('#admin-dashbord tbody').on( 'click', 'tr', function () {
+		        if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+
+		        }
+		    } );*/
+		    /*$('#button').click( function () {
+		        table.row('.selected').remove().draw( false );
+		    } );*/
+		} );
+
+		// Admin report data table js
+		$(document).ready(function() {
+		    /*var table = $('#admin-report').DataTable();
+		    $('#admin-report tbody').on( 'click', 'tr', function () {
+		        if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+		        }
+		    } );*/
+		    /*$('#button').click( function () {
+		        table.row('.selected').remove().draw( false );
+		    } );*/
+		} );
+		// Drag and Drop Upload js
+		// function readUrl(input) {
+		  
+		//     if (input.files && input.files[0]) {
+		//       let reader = new FileReader();
+		//       reader.onload = (e) => {
+		//         let imgData = e.target.result;
+		//         let imgName = input.files[0].name;
+		//         input.setAttribute("data-title", imgName);
+		//         console.log(e.target.result);
+		//       }
+		//       reader.readAsDataURL(input.files[0]);
+		//     }
+		  
+		//   }
+
+		
+	</script>
+
+</apex:page>

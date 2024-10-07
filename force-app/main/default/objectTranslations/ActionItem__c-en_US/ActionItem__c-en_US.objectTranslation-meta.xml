@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Action Item</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Action Items</value>
+    </caseValues>
+    <layouts>
+        <layout>ActionItem Layout</layout>
+        <sections>
+            <label><!-- Comments --></label>
+            <section>Comments</section>
+        </sections>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Description --></label>
+            <section>Description</section>
+        </sections>
+        <sections>
+            <label><!-- TimeLine --></label>
+            <section>TimeLine</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- End Date should not grater than Due Date --></errorMessage>
+        <name>End_Date_not_greater_Due_Date</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please enter value of Start Date, End Date and Effort Estimation In Hours --></errorMessage>
+        <name>Status</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Send_Email --></label>
+        <name>Send_Email</name>
+    </webLinks>
+</CustomObjectTranslation>

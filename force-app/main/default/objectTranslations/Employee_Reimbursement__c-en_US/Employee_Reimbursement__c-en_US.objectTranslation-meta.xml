@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Employee Reimbursement</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Employee Reimbursements</value>
+    </caseValues>
+    <layouts>
+        <layout>Employee Reimbursement Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Fuel Rate --></label>
+            <section>Fuel Rate</section>
+        </sections>
+        <sections>
+            <label><!-- Mileage --></label>
+            <section>Mileage</section>
+        </sections>
+        <sections>
+            <label><!-- Mileage Deduction Calculation --></label>
+            <section>Mileage Deduction Calculation</section>
+        </sections>
+        <sections>
+            <label><!-- Tax Calculation --></label>
+            <section>Tax Calculation</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <webLinks>
+        <label><!-- Concer_Expense --></label>
+        <name>Concer_Expense</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GET_Approve_Trips --></label>
+        <name>GET_Approve_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GET_Trips --></label>
+        <name>GET_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Get_Submitted_Trips --></label>
+        <name>Get_Submitted_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Fuel_Price --></label>
+        <name>Update_Fuel_Price</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Mileages --></label>
+        <name>Update_Mileages</name>
+    </webLinks>
+</CustomObjectTranslation>

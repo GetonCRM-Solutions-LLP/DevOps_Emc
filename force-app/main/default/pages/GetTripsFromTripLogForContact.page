@@ -1,0 +1,17 @@
+<apex:page standardController="Contact" extensions="GetTripsForContact" action="{!getTTripCall}"> 
+  
+   <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <head>
+            <apex:slds />
+        </head>
+        <body class="slds-scope">
+    <apex:pageMessages id="error"/>
+    <apex:form >
+        <div class="slds-p-horizontal--small slds-m-top--medium slds-size--1-of-1 slds-align--absolute-center">
+        <apex:commandButton styleClass="slds-button slds-button--neutral" value="Back to Contact" action="{!backtoContact}" />
+        </div>
+    </apex:form>
+        </body>
+    </html> 
+  
+</apex:page>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Average_Fuel_Price__c</fullName>
+    <label>Average Fuel Price</label>
+    <summarizedField>Gas_Price_LineItem__c.Fuel_Price__c</summarizedField>
+    <summaryFilterItems>
+        <field>Gas_Price_LineItem__c.Fuel_Price__c</field>
+        <operation>greaterThan</operation>
+        <value>0</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Gas_Price_LineItem__c.Gas_Price__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackTrending>false</trackTrending>
+    <type>Summary</type>
+</CustomField>

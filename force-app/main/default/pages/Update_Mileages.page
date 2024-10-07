@@ -1,0 +1,343 @@
+<!--
+***************************************************************************
+Descreption: Update_Mileages Page
+Functionality : Update Mileages - Change its Reim, Approved Date and Status
+***************************************************************************
+-->
+<apex:page Controller="UpdateMileageController" tabStyle="Employee_Reimbursement__c" sidebar="false" showHeader="true" docType="html-5.0">
+    <!-- For Sorting added script -->
+
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <!-- <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"/> -->
+    <!-- <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+    <apex:includescript value="//code.jquery.com/jquery-1.11.1.min.js" />
+    <apex:includescript value="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js" />
+    <apex:stylesheet value="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css" />
+    <!-- <apex:stylesheet value="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap.min.css"/> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap.min.js"></script> -->
+    <!-- <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+    <!-- <apex:includeScript value="{!URLFOR($Resource.Tablesorter, '/jquery-latest.js')}"/>
+ 
+   
+    <apex:stylesheet value="{!URLFOR($Resource.Tablesorter, 'themes/blue/style.css')}"/>
+   
+    <apex:includeScript value="{!URLFOR($Resource.Tablesorter, 'jquery.tablesorter.min.js')}"/> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!--<style>
+        .popupBackgroundsp {
+            background-color: black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+            position: fixed;
+            cursor: wait;
+        }
+        .PopupPanelsp {
+            border: solid 2px grey;
+            background-color: white;
+            left: 50%;
+
+            width: 150px;
+            margin-left: -100px;
+            top: 50%;
+            height: 50px;
+            margin-top: -25px;
+            z-index: 999;
+            position: fixed;        
+            cursor: pointer;
+        }
+    </style>-->
+    <style type="text/css">
+        .hidden {
+            display: none;
+        }
+
+        .lookupInput a {
+            display: block;
+            position: absolute;
+            top: 0px;
+        }
+
+        .lookupInput img {
+            float: right;
+            display: none;
+        }
+
+        span.lookupInput {
+            position: relative;
+            display: inherit;
+            width: 100%;
+            float: left;
+        }
+
+        .lookupInput a,
+        .lookupInput a {
+            border: none !important;
+            background: none !important
+        }
+
+        .ui-panelgrid tr {
+            padding: 2px 5px;
+        }
+
+        .col_1 {
+            width: 20%;
+        }
+
+        .col_2 {
+            width: 30%;
+        }
+
+        .col_3 {
+            width: 20%;
+            padding-left: 20px !important;
+        }
+
+        .col_4 {
+            width: 30%;
+            padding-right: 10% !important;
+        }
+
+        table.tablesorter thead tr .header {
+            background-image: url("{!URLFOR($Resource.Tablesorter, 'themes/blue/bg.gif')}") !important;
+            background-repeat: no-repeat !important;
+            background-position: center right !important;
+        }
+
+        table.tablesorter thead tr .headerSortUp {
+            background-image: url("{!URLFOR($Resource.Tablesorter, 'themes/blue/asc.gif')}") !important;
+        }
+
+        .headerSortDown {
+            background-image: url("{!URLFOR($Resource.Tablesorter, 'themes/blue/desc.gif')}") !important;
+        }
+
+        table.tablesorter thead tr .headerSortUp {
+            background-color: #8dbdd8 !important;
+        }
+
+        .selectCss {
+            width: 36% !important;
+        }
+
+        .searchInput {
+            width: 72% !important;
+            margin-right: 0.85em;
+        }
+    </style>
+    <script>
+        j$ = jQuery.noConflict();
+        j$(document).ready(function () {
+            var accTable = j$('[id$="pageBlock__Table"]').DataTable({
+                stateSave: true,
+                "columnDefs": [{
+                    "targets": [0],
+                    "orderable": false,
+                }]
+            });
+            var allPages = accTable.cells( ).nodes( );
+           
+            j$('body').on('change', 'input[id$=topInput]', function () {
+                if (j$(this).hasClass('allChecked')) {
+                    j$('input[type="checkbox"]', allPages).prop('checked', false);
+                } else {
+                    j$('input[type="checkbox"]', allPages).prop('checked', true);
+                }
+                j$(this).toggleClass('allChecked');
+            });
+
+           
+            // j$('input[id$=isCheckDone]').on('change', function(){
+            //     console.log(j$(this).val(), j$(this).prop('checked'), j$(this));
+            // })
+           
+            j$(".dataTables_length select").addClass("slds-select selectCss");
+            j$(".dataTables_filter input[type=search]").addClass("slds-truncate slds-input searchInput");
+            j$(".dataTables_length").css("margin-bottom", "16px");
+        });
+        var refreshPage = function () {
+            setTimeout(function () {
+                location.reload();
+            }, 2000)
+        }
+    </script>
+    <apex:form id="theForm">
+        <div class="slds">
+            <apex:pageBlock mode="maindetail" id="parentPageBlock">
+                <apex:messages styleClass="slds-notify slds-notify_toast slds-theme_info slds-notify--toast" />
+                <apex:pageMessages id="showmsg"></apex:pageMessages>
+                <!--<div class="slds-page-header">
+                    <div class="slds-grid">
+                        <div class="slds-col slds-has-flexi-truncate">
+                            <p class="slds-text-title--caps slds-line-height--reset">Contacts</p>
+                            <h1 class="slds-page-header__title slds-m-right--small slds-align-middle slds-truncate" title="{!empReimbursement.Name}">{!empReimbursement.Name}</h1>
+                        </div>
+                    </div>
+                </div> -->
+                <apex:pageBlock mode="maindetail" id="reimbursementBlock">
+                    <div class="slds-page-header">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-action-flow slds-icon_container--circle" title="Description of icon when needed">
+                                    <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS100, '/assets/icons/utility-sprite/svg/symbols.svg#edit')}" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <h1 class="slds-page-header__title slds-truncate slds-align-middle" title="{!empReimbursement.Name}">{!empReimbursement.Name}</h1>
+                                <p class="slds-text-body_small slds-line-height_reset">Status : {!empReimbursement.Status__c} •
+                                    <apex:outputText value="{0,date,dd/MM/YYYY}"> Approved Date :
+                                        <apex:param value="{!empReimbursement.Approved_Date__c}" /> </apex:outputText>
+                                    • Fuel Price : {!empReimbursement.Fuel_Price__c}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <apex:panelGrid columns="4" columnClasses="col_1,col_2,col_3,col_4" width="100%">
+                        <apex:outputText value="Employee Reimbursement" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;"
+                        />
+                        <apex:inputField value="{!mileage.EmployeeReimbursement__c}" styleClass="slds-truncate slds-select slds-size-6-of-6" required="false"
+                        />
+                        <apex:outputText value="Approved Date" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!empReimbursement.Approved_Date__c}" styleClass="slds-size-2-of-6 slds-input" />
+                    </apex:panelGrid>
+                    <br/>
+                    <apex:panelGrid columns="4" columnClasses="col_1,col_2,col_3,col_4" width="100%">
+                        <apex:outputText value="Status" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!empReimbursement.Status__c}" styleClass="slds-truncate slds-select slds-size-2-of-6" />
+                        <apex:outputText value="Fuel Price" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!empReimbursement.Fuel_Price__c}" styleClass="slds-truncate slds-input slds-size-2-of-6" html-disabled="true"
+                        />
+                    </apex:panelGrid>
+                </apex:pageBlock>
+                <br/>
+
+                <apex:pageBlock mode="maindetail" id="mileageBlock">
+                    <div class="slds-page-header">
+                        <div class="slds-media">
+                            <div class="slds-media__figure">
+                                <span class="slds-icon_container slds-icon-action-flow slds-icon_container--circle" title="Description of icon when needed">
+                                    <svg class="slds-icon slds-page-header__icon" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Resource.SLDS100, '/assets/icons/utility-sprite/svg/symbols.svg#edit')}" />
+                                    </svg>
+                                </span>
+                            </div>
+                            <div class="slds-media__body">
+                                <h2 class="slds-page-header__title slds-truncate slds-align-middle" title="Employee Mileage Details">Employee Mileage Details</h2>
+                            </div>
+                        </div>
+                    </div>
+                    <br/>
+                    <apex:panelGrid columns="4" columnClasses="col_1,col_2,col_3,col_4" width="100%">
+                        <apex:outputText value="Trip Status" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!mileage.Trip_Status__c}" styleClass="slds-truncate slds-select slds-size-6-of-6" required="false"
+                        />
+                        <apex:outputText value="Approved Date" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!mileage.Approved_Date__c}" styleClass="slds-size-2-of-6 slds-input" />
+                    </apex:panelGrid>
+                    <br/>
+                    <apex:panelGrid columns="4" columnClasses="col_1,col_2,col_3,col_4" width="100%">
+                        <apex:outputText value="MPG" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!mileage.MPG__c}" styleClass="slds-truncate slds-select slds-size-2-of-6" />
+                        <apex:outputText value="Maintenance and Tires" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;"
+                        />
+                        <apex:inputField value="{!mileage.Maintenance_and_Tires__c}" styleClass="slds-truncate slds-input slds-size-2-of-6" />
+                        <apex:outputText value="Activity" styleClass="slds-form-element__label" style="font-size: 15px;font-weight: bold;" />
+                        <apex:inputField value="{!mileage.Activity__c}" styleClass="slds-truncate slds-select slds-size-2-of-6" />
+                    </apex:panelGrid>
+                    <br/>
+
+                    <apex:pageBlock mode="maindetail" title="(Total List Size: {!total_size})" id="finalPageBlock" rendered="{!IF(MileagesList.size > 0,true,false)}">
+                        <apex:pageBlockButtons style="float: right;" location="top">
+                            <apex:outputPanel id="myButtons">
+                                <apex:commandButton action="{!Beginning}" title="Beginning" value="<< Beginning" disabled="{!disablePrevious}" reRender="myPanel,myButtons"
+                                    styleClass="slds-button slds-button--neutral slds-not-selected" />
+                                <apex:commandButton action="{!Previous}" title="Previous" value="< Previous" disabled="{!disablePrevious}" reRender="myPanel,myButtons"
+                                    styleClass="slds-button slds-button--neutral slds-not-selected" />
+                                <apex:commandButton action="{!Next}" title="Next" value="Next >" disabled="{!disableNext}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"
+                                />
+                                <!-- <apex:commandButton action="{!End}" title="End" value="End >>" disabled="{!disableNext}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"/>  -->
+                            </apex:outputPanel>
+                        </apex:pageBlockButtons>
+                        <apex:outputPanel id="myPanel">
+                            <!-- <apex:inputCheckbox id="topInput" onchange="checkAll(this)" style="margin-left: 25px;position: absolute;z-index: 99999;padding-left: 10px;margin-top: 7px;">
+                             </apex:inputCheckbox> -->
+                             <apex:pageBlockTable value="{!MileagesList}" var="wrapper" id="pageBlock__Table" styleClass="slds-table slds-table_bordered slds-table_cell-buffer tablesorter"
+                             style="font-size: 15px;" headerClass="header">
+                             <apex:column styleClass="checkAllInput">
+                                 <apex:facet name="header">
+                                     <apex:inputCheckbox id="topInput" style="margin-left: 19px;" styleClass="checkAllInput">
+                                         <!-- onchange="checkAll(this)" -->
+                                     </apex:inputCheckbox>
+                                 </apex:facet>
+                                 <apex:inputCheckbox value="{!wrapper.isSelected}"   styleClass="slds-checkbox selectInput" id="isCheckDone">
+                                     <!-- <apex:actionSupport event="onclick" reRender="pageBlock__Table"/> -->
+                                 </apex:inputCheckbox>
+                             </apex:column>
+                             <apex:column headerValue="Employee Mileage Name">
+                                 <apex:outputLink value="/{!wrapper.mileage.Name}" target="_blank">{!wrapper.mileage.Name}</apex:outputLink>
+                             </apex:column>
+                             <apex:column value="{!wrapper.mileage.EmployeeReimbursement__c}" />
+                             <apex:column value="{!wrapper.mileage.Mileage__c}" />
+                             <apex:column value="{!wrapper.mileage.Approved_Date__c}" />
+                             <apex:column value="{!wrapper.mileage.Trip_Date__c}" />
+                             <apex:column value="{!wrapper.mileage.Trip_Status__c}" />
+                             <apex:column value="{!wrapper.mileage.Fuel_price__c}" />
+                             <apex:column value="{!wrapper.mileage.MPG__c}" />
+                             <apex:column value="{!wrapper.mileage.Maintenance_and_Tires__c}" />
+                             <apex:column value="{!wrapper.mileage.Activity__c}" />
+                             <apex:facet name="footer">
+                                 <apex:outputText styleClass="slds-form-element__label"> Showing Page # {!pageNumber} of {!totalPages}</apex:outputText>
+                             </apex:facet>
+                             </apex:pageBlockTable>
+                        </apex:outputPanel>
+                        <!-- <apex:pageBlockButtons style="float: right;" location="bottom">
+                           <apex:outputPanel id="myButtons">
+                                <apex:commandButton action="{!Beginning}" title="Beginning" value="<< Beginning" disabled="{!disablePrevious}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"/>
+                                <apex:commandButton action="{!Previous}" title="Previous" value="< Previous" disabled="{!disablePrevious}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"/>        
+                                <apex:commandButton action="{!Next}" title="Next" value="Next >" disabled="{!disableNext}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"/>
+                                <apex:commandButton action="{!End}" title="End" value="End >>" disabled="{!disableNext}" reRender="myPanel,myButtons" styleClass="slds-button slds-button--neutral slds-not-selected"/>   
+                            </apex:outputPanel>
+                        </apex:pageBlockButtons> -->
+                    </apex:pageBlock>
+                    <apex:pageBlock mode="maindetail" title="(Total List Size: {!total_size})" rendered="{!IF(MileagesList.size == 0,true,false)}"
+                    />
+                </apex:pageBlock>
+            </apex:pageBlock>
+
+            <center>
+                <apex:commandButton action="{!updateMileages}" styleClass="slds-button slds-button--neutral slds-not-selected" value="Update" />
+                <apex:commandButton action="{!putHTTP}"  styleClass="slds-button slds-button--neutral slds-not-selected" value="Change Trip Status" rerender="showmsg" oncomplete="refreshPage()"/>
+            </center>
+        </div>
+    </apex:form>
+
+    </html>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        var headers = {},
+            $jtable = $j("[id$=pageBlock__Table]"), i,
+            l = $jtable.find('thead th').length,
+
+            // choose the columns you want to sort (zero-based index)
+            sortcolumns = [1, 2, 3, 4, 5, 6, 7];
+
+        // build headers object; based on sortcolumn selections
+        for (i = 0; i < l; i++) {
+            if ($j.inArray(i, sortcolumns) < 0) {
+                headers[i] = { sorter: false }
+            }
+        }
+    </script>
+</apex:page>

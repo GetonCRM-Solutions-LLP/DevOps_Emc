@@ -1,0 +1,229 @@
+<template>
+        <div class="map_component">
+            <div class="slds-grid slds-wrap card_header">
+                <div class="slds-col slds-size_7-of-12">
+                    <div class="slds-col slds-size_7-of-7 slds-m-bottom_large slds-m-top_small">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_large">
+                                <label>Date:</label>
+                            </div>
+                            <div class="slds-col slds-size_2-of-7 input-border">
+                                <div>
+                                    <div>
+                                        <c-date-picker data-field="tripDate" date={tripFields.tripDate} date-format={dateFormat} is-selected-date={isSelectedDate} min-date={sDate} max-date={eDate} ondateselect={handleInputChange}></c-date-picker>
+                                        <span class="asterisk">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_2-of-7 slds-p-left_x-large">
+                                <div class="start-time">
+                                    <label>Time:</label>
+                                    <div class="main_time">
+                                        <div class="number_inpt">
+                                            <div style="width: 80%;">
+                                                <input type="text" data-id="startTimeInput" data-field="startTime" class="mileage-input" value={tripFields.startTime} onclick={handleStartTime} oninput={handleInputChange} onfocus={handleFocus} onfocusout={handleOffFocus} />
+                                            </div>
+                                            <div class="auto_number_button">
+                                                <button class="up-down-button" data-id="startTimeUp" onclick={handleStartTimeUp}><i class="fa green_color fa-sort-asc"></i></button>
+                                                <button class="up-down-button" data-id="startTimeDown" onclick={handleStartTimeDown}><i class="fa green_color fa-sort-desc"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_2-of-7 slds-p-left_x-large">
+                                <div class="end-time">
+                                    <label>to:</label>
+                                    <div class="main_time">
+                                        <div class="number_inpt" style="width: 85.75%;">
+                                            <div style="width: 80%;">
+                                                <input type="text" data-id="endTimeInput" data-field="endTime" class="mileage-input" value={tripFields.endTime} onclick={handleEndTime} oninput={handleInputChange} onfocus={handleFocus} onfocusout={handleOffFocus} />
+                                            </div>
+                                            <div class="auto_number_button">
+                                                <button class="up-down-button" data-id="endTimeUp" onclick={handleEndTimeUp}><i class="fa green_color fa-sort-asc"></i></button>
+                                                <button class="up-down-button" data-id="endTimeDown" onclick={handleEndTimeDown}><i class="fa green_color fa-sort-desc"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_7-of-7">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_large">
+                                <label>From:</label>
+                            </div>
+                            <div class="slds-col slds-size_4-of-7 input-border">
+                                <div>
+                                    <c-select2-dropdown data-id="from_dropdown" class="sync_dropdown"
+                                        title="Select from location"
+                                        options={allLocations}
+                                        selected-value={tripOrigin}
+                                        onchange={handleInputChange}
+                                        data-field="origin"
+                                        main-class="default-box-input slds-truncate">
+                                    </c-select2-dropdown>
+                                    <span class="asterisk">*</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-7 slds-p-top_x-small">
+                                <div style="display: flex; justify-content: center;">
+                                    <div class="menu-icon">
+                                        <button class="slds-button slds-button_icon" data-fieldname="from-add" onclick={handleShowModal}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                                                <use xlink:href={addLocationIcon}></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="menu-icon">
+                                        <button class="slds-button slds-button_icon" data-fieldname="from-edit" onclick={handleShowModal}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                                                <use xlink:href={editLocationIcon}></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_7-of-7">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_large">
+                                <label>To:</label>
+                            </div>
+                            <div class="slds-col slds-size_4-of-7 input-border">
+                                <div>
+                                    <c-select2-dropdown data-id="to_dropdown" class="sync_dropdown"
+                                        title="Select to location"
+                                        options={allLocations}
+                                        selected-value={tripDestination}
+                                        onchange={handleInputChange}
+                                        data-field="destination"
+                                        main-class="default-box-input slds-truncate">
+                                    </c-select2-dropdown>
+                                    <span class="asterisk">*</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-7 slds-p-top_x-small">
+                                <div style="display: flex; justify-content: center;">
+                                    <div class="menu-icon">
+                                        <button class="slds-button slds-button_icon" data-fieldname="to-add" onclick={handleShowModal}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                                                <use xlink:href={addLocationIcon}></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="menu-icon">
+                                        <button class="slds-button slds-button_icon" data-fieldname="to-edit" onclick={handleShowModal}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26">
+                                                <use xlink:href={editLocationIcon}></use>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_7-of-7 slds-m-bottom_x-large">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7"></div>
+                            <div style="display: flex;" class="slds-col slds-size_3-of-7">
+                                <a class="linked" onclick={calculateMileage}>
+                                    <template lwc:if={isAddTrip}>
+                                        Calculate Driving Distance
+                                    </template>
+                                    <template lwc:else>
+                                        Query Driving Distance
+                                    </template>
+                                </a>
+                            </div>
+                            <div class="slds-col slds-size_3-of-7"></div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_7-of-7">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_large">
+                                <label>Mileage:</label>
+                            </div>
+                            <div class="slds-col slds-size_1-of-7 input-border">
+                                <div>
+                                    <div class="number_inpt">
+                                        <div style="width: 80%;">
+                                            <input class="mileage-input" data-field="mileage" value={tripFields.mileage} oninput={handleInputChange} onfocus={handleFocus} onfocusout={handleOffFocus} />
+                                        </div>
+                                        <div class="auto_number_button">
+                                            <button class="up-down-button" onclick={handleMileageUp}><i class="fa green_color fa-sort-asc"></i></button>
+                                            <button class="up-down-button" onclick={handleMileageDown}><i class="fa green_color fa-sort-desc"></i></button>
+                                        </div>
+                                    </div>
+                                    <span class="asterisk">*</span>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_small">
+                                <p class="mileage_mi">mi</p>
+                            </div>
+                            <div class="slds-col slds-size_3-of-7">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_7-of-7 slds-m-bottom_medium">
+                        <div class="slds-grid slds-wrap">
+                            <div class="slds-col slds-size_1-of-7 slds-p-left_large">
+                                <label>Tags:</label>
+                            </div>
+                            <div class="slds-col slds-size_2-of-7 input-border">
+                                <div>
+                                    <input class="content-input" data-field="tags" value={tripFields.tags} oninput={handleInputChange} />
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_4-of-7 slds-p-left_x-large">
+                                <div class="notes_input">
+                                    <label>Notes:</label>
+                                    <div style="padding-left: 25px;">
+                                        <textarea class="textarea-input" data-field="notes" value={tripFields.notes} placeholder="Optional, free text" oninput={handleInputChange}>{tripFields.notes}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <template lwc:if={isAddTrip}></template>
+                <template lwc:else>
+                    <!-- For map component -->
+                    <!-- <div class="slds-col slds-size_5-of-12 slds-align_absolute-center slds-m-top_medium slds-p-left_large">
+                        <c-map-creation-component
+                            start-location-lt={mapComponentFields.fromLatitude}
+                            start-location-lg={mapComponentFields.fromLongitude}
+                            end-location-lt={mapComponentFields.toLatitude}
+                            end-location-lg={mapComponentFields.toLongitude}
+                            trip-id={mapComponentFields.tripId}
+                            trip-log-api={mapComponentFields.triplogKey}
+                            time-zone={mapComponentFields.timeZone}
+                            way-pt={mapComponentFields.wayPoints}>
+                        </c-map-creation-component>
+                    </div> -->
+                    <!-- For map component -->
+                </template>
+            </div>
+            <div class="button_class">
+                <button type="button" onclick={handleCreateTrip}
+                    class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                    Save
+                </button>
+                <template lwc:if={isAddTrip}></template>
+                <template lwc:else>
+                    <template lwc:if={isDeletable}>
+                        <button onclick={handleDeleteTrip}
+                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-red waves-light mleft-0 btn-trip">
+                            Delete
+                        </button>
+                    </template>
+                </template>
+                <button type="button" onclick={handleCloseTrip}
+                    class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip">
+                    Close
+                </button>
+            </div>
+        </div>
+</template>

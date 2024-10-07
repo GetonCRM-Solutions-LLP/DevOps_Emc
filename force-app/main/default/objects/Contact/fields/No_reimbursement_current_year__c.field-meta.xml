@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_reimbursement_current_year__c</fullName>
+    <inlineHelpText>count of reimbursment record for current year</inlineHelpText>
+    <label>No reimbursement current year</label>
+    <summaryFilterItems>
+        <field>Employee_Reimbursement__c.Year__c</field>
+        <operation>equals</operation>
+        <value>2024</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Employee_Reimbursement__c.Contact_Id__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

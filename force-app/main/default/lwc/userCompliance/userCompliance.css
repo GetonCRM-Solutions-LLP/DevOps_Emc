@@ -1,0 +1,201 @@
+.fa,
+.fas,
+.fa-solid,
+.fa-light,
+.fa-regular {
+    font-family: "Font Awesome 6 Free" !important
+}
+
+:host {
+    --grey-color: #D7D7D7;
+    --green-color: #7ABB4A;
+    --link-color: #1D1D1D;
+    --text-color: #6C6C6C;
+    --even-row-color: #FFFFFF;
+    --odd-row-color: #F7F7F7;
+    --scroll-color: #F6F6F6;
+    --active-color: #404B5B;
+    --step-bg: #F1F8EC;
+    --step-error-bg: #FA7800;
+}
+
+*{
+    font-family: 'Proxima Nova' !important;
+}
+
+/*Media Queries Start --- */
+
+/** Nest hub device **/
+
+@media only screen and (device-width: 1024px)  {
+    .video-container {
+        width: 455px !important;
+        height: 265px !important;
+    }
+
+    .content-flex{
+        padding-left: 11rem !important;
+    }
+
+    .btn-margin{
+        margin-right: 430px !important;
+    }
+}
+
+/* ipad Mini Portrait */
+@media only screen and (min-width: 768px) and (orientation: portrait) {
+    .vS1{
+        padding: 0 !important;
+    }
+
+    .video-frame{
+        width: 100% !important;
+        height: 236px !important;
+    }
+    
+    .parameter-header{
+        width: 100% !important;
+    }
+
+    .footer-text-content{
+        padding: 14px 0 0 0 !important;
+    }
+
+    .compliance-btn-V1{
+        text-align: center !important;
+        width: 100% !important;
+        padding-left: 137px !important;
+    }
+
+    .bottom-plan{
+        flex-flow: column;
+    }
+
+    .plan-parameter{
+        height: 356px !important;
+    }
+}
+
+.video-container {
+    border: 1.10228px solid #D7D7D7;
+    border-radius: 11.0228px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 9.71%, rgba(0, 0, 0, 0.137734) 33.29%, rgba(0, 0, 0, 0.324564) 52.87%, #000000 100%);
+    width: 352px;
+    height: 315px;
+    position: relative;
+    padding-top: 16.35%;
+}
+
+.video-frame{
+    /* width: 100%;
+    height: 100%; */
+    /* position: absolute; */
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    mix-blend-mode: screen;
+    object-fit: cover;
+    border-radius: 11.0228px;
+    object-fit: cover;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
+  }
+
+.font-bold{
+    font-size: 32px;
+    font-family: 'Proxima Nova Semibold' !important;
+    color: #1D1D1D;
+}
+
+.bottom-plan{
+    display: flex;
+    align-items: center;
+}
+
+.fa-circle-exclamation{
+    color: #7ABB4A !important;
+}
+
+.info-text{
+    font-family: 'Proxima Nova Semibold' !important;
+    font-size: 16px;
+    line-height: 19px;
+    width: 207px;
+    color: #1D1D1D;
+}
+
+.footer-text-content{
+    display: flex;
+    flex-flow: row;
+}
+
+.content-flex{
+    flex-flow: row;
+}
+
+.icon-size{
+    width: 30px;
+    height: 30px;
+}
+
+
+.icon-value{
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #1D1D1D;
+}
+
+.plan-parameter{
+    width: 352px;
+    height: 315px;
+    /* margin-left: 123px; */
+}
+
+.plan-info-icon{
+    width: 47px;
+}
+
+.compliance-btn{
+    font-style: normal;
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 16px;
+    /* letter-spacing: 1px; */
+    line-height: 19.45px;
+    color: var(--even-row-color);   
+    background: var(--green-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 14px 22px;
+    gap: 7px;
+    border-radius: 10px;
+    border: none !important;
+}
+
+.in-complete{
+    background: var(--step-bg);
+}
+
+.not-in-complete{
+    opacity: 0.4;
+}
+
+.btn-margin{
+    margin-right: 320px; 
+}
+
+.chat-bot{
+    position: absolute;
+    right: 0;
+}
+
+.text-view{
+    text-align: center;
+}

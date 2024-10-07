@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Contact Layout</layout>
+        <sections>
+            <label><!-- Annual Mileages --></label>
+            <section>Annual Mileages</section>
+        </sections>
+        <sections>
+            <label><!-- Compliance --></label>
+            <section>Compliance</section>
+        </sections>
+        <sections>
+            <label><!-- Employee Reimbursement Data --></label>
+            <section>Employee Reimbursement Data</section>
+        </sections>
+        <sections>
+            <label><!-- GoToWebinar Information --></label>
+            <section>GoToWebinar Information</section>
+        </sections>
+        <sections>
+            <label><!-- Hello Sign --></label>
+            <section>Hello Sign</section>
+        </sections>
+        <sections>
+            <label><!-- Onboarding Process --></label>
+            <section>Onboarding Process</section>
+        </sections>
+        <sections>
+            <label><!-- Other Configuration --></label>
+            <section>Other Configuration</section>
+        </sections>
+        <sections>
+            <label><!-- Plan Parameter --></label>
+            <section>Plan Parameter</section>
+        </sections>
+        <sections>
+            <label><!-- Pre-Allowance Information --></label>
+            <section>Pre-Allowance Information</section>
+        </sections>
+        <sections>
+            <label><!-- Reimbursement Rates --></label>
+            <section>Reimbursement Rates</section>
+        </sections>
+        <sections>
+            <label><!-- Tax Calculation --></label>
+            <section>Tax Calculation</section>
+        </sections>
+        <sections>
+            <label><!-- Triplog Configuration --></label>
+            <section>Triplog Configuration</section>
+        </sections>
+        <sections>
+            <label><!-- True Dialog --></label>
+            <section>True Dialog</section>
+        </sections>
+        <sections>
+            <label><!-- Vehicle Details --></label>
+            <section>Vehicle Details</section>
+        </sections>
+        <sections>
+            <label><!-- mBurse Dashboard --></label>
+            <section>mBurse Dashboard</section>
+        </sections>
+    </layouts>
+    <layouts>
+        <layout>Picture Upload Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Case --></label>
+        <name>Case</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Event --></label>
+        <name>Event</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Task --></label>
+        <name>Task</name>
+    </quickActions>
+    <validationRules>
+        <errorMessage><!-- Please add Valid Value for Cost Code Field. --></errorMessage>
+        <name>Cost_Code_pattern</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field Value is not valid please add value as null or signed or awaiting_signature --></errorMessage>
+        <name>Hello_Sign_Admin_Status_Values</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Field Value is not valid please add value as null or signed or awaiting_signature --></errorMessage>
+        <name>Hello_Sign_Driver_Status_Values</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Enter Only 2 Characters and Valid Value for MailingState field --></errorMessage>
+        <name>MailingState_for_length</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please add Mailing state value --></errorMessage>
+        <name>Mailing_state_not_Null_For_Driver_Role</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- The Mobile Number field should have a minimum 10-digit number. --></errorMessage>
+        <name>Mobile_Number_Validation</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please Select the value. --></errorMessage>
+        <name>Required_Company_Field_for_NW_Pipe</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Please only one Check box either Biweekly Reimbursement or Monthly Reimbursement. --></errorMessage>
+        <name>Select_Monthly_or_Biweekly_Reim</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- please provide the value for cell phone in the contact as it is not assigned from account --></errorMessage>
+        <name>cell_phone_assignment</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- Before inserting a value for the Phone, ensure that the input does not contain parentheses, and remove any parentheses if they are present. --></errorMessage>
+        <name>no_parenthesis</name>
+    </validationRules>
+    <validationRules>
+        <errorMessage><!-- provide reimbersment frequency field value as it is not specified on the account --></errorMessage>
+        <name>reimbersment_frequency_field</name>
+    </validationRules>
+    <webLinks>
+        <label><!-- Invite_to_Goto_Meeting --></label>
+        <name>CRMG_GTM__Invite_to_Goto_Meeting</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Invite_to_Goto_Meeting_list --></label>
+        <name>CRMG_GTM__Invite_to_Goto_Meeting_list</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Meet_Now --></label>
+        <name>CRMG_GTM__Meet_Now</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Meet_Now_New --></label>
+        <name>CRMG_GTM__Meet_Now_New</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Schedule_Meeting --></label>
+        <name>CRMG_GTM__Schedule_Meeting</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Schedule_a_Rep --></label>
+        <name>CRMG_GTM__Schedule_a_Rep</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Deactivate_Contact_and_Pull_Mileage --></label>
+        <name>Deactivate_Contact_and_Pull_Mileage</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GET_Trips --></label>
+        <name>GET_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Get_Trips_VF --></label>
+        <name>Get_Trips_VF</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- HSignContactAction --></label>
+        <name>HelloSign__HSignContactAction</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Upload_Picture --></label>
+        <name>Upload_Picture</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Start_Flights --></label>
+        <name>cirrusadv__Start_Flights</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Start_Flights_List --></label>
+        <name>cirrusadv__Start_Flights_List</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Send_with_DocuSign --></label>
+        <name>dsfs__Send_with_DocuSign</name>
+    </webLinks>
+</CustomObjectTranslation>

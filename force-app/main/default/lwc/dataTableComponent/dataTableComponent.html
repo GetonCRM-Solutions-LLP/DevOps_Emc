@@ -1,0 +1,742 @@
+<!-- sldsValidatorIgnore -->
+<!-- sldsValidatorIgnore -->
+<template>
+    <c-excel-sheet filename={filename}></c-excel-sheet>
+    <!-- class="spinner-padding left-padSpin"-->
+    <!-- <span class="loader"></span> if:true={isloadingText} -->
+    <div if:true={loadingSpinner}>
+        <div>
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div if:true={isloadingText} class="custom-loading-text">
+                    {loadingText}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div if:true={tableSpinner}>
+        <div>
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+                <div class="custom-loading-text">
+                    {updatingText}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="width: 100%;" class="tableContainer">
+        <div class="paginate">
+            <div class="paginate-plugin">
+                <c-paginator per-page-size={pageSize} onhandlepageclick={pageEventClick}></c-paginator>
+            </div>
+            <div class="paginate-content">
+                <b class="slds-float_left" style="padding-top: 2px;">{totalmileage} mi</b>
+                <div class="recordperpageDiv slds-float_left">
+                    <select class="slds-select recordperpageSelect" id="recordsPerPage" onchange={handleRecordsPerPage}>
+                        <template for:each={pageSizeOptions} for:item="option">
+                            <option key={option} value={option}>{option}</option>
+                        </template>
+                    </select>
+                </div>
+                <div class="totalRows slds-float_right ml-4" style="padding-top: 2px;">
+                    <span>/ {totalrows}</span>
+                </div>
+
+            </div>
+            <div style="clear:both"></div>
+        </div>
+        <!-- <lightning-formatted-date-time value="1632028680000"  year="numeric"
+                    month="numeric"
+                    day="2-digit"></lightning-formatted-date-time>
+        <lightning-formatted-date-time value="1632028680000"  weekday="short"></lightning-formatted-date-time> -->
+        <!--2021-08-02T23:13:00.000Z--> <!--2021-08-19T23:33:00.000Z-->
+         <!-- <lightning-formatted-date-time
+                    value="1627945980000" 
+                    year="numeric"
+                    month="numeric"
+                    day="numeric"
+                    hour="2-digit"
+                    minute="2-digit"
+                    time-zone="America/Hermosillo">
+    </lightning-formatted-date-time>-->
+    <!--<br/>  -->
+    <!--2021-08-02T23:27:00.000Z--> <!--2021-08-19T23:48:00.000Z-->
+         <!-- <lightning-formatted-date-time
+                    value="2021-08-02T23:27:00.000Z"
+                    year="numeric"
+                    month="numeric"
+                    day="numeric"
+                    hour="2-digit"
+                    minute="2-digit"
+                    time-zone="America/Santa_Isabel"> 
+    </lightning-formatted-date-time> -->
+      
+        <table id="myTable" class="slds-table slds-table_fixed-layout slds-table_resizable-cols accordion_table">
+            <tr class="slds-line-height_reset">
+                <th class="" scope="col" style="width: 2.25rem;">
+                    <div class="slds-th__action slds-th__action_form">
+                        <div class="slds-checkbox">
+                            <input type="checkbox" class="CheckUncheckAll" name="options" id="checkbox-unique-id-1173"
+                                value="checkbox-unique-id-1173" tabindex="0"
+                                aria-labelledby="check-select-all-label column-group-header"
+                                onclick={IsAllCheckForApprove} />
+                            <label class="slds-checkbox__label" for="checkbox-unique-id-1173"
+                                id="check-select-all-label">
+                                <span class="slds-checkbox_faux"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                            </label>
+                        </div>
+                    </div>
+                </th>
+                <th class="" scope="col" style="width: 2.25rem;">
+
+                </th>
+                <th class="" scope="col" style="width: 3.25rem;">
+                </th>
+                <th class="" scope="col" style="width: 9rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">Date & Time
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 10rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate  tooltip-ex">Driver
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span>
+                    </div>
+                </th>
+                <th class="" scope="col" style="width: 7rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">Mileage
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">From
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">To
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 5rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">Tags
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 6rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">Notes
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+                <th class="" scope="col" style="width: 6rem;" onclick={updateColumnSorting}>
+                    <div class="slds-truncate tooltip-ex">Activity
+                        <span class="tooltip-ex-text tooltip-ex-bottom">Click To Sort</span>
+                        <span
+                            class="slds-icon_container slds-icon-utility-up slds-icon-utility-down slds-float_right slds-sort-icons">
+                            <template if:false={reverse}>
+                                <lightning-icon icon-name="utility:chevronup" alternative-text="sort" size="x-small"
+                                    class="chevronup-icon">
+                                </lightning-icon>
+                            </template>
+                            <template if:true={reverse}>
+                                <lightning-icon icon-name="utility:chevrondown" alternative-text="sort" size="x-small"
+                                    class="chevrondown-icon">
+                                </lightning-icon>
+                            </template>
+                        </span></div>
+                </th>
+            </tr>
+
+            <template if:false={loadingSpinner}>
+                <template if:true={searchFlag}>
+                    <template if:false={searchDataLength}>
+                        <tr class="slds-nodata">
+                            <td colspan="11">
+                                <div class="slds-truncate slds-align_absolute-center">No Data Available</div>
+                            </td>
+                        </tr>
+                    </template>
+                    <template if:true={searchDataLength}>
+                        <template for:each={searchData} for:item="tableData" for:index="index">
+
+                            <tr id={tableData.id} key={tableData.id} data-id={tableData.id} onclick={clickHandler}
+                                class="collapsible">
+                                <td>
+                                    <div class="slds-checkbox">
+                                        <input type="checkbox" name="options" id={tableData.id} data-id={tableData.id}
+                                            value="checkbox-unique-id-1173" tabindex="0"
+                                            aria-labelledby="check-select-all-label column-group-header"
+                                            class="checkboxCheckUncheckSearch" />
+                                        <label class="slds-checkbox__label" for={tableData.id}>
+                                            <span class="slds-checkbox_faux"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <lightning-icon class="slds-icon-text-default ms-help-icon" id={tableData.id}
+                                        data-id={tableData.id} size="x-small" icon-name="utility:checkin"
+                                        onmouseleave={handleMouseLeave} onmouseover={handleMouseEnter}></lightning-icon>
+                                    <c-tooltip-component tooltip-description={tableData.TrackingMethod}
+                                        id={tableData.id} data-id={tableData.id} class="slds-hide">
+                                    </c-tooltip-component>
+
+                                </td>
+                                <td>
+                                    <img src={statusAppImg} width="17" height="17" data-id={tableData.id}
+                                        class="statusApImage">
+
+                                    <img src={statusRejImg} width="17" height="17" data-id={tableData.id}
+                                        class="statusRejImage">
+
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Date}</div>
+                                    <div class="hint">{tableData.Time}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Name}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Mileage}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.FromLocation}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.ToLocation}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Tags}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Notes}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Activity}</div>
+                                </td>
+                            </tr>
+                            <tr id={tableData.id} key={tableData.id} data-id={tableData.id} class="content">
+                                <td colspan="11" class="opened">
+                                    <form>
+                                        <table class="slds_opened">
+                                            <tbody>
+                                                <tr class="slds_driver">
+                                                    <td class="acc-header">Driver : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 186px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.Name} class="driverDetail_Input">
+                                                            </c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">Mileage : </td>
+                                                    <td>
+                                                        <div class="slds_input">
+                                                            <c-input-field-component class="mileageInput"
+                                                                input-value={tableData.Mileage} data-id={tableData.id}>
+                                                            </c-input-field-component>
+                                                            <!-- <span style="padding-left: 68px;line-height: 36px">mi</span> -->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <!-- <td>Vehicle</td>
+                                                <td>
+                                                    <div class="slds_input" style="width: 186px;">
+                                                        <c-input-field-component data-id={tableData.id}
+                                                            class="vehicle_Input" input-value={tableData.VehicleType}></c-input-field-component>
+                                                    </div>
+                                                </td> -->
+                                                    <td class="acc-header">Date Time : </td>
+                                                    <td colspan="3">
+                                                        <c-datetime-component data-id={tableData.id}
+                                                            strtime-value={tableData.StartTime}
+                                                            entime-value={tableData.EndTime} class="datetimecomponent">
+                                                        </c-datetime-component>
+                                                    </td>
+                                                    <td class="acc-header">Activity : </td>
+                                                    <td colspan="3">
+                                                        <div class={disableClass}>
+                                                            <c-inline-dropdown data-id={tableData.id}
+                                                                class="activity_Input"
+                                                                selected-account={tableData.Activity}
+                                                                field-name="Activity__c" key-field="Id"
+                                                                acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId"
+                                                                admin-id='' acc-id={accountID} pl-acc-id={plID}
+                                                                object-name="Employee_Mileage__c"
+                                                                search-key="Activity__c" id-of-driver='' where-field=''
+                                                                dynamic-placeholder="All Activities"
+                                                                onhandleselectevent={handleInlineEvent}>
+                                                            </c-inline-dropdown>
+                                                            <!-- <c-input-field-component data-id={tableData.id}
+                                                            class="activity_Input" input-value={tableData.Activity}>
+                                                        </c-input-field-component> -->
+                                                        </div>
+                                                    </td>
+                                                    <td rowspan="7" class="mapCreationtd">
+                                                        <c-map-creation-component data-id={tableData.id}
+                                                            start-location-lt={tableData.FromLatitude}
+                                                            start-location-lg={tableData.FromLongitude}
+                                                            end-location-lt={tableData.ToLatitude}
+                                                            end-location-lg={tableData.ToLongitude}
+                                                            trip-id={tableData.TripId}
+                                                            trip-log-api={tableData.TripLogApi}
+                                                            time-zone={tableData.TimeZone} way-pt={tableData.waypoint}>
+                                                        </c-map-creation-component>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">From : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 501px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.FromLocation}
+                                                                class="fromLocation_Input"></c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">
+                                                        Drive Time :
+                                                    </td>
+                                                    <td>
+                                                        <c-input-field-component data-id={tableData.id}
+                                                            input-value={tableData.DriveTime} class="driveTime_Input">
+                                                        </c-input-field-component>
+                                                    </td>
+                                                    <!-- <td rowspan="7">
+                                                    <c-map-creation-component data-id={tableData.id} class="slds-hide" start-location-lt={tableData.FromLatitude} start-location-lg={tableData.FromLongitude} end-location-lt={tableData.ToLatitude} end-location-lg={tableData.ToLongitude}>
+                                                    </c-map-creation-component>
+                                                </td> -->
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">To : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 501px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.ToLocation}
+                                                                class="toLocation_Input"></c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">
+                                                        Stay Time :
+                                                    </td>
+                                                    <td>
+                                                        <input data-id={tableData.id}
+                                                            type="text"  maxlength="4"
+                                                            class="slds-input stayTime_Input" value={tableData.StayTime}
+                                                            oninput={handleStayTimeInput} />
+                                                        <!-- <c-input-field-component data-id={tableData.id}
+                                                            input-value={tableData.StayTime} class="stayTime_Input">
+                                                        </c-input-field-component> -->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">Tags : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input">
+                                                            <input id={tableData.TripId} data-id={tableData.id}
+                                                                type="text" maxlength="150"
+                                                                class="slds-input tags_Input" value={tableData.Tags}
+                                                                oninput={handleTagInput} />
+                                                            <!-- <c-input-field-component data-id={tableData.id}
+                                                            class="tags_Input" disabled-val={isDisabled}></c-input-field-component> -->
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">Notes : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input">
+                                                            <textarea data-id={tableData.id} class="slds-textarea"
+                                                                placeholder="Optional,free text"
+                                                                oninput={handleTextAreaInput}
+                                                                value={tableData.Notes}>{tableData.Notes}</textarea>
+                                                            <!-- <c-textarea-input-component data-id={tableData.id}
+                                                            input-content={tableData.notes} class="txtarea_component">
+                                                        </c-textarea-input-component> -->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <!-- <lightning-button variant="brand" label="Approve"
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button>
+
+
+                                                    <lightning-button variant="destructive" label="Reject"
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button> -->
+                                                        <button type="button" id={tableData.id} data-id={tableData.id}
+                                                            data-log={tableData.TripLogApi}
+                                                            data-tripid={tableData.TripId}
+                                                            data-actual={tableData.ActualMileage}
+                                                            data-email={tableData.emailID}
+                                                            data-trip={tableData.tripDate} data-name={tableData.Name}
+                                                            data-old={tableData.Activity}
+                                                            data-mil={tableData.ActualMileage}
+                                                            data-mileage={tableData.Mileage}
+                                                            data-index={index}
+                                                            class="slds-button slds-button_brand slds_save"
+                                                            onclick={handleSave}>Save</button>
+
+                                                        <button type="button" id={tableData.id} data-id={tableData.id}
+                                                            class="slds-button slds-button_neutral slds_closebtn"
+                                                            onclick={handlecloselookUp}>Close</button>
+
+                                                        <!-- <lightning-button id={tableData.id} data-id={tableData.id}
+                                                        variant="base" label="Close" onclick={handlecloselookUp}
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button> -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+
+                        </template>
+                    </template>
+
+                </template>
+                <template if:false={searchFlag}>
+                    <template if:true={currentDataLength}>
+                        <template for:each={currentData} for:item="tableData" for:index="index">
+
+                            <tr id={tableData.id} key={tableData.id} data-id={tableData.id} onclick={clickHandler}
+                                class="collapsible">
+                                <td>
+                                    <div class="slds-checkbox">
+                                        <input type="checkbox" name="options" id={tableData.id} data-id={tableData.id}
+                                            class="checkboxCheckUncheck" value="checkbox-unique-id-1173" tabindex="0"
+                                            aria-labelledby="check-select-all-label column-group-header" />
+                                        <label class="slds-checkbox__label" for={tableData.id}>
+                                            <span class="slds-checkbox_faux"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <lightning-icon class="slds-icon-text-default ms-help-icon" id={tableData.id}
+                                        data-id={tableData.id} size="x-small" icon-name="utility:checkin"
+                                        onmouseleave={handleMouseLeave} onmouseover={handleMouseEnter}></lightning-icon>
+                                    <c-tooltip-component tooltip-description={tableData.TrackingMethod}
+                                        id={tableData.id} data-id={tableData.id} class="slds-hide">
+                                    </c-tooltip-component>
+                                </td>
+                                <td>
+                                    <img src={statusAppImg} width="17" height="17" data-id={tableData.id}
+                                        class="statusApImage">
+
+                                    <img src={statusRejImg} width="17" height="17" data-id={tableData.id}
+                                        class="statusRejImage">
+
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Date}</div>
+                                    <div class="hint">{tableData.Time}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Name}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Mileage} mi</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.FromLocation}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.ToLocation}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Tags}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Notes}</div>
+                                </td>
+                                <td>
+                                    <div class="slds-truncate">{tableData.Activity}</div>
+                                </td>
+                            </tr>
+                            <tr id={tableData.id} key={tableData.id} data-id={tableData.id} class="content">
+                                <td colspan="11" class="opened">
+                                    <form>
+                                        <table class="slds_opened">
+                                            <tbody>
+                                                <tr class="slds_driver">
+                                                    <td class="acc-header">Driver : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 186px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.Name} class="driverDetail_Input">
+                                                            </c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">Mileage : </td>
+                                                    <td>
+                                                        <div class="slds_input">
+                                                            <c-input-field-component class="mileageInput"
+                                                                input-value={tableData.Mileage} data-id={tableData.id}>
+                                                            </c-input-field-component>
+                                                            <!-- <span style="padding-left: 68px;line-height: 36px">mi</span> -->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <!-- <td>Vehicle</td>
+                                                <td>
+                                                    <div class="slds_input" style="width: 186px;">
+                                                        <c-input-field-component data-id={tableData.id}
+                                                            class="vehicle_Input" input-value={tableData.VehicleType}></c-input-field-component>
+                                                    </div>
+                                                </td> -->
+                                                    <td class="acc-header">Date Time : </td>
+                                                    <td colspan="3">
+                                                        <c-datetime-component data-id={tableData.id}
+                                                            strtime-value={tableData.StartTime}
+                                                            entime-value={tableData.EndTime} class="datetimecomponent">
+                                                        </c-datetime-component>
+                                                    </td>
+                                                    <td class="acc-header">Activity : </td>
+                                                    <td colspan="3">
+                                                        <div class={disableClass}>
+                                                            <c-inline-dropdown data-id={tableData.id}
+                                                                field-name="Activity__c" class="activity_Input"
+                                                                selected-account={tableData.Activity} key-field="Id"
+                                                                acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId"
+                                                                admin-id='' acc-id={accountID} pl-acc-id={plID}
+                                                                object-name="Employee_Mileage__c"
+                                                                search-key="Activity__c" id-of-driver='' where-field=''
+                                                                dynamic-placeholder="All Activities"
+                                                                onhandleselectevent={handleInlineEvent}>
+                                                            </c-inline-dropdown>
+                                                            <!-- <c-input-field-component data-id={tableData.id}
+                                                            class="activity_Input" input-value={tableData.Activity}>
+                                                        </c-input-field-component> -->
+                                                        </div>
+                                                    </td>
+                                                    <td rowspan="7" class="mapCreationtd">
+                                                        <c-map-creation-component data-id={tableData.id}
+                                                            start-location-lt={tableData.FromLatitude}
+                                                            start-location-lg={tableData.FromLongitude}
+                                                            end-location-lt={tableData.ToLatitude}
+                                                            end-location-lg={tableData.ToLongitude}
+                                                            trip-id={tableData.TripId}
+                                                            trip-log-api={tableData.TripLogApi}
+                                                            time-zone={tableData.TimeZone} way-pt={tableData.waypoint}>
+                                                        </c-map-creation-component>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">From : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 501px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.FromLocation}
+                                                                class="fromLocation_Input"></c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">
+                                                        Drive Time :
+                                                    </td>
+                                                    <td>
+                                                        <c-input-field-component data-id={tableData.id}
+                                                            input-value={tableData.DriveTime} class="driveTime_Input">
+                                                        </c-input-field-component>
+                                                    </td>
+                                                    <!-- <td rowspan="7">
+                                                    <c-map-creation-component data-id={tableData.id} class="slds-hide" start-location-lt={tableData.FromLatitude} start-location-lg={tableData.FromLongitude} end-location-lt={tableData.ToLatitude} end-location-lg={tableData.ToLongitude}>
+                                                    </c-map-creation-component>
+                                                </td> -->
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">To : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input" style="width: 501px;">
+                                                            <c-input-field-component data-id={tableData.id}
+                                                                input-value={tableData.ToLocation}
+                                                                class="toLocation_Input"></c-input-field-component>
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">
+                                                        Stay Time :
+                                                    </td>
+                                                    <td>
+                                                        <input data-id={tableData.id}
+                                                            type="text" maxlength="4"
+                                                            class="slds-input stayTime_Input" value={tableData.StayTime}
+                                                            oninput={handleStayTimeInput} />
+                                                        <!-- <c-input-field-component data-id={tableData.id}
+                                                            input-value={tableData.StayTime} class="stayTime_Input">
+                                                        </c-input-field-component> -->
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="acc-header">Tags : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input">
+                                                            <input id={tableData.TripId} data-id={tableData.id}
+                                                                type="text" maxlength="150"
+                                                                class="slds-input tags_Input" value={tableData.Tags}
+                                                                oninput={handleTagInput} />
+                                                            <!-- <c-input-field-component data-id={tableData.id}
+                                                            class="tags_Input" disabled-val={isDisabled}></c-input-field-component> -->
+                                                        </div>
+                                                    </td>
+                                                    <td class="acc-header">Notes : </td>
+                                                    <td colspan="3">
+                                                        <div class="slds_input">
+                                                            <textarea data-id={tableData.id} class="slds-textarea"
+                                                                placeholder="Optional,free text"
+                                                                oninput={handleTextAreaInput}
+                                                                value={tableData.Notes}>{tableData.Notes}</textarea>
+                                                            <!-- <c-textarea-input-component data-id={tableData.id}
+                                                            input-content={tableData.notes} class="txtarea_component">
+                                                        </c-textarea-input-component> -->
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <!-- <lightning-button variant="brand" label="Approve"
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button>
+
+
+                                                    <lightning-button variant="destructive" label="Reject"
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button> -->
+                                                        <button type="button" id={tableData.id}
+                                                            data-log={tableData.TripLogApi}
+                                                            data-tripid={tableData.TripId}
+                                                            data-email={tableData.emailID}
+                                                            data-trip={tableData.tripDate} data-name={tableData.Name}
+                                                            data-old={tableData.Activity}
+                                                            data-actual={tableData.ActualMileage}
+                                                            data-index={index}
+                                                            data-mileage={tableData.Mileage} data-id={tableData.id}
+                                                            class="slds-button slds-button_brand slds_save"
+                                                            onclick={handleSave}>Save</button>
+
+                                                        <button type="button" id={tableData.id} data-id={tableData.id}
+                                                            class="slds-button slds-button_neutral slds_closebtn"
+                                                            onclick={handlecloselookUp}>Close</button>
+
+                                                        <!-- <lightning-button id={tableData.id} data-id={tableData.id}
+                                                        variant="base" label="Close" onclick={handlecloselookUp}
+                                                        style="margin: 0 0.4rem;">
+                                                    </lightning-button> -->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </form>
+                                </td>
+                            </tr>
+                        </template>
+                    </template>
+                    <template if:false={currentDataLength}>
+                        <tr class="slds-nodata">
+                            <td colspan="11">
+                                <div class="slds-truncate slds-align_absolute-center">No Data Available</div>
+                            </td>
+                        </tr>
+                    </template>
+                </template>
+            </template>
+        </table>
+    </div>
+    <!-- <c-custom-infinite-table></c-custom-infinite-table> -->
+    <c-filter-modal-popup modal-header="Download Trips CSV"
+        modal-content="Please select the date range for the trips to download in a CSV format:"
+        onhandlecsvevent={handleCSVEvent}></c-filter-modal-popup>
+</template>

@@ -1,0 +1,45 @@
+<apex:page id="Authpage"  controller="GoToWebinarSyncController" action="{!getAllwebinars}" lightningStylesheets="true" showHeader="false" sidebar="false" >
+     <apex:slds /> 
+     <apex:form >
+
+          <article class="slds-card">
+
+               <div class="slds-card__header slds-grid slds-assistive-text large">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                         <div class="slds-media__body">
+                         <h2 class="slds-card__header-title">
+                              <a href="#" class="slds-card__header-link slds-truncate" title="Card Header">
+                              <span>Card Header</span>
+                              </a>
+                         </h2>
+                         </div>
+                    </header>
+               </div>
+               <div class="slds-card__body slds-card__body_inner slds-p-around_large">
+                    <b>
+        
+                    <apex:outputpanel >
+                         <b>  A Batch is running in background.All data related to GoToWebinar Details will be synced in sometime.</b>
+                    </apex:outputpanel>
+                    </b>
+               </div>
+
+               <div class="slds-scope ">              
+                    <footer class="slds-card__footer">                                   
+                         <apex:commandbutton value="Close" styleClass="slds-button slds-button_text-destructive "  /> 
+                    </footer>
+               </div >
+          </article>
+     </apex:form>
+
+
+     <script>
+        function closeWindow() {
+            alert(1);
+            window.self.close();
+        }
+        function closeWin() {
+         window.close();   // Closes the new window
+        }
+    </script>
+</apex:page>

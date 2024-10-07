@@ -1,0 +1,595 @@
+<template>
+    <div lwc:if={spinner}>
+        <div class="spinner-background opacity"></div>
+        <div class="loader">
+            <div class="svg-container">
+                <div style="position:relative">
+                    <img style="width: 180px;" src={loaderIcon}  />
+                 </div>
+            </div>
+            <div class="mloader-text">{loaderPlaceholder}</div>
+        </div>
+    </div>
+    <div class="animate__animated animate__slideInLeft animate__faster">
+        <lightning-layout-item size="12">
+            <lightning-layout>
+                <lightning-layout-item class="slds-p-horizontal_medium slds-size_12-of-12">
+                    <div class="middle-block slds-p-around_small slds-col slds-size_12-of-12">
+                        <div class="grid-block">
+                            <template lwc:if={isNotIRS}>
+                                <div class="vehicle-info">
+                                    <div class="vehicle_1">
+                                        <div class="slds-p-horizontal_x-small slds-p-vertical_small vehicle_1-1">
+                                            <span data-customtooltip="Vehicle used to generate your reimbursement rates">
+                                                <svg class="vehicle-info-icon" xmlns="http://www.w3.org/2000/svg" width="20"
+                                                    height="20" viewBox="0 0 30 30" fill="none">
+                                                    <circle cx="12" cy="12" r="10.9333" transform="matrix(1 0 0 -1 3 27)"
+                                                        stroke="#4DBFFF" stroke-width="2.13333" />
+                                                    <path
+                                                        d="M15.995 11.8347C15.7283 12.112 15.3976 12.2507 15.003 12.2507C14.6083 12.2507 14.2723 12.112 13.995 11.8347C13.7283 11.5573 13.595 11.2213 13.595 10.8267C13.595 10.432 13.7283 10.1013 13.995 9.83467C14.2723 9.55734 14.6083 9.41867 15.003 9.41867C15.3976 9.41867 15.7283 9.55734 15.995 9.83467C16.2723 10.1013 16.411 10.432 16.411 10.8267C16.411 11.2213 16.2723 11.5573 15.995 11.8347ZM16.235 20.6667H13.771V12.9387H16.235V20.6667Z"
+                                                        fill="#4DBFFF" />
+                                                </svg>
+                                            </span>
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-left_xx-small slds-p-right_small slds-p-bottom_large">
+                                                <div class="vehicle_font">Reimbursement Vehicle:</div>
+                                                <div class="slds-p-top_x-small vehicle_font_1" style="
+                                                font-weight: 400;
+                                                font-size: 14px;
+                                                line-height: 14px;color: #6C6C6C;">{vehicleType}</div>
+                                            </div>
+                                            <!--slds-col slds-size_12-of-12 -->
+                                            <div class="slds-col slds-size_12-of-12 slds-p-right_small slds-p-left_xx-small">
+                                                <div class="vehicle_font">Home:</div>
+                                                <div class="slds-p-top_x-small vehicle_font_1">{address}</div>
+                                            </div>
+                                        </div>
+                                        <div id="spacer" class="spacer_1"></div>
+                                        <div class="">
+                                                <div class="carProfile">
+                                                    <img style="height: inherit !important;" src={vehicleImage} />
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="map-state">
+                                    <div class="map-state_1">
+                                        <template lwc:if={isDrivingSt}>
+                                            <div class="addState">Add Driving
+                                                States
+                                                    <svg lwc:if={isSelectedState} xmlns="http://www.w3.org/2000/svg" width="19" height="19.904" onclick={addState} viewBox="0 0 26.238 19.904" fill="none" style="margin: 0px 0px 4px 12px;cursor:pointer"><path d="M9.824 19.678a1.52 1.52 0 0 1 -1.082 -0.458L0.447 10.801a1.586 1.586 0 0 1 0 -2.211 1.508 1.508 0 0 1 2.163 0l7.212 7.313L23.627 0.458a1.508 1.508 0 0 1 2.162 0c0.598 0.611 0.598 1.6 0 2.211L10.905 19.22a1.51 1.51 0 0 1 -1.08 0.458" fill="#7ABB4A"></path>
+                                                    </svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" onclick={removeState} fill="none" style="margin: 0 0 4px 8px;cursor:pointer">
+                                                        <path d="M5.29944 15.906L15.906 5.29943" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                                        <path d="M5.29944 5.3071L15.906 15.9137" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                                    </svg>
+                                            </div>
+                                            <div class="slds-p-top_x-small addState-font">{drivingTitle}</div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="map-state-font">Driving States
+                                                <span data-statetooltip="Add Driving State">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin: 0 0 4px 8px;width: 12px;height: 12px;cursor:pointer" onclick={addDrivingState}>
+                                                        <path d="M7 13L7 1" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                                        <path d="M1 7L13 7" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <div class="map-state-font_1">{states}</div>
+                                        </template> 
+                                    </div>
+                                    <div class="choropleth map-config">
+                                        <c-choropleth-map contact-id={contactId} width="160" height="127"
+                                            background="#F7F7F7" border-color="#F7F7F7" type={typeMap}
+                                            canada={canadaStatesList} onstateclick={getSelectedStates}></c-choropleth-map>
+                                    </div>
+                                    <template lwc:if={isDrivingSt}>
+                                    </template>
+                                    <template lwc:else>
+                                        <div class="view-map slds-p-around_xx-small" lwc:if={multipleMap}>
+                                            <div>
+                                                <div class="slds-form-element">
+                                                    <label class="slds-checkbox_toggle slds-grid_vertical">
+                                                        <input type="checkbox" name="checkbox-toggle-16"
+                                                            value="checkbox-toggle-16" aria-describedby="checkbox-toggle-16"
+                                                            onchange={handleMap} checked={checkAll} />
+                                                        <span id="checkbox-toggle-16" class="slds-checkbox_faux_container"
+                                                            aria-live="assertive">
+                                                            <span class="slds-checkbox_faux toogle-input"></span>
+                                                            <span class="slds-checkbox_on"></span>
+                                                            <span class="slds-checkbox_off"></span>
+                                                        </span>
+                                                        <!-- <span class="slds-form-element__label slds-m-bottom_none input-label"><span class="map-label map--us">USA</span> <span class="map-label map--canada">/ Canada</span></span> -->
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <div class="vehicle-info cflex">
+                                    <div class="vehicle_1">
+                                        <div class="slds-p-horizontal_x-small slds-p-vertical_xx-small vehicle_1-1">
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-left_xx-small slds-p-right_small slds-p-bottom_large">
+                                                <div class="vehicle_font">{vehicleType}:</div>
+                                            </div>
+                                        </div>
+                                        <div class="">
+                                                <div style="left: 0;
+                                                top: 40px;
+                                                width: 189px;
+                                                height: inherit;
+                                                position: absolute;">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="197" height="78"
+                                                        viewBox="0 0 197 78" fill="none">
+                                                        <path
+                                                            d="M82.988 12.1297C86.0423 12.2606 88.1366 12.8714 89.0092 13.6132C89.8819 14.3549 90.3618 16.3184 90.3618 19.1108V53.5364C90.3618 56.4598 89.8819 58.2923 89.0092 59.0341C88.1366 59.7758 86.0859 60.2558 82.988 60.3867V61.8702H105.502V60.3867C102.448 60.2558 100.484 59.7758 99.4809 59.0341C98.6083 58.2923 98.1283 56.4598 98.1283 53.5364V19.1108C98.1283 16.2747 98.6083 14.3549 99.4809 13.6132C100.441 12.8714 102.404 12.2606 105.502 12.1297V10.7771H82.988V12.1297Z"
+                                                            fill="#010202" />
+                                                        <path
+                                                            d="M152.93 59.2959C152.057 58.685 150.967 57.9433 150.007 56.7216L134.474 37.1308C138.75 36.3891 141.935 35.0365 144.509 32.9858C146.953 30.8914 148.174 28.099 148.174 24.1721C148.174 18.5436 145.338 14.4858 139.971 12.4351C137.048 11.2134 133.339 10.8644 128.933 10.8644H107.596V12.217C110.433 12.4787 112.134 12.9587 112.876 13.7877C113.749 14.6603 114.229 16.362 114.229 19.1544V52.4456C114.229 55.7617 113.749 57.8124 113.007 58.685C112.265 59.4268 110.563 60.0376 107.64 60.2558V61.7393H128.845V60.2558C125.922 60.1249 124.177 59.514 123.217 58.7723C122.344 58.0305 121.864 56.198 121.864 53.4056V38.2216L126.14 38.0907L144.247 61.8265H155.155L154.894 60.1249C154.283 59.994 153.541 59.7758 152.93 59.2959ZM121.951 35.3855V16.2747C121.951 15.053 122.213 14.4422 122.693 14.1804C123.173 13.7004 124.395 13.5695 126.62 13.5695C129.805 13.5695 132.379 14.0495 134.343 14.9221C138.008 16.4929 139.71 19.678 139.71 24.0849C139.71 28.8407 137.615 32.0259 133.688 33.6403C131.376 34.5565 127.318 35.1674 121.951 35.3855Z"
+                                                            fill="#010202" />
+                                                        <path
+                                                            d="M184.869 40.7959C183.167 38.5707 180.2 36.1273 176.055 33.4657L169.336 29.408C166.892 27.8372 165.06 26.2228 163.838 24.7393C162.616 23.3867 162.136 21.816 162.136 19.5908C162.136 17.4964 162.878 15.6639 164.362 14.4422C165.932 13.0896 167.809 12.4787 169.728 12.4787C172.434 12.4787 175.226 13.5695 177.8 15.4021C180.636 17.3655 182.687 20.7688 183.822 25.6992H185.523L183.952 9.29362H182.382C182.251 10.1663 181.902 10.7771 181.64 11.2571C181.16 11.737 180.68 11.9988 179.546 11.9988C179.284 11.9988 177.975 11.5188 175.401 10.6462C172.957 9.77356 170.863 9.29362 169.161 9.29362C164.885 9.29362 161.438 10.6462 158.995 13.2205C156.29 15.9257 155.199 19.1108 155.199 22.9068C155.199 25.8301 156.159 28.5353 158.384 30.9787C159.344 32.3313 161.089 33.553 162.922 34.9056L169.423 38.9634C173.219 41.4068 175.793 43.1084 176.753 44.3301C178.717 46.1626 179.589 48.3879 179.589 50.9622C179.589 53.7982 178.717 55.8489 176.753 57.5942C175.182 59.0777 172.957 59.8195 170.514 59.8195C165.976 59.8195 162.311 57.9869 159.126 54.4527C157.555 52.3584 155.941 49.6968 154.719 46.2499H153.017L154.85 60.0812C155.33 60.2121 155.81 60.343 156.421 60.343V61.8265H155.068L155.199 62.6992H156.901C156.901 61.9574 157.162 61.3466 157.511 60.8666C157.773 60.2558 158.384 59.994 159.213 59.994C159.475 59.994 160.915 60.4739 163.62 61.3466C166.063 62.2192 168.638 62.6992 170.95 62.6992C175.619 62.6992 179.502 61.3466 182.469 58.6414C185.523 55.9362 187.007 52.5329 187.007 48.4751C187.312 45.5518 186.483 42.9775 184.869 40.7959Z"
+                                                            fill="#010202" />
+                                                        <path
+                                                            d="M156.595 60.3867C155.984 60.3867 155.504 60.2558 155.024 60.1249L155.286 61.8265H156.639C156.595 61.8702 156.595 60.3867 156.595 60.3867Z"
+                                                            fill="#010202" />
+                                                        <path
+                                                            d="M70.9893 15.1839C70.2475 13.9622 62.7864 10.428 51.8784 8.20282C47.4716 13.0896 47.4716 15.053 47.3407 15.7948C47.2098 16.5365 48.8242 18.6309 50.3949 20.6816C53.3183 24.6084 54.1909 25.3502 54.6709 26.5719C55.5435 28.6662 54.06 33.8148 53.1001 38.3089C53.1001 38.178 50.3949 28.4044 49.3041 22.1651C49.1732 21.5542 49.3041 21.2924 49.3041 21.2924C42.6721 20.6816 38.178 20.4198 37.4362 23.8667C34.382 23.8667 32.8985 24.7393 32.5495 25.3502C31.8077 26.7028 32.6804 29.408 33.2912 30.7169C33.7712 29.6261 36.3454 29.8443 37.2181 29.8443C37.698 29.9752 37.698 30.1061 37.8289 30.4551V43.5447H29.8879L23.1686 62.0447C26.2228 63.5282 29.6698 64.7499 31.7205 64.7499C33.8148 64.7499 38.9634 62.0447 39.6615 62.0447C40.2723 62.0447 45.4209 64.7499 47.5152 64.7499C49.6096 64.7499 52.882 63.6591 56.0671 62.0447L49.3478 43.5447C49.3478 43.5447 42.3667 43.5447 41.4068 43.5447C41.4068 40.6214 41.4068 33.9893 41.4068 30.9351C41.2759 30.1933 40.9268 29.8443 40.665 29.8443L44.5919 29.7134C43.981 27.4881 43.2393 25.7865 42.1485 25.6556C42.4103 25.1757 42.7593 24.9139 43.1084 24.5648H40.0542C40.316 22.9941 44.3301 23.474 46.0754 23.6922C47.777 32.5058 51.224 44.5046 51.3549 44.6355C51.4857 44.7664 54.2782 45.8572 54.54 45.9881C56.1107 42.4539 58.685 31.895 58.8159 29.3207C60.9103 30.0624 60.1685 32.7676 59.6886 35.5601C57.3761 49.8714 55.4126 54.2782 55.0199 56.9834C57.1143 56.5034 58.2051 56.1107 58.5541 55.8926C58.8159 55.4126 59.7758 53.0565 60.6485 50.3949C61.8702 46.4681 63.7027 36.6945 63.7027 32.7676C63.7027 31.895 62.8301 30.8042 61.4775 30.1933C61.4775 30.1933 62.2192 28.9716 62.4374 28.099C62.9173 27.2264 63.31 25.3938 63.31 25.3938C64.1827 25.6556 64.7935 26.0047 64.8808 26.8773C65.3607 30.6733 65.1426 30.9351 64.619 37.9162C64.619 40.0105 63.7463 44.5483 63.0482 49.1732C61.5647 57.507 60.1249 61.1721 60.1249 62.5246C62.3501 61.7829 64.0518 61.172 64.2699 60.9539C64.4008 60.6921 65.9716 56.6779 67.1933 50.4386C67.6732 47.7334 67.935 45.1591 68.415 42.4976C69.0258 38.9634 69.1567 35.1674 69.1567 32.2004C69.1567 27.6627 69.7675 27.6627 66.3206 25.961C67.6732 22.4268 67.2805 19.9398 67.0624 19.2417C66.4515 18.02 65.8407 18.02 62.9173 18.1509C63.8772 19.2417 63.6591 21.0742 63.3973 22.2959C62.7864 21.816 63.1355 20.9434 59.9504 21.0743C59.4704 15.9257 58.4669 15.4457 58.4669 15.1839C57.9869 14.5731 55.4126 14.9221 54.6709 15.1839C55.2817 15.6639 56.3725 19.4599 55.8926 21.2051C55.6308 20.7252 51.224 15.7075 51.4857 14.704C51.7475 14.0931 52.0966 13.4823 53.5801 11.7806C58.7287 12.8714 67.4114 16.0566 68.0223 17.0601C68.5022 18.2818 68.9822 19.6344 69.3749 21.5978C69.8548 24.5212 70.7275 31.5023 70.2475 42.0612C69.7675 53.1001 68.2841 59.2086 68.5459 58.9468C70.1166 58.4669 72.6909 56.0235 72.9527 55.4126C73.6944 53.5801 73.9126 47.2098 74.1744 41.3195C74.0435 35.5601 73.4326 28.2299 73.2145 25.3938C72.3418 18.5 71.8619 16.6674 70.9893 15.1839ZM31.5896 60.9975C30.0188 60.9975 27.6627 60.7357 27.6627 60.7357L31.5896 49.086L35.2546 60.7357C35.2546 60.6048 33.0294 60.9975 31.5896 60.9975ZM51.2676 60.6048C51.2676 60.6048 48.9551 60.8666 47.3407 60.8666C45.9881 60.8666 43.6756 60.6048 43.6756 60.6048L47.3407 48.9551L51.2676 60.6048ZM41.1013 51.7039V47.1662H44.5483L39.3997 61.6084L34.2511 47.2971H37.698V50.4822C37.698 50.4822 37.698 50.744 37.8289 50.744C38.3089 51.0058 38.4398 51.0058 38.4398 51.0058L41.1013 51.7039ZM41.494 28.0554H35.6037C35.1237 26.5719 35.6037 26.2228 36.9563 26.0919C39.2688 25.961 41.3631 25.961 41.494 28.0554ZM58.2487 21.6851C60.343 21.4233 59.4704 25.2193 58.8596 26.8337C57.9869 25.0011 57.3761 23.9103 56.0235 22.1651C56.8088 21.816 57.4197 21.816 58.2487 21.6851Z"
+                                                            fill="#010202" />
+                                                        <path
+                                                            d="M19.9398 54.0164C20.8997 52.7947 24.6084 49.1296 25.2193 47.0353C25.8301 44.5919 26.441 38.7016 26.441 37.349C26.441 37.349 22.7759 39.9233 20.9434 41.8867C20.0707 42.7593 18.9799 44.3301 18.9799 44.3301C18.5 42.2358 19.1108 39.7924 19.9398 38.4398C21.1615 36.3454 25.5683 32.5495 26.1792 30.9787C27.1391 28.4044 27.0518 26.2228 27.7499 23.5176C24.8266 24.6084 21.1179 26.8337 19.2853 28.7971C19.1544 25.8738 20.0271 23.6485 21.9905 22.1651C24.8266 19.9398 28.6226 18.7181 30.9351 18.02C33.0294 17.4092 36.4327 16.7983 38.0471 15.9257C41.1013 14.4422 44.0683 10.0354 44.7664 7.85376C43.8065 7.85376 40.0978 7.72286 36.5636 9.07545C35.211 9.6863 34.6002 10.908 34.1202 11.9115C33.5094 12.7842 32.8985 13.7441 32.4186 14.4858C30.9351 16.7111 29.2334 17.8018 27.0518 18.4127C27.0518 18.2818 28.5353 17.3219 29.4952 15.0967C30.3679 13.1332 31.4587 9.46814 31.4587 9.07545C29.4952 9.33725 28.4044 9.94809 26.3101 10.6462C24.2158 11.5188 23.474 12.4787 23.125 13.3514C21.6415 15.5766 22.1651 21.9033 19.1981 24.2594C19.329 20.9433 20.0707 17.4092 18.9363 13.3514C13.046 15.7948 11.8243 17.8891 12.3042 20.3325C12.9151 23.7794 16.5802 25.2193 18.1945 28.1863C18.8054 29.0589 18.9363 30.2806 18.9363 30.2806C19.0672 30.2806 17.7146 31.8513 18.1945 35.1674C18.1945 35.1674 16.9728 32.724 15.882 31.2405C14.1804 29.0153 10.7335 25.3502 10.7335 25.3502C9.99172 34.5129 11.2134 36.3891 11.6061 37.0872C12.8278 39.0506 16.9728 41.974 17.9764 43.9374C18.4563 44.8101 18.5872 45.1591 18.5872 45.1591C18.7181 45.4209 17.7146 46.6426 17.8455 48.3442C17.9764 48.9551 18.1073 49.5659 18.3254 50.4386C18.3254 50.4386 16.9728 48.4751 15.2712 46.5117C13.7877 44.6792 10.7335 42.4539 10.6026 42.4539C10.4717 43.5447 11.0825 48.5624 11.2134 49.435C11.4752 52.0093 11.6934 54.3218 13.9186 56.678C15.6203 58.5105 21.6415 60.9539 22.8632 61.4338C22.8632 61.4338 22.6014 60.2121 21.9905 58.5978C20.8997 56.8088 19.9398 54.0164 19.9398 54.0164Z"
+                                                            fill="#010202" />
+                                                    </svg>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="map-state cflex-state">
+                                    <div class="map-state_1">
+                                        <template lwc:if={isDrivingSt}>
+                                            <div class="addState">Add Driving
+                                                States
+                                                    <svg lwc:if={isSelectedState} xmlns="http://www.w3.org/2000/svg" width="19" height="19.904" onclick={addState} viewBox="0 0 26.238 19.904" fill="none" style="margin: 0px 0px 4px 12px;cursor:pointer"><path d="M9.824 19.678a1.52 1.52 0 0 1 -1.082 -0.458L0.447 10.801a1.586 1.586 0 0 1 0 -2.211 1.508 1.508 0 0 1 2.163 0l7.212 7.313L23.627 0.458a1.508 1.508 0 0 1 2.162 0c0.598 0.611 0.598 1.6 0 2.211L10.905 19.22a1.51 1.51 0 0 1 -1.08 0.458" fill="#7ABB4A"></path>
+                                                    </svg>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" onclick={removeState} fill="none" style="margin: 0 0 4px 8px;cursor:pointer">
+                                                        <path d="M5.29944 15.906L15.906 5.29943" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                                        <path d="M5.29944 5.3071L15.906 15.9137" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                                    </svg>
+                                            </div>
+                                            <div class="slds-p-top_x-small addState-font">{drivingTitle}</div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class="map-state-font">Driving States
+                                                <span data-statetooltip="Add Driving State">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin: 0 0 4px 8px;width: 12px;height: 12px;cursor:pointer" onclick={addDrivingState}>
+                                                        <path d="M7 13L7 1" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                                        <path d="M1 7L13 7" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                                    </svg>
+                                                </span>
+                                            </div>
+                                            <div class="map-state-font_1">{states}</div>
+                                        </template> 
+                                    </div>
+                                    <div class="choropleth map-config cflex-map-config">
+                                        <c-choropleth-map contact-id={contactId} width="160" height="127"
+                                            background="#F7F7F7" border-color="#F7F7F7" type={typeMap}
+                                            canada={canadaStatesList} onstateclick={getSelectedStates}></c-choropleth-map>
+                                    </div>
+                                    <template lwc:if={isDrivingSt}>
+                                    </template>
+                                    <template lwc:else>
+                                        <div class="view-map slds-p-around_xx-small" lwc:if={multipleMap}>
+                                            <div>
+                                                <div class="slds-form-element">
+                                                    <label class="slds-checkbox_toggle slds-grid_vertical">
+                                                        <input type="checkbox" name="checkbox-toggle-16"
+                                                            value="checkbox-toggle-17" aria-describedby="checkbox-toggle-16"
+                                                            onchange={handleMap} checked={checkAll} />
+                                                        <span id="checkbox-toggle-17" class="slds-checkbox_faux_container"
+                                                            aria-live="assertive">
+                                                            <span class="slds-checkbox_faux toogle-input"></span>
+                                                            <span class="slds-checkbox_on"></span>
+                                                            <span class="slds-checkbox_off"></span>
+                                                        </span>
+                                                        <!-- <span class="slds-form-element__label slds-m-bottom_none input-label"><span class="map-label map--us">USA</span> <span class="map-label map--canada">/ Canada</span></span> -->
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </template>
+                                   
+                                </div>
+                            </template>
+                           
+                            <div  class="slds-p-left_small miles-view">
+                                <div  class="slds-grid slds-grid--pull-padded">
+                                    <div  class="slds-col--padded">
+                                        <div class="slds-box--xx-small slds-text-align--center" style="display: flex;width: 100%;">
+                                            <div  style="width: 90%;">
+                                                <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--6-of-12" style="float: left;">
+                                                    <div  class="slds-text-align--center slds-p-right_medium" style="float: left;">
+                                                        <!-- <img class="middle-icon"
+                                                        src={milesIcon}  style="max-width: 36px;float: left;" /> -->
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M32.188 4.2c3.063 0 5.612 2.254 5.612 5.248 0 .73-.173 1.68-.438 2.347-1.501 3.024-3.017 6.056-4.528 9.082a.722.722 0 0 1-.635.38h-9.1c-1.757 0-3.15 1.305-3.15 2.951 0 1.648 1.393 2.953 3.15 2.953h4.55c2.896 0 5.25 2.205 5.25 4.919 0 2.716-2.354 4.921-5.25 4.921H10.5a.721.721 0 0 1-.635-.38c-1.704-3.407-3.486-6.79-5.173-10.199a7.508 7.508 0 0 1-.492-2.543c0-3.332 2.853-5.904 6.311-5.904s6.289 2.576 6.289 5.904c0 .811-.207 1.827-.491 2.543-1.559 3.087-3.136 6.177-4.704 9.266H27.65c2.147 0 3.85-1.599 3.85-3.609s-1.704-3.607-3.85-3.607H23.1c-2.507 0-4.55-1.913-4.55-4.265 0-2.35 2.042-4.263 4.55-4.263h7.996c-1.349-2.719-2.735-5.426-4.06-8.148a7.114 7.114 0 0 1-.436-2.349c0-2.993 2.525-5.247 5.589-5.247Zm0 1.312C29.839 5.512 28 7.132 28 9.447c0 .486.191 1.475.35 1.887 1.276 2.57 2.567 5.138 3.85 7.707 1.255-2.58 2.552-5.077 3.85-7.707.16-.41.35-1.4.35-1.887 0-2.315-1.862-3.934-4.211-3.934Zm.012 1.639c1.344 0 2.45 1.036 2.45 2.296 0 1.26-1.106 2.296-2.45 2.296s-2.45-1.036-2.45-2.296c0-1.26 1.106-2.296 2.45-2.296Zm0 1.313c-.588 0-1.05.433-1.05.982 0 .551.462.984 1.05.984s1.05-.433 1.05-.984c0-.551-.462-.982-1.05-.982ZM10.511 19.288c-2.73 0-4.911 1.95-4.911 4.592 0 .56.21 1.578.404 2.071C7.495 28.905 9 31.857 10.5 34.808c1.47-2.966 3.038-5.953 4.496-8.857.196-.494.406-1.512.406-2.072 0-2.641-2.161-4.591-4.89-4.591Zm-.011 1.641c1.732 0 3.15 1.33 3.15 2.951 0 1.624-1.418 2.953-3.15 2.953s-3.15-1.33-3.15-2.953 1.418-2.95 3.15-2.95Zm0 1.312c-.974 0-1.75.725-1.75 1.64s.775 1.641 1.75 1.641 1.75-.728 1.75-1.641-.775-1.64-1.75-1.64Z" fill="#1D1D1D"/></svg>
+                                                    </div>
+                                                    <div style="display: flex;flex-flow: column;">
+                                                        <div  class="slds-text-align--center content-text"
+                                                        style="font-family: 'Proxima Nova Bold' !important;font-size: 26px;line-height: 35px;color: rgb(29, 29, 29);"
+                                                        >
+                                                            <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                            font-size: 26px;
+                                                            line-height: 35px;
+                                                            color: rgb(29, 29, 29);">
+                                                                <template lwc:if={lastMilesZero}>
+                                                                    {lastMilesZero}
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={lastMonthMiles} maximum-fraction-digits="2"></lightning-formatted-number>
+                                                                </template>
+                                                            </div>
+                                                            <!-- <i  class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                                                style="font-size: 16px; line-height: 35px; cursor: pointer;float:left;z-index: 4;
+                                                                position: relative;" onclick={getLastMonthMileage}></i> -->
+                                                        </div>
+                                                        <div style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;"
+                                                            onclick={getLastMonthMileage}> {lastmonthAbbr} Mileage
+                                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                                                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                        </svg> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--6-of-12"
+                                                    style="float: left;">
+                                                    <div
+                                                        style="height: 45px;border: 0.11803px solid #d7d7d7;float: left;margin-top: 6px;margin-left: 6px">
+                                                    </div>
+                                                    <div style="display: flex;flex-flow: column;">
+                                                        <div style="display: flex;">
+                                                            <div class="slds-p-left_x-small content-text"
+                                                                style="font-family: 'Proxima Nova Bold' !important;font-size: 26px; line-height: 35px; color: rgb(29, 29, 29)">
+                                                                <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                                font-size: 26px;
+                                                                line-height: 35px;
+                                                                color: rgb(29, 29, 29);">
+                                                                    <template lwc:if={thisMilesZero}>
+                                                                        {thisMilesZero}
+                                                                    </template>
+                                                                    <template lwc:else>
+                                                                        <lightning-formatted-number
+                                                                            style="font-family: 'Proxima Nova Bold' !important;"
+                                                                            value={thisMonthMiles}
+                                                                            maximum-fraction-digits="2"></lightning-formatted-number>
+                                                                    </template>
+                                                                </div>
+                                                                <!-- <i class="fa-solid slds-p-left_x-small fa-arrow-right-from-bracket"
+                                                                style="font-size: 16px; line-height: 35px; cursor: pointer;float:left" onclick={getThisMonthMileage}></i> -->
+                                                            </div>
+                                                            <svg class="synIcon" xmlns="http://www.w3.org/2000/svg" onclick={syncProcess} width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                                                <rect width="24" height="24" rx="9" fill="#404B5A"/>
+                                                                <path d="M15.9769 7.88575C15.9135 7.82241 15.8502 7.75908 15.7869 7.69575C15.3435 7.31575 14.7735 6.99908 14.2035 6.80908C13.8235 6.68241 13.4435 6.61908 13.0635 6.61908C12.8102 6.61908 12.5569 6.61908 12.3035 6.61908C11.8602 6.68241 11.4169 6.80908 11.0369 6.99908C9.96021 7.50575 9.20021 8.26575 8.75688 9.27908C8.50354 9.72241 8.37687 10.2291 8.31354 10.7357C8.31354 10.9257 8.31354 11.1157 8.25021 11.3057C8.25021 11.5591 7.99687 11.7491 7.80687 11.8124C7.55354 11.8757 7.30021 11.8124 7.17354 11.5591C7.11021 11.4324 7.04688 11.3057 7.04688 11.1791C7.04688 10.2924 7.23688 9.53241 7.61688 8.70908C8.18687 7.56908 9.01021 6.68241 10.1502 6.04908C10.7202 5.73241 11.3535 5.54241 12.0502 5.41575C12.4935 5.35241 12.9369 5.35241 13.3802 5.35241C14.5835 5.47908 15.6602 5.92241 16.6102 6.74575L16.6735 6.80908V6.74575C16.6735 6.49241 16.6735 6.23908 16.6735 5.92241C16.6735 5.79575 16.6735 5.66908 16.7369 5.60575C16.8635 5.41575 17.1802 5.28908 17.4335 5.35241C17.6869 5.41575 17.8135 5.60575 17.8135 5.85908C17.8135 6.04908 17.8135 6.23908 17.8135 6.42908C17.8135 6.99908 17.8135 7.63241 17.8135 8.20241C17.8135 8.32908 17.8135 8.39241 17.8135 8.51908C17.7502 8.77241 17.5602 8.96241 17.3069 8.96241C17.0535 8.96241 16.8002 8.96241 16.5469 8.96241C15.9769 8.96241 15.4069 8.96241 14.8369 8.96241C14.5835 8.96241 14.3935 8.89908 14.2669 8.64575C14.0769 8.32908 14.2035 7.94908 14.5202 7.75908C14.5835 7.69575 14.6469 7.69575 14.7735 7.69575C14.9617 7.69575 15.2207 7.75908 15.9769 7.88575C15.9769 7.94908 15.9769 7.94908 15.9769 7.88575Z" fill="white"/>
+                                                                <path d="M8.32052 16.0543C8.32052 16.371 8.32052 16.6243 8.32052 16.941C8.32052 17.0043 8.32052 17.131 8.25719 17.1943C8.19385 17.4477 7.81385 17.6377 7.49719 17.511C7.24385 17.3843 7.18052 17.2577 7.11719 17.0043C7.11719 16.8143 7.11719 16.6243 7.11719 16.4343C7.11719 15.8643 7.11719 15.231 7.11719 14.661C7.11719 14.5343 7.11719 14.471 7.11719 14.3443C7.18052 14.091 7.37052 13.901 7.62385 13.901C7.87719 13.901 8.13052 13.901 8.38385 13.901C8.95385 13.901 9.52385 13.901 10.0939 13.901C10.2839 13.901 10.4739 13.9643 10.6005 14.091C10.7905 14.281 10.8539 14.7877 10.4739 14.9777C10.3472 15.041 10.2839 15.1043 10.1572 15.1043C9.77719 15.1043 9.46052 15.1043 9.08052 15.1043H9.01719L9.08052 15.1677C9.33385 15.421 9.58719 15.611 9.84052 15.7377C10.2839 15.991 10.7272 16.181 11.1705 16.2443C11.6772 16.371 12.2472 16.371 12.7539 16.3077C13.7039 16.181 14.5905 15.801 15.2872 15.1043C16.0472 14.4077 16.4905 13.521 16.6805 12.571C16.7439 12.3177 16.7439 12.0643 16.7439 11.811C16.7439 11.621 16.8072 11.4943 16.9339 11.3677C17.1239 11.1777 17.3139 11.1777 17.5672 11.241C17.8205 11.3043 17.8839 11.4943 17.9472 11.7477C17.9472 11.9377 17.9472 12.1277 17.9472 12.3177C17.8839 12.761 17.8205 13.2043 17.6939 13.6477C17.4405 14.4077 17.0605 15.1043 16.4905 15.6743C15.9839 16.2443 15.3505 16.6877 14.6539 17.0677C14.1472 17.321 13.6405 17.4477 13.0705 17.5743C12.5639 17.6377 12.0572 17.6377 11.5505 17.6377C10.4105 17.511 9.46052 17.131 8.57385 16.371C8.44719 16.181 8.38385 16.1177 8.32052 16.0543Z" fill="white"/>
+                                                            </svg>    
+                                                            
+                                                        </div>
+
+                                                        <div style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;
+                                                        padding-left: 8px;" onclick={getThisMonthMileage}> {thismonthAbbr} Mileage 
+
+                                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                                                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                        </svg> -->
+                                                       </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div lwc:if={isNotIRS}  style="width: 50%;">
+                                                <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--12-of-12">
+                                                    <div  class="slds-text-align--center slds-p-right_small" style="float: left;">
+                                                        <!-- <img class="middle-icon" src={moneyIcon}   style="max-width: 36px;"/> -->
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M5.116 11.489h30.878M32.905 8.4H8.204M3.57 14.576h33.965c0.427 0 0.772 0.346 0.772 0.772v16.982a0.772 0.772 0 0 1 -0.772 0.772H3.573a0.772 0.772 0 0 1 -0.772 -0.772V15.348c0 -0.427 0.346 -0.772 0.772 -0.772Zm30.878 12.351v-6.174c0 -0.427 -0.352 -0.759 -0.763 -0.874a2.021 2.021 0 0 1 -1.456 -1.452c-0.112 -0.41 -0.443 -0.763 -0.868 -0.763H9.746c-0.425 0 -0.756 0.352 -0.868 0.763 -0.215 0.77 -0.759 1.255 -1.456 1.452 -0.41 0.115 -0.763 0.446 -0.763 0.872v6.176c0 0.427 0.355 0.761 0.758 0.898a2.315 2.315 0 0 1 1.433 1.431c0.14 0.404 0.472 0.759 0.898 0.759h21.616c0.425 0 0.759 -0.355 0.896 -0.759a2.315 2.315 0 0 1 1.433 -1.431c0.404 -0.14 0.759 -0.472 0.759 -0.898Zm-10.808 -3.094a3.089 3.089 0 1 1 -6.174 0 3.089 3.089 0 0 1 6.174 0Z" stroke="#1D1D1D" stroke-width="1.543878" stroke-miterlimit="10" stroke-linecap="round"/></svg>
+                                                    </div>
+                                                    <template lwc:if={biweekly}>
+                                                        <div style="display: flex;flex-flow: column;">
+                                                            <div  class="slds-text-align--center content-text" style="font-family: 'Proxima Nova Bold' !important;font-size: 26px;line-height: 35px;color: rgb(29, 29, 29);">
+                                                                <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                                font-size: 26px;
+                                                                line-height: 35px;
+                                                                color: rgb(29, 29, 29);">
+                                                                <template lwc:if={halfFixedZero}>
+                                                                    {halfFixedZero}
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={halfFixedAmount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                </template></div>
+                                                                 <!-- <i class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                                                    style="font-size: 16px; line-height: 35px; cursor: pointer;float:left" onclick={getBiweekReimbursement}></i> -->
+                                                            </div>
+                                                            <div onclick={getBiweekReimbursement}  style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;
+                                                            ">Biweek
+                                                             <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                                                                <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                            </svg> -->
+                                                            </div>
+                                                        </div>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <div style="display: flex;flex-flow: column;">
+                                                            <div  class="slds-text-align--center content-text" style="font-family: 'Proxima Nova Bold' !important;font-size: 26px;line-height: 35px;color: rgb(29, 29, 29);" >
+                                                                <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                                font-size: 26px;
+                                                                line-height: 35px;
+                                                                color: rgb(29, 29, 29);">
+                                                                    <template lwc:if={fixedAmountZero}>
+                                                                        {fixedAmountZero}
+                                                                    </template>
+                                                                    <template lwc:else>
+                                                                         <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={fixedAmount} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                    </template>
+                                                                </div> <!--<i class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                                                    style="font-size: 16px; line-height: 35px; cursor: pointer;float:left" onclick={getMonthReimbursement}></i>-->
+                                                            </div>
+                                                            <div onclick={getMonthReimbursement}  style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;
+                                                            ">Month 
+                                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                                                                <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                            </svg> -->
+                                                           </div>
+                                                        </div>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-box--small slds-text-align--center" style="display: flex;width: 100%;">
+                                            <div  style="width: 90%;">
+                                                <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--12-of-12">
+                                                    <div  class="slds-text-align--center slds-p-right_x-small" style="float: left;">
+                                                        <!-- <img  class="middle-icon"
+                                                            src={variableRateIcon} style="max-width: 36px;float: left;"> -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M10.476 21.653c1.412 0 2.559-1.079 2.599-2.42 1.508-.662 2.677-1.867 3.238-3.377.514-1.344 1-3.297 2.397-4.064.985 1.591 3.654 1.472 4.483-.196 1.016.493 1.649 1.46 2.1 2.423a6.095 6.095 0 0 0 3.444 2.915c.353 2.891 4.68 2.961 5.143.092.795-.196 3.486-1.883 2.354-2.738a.672.672 0 0 0-.903.172 3.709 3.709 0 0 1-1.604 1.285c-.801-2.021-3.93-2.066-4.795-.071-1.347-.502-2.276-1.649-2.838-2.901a5.479 5.479 0 0 0-2.607-2.436c-.249-3.28-5.257-3.064-5.185.218a5.357 5.357 0 0 0-2.441 2.809l-.775 2.074a4.704 4.704 0 0 1-2.324 2.557c-1.246-2.257-4.883-1.412-4.889 1.169 0 1.372 1.168 2.489 2.604 2.489Zm20.837-6.224c1.718.044 1.718 2.447 0 2.491-1.717-.042-1.717-2.447 0-2.491ZM20.894 9.205c1.718.044 1.718 2.447 0 2.491-1.717-.042-1.717-2.447 0-2.491Zm-10.419 8.716c1.718.042 1.718 2.447 0 2.489-1.717-.042-1.717-2.447 0-2.489Z" fill="#1D1D1D"/><path d="M2.8 7v27.514h36.011" stroke="#1D1D1D" stroke-width="1.31" stroke-linecap="round"/><path d="M7.573 23.377h5.689c.361 0 .655.294.655.655v10.481h-7v-10.48c0-.362.294-.655.655-.655Zm10.388-3.931h5.689c.361 0 .655.294.655.655v14.413h-7.001V20.101c0-.361.294-.655.655-.655Zm10.387 2.621h5.691c.361 0 .655.294.655.655v11.792h-7V22.722c0-.362.292-.655.654-.655Z" stroke="#1D1D1D" stroke-width="1.31"/></svg>
+                                                    </div>
+                                                    <div style="display: flex;flex-flow: column;">
+                                                        <div  class="slds-text-align--center content-text"
+                                                            style="font-family: 'Proxima Nova Bold' !important;font-size: 26px;line-height: 35px;color: rgb(29, 29, 29);" >
+                                                            <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                            font-size: 26px;
+                                                            line-height: 35px;
+                                                            color: rgb(29, 29, 29);">
+                                                                <template lwc:if={messageForNextBatch}>
+                                                                    <span style="font-family: 'Proxima Nova Bold' !important;font-size: 16px;
+                                                                     line-height: 35px;color: rgb(29, 29, 29);">{messageForNextBatch}</span>
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <template lwc:if={mileageRateZero}>
+                                                                        {mileageRateZero}
+                                                                    </template>
+                                                                    <template lwc:else>
+                                                                        <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={lastMonthMileageRate} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                                    </template>
+                                                                </template>
+                                                            </div>
+                                                            <!-- <i
+                                                                class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                                                style="font-size: 16px; line-height: 35px; cursor: pointer;float:left" onclick={getGasPrice}></i> -->
+                                                        </div>
+                                                        <div onclick={getGasPrice} style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;">Mile 
+                                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none"  >
+                                                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                            </svg> -->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            <div lwc:if={isNotIRS} style="width: 50%;">
+                                                <div class="slds-size--1-of-1 slds-medium-size--1-of-2 slds-large-size--12-of-12">
+                                                    <div  class="slds-text-align--center  slds-p-right_small" style="float: left;">
+                                                        <!-- <img  class="middle-icon"
+                                                            src={fuelIcon} style="max-width: 36px;float: left;"> -->
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M8.4 33.6V8.12a0.42 0.42 0 0 1 0.42 -0.42h15.96a0.42 0.42 0 0 1 0.42 0.42V33.6" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round"/><path d="M25.2 29.4c2.1 0.467 6.3 0.42 6.3 -3.5V9.8l4.2 -2.1" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round"/><path d="M6.3 34.3h21" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round"/><path x="8" y="8" width="8" height="4" rx="0.3" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round" d="M11.62 11.2h10.359a0.42 0.42 0 0 1 0.42 0.42v4.76a0.42 0.42 0 0 1 -0.42 0.42H11.62a0.42 0.42 0 0 1 -0.42 -0.42v-4.76a0.42 0.42 0 0 1 0.42 -0.42z"/><path d="M11.2 20.3h11.2" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round"/><path d="M31.5 12.6h2.38a0.42 0.42 0 0 1 0.42 0.42v4.06a0.42 0.42 0 0 1 -0.42 0.42H31.5" stroke="#1D1D1D" stroke-width="1.5400000000000003" stroke-linecap="round"/></svg>
+                                                    </div>
+                                                    <div style="display: flex;flex-flow: column;">
+                                                        <div  class="slds-text-align--center content-text"
+                                                        style="font-family: 'Proxima Nova Bold' !important;font-size: 26px;line-height: 35px;color: rgb(29, 29, 29);">
+                                                        <div style="float: left;font-family: 'Proxima Nova Bold' !important;
+                                                        font-size: 26px;
+                                                        line-height: 35px;
+                                                        color: rgb(29, 29, 29);">
+                                                        <template lwc:if={messageForNextBatch}>
+                                                            <span style="font-family: 'Proxima Nova Bold' !important;font-size: 16px;
+                                                             line-height: 35px;color: rgb(29, 29, 29);">{messageForNextBatch}</span>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <template lwc:if={fuelPriceZero}>
+                                                                {fuelPriceZero}
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={monthfuelPrice} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                                                            </template>
+                                                        </template>
+                                                        </div>
+                                                        <!-- <i
+                                                            class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                                            style="font-size: 16px; line-height: 35px; cursor: pointer;float:left" onclick={getGasPrice}></i> -->
+                                                        </div>
+                                                        <div onclick={getGasPrice} style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;text-align: start;">Gallon 
+                                                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none"  onclick={getGasPrice}>
+                                                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                                                            </svg> -->
+                                                       </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+        <lightning-layout-item size="12">
+            <lightning-layout>
+                <lightning-layout-item class="slds-p-horizontal_medium slds-p-vertical_large slds-size_12-of-12">
+                    <div class="flex-row">
+                        <div class="slds-m-right_small"><button
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-white waves-light mleft-0 my-trip btn-toggle is-active"
+                                onclick={handleMyTrip}>
+                                My trips</button></div>
+                        <div class="slds-m-right_small"><button
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-white waves-light mleft-0 my-plan btn-toggle"
+                                onclick={handlePlanInfo}>
+                                Plan info</button></div>
+                        <template lwc:if={myTA}>
+                            <div class=""><button
+                                    class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-white waves-light mleft-0 my-ta btn-toggle"
+                                    onclick={handleTimeAttendance}>
+                                    T &amp; A</button></div>
+                        </template>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </lightning-layout-item>
+    </div>
+    <div>
+        <div class="slds-p-horizontal_medium animate__animated animate__slideInLeft animate__faster">
+            <template lwc:if={myTrip}>
+                <template lwc:if={lengthOfContact}>
+                    <c-accordion-view accordion-data={accordionList} is-tand-a={timeAttendance} contact-id={contactId} is-download-all={hrBorder} hr-class={hrBorder} show-arrow-icon={isIcon}
+                        account-id={accountId} contact-info={contact} activation-date={activationDate} onnavigate={fromAccordion} ontoast={onToast} onshow={getSpinner} is-irs={isIRS}>
+                    </c-accordion-view>
+                </template>
+            </template>
+        </div>
+        <div class="slds-p-horizontal_medium animate__animated animate__slideInLeft animate__faster">
+            <template lwc:if={timeAttendance}>
+                <template lwc:if={lengthOfContact}>
+                    <c-accordion-view accordion-data={accordionList} is-tand-a={timeAttendance} contact-id={contactId} is-download-all={hrBorder}  hr-class={hrBorder} show-arrow-icon={isIcon}
+                        account-id={accountId} contact-info={contact} activation-date={activationDate} onnavigate={fromAccordion} ontoast={onToast}  onshow={getSpinner}>
+                    </c-accordion-view>
+                </template>
+            </template>
+        </div>
+        <div class="slds-p-horizontal_medium animate__animated animate__slideInLeft animate__faster">
+            <template lwc:if={myPlanInfo}>
+                <c-user-plan-info contact-id={contactId} insurance-attachment-id={attachmentInsurance}
+                    insurance-rate={insuranceRate} maintenance={maintenance} license={license} taxes={taxes}
+                    depreciation={depreciation} monthly-cost={totalCost} business-use={businessUse}
+                    total-monthly-amount={totalMonthlyAmount} fixedcostadjustment={fixedCostAdjustment}
+                    total-monthly-fixed-cost={totalMonthlyFixedCost} variablefuelprice={variablefuelprice} tires={tires}
+                    miles={miles} business-percent={percent} packet-status1={packetStatus1} packet-status2={packetStatus2}
+                    packet-status3={packetStatus3} packet-status4={packetStatus4} meeting-status1={meetingStatus1}
+                    meeting-status2={meetingStatus2} meeting-status3={meetingStatus3}></c-user-plan-info>
+            </template>
+        </div>
+        <div class="slds-m-top_medium slds-m-left_medium">
+            <button class="slds-btn waves-effect btn-grey slds-back-btn slds-btn-sm" onclick={revertHandler}><i
+                    class="fas fa-arrow-left"></i></button>
+        </div>
+        <template lwc:if={myPlanInfo}>
+        </template>
+        <template lwc:else>
+            <div lwc:if={isArchive} style="padding-top: 28px;padding-left: 16px;">
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip"
+                    onclick={archiveReimbursement}>
+                    Go to archive</button>
+            </div>
+        </template>
+    </div>
+    <template lwc:if={paginatedModal}>
+        <c-user-profile-modal header={headerText}  month={monthText} show-footer={isFalse} show-btn={isTrue}
+        modal-class="slds-modal slds-modal_large slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster"
+        header-class="slds-modal__header header-preview padding-preview slds-p-horizontal_large slds-p-top_xx-large slds-p-bottom_xxx-small slds-clearfix"
+        modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_medium slds-p-top_small"
+        subheader-class="slds-text-heading_medium slds-hyphenate slds-float_left"
+        style-header="slds-modal__container slds-m-top_medium" close-btn-class="close-paginated">
+            <div slot="header">
+                <template lwc:if={modalLength}>
+                    <div class="slds-float_right slds-p-right_small">
+                        <div  class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                            <img class="search-icon" src={searchIcon} />
+                            <template lwc:if={isSearchEnable}>
+                            </template>
+                            <template lwc:else>
+                                <div class="close-btn" onclick={handleClearInput}>
+                                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                </div>
+                            </template>
+                            <input  class="slds-input filter-input" type="text" placeholder="Search" value={_value}  onkeyup={handleChange}/>
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div>
+                <template lwc:if={lastModelList}>
+                    <c-user-data-table main-class="slds-table--header-fixed_container modal-height" is-default-sort={paginatedModal} scrollable={isScrollable} is-paginate={paginatedModal}  model-data={lastModelList} search-key={_value}
+                    columns={modalListColumn} options={modalKeyFields} is-sortable={isSortable}  colname={colname} coltype={coltype} sortorder={sortorder} is-all-download={download} onview={downloadUserTrips} is-variable={variable}></c-user-data-table>
+                </template>
+            </div>
+        </c-user-profile-modal>
+    </template>
+    <template lwc:else>
+        <template lwc:if={isSync}>
+            <c-user-profile-modal header={headerText} show-footer={isFalse} show-btn={isTrue}
+                modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster"
+                header-class="slds-modal__header header-preview slds-p-horizontal_large slds-p-top_xx-large slds-p-bottom_xxx-small slds-clearfix"
+                modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_medium slds-p-top_small"
+                subheader-class="slds-text-heading_medium slds-hyphenate"
+                style-header="slds-modal__container modal-width-sync slds-m-top_medium" onclosedialog={closeModalPopup} onclosedialogesc={closeModalPopup} close-btn-class="close-paginated">
+                <div class="slds-text-heading_medium tagline-text" slot="tagline">
+                    Confirm your business mileage <a href={videoPlanUrl} target="_blank" class="watch-link">HERE</a> before syncing
+                </div>
+                <div class="sync-action">
+                    <table class="slds-table slds-table_cell-buffer slds-table_striped fixed-table" id="tableSel">
+                        <tr>
+                            <td class="model-content-td">This Month’s Mileage</td>
+                            <td>
+                                <div class="slds-checkbox">
+                                    <input type="checkbox" name="options" id="checkbox-unique-id-81" value="checkbox-unique-id-81"
+                                        checked={isChecked} onchange={checkboxThisMonthHandler} />
+                                    <label class="slds-checkbox__label" for="checkbox-unique-id-81">
+                                        <span class="slds-checkbox_faux"></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="model-content-td">Last Month’s Mileage</td>
+                            <td>
+                                <div class="slds-checkbox">
+                                    <input type="checkbox" name="options" id="checkbox-unique-id-82" value="checkbox-unique-id-82"
+                                        checked={isLastChecked} onchange={checkboxLastMonthHandler} />
+                                    <label class="slds-checkbox__label" for="checkbox-unique-id-82">
+                                        <span class="slds-checkbox_faux"></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="padding-top: 7px;padding-bottom: 15px"><button
+                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light sync-btn mleft-0"
+                        disabled={isActiveSync} onclick={syncMileage}> Sync Now</button></div>
+            </c-user-profile-modal>
+        </template>
+        <template lwc:else>
+            <c-user-profile-modal header={headerText} month={monthText} show-footer={isFalse} show-btn={isTrue}
+            modal-class={modalStyle} header-class=""
+            modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_x-large slds-p-top_large slds-modal__content_headless modal_header"
+            subheader-class="" style-header="slds-modal__container slds-m-top_medium" close-btn-class="close-aligned">
+            <div>
+                <template lwc:if={lastModelList}>
+                    <c-user-data-table main-class="modal-height" scrollable={isScrollable} is-sortable={isSortable} is-paginate={paginatedModal} model-data={lastModelList}
+                    columns={modalListColumn} options={modalKeyFields}  colname={colname} coltype={coltype} sortorder={sortorder} onrecord={downloadAllRecord} footer-list={reimbursementYtd} is-ytd-biweek={biweekYtd} is-ytd={ytd}></c-user-data-table>
+                </template>
+            </div>
+           </c-user-profile-modal>
+        </template>
+    </template>
+    <c-export-excel></c-export-excel>
+</template>

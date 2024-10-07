@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Type of Policy --></label>
+    <name>Type_of_Policy__c</name>
+    <picklistValues>
+        <masterLabel>Car Allowance Non-Taxable</masterLabel>
+        <translation><!-- Car Allowance Non-Taxable --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Car Allowance with Fuel Card</masterLabel>
+        <translation><!-- Car Allowance with Fuel Card --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Car Allowance with Fuel Reimbursement</masterLabel>
+        <translation><!-- Car Allowance with Fuel Reimbursement --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Car Allowance with Mileage Reimbursement</masterLabel>
+        <translation><!-- Car Allowance with Mileage Reimbursement --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Car Allowance with Mileage Substantiation</masterLabel>
+        <translation><!-- Car Allowance with Mileage Substantiation --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Car Data Consultants</masterLabel>
+        <translation><!-- Car Data Consultants --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Company Car</masterLabel>
+        <translation><!-- Company Car --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Flat Taxable Car Allowance</masterLabel>
+        <translation><!-- Flat Taxable Car Allowance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>IRS Mileage Rate</masterLabel>
+        <translation><!-- IRS Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Motus</masterLabel>
+        <translation><!-- Motus --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Old Runzheimer Plan (non-compliant)</masterLabel>
+        <translation><!-- Old Runzheimer Plan (non-compliant) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Runzheimer</masterLabel>
+        <translation><!-- Runzheimer --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Wheels</masterLabel>
+        <translation><!-- Wheels --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

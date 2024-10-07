@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <links>Mass_Update_Mileages</links>
+    <links>Mass_Mileage_Transfer</links>
+    <links>Missing_Fuel_Price_Checking</links>
+    <pageComponentType>links</pageComponentType>
+</HomePageComponent>

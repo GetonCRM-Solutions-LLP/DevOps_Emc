@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Dropbox Sign 署名者の役割</value>
+    </caseValues>
+    <nameFieldLabel>役割名</nameFieldLabel>
+</CustomObjectTranslation>

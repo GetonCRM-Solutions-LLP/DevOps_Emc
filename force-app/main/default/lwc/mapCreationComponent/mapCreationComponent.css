@@ -1,0 +1,7 @@
+/* .scaled-frame {
+    transform: matrix(1, 0, 0, 1, -26, -232);
+} */
+.directional-map {
+    height: 250px;
+    width: 400px;
+}

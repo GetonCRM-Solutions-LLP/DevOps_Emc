@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>No - Mileage &amp; Vehicle Value</label>
+    <protected>false</protected>
+    <values>
+        <field>Email_Template__c</field>
+        <value xsi:type="xsd:string">Driver_compliace_status_No_Mileage_And_vehicle_value</value>
+    </values>
+    <values>
+        <field>IsActive__c</field>
+        <value xsi:type="xsd:boolean">true</value>
+    </values>
+</CustomMetadata>

@@ -1,0 +1,29 @@
+<template>
+    <div>
+        <div>
+            <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_small font-bold">Your Onboarding Process</div>
+        </div>
+       <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_small font-style emcFont">Follow this steps to get started:</div>
+       <div>
+           <c-onboarding-step></c-onboarding-step>
+       </div>
+       <div class="slds-clearfix slds-align_absolute-center plr slds-p-top_small" style="flex-flow: column;"> 
+           <div class="footer-text">
+               <div class="font-style display"><div class="info-text">It's helpful to have the following:</div>
+                   <ul class="slds-list_dotted slds-p-top_x-small">
+                       <li class="list-li">Approximately 20 minutes to complete the setup</li>
+                   </ul>
+               </div>
+           </div>
+           <div class="footer-button slds-p-top_xx-small">
+            <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light mleft-0 mright-0" onclick={redirectToPlan}>
+                {renderBtnText}
+            </button>
+            <!-- <div  class="align_message slds-p-top_small"><a  class="dont-font">Don’t show this process again</a></div> -->
+           </div>
+       </div>
+    </div>
+    <template lwc:if={showWelcomeVideo}>
+        <c-onboarding-introduction custom-setting={customSetting} onredirect={redirectToStep}></c-onboarding-introduction>
+    </template>
+</template>

@@ -1,0 +1,5 @@
+<apex:page showHeader="false">
+    <apex:pageBlock >
+        <apex:iframe src="https://prod-apnortheast-a.online.tableau.com/t/mbursegoc/views/AccountTracking/Tooltip-OpportunitiesbyCloseDate?:origin=card_share_link&:embed=n" scrolling="true" id="theIframe"/>
+    </apex:pageBlock>
+</apex:page>

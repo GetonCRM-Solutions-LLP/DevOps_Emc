@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- High=Red, Medium=Yellow, Low=Green, None=Blue --></help>
+    <label><!-- Priority Image --></label>
+    <name>Priority_Image__c</name>
+</CustomFieldTranslation>

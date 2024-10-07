@@ -1,0 +1,421 @@
+<apex:page controller="RG_MyTeamRecordsClass"  standardStylesheets="false" showHeader="false" action="{!pageredirect}" id="page">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:form id="form">
+        <html lang="en-US" class="no-js">
+            <head>
+                
+                <title>Your Team Record</title>
+                <link rel='stylesheet' id='rcap-style-css'  href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}" type='text/css' media='all' />
+                <apex:variable value="{!0}" var="i"/>
+                    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+                    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/md_responsive.css')}"/>
+                </head>
+                <style>
+                .backButton {
+                float: right;
+                padding: 5px 25px 5px 25px !important;
+                margin-top: -58px;
+                }
+                .tdefault{display: table-row;}
+                .selmonth{float:left;width: 123px;text-align: center;text-transform: none;font-size: 12px !important;font-weight: 100;}
+                @media screen and  (max-width: 767px) and (min-width:320px){
+                
+                body #wrapper #header img{width: 400px !important;padding-top: 30px;padding-left: 30px;}
+                #header .tittle{
+                font-size: 40px !important;
+                
+                }
+                #header #mtitle {
+                font-size: 37px !important;
+                }
+                }
+                .popupBackground {
+                background-color:black;
+                opacity: 0.25;
+                position: fixed;
+                filter: alpha(opacity = 20);
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                z-index: 1000;
+                }
+                
+                .queryTitle {
+                height: 30px;
+                background-color: black;
+                color: white;
+                padding: 5px 10px 0px 10px;
+                font-size: 18px;
+                }
+                .custPopup {
+                background-color: white;
+                left: 55%;
+                position: fixed;
+                width: 400px;
+                margin-left: -250px;
+                top: 70px;
+                z-index: 1000;
+                border-radius: 5px;
+                border: 1px solid #000;
+                }
+                
+                .queryInfo {
+                padding: 10px 0px 15px 10px;
+                font-size: 14px;
+                }
+                </style>
+                <body>
+                    <div id="wrapper">
+                        <div id="header" class="ddd">
+                            
+                            <apex:actionFunction name="updaterecordjs" action="{!UpdateRecord}" reRender="message,rptr_mileages" status="status" onComplete="myPopup();">
+                            </apex:actionFunction>
+                            <img src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/images/mBurse.png')}" alt="mBurse"/>
+                            <apex:outputPanel rendered="{!isSuperManager}" >
+                                <apex:outputpanel rendered="{!imMan}">
+                                <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                                <!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+                            <apex:outputLink style="float: right;" >Logged in as {!Name}</apex:outputLink>
+                            
+                        </apex:outputpanel>
+                        <apex:outputpanel rendered="{!!imMan}">
+                            <apex:outputpanel rendered="{!imManDr}">
+                            <apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+                        <apex:outputLink style="float: right;" >Logged in as {!Name}</apex:outputLink>
+                    </apex:outputpanel>
+                    <apex:outputpanel rendered="{!!imManDr}">
+                        <apex:outputPanel rendered="{!imSupDr}">
+                        <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+                        <!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+                    <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Users</apex:outputLink><br/>
+                <apex:outputLink style="float: right;" value="/apex/EmployeeMileageUploaderPage" >Upload Mileage</apex:outputLink><br/>
+            <apex:outputPanel rendered="{!EnableReports}" ><apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink></apex:outputPanel>
+        </apex:outputPanel>
+        <apex:outputPanel rendered="{!!imSupDr}">
+        <apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+        <!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+    <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Users</apex:outputLink><br/>
+<apex:outputLink style="float: right;" value="/apex/EmployeeMileageUploaderPage" >Upload Mileage</apex:outputLink><br/>
+<apex:outputPanel rendered="{!EnableReports}" >
+    <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports
+    </apex:outputLink></apex:outputPanel>
+</apex:outputPanel>
+</apex:outputpanel>
+</apex:outputpanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isSuperManagerDriver}" >
+<apex:outputpanel rendered="{!imMan}">
+<apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:outputLink style="float: right;" >Logged in as {!Name}</apex:outputLink><br/>
+</apex:outputpanel>
+<apex:outputpanel rendered="{!!imMan}">
+<apex:outputpanel rendered="{!imManDr}">
+<apex:outputLink style="float: right;" value="/apex/RG_DashboardAdmin1">Log Out </apex:outputLink><br/>
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:outputLink style="float: right;" >Logged in as {!Name}</apex:outputLink><br/>
+</apex:outputpanel>
+<apex:outputpanel rendered="{!!imManDr}">
+<apex:outputPanel rendered="{!imSupDr}">
+<apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<!-- <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page">Create New User</apex:outputLink><br/> -->
+<apex:outputLink style="float: right;" value="/apex/EmployeeMileageUploaderPage" >Upload Mileage</apex:outputLink><br/>
+<apex:outputPanel rendered="{!EnableReports}">
+<apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page">
+Reports
+</apex:outputLink>
+</apex:outputPanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!!imSupDr}">
+<apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:outputPanel rendered="{!EnableReports}">
+<apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page">
+Reports
+</apex:outputLink>
+</apex:outputPanel>
+</apex:outputPanel>
+</apex:outputpanel>
+</apex:outputpanel>
+</apex:outputPanel>
+<apex:outputpanel rendered="{!isManager}">
+<apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+<!-- <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/> -->
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:commandButton styleclass="backButton" value="Back" rendered="{!IF($CurrentPage.parameters.redirect == 'true',true,false)}" action="{!backMethod}"/>
+<apex:outputPanel rendered="{!EnableReports}" >
+<apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page">
+Reports
+</apex:outputLink>
+</apex:outputPanel>
+</apex:outputpanel>
+<apex:outputpanel rendered="{!isManagerDriver}">
+<apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+<!-- <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/> -->
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:commandButton styleclass="backButton" value="Back" rendered="{!IF($CurrentPage.parameters.redirect == 'true',true,false)}" action="{!backMethod}"/>
+<apex:outputPanel rendered="{!EnableReports}">
+<apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page">
+Reports
+</apex:outputLink>
+</apex:outputPanel>
+</apex:outputpanel>
+<apex:outputpanel rendered="{!isDriver}">
+<apex:outputLink style="float: right;" value="/secur/logout.jsp">Log Out </apex:outputLink><br/>
+<!-- <apex:commandLink style="float: right;" value="Knowledge" action="{!openKnowledge}"/><br/> -->
+<apex:outputPanel rendered="{!EnableReports}">
+<apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page">
+Reports
+</apex:outputLink>
+</apex:outputPanel>
+</apex:outputpanel>
+<div id="mtitle">My Teams Monthly Reimbursement Summary </div>
+</div>
+<div>
+<div>
+<apex:include pageName="Rg_Charting"/>
+</div>
+<div id="data">
+<!-- <div id="dtitle" class="tittle">Monthly Reimbursement Summary </div> <br/> -->
+<apex:outputPanel rendered="{!isSuperManager}">
+<apex:outputPanel rendered="{!!imSuper}" >
+<apex:outputPanel rendered="{!!imSupDr}" >
+<apex:outputPanel rendered="{!!imMan}" >
+<apex:outputPanel rendered="{!imManDr}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">My Records
+<apex:param name="id" value="{!contid}"/>
+</apex:outputLink></li>
+</ul>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!!imManDr}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+<apex:param name="un" value="ap" />
+</apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">Login As
+<apex:param name="l" value="xyz" />
+</apex:outputlink></li>
+</ul>
+</apex:outputPanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!imMan}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+</ul>
+</apex:outputPanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!imSupDr}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">My Records
+<apex:param name="id" value="{!contid}"/>
+</apex:outputLink></li>
+</ul>
+</apex:outputPanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!imSuper}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+<apex:param name="un" value="ap" />
+</apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">Login As
+<apex:param name="l" value="xyz" />
+</apex:outputlink></li>
+</ul>
+</apex:outputPanel>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isManager}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+<apex:param name="un" value="ap" />
+</apex:outputlink></li>
+</ul>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isManagerDriver}" >
+<ul class="nav nav-pills nav-justified" >
+<li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+<li><apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+    <apex:param name="un" value="ap" />
+    </apex:outputlink></li>
+    <li><apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">My Records
+        <apex:param name="id" value="{!contid}"/>
+        </apex:outputLink></li>
+        
+    </ul>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!isSuperManagerDriver}" >
+    <apex:outputPanel rendered="{!imMan}" >
+        <ul class="nav nav-pills nav-justified" >
+            <li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+            
+        </ul>
+    </apex:outputPanel>
+    <apex:outputPanel rendered="{!!imMan}" >
+        <apex:outputPanel rendered="{!imManDr}" >
+            <ul class="nav nav-pills nav-justified" >
+                <li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+                <li><apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                    <apex:param name="id" value="{!contid}"/>
+                    </apex:outputLink></li>
+                    
+                </ul>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!!imManDr}" >
+                <ul class="nav nav-pills nav-justified" >
+                    <li class="active"><apex:outputlink > My Team Records </apex:outputlink></li>
+                    <li><apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                        <apex:param name="id" value="{!contid}"/>
+                            
+                        </apex:outputLink></li>
+                        
+                        <li><apex:outputlink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                            <apex:param name="un" value="ap" />
+                            </apex:outputlink></li>
+                            <li><apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">Login As
+                                <apex:param name="l" value="xyz" />
+                                </apex:outputlink></li>
+                                
+                            </ul>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                
+                <div id="table">
+                    <apex:outputPanel id="rptr_mileages">
+                        <table id="d2">
+                            <tr id="theader">
+                                <th class="approval" style="width:200px;">
+                                    <input type="checkbox" name="allCheckBox" id="allCheckBox"/>
+                                </th>
+                                <th class="name">name</th>
+                                <th class="autoapproval" style="width:135px">Monthly Auto<br/>Approval Threshold</th>
+                                <th class="submittedmileage">submitted mileage</th>
+                                <th class="approvedmileage">approved mileage</th>
+                            </tr>
+                            
+                            <apex:repeat value="{!cwraplist}" var="item">
+                                <tr class="summary_861 tdefault">
+                                    
+                                    <!-- <apex:outputPanel rendered="{!if(item.status!=null && item.status!='Approved' && item.status!='In Process',true,false)}" > -->
+                                    
+                                    <td class="approval" style="display: {!if(item.status!=null && item.status!='Approved' && item.status!='In Process','','none')} " ><apex:inputcheckBox value="{!item.conb}"/>  </td>
+                                    
+                                <!--  </apex:outputPanel>
+                                <apex:outputPanel rendered="{!if(item.status!=null && (item.status == 'Approved' || item.status == 'In Process'),true,false)}" >
+                                    <apex:variable value="{!i+1}" var="i"/> -->
+                                        
+                                        <td class="approval" style="display:{!if(item.status != null && (item.status == 'Approved' || item.status == 'In Process'),'','none')}">
+                                            <span style="color:#76BD1D">{!if(item.totalMileage == 0,'Zero Mileage',item.status)}
+                                                <apex:outputText rendered="{!item.totalMileage > 0}" value="{0, date, MM/dd/yy}">
+                                                    <apex:param value="{!if(item.ApprovedDate!=null,item.ApprovedDate,'')}"/>
+                                                    </apex:outputText>
+                                                </span>
+                                            </td>
+                                            <!-- </apex:outputPanel> -->
+                                            
+                                            <td class="name">
+                                            <apex:outputLink value="/apex/RG_MonthlyReimbursementSummary" disabled="{!If($CurrentPage.parameters.redirect == 'true',true,false)}">{!if(item.lastName!=null,item.lastName,"")} <apex:param name="man" value="{!manaid}"/> <apex:param name="dr" value="{!item.con}"/></apex:outputLink>
+                                        </td>
+                                        <td class="autoapproval"><apex:inputtext style="padding: 0px;width: 104px;height: 24px; text-align: center;" value="{!item.monthlyMileageLimit}"/></td>
+                                        <td class="submittedmileage">{!if(item.totalMileage!=null,item.totalMileage,"")}</td>
+                                        <td class="approvedmileage">{!if(item.totalMileageApproved!=null,item.totalMileageApproved,"")}</td>
+                                    </tr>
+                                </apex:repeat>
+                                
+                            </table>
+                        </apex:outputPanel>
+                        <!--  <apex:outputPanel rendered="{!(cwraplist.size!=i)}"> -->
+                        <apex:CommandButton onclick="updaterecordjs();return false;" value="Submit" rendered="{!cwraplist.size>0}" style="align:Center;padding: 0px;width: 104px;height: 30px;" />
+                            <!-- </apex:outputPanel>  -->
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                
+            </div>
+            <div id="unlockErrorBox" style="display: none;">
+                <div class="popupBackground"/>
+                    <div class="custPopup" style="width:300px;">
+                        <div class="queryTitle">
+                            Message
+                        </div>
+                        <div class="queryInfo">
+                            <apex:outputPanel id="message">
+                                {!message}
+                            </apex:outputPanel>
+                        </div>
+                        <center>
+                        <Button type="reset" onclick="moveToRecordPage();" value="OK" class="popupButton" >OK</button>
+                        </center>
+                    </div>
+                </div>
+                <apex:actionStatus id="status">
+                    <apex:facet name="start">
+                        <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                        <div style="top: 40%;padding: 10px;left: 43%;  width: 30%;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                            <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                            <span class="content" style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Please wait...</span>
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>
+                <!--<apex:actionStatus id="status">
+                    <apex:facet name="start">
+                        <div style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.25; z-index: 1000; background-color: black;">
+                            &nbsp;
+                        </div>
+                        <div style="position: fixed; left: 0; top: 0; bottom: 0; right: 0; z-index: 1001; margin: 15% 45%">
+                            <div style="display: inline-block; background-color: #fff; width: 135px;">
+                                <img src="/img/loading.gif" style="float: left; margin: 8px;" />
+                                <span style="display: inline-block;">Please Wait...</span>
+                            </div>
+                        </div>
+                    </apex:facet>
+                </apex:actionStatus>-->
+                <script>
+                function oncompletecall(varmessage)
+                {
+                }
+                function myPopup () {
+                document.getElementById('unlockErrorBox').style.display = 'flex';
+                }
+                function moveToRecordPage() {
+                document.getElementById('unlockErrorBox').style.display = 'none';
+                }
+                shdetails=function(obj,vis){
+                if(vis == 0){
+                jQuery('.summary_'+obj).css('display','table-row');
+                jQuery('.details_'+obj).css('display','none');
+                } else {
+                jQuery('.summary_'+obj).css('display','none');
+                jQuery('.details_'+obj).css('display','table-row');
+                }
+                }
+                jQuery(".tdefault:odd").css( "background-color", "#f2f2f2" );
+                
+                $('#allCheckBox').change(function(){
+                if($(this).prop('checked')){
+                $('tbody tr td input[type="checkbox"]').each(function(){
+                $(this).prop('checked', true);
+                });
+                }else{
+                $('tbody tr td input[type="checkbox"]').each(function(){
+                $(this).prop('checked', false);
+                });
+                }
+                });
+                </script>
+            </body>
+        </html>
+    </apex:form>
+</apex:page>

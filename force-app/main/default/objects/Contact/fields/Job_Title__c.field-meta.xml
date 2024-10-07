@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Job_Title__c</fullName>
+    <label>Job Title</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Territory Manager</fullName>
+                <default>false</default>
+                <label>Territory Manager</label>
+            </value>
+            <value>
+                <fullName>Director of Product Strategy &amp; Marketing</fullName>
+                <default>false</default>
+                <label>Director of Product Strategy &amp; Marketing</label>
+            </value>
+            <value>
+                <fullName>Director of Sales</fullName>
+                <default>false</default>
+                <label>Director of Sales</label>
+            </value>
+            <value>
+                <fullName>CFO/COO</fullName>
+                <default>false</default>
+                <label>CFO/COO</label>
+            </value>
+            <value>
+                <fullName>Technical Support</fullName>
+                <default>false</default>
+                <label>Technical Support</label>
+            </value>
+            <value>
+                <fullName>Forced Air Product Manager</fullName>
+                <default>false</default>
+                <label>Forced Air Product Manager</label>
+            </value>
+            <value>
+                <fullName>Director of Product Strategy &amp; Technical Support</fullName>
+                <default>false</default>
+                <label>Director of Product Strategy &amp; Technical Support</label>
+            </value>
+            <value>
+                <fullName>Hydronics Application Specialist</fullName>
+                <default>false</default>
+                <label>Hydronics Application Specialist</label>
+            </value>
+            <value>
+                <fullName>Commercial Sales Manager</fullName>
+                <default>false</default>
+                <label>Commercial Sales Manager</label>
+            </value>
+            <value>
+                <fullName>Accounting Manager</fullName>
+                <default>false</default>
+                <label>Accounting Manager</label>
+            </value>
+            <value>
+                <fullName>President</fullName>
+                <default>false</default>
+                <label>President</label>
+            </value>
+            <value>
+                <fullName>Director of Human Resources</fullName>
+                <default>false</default>
+                <label>Director of Human Resources</label>
+            </value>
+            <value>
+                <fullName>Design Engineer Lead</fullName>
+                <default>false</default>
+                <label>Design Engineer Lead</label>
+            </value>
+            <value>
+                <fullName>Our Brands Manager</fullName>
+                <default>false</default>
+                <label>Our Brands Manager</label>
+            </value>
+            <value>
+                <fullName>KOMPASS Supervisor</fullName>
+                <default>false</default>
+                <label>KOMPASS Supervisor</label>
+            </value>
+            <value>
+                <fullName>Set Team Leader</fullName>
+                <default>false</default>
+                <label>Set Team Leader</label>
+            </value>
+            <value>
+                <fullName>Set Team Member</fullName>
+                <default>false</default>
+                <label>Set Team Member</label>
+            </value>
+            <value>
+                <fullName>Div Mapping Specialist</fullName>
+                <default>false</default>
+                <label>Div Mapping Specialist</label>
+            </value>
+            <value>
+                <fullName>Surge Set Team Member</fullName>
+                <default>false</default>
+                <label>Surge Set Team Member</label>
+            </value>
+            <value>
+                <fullName>KOMPASS Manager</fullName>
+                <default>false</default>
+                <label>KOMPASS Manager</label>
+            </value>
+            <value>
+                <fullName>Set/Remodel Manager</fullName>
+                <default>false</default>
+                <label>Set/Remodel Manager</label>
+            </value>
+            <value>
+                <fullName>Adult Beverage Reset Coor</fullName>
+                <default>false</default>
+                <label>Adult Beverage Reset Coor</label>
+            </value>
+            <value>
+                <fullName>Account Manager</fullName>
+                <default>false</default>
+                <label>Account Manager</label>
+            </value>
+            <value>
+                <fullName>FT Fulfillment Associate</fullName>
+                <default>false</default>
+                <label>FT Fulfillment Associate</label>
+            </value>
+            <value>
+                <fullName>Order Fulfillment Superv</fullName>
+                <default>false</default>
+                <label>Order Fulfillment Superv</label>
+            </value>
+            <value>
+                <fullName>Inspector/Consultant</fullName>
+                <default>false</default>
+                <label>Inspector/Consultant</label>
+            </value>
+            <value>
+                <fullName>Director of Safety</fullName>
+                <default>false</default>
+                <label>Director of Safety</label>
+            </value>
+            <value>
+                <fullName>Environmental Consultant</fullName>
+                <default>false</default>
+                <label>Environmental Consultant</label>
+            </value>
+            <value>
+                <fullName>Area Manager</fullName>
+                <default>false</default>
+                <label>Area Manager</label>
+            </value>
+            <value>
+                <fullName>Safety Consultant</fullName>
+                <default>false</default>
+                <label>Safety Consultant</label>
+            </value>
+            <value>
+                <fullName>VP of Environmental</fullName>
+                <default>false</default>
+                <label>VP of Environmental</label>
+            </value>
+            <value>
+                <fullName>VP of Florida Region</fullName>
+                <default>false</default>
+                <label>VP of Florida Region</label>
+            </value>
+            <value>
+                <fullName>Manager</fullName>
+                <default>false</default>
+                <label>Manager</label>
+            </value>
+            <value>
+                <fullName>Sales</fullName>
+                <default>false</default>
+                <label>Sales</label>
+            </value>
+            <value>
+                <fullName>Admin</fullName>
+                <default>false</default>
+                <label>Admin</label>
+            </value>
+            <value>
+                <fullName>Service</fullName>
+                <default>false</default>
+                <label>Service</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

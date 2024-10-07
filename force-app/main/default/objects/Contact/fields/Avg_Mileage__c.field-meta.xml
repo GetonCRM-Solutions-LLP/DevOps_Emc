@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Avg_Mileage__c</fullName>
+    <description>this is the average mileage of the contact from december to current month and it assigned from the monthlyCompliancestatusBatch this number is used to show wheather the contact have enough compliance mileage to be compliant</description>
+    <externalId>false</externalId>
+    <label>Avg Mileage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GET_Unapproved_Trips</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>GET Unapproved Trips</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/21.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/21.0/apex.js&quot;)}
+
+var status = &apos;{!Bi_Weekly_Reimbursement__c.Status__c}&apos;;
+var approvalDate = &apos;{!Bi_Weekly_Reimbursement__c.Approved_Date__c}&apos;;
+var reimIds = &apos;{!Bi_Weekly_Reimbursement__c.Employee_Reimbursement__c}&apos;;
+if(status == &apos;Approved&apos; || approvalDate != &apos;&apos; || reimIds == &apos;&apos;){
+alert(&apos;Please change the status to Pending and remove Approval Date and select reimbursement!!&apos;);
+}
+
+else {
+var todayDate = &apos;{!Bi_Weekly_Reimbursement__c.Start_Date__c}&apos;;
+var str = todayDate.split(&quot;/&quot;);
+var priMin = str[2]+&apos;-&apos;+str[0]+&apos;-&apos;+str[1];
+
+var endDate = &apos;{!Bi_Weekly_Reimbursement__c.End_Date__c}&apos;;
+var lastDayOfMonth = endDate.split(&quot;/&quot;);
+var priMax = lastDayOfMonth[2]+&apos;-&apos;+lastDayOfMonth[0]+&apos;-&apos;+lastDayOfMonth[1];
+//var priMin = &apos;2021-11-01&apos;;
+//var priMax = &apos;2021-11-15&apos;;
+var fuel,
+fuel = &apos;{!Bi_Weekly_Reimbursement__c.Fuel_Price__c}&apos;;
+if (fuel != &quot;&quot;) {
+var fuelstr = fuel.split(&quot;$&quot;);
+fuel = fuelstr[1];
+}
+maintenansAndTires = &apos;{!Bi_Weekly_Reimbursement__c.Maintenance_and_Tires__c}&apos;;
+if (maintenansAndTires != &quot;&quot;) {
+var matstr = maintenansAndTires.split(&quot;$&quot;);
+maintenansAndTires = matstr[1];
+}
+var accounts = sforce.connection.query(&quot;SELECT id,name,Contact__c, Contact__r.Account.Triplog_API__c,Contact__r.Biweek_Reimbursement__c,Employee_Reimbursement__c,Contact__r.Account.Trip_Activity_Status__c FROM Bi_Weekly_Reimbursement__c WHERE id = &apos;{!Bi_Weekly_Reimbursement__c.Id}&apos;&quot;);
+var apiToken = accounts.records.Contact__r.Account.Triplog_API__c;
+var activitystatus = accounts.records.Contact__r.Account.Trip_Activity_Status__c;
+var reimId = accounts.records.Employee_Reimbursement__c;
+var contactids = accounts.records.Contact__c;
+if(apiToken != null &amp;&amp; apiToken != &apos;&apos;) {
+sforce.apex.execute(&quot;GetTripCalloutforCommute&quot;,&quot;GetTripCalloutForCommuteMileage&quot;,{empReID:reimId, contactEmail:&apos;{!Bi_Weekly_Reimbursement__c.Contact_Email__c}&apos;,contactid:contactids,priMin:priMin,priMax:priMax, fuel:fuel, mpg:&apos;{!Bi_Weekly_Reimbursement__c.MPG__c}&apos;, maintenansAndTires:maintenansAndTires, apiToken:apiToken, tripStatus:&apos;U&apos;,putCall:false,activityStatus:activitystatus,checkByWeek:true,biWeekReimId:&apos;{!Bi_Weekly_Reimbursement__c.Id}&apos;});
+location.reload(true);
+} else {
+alert(&apos;Please fill Account API Token&apos;);
+}
+}</url>
+</WebLink>

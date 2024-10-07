@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Sync_Trips</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Sync Trips</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/apex.js&quot;)}
+
+var reimonth = &apos;{!Account.Reimbursement_Month__c}&apos;;
+var apitoken = &apos;{!Account.Triplog_API__c}&apos;;
+var str = reimonth.split(&quot;-&quot;);
+var priMin = str[1]+&apos;-&apos;+str[0]+&apos;-1&apos;;
+var lastDayOfMonth = new Date(str[1], str[0], 0);
+var priMax = str[1]+&apos;-&apos;+str[0]+&apos;-&apos;+lastDayOfMonth.getDate();
+var activity = &apos;{!Account.Trip_Activity_Status__c}&apos;;
+sforce.apex.execute(&quot;MassSyncTripforCommuteBefore&quot;,&quot;validate&quot;,{accountId:&apos;{!Account.Id}&apos;,minDate:priMin,maxDate:priMax,month:&apos;{!Account.Reimbursement_Month__c}&apos;,status:&apos;U&apos;,putapi:false,activityStatus:&apos;{!Account.Trip_Activity_Status__c}&apos;});
+location.reload(true);</url>
+</WebLink>

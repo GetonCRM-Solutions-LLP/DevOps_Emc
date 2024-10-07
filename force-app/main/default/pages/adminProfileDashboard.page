@@ -1,0 +1,328 @@
+<apex:page showHeader="false" title="Admin Dashboard" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false" controller="GetDriverData">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+    <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/siteConfig.css')}" />
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <!-- Css Part Start -->
+    <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/fontawesome.min.css')}" />
+    <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/all.css')}"  />
+    <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/animate.min.css')}" />
+    <!--Toaster -->
+    <script  src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+    <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+    <link href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/mainDashboard.css')}" rel="stylesheet" />
+    <apex:includeLightning />
+    <body>
+        <div style="padding-bottom: 80px" id="adminLwc" />
+        <div id="locationSpinner" class="d-none">
+            <div class="location--spinner-background"></div>
+            <div class="loader">
+                <div class="svg-container">
+                    <div style="position:relative">
+                        <img class="mapLoader_v1" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/map-loading.gif')}" />
+                    </div>
+                </div>
+                <div class="location-text" id="locationText"></div>
+            </div>
+        </div>
+    
+        <div id="mSpinner" class="d-none">
+            <div class="spinner-background"></div>
+                <div class="loader">
+                    <span class="text-loading" id="welcome-text"></span>
+                    <div class="loading-text-sub" id="subtext-welcome"></div>
+                    <div class="mbloader-text">Please wait while we load your profile</div>
+                    <div class="svg-container">
+                        <div style="position:relative">
+                            <img class="loaderS1" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/Bar-style.gif')}" />
+                        </div>
+                    </div>
+                </div>
+        </div>
+    
+        <div id="mLoader" class="d-none">
+            <div class="spinner-background opacity-spinner"></div>
+            <div class="loader">
+                <!-- <span class="text-loading">Loading...</span>-->
+                <span class="data-text-loading">Loading data…</span>
+                <div class="mbloader-text">This may take a few seconds</div>
+                <div class="svg-container">
+                    <div style="position:relative">
+                       <img class="loaderS1" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/Bar-style.gif')}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div id="conditionalLoader" class="d-none">
+            <div class="spinner-background opacity-spinner"></div>
+            <div class="loader">
+                <div class="svg-container">
+                    <div style="position:relative">
+                       <img class="loaderS1" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/Bar-style.gif')}" />
+                    </div>
+                </div>
+                <div id="conditionalText" class="mloader-text"></div>
+            </div>
+        </div>
+    
+        <div id="copiedmsg" style="display:none;">
+            <div class="msgBackground"></div>
+            <div class="dv_load">
+                <span class="dv_span">Copied to clipboard!</span>
+            </div>
+        </div>
+    
+        <c:mBurseChatBot />
+    </body>
+
+    <script>
+         var mileageResult = '', resultdata, copyElements, url, path, team, nameOfUser, videoWrapper, performanceProfile, ProfileId, Role, userLogin, meeting, activationDate, systemNotification, welcomeText, subText, mainComponent
+         url = location.href;
+         path = location.origin + location.pathname + location.search;
+         team = {!showMyTeam};
+         nameOfUser = '{!contactName}';
+         meeting = '{!ScheduleGotoMeeting}';
+         userLogin = '{!userLoginCount}';
+         ProfileId = "{!$User.ProfileId}";
+         profileRecordId = "{!profileID}";
+         activationDate = '{!activationDate}';
+         systemNotification = '{!systemNotification}';
+         videoWrapper = {!videoCustom};
+         performanceProfile = window.performance.getEntriesByType("navigation")[0].type;
+         Role = (profileRecordId === 'Driver/Manager' || profileRecordId === 'Manager') ? 'Manager' : (profileRecordId === 'Driver/Admin' || profileRecordId === 'Admin') ? 'Admin' : 'Driver'
+         welcomeText =   document.querySelector("#welcome-text");
+         subText = document.querySelector("#subtext-welcome");
+         const idParamValue = new URL(url).searchParams.get('id');
+         /*Get logged in user's account id */
+         const aidParamValue = new URL(url).searchParams.get('accid');
+
+
+        this.setOptions = function () {
+              toastr.options.positionClass = "toast-top-right";
+              toastr.options.closeButton = true;
+              /*toastr.options.disableTimeOut = true;*/
+              toastr.options.progressBar = false;
+              toastr.options.fadeOut = 6000;
+              /*toastr.options.timeOut = 0;
+              toastr.options.extendedTimeOut= 960000;
+              toastr.options.hideDuration = 0;*/
+          };
+        
+        this.setOptions();
+
+
+        function copyMessage(){
+            $("#copiedmsg").show();
+             setInterval(function() {
+                $("#copiedmsg").hide();
+             },2000);
+        }
+
+        function copyContents(element) {
+            var el = element;
+                var body = document.body, range, sel;
+                if (document.createRange && window.getSelection) {
+                    range = document.createRange();
+                    sel = window.getSelection();
+                    sel.removeAllRanges();
+                    try {
+                        range.selectNodeContents(el);
+                        sel.addRange(range);
+                        document.execCommand("copy");
+                    } catch (e) {
+                        range.selectNode(el);
+                        sel.addRange(range);
+                    }
+                } else if (body.createTextRange) {
+                    range = body.createTextRange();
+                    range.moveToElementText(el);
+                    range.select();
+                }
+               copyMessage();
+        };
+
+        function copyRich(element) {
+                var body = document.body,
+                range, sel;
+                if (document.createRange && window.getSelection) {
+                    range = document.createRange();
+                    sel = window.getSelection();
+                    sel.removeAllRanges();
+                    range.selectNodeContents(element);
+                    sel.addRange(range);
+                }
+                document.execCommand("Copy");
+        }
+
+        function createPrintDocument(element) {
+                var elementTable = element;
+                var eleToChng = [];
+                var inpts = elementTable.getElementsByTagName('input');
+                if(inpts.length > 0) {
+                    for (let i = 0; i < inpts.length; i++) {
+                        eleToChng.push(inpts[i].parentNode);
+                        inpts[i].parentNode.innerHTML = inpts[i].value;
+                    }
+                }
+                var style = "<style>";
+                style = style + "table {width: 100%;font: 17px Calibri;}";
+                style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+                style = style + "padding: 2px 3px;text-align: center;}";
+                style = style + "</style>";
+                var win = window.open('', '', 'height=700,width=700');
+                win.document.write('<html><head>');
+                win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+                win.document.write('</head>');
+                win.document.write('<body>');
+                win.document.write(elementTable.innerHTML);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+                win.document.write('</body></html>');
+                win.document.close();   // CLOSE THE CURRENT WINDOW.
+                win.print();    // PRINT THE CONTENTS.
+                if(inpts.length > 0) {
+                    for (let i = 0; i < eleToChng.length; i++) {
+                        eleToChng[i].innerHTML = '';
+                        eleToChng[i].appendChild(inpts[i]);
+                    }
+                }
+        }
+
+        function eventListener(element, evt, listener) {
+                element.addEventListener(evt, function(e) {
+                    //element.removeEventListener(evt, arguments.callee);
+                    return listener(e);
+                });
+        }
+
+        $(document).ready(function(){ 
+            // code for one time initialization
+            const appName = "c:LWCLightningApp";
+            const componentName = "c:adminDashboardFrame";
+            const targetElement =  document.querySelector("#adminLwc");
+          
+           if (performanceProfile === 'navigate' || performanceProfile === 'back_forward') {
+                if (location.hash != '') {
+                    document.querySelector("#mLoader").classList.remove("d-none");
+                } else {
+                    document.querySelector("#mSpinner").classList.remove("d-none");
+                    subText.innerText = (userLogin > 1) ? 'Welcome back to mDash' : 'Welcome to mDash';
+                    welcomeText.innerText = (nameOfUser === '') ? 'Hi!' : 'Hi ' + nameOfUser + '!'
+                }
+            } else if (performanceProfile === 'reload') {
+                        document.getElementById("mLoader").classList.remove("d-none");
+            }
+
+            Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.GetDriverData.fetchMileages}', aidParamValue, idParamValue, 2000, 0,
+            function (result, event) {
+                    mileageResult = result
+                    const componentAttributes = {
+                            showTeam: team,
+                            profile: ProfileId,
+                            userRole: Role,
+                            loginCount: userLogin,
+                            managerId : idParamValue,
+                            customSetting: videoWrapper,
+                            driverMeeting: meeting,
+                            activationDate: activationDate,
+                            systemNotification : systemNotification,
+                            mileageRecord: JSON.stringify(mileageResult)
+                    };
+                    $Lightning.use(
+                        appName, function () {
+                            $Lightning.createComponent(
+                                componentName,
+                                componentAttributes,
+                                targetElement,
+                                function(cmp){
+                                    //console.log("Component created Successfully");
+                                    let mLoader, mSpinner, locationSpinner, textLoading, conditionalLoader, conditionalText,  mainComponent = document.querySelector('c-admin-dashboard-frame');
+                                    mLoader = document.querySelector("#mLoader");
+                                    mSpinner = document.querySelector("#mSpinner");
+                                    locationSpinner = document.querySelector("#locationSpinner");
+                                    textLoading =  document.querySelector("#locationText");
+                                    conditionalLoader = document.querySelector("#conditionalLoader");
+                                    conditionalText = document.querySelector("#conditionalText");
+                                    //mSpinner.classList.add("d-none");
+                                    //mLoader.classList.add("d-none");
+                                    this.eventListener(mainComponent, 'show', function() {
+                                        mLoader.classList.remove("d-none");
+                                    });  
+                                    
+                                    this.eventListener(mainComponent, 'hide', function() {
+                                        mSpinner.classList.add("d-none");
+                                        mLoader.classList.add("d-none");
+                                    });
+
+                                    this.eventListener(mainComponent, 'spinnershow', function(e) {
+                                        locationSpinner.classList.remove("d-none");
+                                        textLoading.innerText = e.detail.message;
+                                    });
+
+                                    this.eventListener(mainComponent, 'spinnerhide', function(e) {
+                                        locationText.innerText = '';
+                                        locationSpinner.classList.add("d-none");
+                                    });
+                                
+                                    this.eventListener(mainComponent, 'conditionalshow', function(e) {
+                                        conditionalLoader.classList.remove("d-none");
+                                        conditionalText.innerText = e.detail.message;
+                                    });
+
+                                    this.eventListener(mainComponent, 'conditionalhide', function(e)  {
+                                            conditionalText.innerText = '';
+                                            conditionalLoader.classList.add("d-none");
+                                    })
+
+                                    this.eventListener(mainComponent, 'sent', function(e)  {
+                                        if(e.detail.contactEmail != undefined && e.detail.contactPhone != undefined){
+                                                toastr.success("The email was sent to "+ e.detail.contactEmail + " as well as a text message to " + e.detail.contactPhone +". Please check your email and text message to get started.") //  + " as well as a text message to " + contactPhone  Please check your email and text message to get started
+                                        }else{
+                                                if(e.detail.contactEmail != undefined){
+                                                    toastr.success("The email was sent to "+ e.detail.contactEmail +". Please check your email to get started.")
+                                                }
+                                        }
+                                    })
+
+                                    this.eventListener(mainComponent, 'senterror', function(e)  {
+                                        toastr.error(e.detail)
+                                    })
+
+                                    this.eventListener(mainComponent, 'toast', function(e)  {
+                                        if (e.detail.type === 'error') {
+                                            toastr.error(e.detail.message)
+                                        } else if (e.detail.type === 'success') {
+                                            toastr.success(e.detail.message)
+                                        } else if (e.detail.type === 'info') {
+                                            toastr.info(e.detail.message)
+                                        }
+                                    })
+
+                                    /** For print document **/
+                                    this.eventListener(mainComponent, 'print', function(e)  {
+                                    if (e.detail) {
+                                                this.createPrintDocument(e.detail)
+                                        }
+                                    })
+
+                                    /** For copy document **/
+                                    this.eventListener(mainComponent, 'copy',  function(e) {
+                                            if (e.detail) {
+                                                    this.copyContents(e.detail)
+                                            }
+                                        })
+
+                                    
+                                    }
+                            );
+                        }
+                    )
+            }
+            );
+           
+           
+        }); 
+       
+    
+    </script>
+</apex:page>

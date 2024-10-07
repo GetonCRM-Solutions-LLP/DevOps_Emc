@@ -1,0 +1,130 @@
+<apex:page showHeader="false" lightningStylesheets="true" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <head>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/main.css')}"/>
+        <script src="{!URLFOR($Resource.HighChart,'/highchartsv9.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/rounded-corners.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/exporting.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/export-data.js')}"></script>
+        <script>
+            var lexOrigin = location.origin;
+            var postData;
+           window.addEventListener("message", function (event) {
+               console.log('Origin ' + event.origin);
+               console.log('data ' + event.data);
+               if (event.origin !== lexOrigin) {
+                   return;
+               }
+               postData = JSON.parse(event.data);
+             
+              
+                console.log(event.data)
+                let mapContain = document.getElementById('container');
+                if (mapContain) {
+                    let categoryList = (postData.taxLiablity === null) ? ["Reimbursement","Max Allowable"] : ["Reimbursement",
+                        "Max Allowable",
+                        "Tax Liability"
+                    ]
+
+                    let dataList = (postData.taxLiablity === null) ? [postData.reimbursements,postData.maxAllow] : [postData.reimbursements,postData.maxAllow, postData.taxLiablity]
+                    // eslint-disable-next-line no-undef
+                    Highcharts.chart(mapContain, {
+                        colors: ["#37c1ee", "#37c1ee", "#37c1ee", "#37c1ee"],
+                        chart: {
+                        type: "column"
+                        },
+                        title: {
+                        text: ""
+                        },
+                        exporting: {
+                        enabled: false
+                        },
+                        credits: {
+                        enabled: false
+                        },
+                        xAxis: {
+                        categories: categoryList,
+                        lineColor: "#000000",
+                        labels: {
+                            style: {
+                            color: "#1D1D1D",
+                            fontSize: "14px",
+                            fontFamily: "Proxima Nova"
+                            }
+                        }
+                        },
+                        yAxis: {
+                        title: {
+                            text: null
+                        },
+                        tickInterval: 50,
+                        gridLineWidth: 0,
+                        lineColor: "transparent",
+                        labels: {
+                            enabled: false
+                        }
+                        },
+                        plotOptions: {
+                        series: {
+                            dataLabels: {
+                                enabled: true,
+                                inside: true,
+                                crop: false,
+                                color: "white",
+                                style: {
+                                    fontFamily: "Proxima Nova Bold",
+                                    textOutline: false,
+                                    fontSize: "20px"
+                                },
+                                formatter: function () {
+                                    if (this.y < 200) {
+                                        return
+                                    } 
+                                    // display only if larger than 1
+                                    return (
+                                    "$" +
+                                    this.y
+                                        .toString()
+                                        .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    );
+                                }
+                            },
+                            colorByPoint: true
+                        }
+                        },
+                        series: [
+                            {
+                                data: dataList,
+                                colors: ["#7ABA4A", "#404b5a66", "#404B5A"],
+                                pointWidth: 200,
+                                borderRadiusTopLeft: "20px",
+                                borderRadiusTopRight: "20px"
+                            }
+                        ],
+                        legend: {
+                            enabled: false
+                        },
+                        tooltip: {
+                            borderRadius: 0,
+                            padding: 10,
+                            formatter: function () {
+                                return (
+                                this.x +
+                                ": <b> $" +
+                                this.y.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +
+                                "</b>"
+                                );
+                            },
+                            style: {
+                                fontFamily: "Proxima Nova",
+                                fontSize: "12px"
+                            }
+                        }
+                    });
+                }
+           })
+       </script>
+    </head>
+    <body>
+        <div id="container" class="chart" style="width: 700px;height:300px; margin: 0 auto"></div>
+    </body>
+</apex:page>

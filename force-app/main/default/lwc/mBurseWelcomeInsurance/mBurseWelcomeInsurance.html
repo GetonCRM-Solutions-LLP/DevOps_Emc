@@ -1,0 +1,154 @@
+<template>
+    <template lwc:if={promiseError}>
+        <c-m-burse-error message={errorMessage}></c-m-burse-error>
+    </template>
+    <template lwc:if={welcomeInsurance}>
+        <div class="transition">
+            <div>
+                <c-m-burse-header-text head-text="Step 1">
+                    <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style emc-font">Watch the Driver Meeting</div>
+                </c-m-burse-header-text>
+            </div>
+            <!-- <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_medium font-style emcFont p_bottom">
+                Welcome to mBurse - Get started with this short video.
+            </div> -->
+            <div class="slds-align_absolute-center video-container">
+                <video id="video-source"  class="video-frame" width={videoWidth} height={videoHeight}  controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                    <source  type="video/mp4" src={driverMeetingUrl}/>
+                </video>
+            </div>
+            <div class="slds-clearfix slds-align_absolute-center slds-p-top_x-large p_top" style="flex-flow: column; width: 34%;">
+                <div class="footer-text slds-p-bottom_large" style="width: -webkit-fill-available;">
+                    <div class="font-style">
+                        <div class="header">To Move to the Next Step Choose an Option</div>
+                        <ul class="list-item slds-p-top_x-small">
+                            <li><div class="check-input slds-checkbox"> 
+                                <input type="checkbox" name="error-checkbox" id="error-check" checked={checked} class="checkbox-input complete-check" onchange={handleNextMeeting}>
+                                <label class="slds-checkbox__label"  for="error-check">
+                                    <span class="slds-checkbox_faux"></span>
+                                </label>
+                            </div><div class="dont-message" onclick={handleNextMeeting}>I watched the Driver Meeting</div></li>
+                            <li style="margin-top: 10px;"><div class="check-input slds-checkbox"> 
+                                <input type="checkbox" name="error-checkbox" id="error-check-2" checked={checkedskip} class="checkbox-input skip-check"  onchange={handleSkipMeeting}>
+                                <label class="slds-checkbox__label"  for="error-check-2">
+                                    <span class="slds-checkbox_faux"></span>
+                                </label>
+                            </div><div class="dont-message" onclick={handleSkipMeeting}>I will watch the Driver Meeting Later</div></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-button slds-p-bottom_medium mright-0 mleft-0">
+                    <div style="margin: 0.375rem 7rem 0.375rem 0;">
+                        <ul class="slds-list_horizontal slds-has-block-links_space border-radius">
+                            <li class="slds-item navigate">
+                                <a 
+                                name="buttonBackwards"
+                                label="Previous" 
+                                title="Back" 
+                                onclick={backToPrevious}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- <div class="back_to_previous slds-float_left">
+                            <a class="font-s" onclick={backToPrevious}><i class="fa-solid fa-angle-left"></i> Back</a>
+                        </div> -->
+                        <!-- <div class="back_to_previous  slds-float_right" lwc:if={nextPreview}>
+                            <a class="font-s" onclick={skipToNext}>Skip<i class="fa-solid fa-angle-right"></i></a>
+                        </div> -->
+                    </div>
+                    <div lwc:if={showBtn}>
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light step-btn" onclick={nextDeclaration}>
+                            {renderText}
+                        </button>
+                        <!-- <div class="align_message slds-p-top_small">  <a class="dont-font" onclick={removePreview}>Don’t show this page again</a> </div> -->
+                    </div>
+                 
+                </div>
+            </div>
+        </div>
+    </template>
+    <template lwc:if={insuranceDeclaration}>
+        <div class="transition">
+            <div>
+                <c-m-burse-header-text head-text="Step 2">
+                    <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Insurance Preview</div>
+                </c-m-burse-header-text>
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_small font-style emcFont p_bottom">
+                Watch this video to learn why we need your insurance.
+            </div>
+            <div class="slds-align_absolute-center video-container">
+                <video id="insurance-source"  class="video-frame" width={videoWidth} height={videoHeight}  controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                    <source  type="video/mp4" src={insuranceVideoUrl}/>
+                </video>
+            </div>
+            <div class="slds-clearfix slds-align_absolute-center slds-p-top_x-large p_top" style="flex-flow: column; width: 34%;">
+                <div class="footer-text slds-p-bottom_large">
+                    <div class="font-style"><div style="font-size: 16px; font-family: 'Proxima Nova Bold' !important">The insurance declaration pages should be in PDF format and contain your:</div>
+                        <ul class="slds-list_dotted slds-p-top_x-small">
+                            <li>Name</li>
+                            <li>Level of Insurance</li>
+                            <li>Vehicle's make, model, and year</li>
+                            <li>Insurance term (coverage dates)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-button mright-0 mleft-0">
+                    <div>
+                        <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                            <li class="slds-item navigate" style="margin: 0rem 2.375rem 0.75rem 0rem;">
+                                <a 
+                                name="buttonBackwards"
+                                label="Previous" 
+                                title="Back" 
+                                onclick={backToPrevious}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={nextDeclarationUpload}>
+                                    Go to Upload Insurance
+                                </button>
+                            </li>
+                            <template lwc:if={nextShow}>
+                            </template>
+                            <template lwc:else>
+                                <li class="slds-item navigate" style="margin: 0rem 0rem 0.75rem 2.375rem;">
+                                    <a 
+                                    name="buttonBackwards"
+                                    label="Previous" 
+                                    title="Skip this step" 
+                                    onclick={skipToPage}  >
+                                    <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </template>
+                         
+                        </ul>
+                        <!-- <div class="back_to_previous slds-float_left">
+                            <a class="font-s" onclick={backToPage}><i class="fa-solid fa-angle-left"></i> Back</a>
+                        </div> -->
+                        <!-- <div style="margin: 0.375rem 7rem 0.375rem 0;"  lwc:else={nextShow}>
+                            <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item navigate">
+                                    <a 
+                                    name="buttonBackwards"
+                                    label="Previous" 
+                                    title="" 
+                                    onclick={skipToPage}  >
+                                    <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div> -->
+                        <!-- <div class="back_to_previous marginl-px slds-float_right" lwc:else={nextShow}>
+                            <a class="font-s" onclick={skipToPage}>Skip<i class="fa-solid fa-angle-right"></i></a>
+                        </div> -->
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

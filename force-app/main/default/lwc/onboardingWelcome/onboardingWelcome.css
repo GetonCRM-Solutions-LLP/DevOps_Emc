@@ -1,0 +1,112 @@
+*{
+    font-family: 'Proxima Nova' !important;
+}
+@keyframes slideIn {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0%);
+    }
+}
+
+.transition {
+    animation: slideIn 1s cubic-bezier(.1, .86, .45, 1);
+    animation-fill-mode: forwards;
+}
+
+.font-bold{
+    font-size: 32px;
+    line-height: 32px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1d1d11;
+}
+
+.font-style{
+    color:#000000;
+}
+
+.display{
+    display: flex;
+}
+
+.info-text{
+    text-align: left;
+    display: flex;
+    font-size: 24px;
+    width: 236px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #7ABB4A;
+}
+
+.align_message{
+    text-align: center;
+}
+
+.dont-font{
+    font-size: 12px;
+    color: #7ABB4A;
+    font-family: 'Proxima Nova Semibold' !important;
+    text-decoration: underline;
+}
+
+.list-li{
+    font-size: 14px;
+    color: #1d1d1d;
+}
+
+.slds-btn-primary {
+    color: #fff;
+    background-color: #78bc42;
+    border-color: #78bc42;
+}
+
+.emcFont{
+    font-size: 16px;
+    color: #1d1d1d;
+}
+
+.footer-text {
+    font-size: 1.12vw;
+}
+.m-left{
+    margin-left: 176px;
+}
+.m-right{
+    margin-right: 176px;
+}
+.plr{
+    padding-right: var(--lwc-spacingSmall,0.75rem);
+    padding-left: var(--lwc-spacingSmall,0.75rem);
+}
+.slds-btn-sm {
+    padding: 12px 45px;
+    font-size: 16px;
+    font-family: 'Proxima Nova Bold' !important;
+}
+.slds-btn {
+    margin: .375rem;
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+}
+.mleft-0 {
+    margin-left: 0rem;
+}
+.mright-0 {
+    margin-right: 0rem;
+}
+.slds-list_dotted{
+    margin-left: 1rem !important;
+}
+.slds-list_dotted li{
+    margin-bottom: 6px !important;
+}

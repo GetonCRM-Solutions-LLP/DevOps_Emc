@@ -1,0 +1,393 @@
+<template>
+    <c-file-upload-spinner show-spinner={isSpinner}
+        is-not-custom-setting-message={isNotCustomSettingMessage}></c-file-upload-spinner>
+    <template lwc:if={isdataLoaded}>
+        <div class="animate__animated animate__slideInLeft animate__faster">
+            <template lwc:if={data}>
+                <c-user-preview-table onupdate={handleUpdateList} head-th="header-title--v1" show-footer="true"
+                    is-footer="true" sort-th="sort-container p-top-v1" d-flex="flex-block" main-class={classToTable}
+                    row-download="true" is-paginate={paginatedModal} is-sortable={sortable} is-default-sort={isSort}
+                    colname="fullname" coltype="String" sortorder="desc" scrollable={isScrollable} model-data={data}
+                    columns={accordionListColumn} oniconclick={handleModal} onedit={editRecord}
+                    onconditionalclick={deleteNotification} onicon2click={handlePopup} options={accordionKeyFields}>
+                    <div slot="filter" class="slds-p-bottom_small slds-p-top_xx-small row">
+                        <template lwc:if={onloadTool}>
+                            <button onclick={downloadLocationTemp}
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="#FFFFFF" version="1.1" x="0px" y="0px"
+                                    viewBox="0 0 20 20" style="enable-background:new 0 0 30 30;" xml:space="preserve"
+                                    width="20" height="20">
+                                    <path class="st0"
+                                        d="M10 2.333c2.333 0 4.467 1.467 5.133 3.667 0.467 1.467 0.333 2.867 -0.467 4.2 -1.333 2.333 -2.733 4.667 -4.067 7 -0.333 0.533 -0.933 0.533 -1.267 0 -1.333 -2.333 -2.733 -4.667 -4.067 -7 -1.467 -2.533 -0.6 -5.667 2 -7.133 0.867 -0.467 1.733 -0.733 2.733 -0.733zm0 13.267c0 -0.067 0.067 -0.067 0.067 -0.133 1.133 -2 2.333 -4 3.467 -6 0.733 -1.267 0.733 -2.6 -0.067 -3.933 -1.067 -1.667 -3.2 -2.333 -5.067 -1.6 -1.467 0.733 -2.467 2.133 -2.467 3.733 0 0.733 0.2 1.4 0.6 2l2.8 4.8c0.2 0.4 0.467 0.733 0.667 1.133z" />
+                                    <path class="st0"
+                                        d="M12.067 7.933c0 1.133 -0.933 2.067 -2.067 2.067 -1.133 0 -2.067 -0.933 -2.067 -2.067 0 -1.133 0.933 -2.067 2.067 -2.067 1.133 0 2.067 0.867 2.067 2.067zm-2.8 0c0 0.4 0.333 0.733 0.733 0.733 0.4 0 0.733 -0.333 0.733 -0.733 0 -0.4 -0.333 -0.733 -0.733 -0.733 -0.4 0 -0.733 0.333 -0.733 0.733z" />
+                                </svg>Location template
+                            </button>
+                        </template>
+                        <template lwc:if={istrueInsurance}>
+                            <button onclick={handleSendInsuranceReminder}
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none">
+                                    <path
+                                        d="m11.467 11.738 -4.688 -3.308a0.057 0.057 0 0 1 0.026 -0.103l13.072 -1.669a0.057 0.057 0 0 1 0.054 0.09l-7.51 10.569a0.057 0.057 0 0 1 -0.103 -0.025l-0.828 -5.515a0.057 0.057 0 0 0 -0.023 -0.038Z"
+                                        stroke="#FFFFFF" stroke-width="1.135775" stroke-linecap="round" />
+                                    <path d="m14.608 9.766 -3.124 1.703" stroke="#FFFFFF" stroke-width="1.135775" stroke-linecap="round" />
+                                    <path d="m9.494 12.891 -1.987 1.419" stroke="#FFFFFF" stroke-width="1.135775" stroke-linecap="round" />
+                                    <path d="M6.084 16.008c-0.189 0.379 -0.454 1.421 0 2.556" stroke="#FFFFFF" stroke-width="1.135775"
+                                        stroke-linecap="round" />
+                                    <path d="M7.507 20.273c0.473 0.189 1.59 0.568 2.272 0.568" stroke="#FFFFFF" stroke-width="1.135775"
+                                        stroke-linecap="round" />
+                                </svg>{insuranceLabel}
+                            </button>
+                        </template>
+                        <template lwc:if={istrueMessaging}>
+                            <c-dropdown-select style="width: 182px" data-id="list" options={activityList} selected-value={currentType}
+                                            onchange={handleTypeActivity}
+                                            main-class="default-box-input slds-truncate"></c-dropdown-select>
+                            <button lwc:if={showMessageBox} onclick={handleMassTextMessage}
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                                <!-- <svg class="send-message send-icon" xmlns="http://www.w3.org/2000/svg" width="18"
+                                    height="16" viewBox="0 0 20 19.13" fill="none">
+                                    <path
+                                        d="m1.028 8.785 0.006 0.002 7.026 2.574 2.717 6.661c0.116 0.326 0.429 0.508 0.783 0.508a0.843 0.843 0 0 0 0.783 -0.503l6.819 -16.155v-0.003c0.111 -0.29 0.059 -0.638 -0.198 -0.857a0.903 0.903 0 0 0 -0.889 -0.183h-0.003L1.026 7.292h-0.001c-0.332 0.131 -0.531 0.423 -0.531 0.746 0 0.348 0.226 0.641 0.535 0.748Zm7.68 1.077 -5.07 -1.85 13.229 -5 -5.28 12.543 -1.803 -4.43 2.715 -2.572c0.335 -0.317 0.339 -0.828 -0.002 -1.125 -0.332 -0.313 -0.861 -0.317 -1.172 0.002l-2.617 2.433Z"
+                                        fill="#fff" stroke="#fff" stroke-width="0.17391304347826086" />
+                                </svg> -->
+                                <i class="fa-solid fa-plus create-icon"></i>
+                                {messagingLabel}
+                            </button>
+                            <!-- <button onclick={handleMassNotiMessage} style="margin-left: 10px;"
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"
+                                    fill="none">
+                                    <path
+                                        d="M10.131 2.834h-0.216l-0.265 0.015a4.236 4.236 0 0 0 -2.523 1.258c-0.763 0.781 -1.245 1.821 -1.447 2.927l-0.724 3.955c-0.15 0.82 -0.457 0.988 -0.894 1.275 -0.219 0.143 -0.485 0.295 -0.719 0.568 -0.233 0.271 -0.39 0.668 -0.39 1.129 0 0.787 0.655 1.437 1.448 1.437H7.484c0.094 1.401 1.275 2.517 2.709 2.517 1.433 0 2.615 -1.116 2.708 -2.516h3.082c0.794 0 1.448 -0.652 1.448 -1.439 0 -0.461 -0.157 -0.857 -0.39 -1.129 -0.234 -0.271 -0.5 -0.425 -0.718 -0.568 -0.437 -0.286 -0.744 -0.454 -0.894 -1.275l-0.725 -3.955c-0.202 -1.105 -0.684 -2.145 -1.447 -2.926a4.236 4.236 0 0 0 -2.523 -1.258l-0.265 -0.015h-0.341Zm0.063 1.059c0.952 0 1.699 0.361 2.284 0.961 0.586 0.599 0.997 1.448 1.166 2.37l0.724 3.955c0.205 1.123 0.894 1.675 1.363 1.983 0.235 0.154 0.402 0.266 0.486 0.365 0.085 0.099 0.13 0.175 0.13 0.432a0.348 0.348 0 0 1 -0.361 0.36H4.403a0.348 0.348 0 0 1 -0.362 -0.36c0 -0.257 0.045 -0.334 0.13 -0.432 0.085 -0.099 0.252 -0.212 0.486 -0.365 0.469 -0.307 1.157 -0.86 1.363 -1.983l0.724 -3.955c0.168 -0.923 0.579 -1.772 1.165 -2.371 0.586 -0.599 1.332 -0.961 2.285 -0.961Zm1.594 11.505c-0.092 0.814 -0.747 1.439 -1.595 1.439 -0.847 0 -1.503 -0.625 -1.594 -1.439h3.19Z"
+                                        fill="#fff" />
+                                </svg>
+                                {massNotimessageLabel}
+                            </button> -->
+                        </template>
+                        <template lwc:if={isTrueCancelProcess}>
+                            <button onclick={handleCancelProcess}
+                                class="slds-btn slds-btn-primary slds-btn-sm waves-effect waves-light mleft-0 slds-flagbtn">
+                                <svg class="cancel_icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                    viewBox="0 0 18 18" fill="none">
+                                    <path d="M1.8 16 15.8 1.998M1.8 2 15.8 16.002" stroke="white" stroke-width="2.16"
+                                        stroke-linecap="round" />
+                                </svg>Cancel
+                            </button>
+                        </template>
+                        <button lwc:if={clearMessage} class="slds-btn slds-btn-primary slds-btn-sm waves-effect waves-light mleft-0 btn-trip"
+                            style=" background-color: #404b5a; margin-left: 10px;" onclick={handleClearMass}>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="#FFF" viewBox="0 0 20 20"
+                                style="enable-background:new 0 0 30 30" xml:space="preserve" width="20" height="20">
+                                <defs>
+                                    <path id="a" d="M1.933 1.867h16.134V18.2H1.933V1.867z" />
+                                </defs>
+                                <clipPath id="b">
+                                    <use xlink:href="#a" style="overflow:visible" />
+                                </clipPath>
+                                <path class="st1"
+                                    d="M8.4 16.133c-.467 0-.867-.2-1.267-.533l-2.667-2.667c-.267-.267-.467-.533-.533-.933-.133-.6 0-1.2.467-1.667s.933-1 1.467-1.533L9.6 5.067c.267-.267.467-.467.733-.667.4-.4.867-.533 1.4-.533.467 0 .867.267 1.2.6L15.6 7.134c.4.4.6.933.533 1.533-.067.333-.133.6-.4.867-.467.533-1 1.067-1.533 1.533l-2.067 2.067-2.267 2.267c-.133.133-.267.267-.467.4-.2.267-.533.333-1 .333zm2.467-3.333.067-.067 1.8-1.8c.733-.733 1.4-1.467 2.133-2.2.2-.2.2-.533 0-.733-.133-.133-.267-.333-.467-.467-.8-.8-1.667-1.6-2.467-2.467-.2-.2-.467-.133-.667 0l-.6.6-3.333 3.333-.067.067c1.133 1.267 2.4 2.467 3.6 3.733zm-.867.867C8.8 12.467 7.6 11.2 6.333 10l-.4.4-.8.8c-.2.2-.133.533 0 .667.133.133.2.2.267.333L8 14.8c.2.2.533.2.733 0 .2-.133.333-.333.533-.467.267-.267.533-.467.733-.667zM13.4 15h2.267c.267 0 .467.2.467.467v.133c0 .333-.2.533-.533.533H11c-.333 0-.467-.333-.467-.667 0-.267.267-.533.533-.533.8.067 1.6.067 2.333.067z"
+                                    style="clip-path:url(#b)" />
+                            </svg>Clear
+                        </button>
+                    </div>
+                    <div slot="header" class="search-humburger">
+                        <div class="slds-float_right humburger">
+                            <svg xmlns="http://www.w3.org/2000/svg" onclick={openMenu} width="18" height="12"
+                                viewBox="0 0 18 12" fill="none">
+                                <path d="M1 1H17" stroke="#7ABB4A" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M1 6H17" stroke="#7ABB4A" stroke-width="1.5" stroke-linecap="round" />
+                                <path d="M1 11H17" stroke="#7ABB4A" stroke-width="1.5" stroke-linecap="round" />
+                            </svg>
+                        </div>
+                        <div class="slds-float_right">
+                            <div class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                                <div class="search-icon-block">
+                                    <img class="search-icon" src={searchIcon} />
+                                </div>
+                                <template lwc:if={isSearchEnable}>
+                                </template>
+                                <template lwc:else>
+                                    <div class="close-btn" onclick={handleClearInput}>
+                                        <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20"
+                                            height="20" viewBox="0 0 20 20" fill="none">
+                                            <path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642"
+                                                stroke="#929497" stroke-width="2" stroke-linecap="round" />
+                                        </svg>
+                                    </div>
+                                </template>
+
+                                <input class="slds-input filter-input" type="text" value={_value} placeholder="Search"
+                                    onkeyup={handleChange} />
+                            </div>
+                        </div>
+                    </div>
+                    <div slot="footer">
+                        <div class="slds-p-top_large slds-p-bottom_medium">
+                            <div class="slds-p-top_small slds-p-left_large bottom-border">
+                                <template lwc:if={data}>
+                                    <button onclick={exportToExcel}
+                                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip"><svg
+                                            xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                            viewBox="0 0 20 20" fill="none" style="margin-right:3px">
+                                            <path
+                                                d="m6.049 9.302.025-.025-.025.025 3.418 3.418a.749.749 0 0 0 .115.095.5.5 0 0 0 .055.029h.001l.025.015.007.005.038.02a.285.285 0 0 0 .071.023l.005.002a.445.445 0 0 0 .065.02l.002.001a.753.753 0 0 0 .295 0h.002a.402.402 0 0 0 .042-.015.417.417 0 0 1 .022-.005l.002-.002.025-.007.045-.015a.422.422 0 0 0 .078-.04l.001-.001.002-.001a.185.185 0 0 1 .022-.013l.029-.017a.762.762 0 0 0 .115-.095l3.418-3.418a.753.753 0 0 0 0-1.065.753.753 0 0 0-1.065 0l-2.135 2.135V3.875a.755.755 0 0 0-1.505 0v6.497l-2.13-2.135a.753.753 0 0 0-1.065 0 .753.753 0 0 0 0 1.065Zm10.658 6.175a.754.754 0 0 0-.755-.753H4.045a.755.755 0 0 0 0 1.505h11.909a.755.755 0 0 0 .754-.754Z"
+                                                fill="#fff" stroke="#fff" stroke-width=".081" />
+                                        </svg>Export
+                                    </button>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </c-user-preview-table>
+            </template>
+            <template lwc:if={textMessaging}>
+                <c-m-burse-s-m-s driver-name={userName} driver-id={driverId} onclose={closePopup}></c-m-burse-s-m-s>
+            </template>
+            <template lwc:if={isNotification}>
+                <div class="noti_Container">
+                    <div>
+                        <div role="presentation" class="noti_chat">
+                            <div class="noti_P">
+                                <div class="noti_Q">
+                                    <header class="noti_HeaderView">
+                                        <div class="noti_HeaderRow">
+                                            <div>
+                                                <h1 class="noti_Title">Notification message to</h1>
+                                                <h2 class="noti_Title noti_bold">{userName}</h2>
+                                            </div>
+                                            <button type="button" class="slds-button close-noti-message" data-dismiss="modal"
+                                                onclick={closeNotificationPopup}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" data-key="check" width="22" height="22"
+                                                    viewBox="0 0 22 22" fill="none">
+                                                    <path d="m5.263 16.527 10.528 -10.528" stroke="white"
+                                                        stroke-width="1.7179684210526316" stroke-linecap="round" />
+                                                    <path d="m5.263 6 10.528 10.528" stroke="white"
+                                                        stroke-width="1.7179684210526316" stroke-linecap="round" />
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </header>
+                                    <form class="noti_FormContainer">
+                                        <main>
+                                            <div class="slds-grid noti_message-time notify-date slds-p-bottom_small"
+                                                data-id={msgIndex}>
+                                                <lightning-formatted-date-time value={notificationDate} year="2-digit"
+                                                    month="short" day="2-digit" hour="numeric" minute="numeric" weekday="short">
+                                                </lightning-formatted-date-time>
+                                            </div>
+                                            <div class="noti_Fields">
+                                                <div class="message-controls" data-id={msgIndex}>
+                                                    <div
+                                                        class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_11-of-12 slds-p-right_medium">
+                                                        <textarea data-id={msgIndex} rows="7" name="message"
+                                                            placeholder="Type a short message here" class="noti_TextInput">{notiTextMessage}
+                                                            </textarea>
+                                                    </div>
+                                                    <div class="slds-col slds-p-horizontal_medium chat_button">
+                                                        <div class="file-upload-button">
+                                                            <button class="slds-button slds-p-left_small slds-button_icon"
+                                                                onclick={sendNotification}>
+                                                                <svg class="send-message send-icon"
+                                                                    xmlns="http://www.w3.org/2000/svg" width="23" height="22"
+                                                                    viewBox="0 0 23 22" fill="none">
+                                                                    <path
+                                                                        d="M1.18219 10.103L1.18915 10.1054L9.26906 13.0648L12.3937 20.7258C12.5265 21.1 12.8869 21.3094 13.2945 21.3094C13.6776 21.3094 14.0321 21.0967 14.1932 20.7305L14.1938 20.7292L22.0357 2.15172L22.0357 2.15174L22.0369 2.14863C22.1644 1.81616 22.1039 1.41461 21.8083 1.16389C21.5497 0.920577 21.1369 0.831918 20.7864 0.952613L20.7864 0.952568L20.7835 0.953657L1.17893 8.38463L1.17893 8.38463L1.17757 8.38516C0.796112 8.53615 0.566962 8.87197 0.566962 9.24349C0.566962 9.64306 0.826512 9.98032 1.18219 10.103ZM10.0136 11.3413L4.18327 9.21426L19.3972 3.46353L13.3251 17.8882L11.2509 12.7932L14.3727 9.8349C14.7578 9.46998 14.7632 8.88311 14.3711 8.54082C13.989 8.18026 13.381 8.1758 13.0231 8.54338L10.0136 11.3413Z"
+                                                                        fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.2" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="span-error slds-p-top_x-small d-none error-text" data-id={msgIndex}>
+                                                <i class="fa-solid fa-exclamation"></i>
+                                                &nbsp;Please enter a short message
+                                            </div>
+                                        </main>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+            <lightning-icon class="back_button" icon-name="utility:back" size="xx-small"
+                onclick={handleBackToDashboard}></lightning-icon>
+            <c-export-excel></c-export-excel>
+        </div>
+    </template>
+    <template lwc:if={isMileageLoaded}>
+        <div class="animate__animated animate__slideInLeft animate__faster">
+            <template lwc:if={mileageData}>
+                <c-user-preview-table class="mileage-user-table" data-id="mileage" head-th="header-title--v1"
+                    sort-th="sort-container p-top-v1" show-footer="true" is-footer="true" d-flex="flex-block"
+                    main-class={classToTable} is-paginate={paginatedModal} is-sortable={sortable} is-default-sort={isSort}
+                    colname="name" coltype="String" sortorder="desc" scrollable={isScrollable} model-data={mileageData}
+                    columns={mileageListColumn} options={mileageKeyFields} onenablesubmit={enableSubmit}
+                    editable-view={editableView} oneditmode={editMode} onupdate={handleUpdateListMileage}>
+                    <div slot="filter" class="slds-p-bottom_small slds-p-top_xx-small row">
+                        <button onclick={handleCancelProcess}
+                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect waves-light mleft-0 slds-flagbtn">
+                            <svg class="cancel_icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                                viewBox="0 0 18 18" fill="none">
+                                <path d="M1.8 16 15.8 1.998M1.8 2 15.8 16.002" stroke="white" stroke-width="2.16"
+                                    stroke-linecap="round" />
+                            </svg>Cancel
+                        </button>
+                    </div>
+                </c-user-preview-table>
+                <div class="slds-align_absolute-center" lwc:if={isEditMode}>
+                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green2 waves-light"
+                        onclick={updateMileage}>
+                        Update
+                    </button>
+                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light"
+                        onclick={cancelEditMode}>
+                        Cancel
+                    </button>
+                </div>
+            </template>
+            <lightning-icon class="back_button" icon-name="utility:back" size="xx-small"
+            onclick={handleBackToDashboard}></lightning-icon>
+        </div>
+    </template>
+    <c-user-profile-modal data-id="menu" month='' show-btn={isFalse} modal-class={modalClass} header-class={headerClass}
+    modal-content-style={modalcontentstyle} style-header={styleHeader} close-btn-class="close-notify"
+    subheader-class={subheaderClass}>
+    <div class="modal-container">
+        <div class="slds-p-top_medium">
+            <div class="menu-header">Insurance reminder</div>
+            <div>
+                <p class="info-text">Send email to driver/admin to submit your insurance
+                    declaration page</p>
+            </div>
+            <div>
+                <button onclick={handleInsuranceReminder}
+                    class="slds-btn slds-btn-primary btn-send slds-align_absolute-center">
+                    <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="17.217"
+                        viewBox="0 0 18 17.217" fill="#fff">
+                        <path
+                            d="m0.925 7.907 0.005 0.002 6.323 2.317 2.446 5.995c0.104 0.293 0.386 0.457 0.704 0.457a0.759 0.759 0 0 0 0.704 -0.453l6.137 -14.539v-0.002c0.1 -0.261 0.053 -0.574 -0.178 -0.771a0.812 0.812 0 0 0 -0.8 -0.165h-0.002L0.923 6.563h-0.001c-0.299 0.118 -0.478 0.381 -0.478 0.671 0 0.313 0.203 0.577 0.481 0.673Zm6.912 0.969 -4.563 -1.665 11.906 -4.5 -4.752 11.288 -1.623 -3.987 2.443 -2.315c0.301 -0.286 0.305 -0.745 -0.002 -1.013 -0.299 -0.282 -0.775 -0.286 -1.055 0.002l-2.356 2.19Z"
+                            fill="#fff" stroke="#fff" stroke-width="0.1565217391304348" />
+                    </svg>Send
+                </button>
+            </div>
+        </div>
+        <div class="slds-p-top_xx-large">
+            <div class="menu-header">Messaging</div>
+            <div>
+                <p class="info-text">Send notification messages</p>
+            </div>
+            <div>
+                <button onclick={handleMessaging}
+                    class="slds-btn slds-btn-primary btn-send slds-align_absolute-center">
+                    <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="17.217"
+                        viewBox="0 0 18 17.217" fill="#fff">
+                        <path
+                            d="m0.925 7.907 0.005 0.002 6.323 2.317 2.446 5.995c0.104 0.293 0.386 0.457 0.704 0.457a0.759 0.759 0 0 0 0.704 -0.453l6.137 -14.539v-0.002c0.1 -0.261 0.053 -0.574 -0.178 -0.771a0.812 0.812 0 0 0 -0.8 -0.165h-0.002L0.923 6.563h-0.001c-0.299 0.118 -0.478 0.381 -0.478 0.671 0 0.313 0.203 0.577 0.481 0.673Zm6.912 0.969 -4.563 -1.665 11.906 -4.5 -4.752 11.288 -1.623 -3.987 2.443 -2.315c0.301 -0.286 0.305 -0.745 -0.002 -1.013 -0.299 -0.282 -0.775 -0.286 -1.055 0.002l-2.356 2.19Z"
+                            fill="#fff" stroke="#fff" stroke-width="0.1565217391304348" />
+                    </svg>Send
+                </button>
+            </div>
+        </div>
+        <div class="slds-p-top_xx-large slds-p-bottom_large">
+            <div class="menu-header">Mileage</div>
+            <div>
+                <p class="info-text">Import mileage to reimbursement</p>
+            </div>
+            <div>
+                <button onclick={handleMilleage}
+                    class="slds-btn slds-btn-primary btn-send slds-align_absolute-center">
+                    <svg class="send-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="17.217"
+                        viewBox="0 0 18 17.217" fill="#fff">
+                        <path
+                            d="m0.925 7.907 0.005 0.002 6.323 2.317 2.446 5.995c0.104 0.293 0.386 0.457 0.704 0.457a0.759 0.759 0 0 0 0.704 -0.453l6.137 -14.539v-0.002c0.1 -0.261 0.053 -0.574 -0.178 -0.771a0.812 0.812 0 0 0 -0.8 -0.165h-0.002L0.923 6.563h-0.001c-0.299 0.118 -0.478 0.381 -0.478 0.671 0 0.313 0.203 0.577 0.481 0.673Zm6.912 0.969 -4.563 -1.665 11.906 -4.5 -4.752 11.288 -1.623 -3.987 2.443 -2.315c0.301 -0.286 0.305 -0.745 -0.002 -1.013 -0.299 -0.282 -0.775 -0.286 -1.055 0.002l-2.356 2.19Z"
+                            fill="#fff" stroke="#fff" stroke-width="0.1565217391304348" />
+                    </svg>Send
+                </button>
+            </div>
+        </div>
+    </div>
+    </c-user-profile-modal>
+    <c-user-profile-modal data-id="message" header="Text Message" month='' show-btn={isFalse}
+        modal-class={modalClass} header-class={headerClass} modal-content-style={modalcontentstyle}
+        style-header={styleHeader} close-btn-class="close-notify" subheader-class={subheaderClass}>
+        <div class="noti_Fields">
+            <div class="message-controlss slds-grid" data-id={msgIndex}>
+                <div class={textStyle} style="width: 86%;">
+                    <textarea class="slds-textarea message-input" role="textbox" rows="4"
+                        placeholder="Type your message..." onkeypress={onKeyPress} oninput={onCreateSMS}>
+                        </textarea>
+                </div>
+                <div class="slds-col slds-p-horizontal_medium chat_button">
+                    <input type="file" data-id="attatch" accept="image/png, image/jpeg, image/jpg" class="hidden" onchange={handlemassAtt} />
+                    <div class="file-upload-button">
+                        <button class="slds-button slds-p-left_small slds-button_icon send_chat_button"
+                            onclick={sendMassAttatchment}>
+                            <span class="chat__input-fileupload naoTooltip-wrap">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none">
+                                    <g clip-path="url(#clip0_6301_36003)">
+                                        <path
+                                            d="M21.7527 2.88604C18.7616 -0.105242 13.8943 -0.105242 10.9027 2.88604L1.6023 12.1864C-0.534217 14.3231 -0.534076 17.7998 1.60258 19.9364C2.671 21.0048 4.07397 21.539 5.4775 21.5389C6.88066 21.5387 8.28438 21.0047 9.35261 19.9364L17.8777 11.4111C18.4988 10.7901 18.8409 9.9644 18.841 9.08615C18.841 8.20785 18.499 7.3822 17.8778 6.76101C16.5957 5.47902 14.5096 5.47907 13.2277 6.76124L7.65264 12.3362C7.22463 12.7642 7.22463 13.4581 7.65255 13.8862C8.08052 14.3143 8.7745 14.3142 9.20256 13.8862L14.7777 8.31121C15.205 7.88385 15.9003 7.88376 16.3277 8.31112C16.4298 8.41265 16.5107 8.53343 16.5659 8.66645C16.621 8.79948 16.6491 8.94211 16.6488 9.0861C16.6488 9.37884 16.5348 9.65399 16.3277 9.86109L7.8026 18.3863C6.52052 19.6683 4.43458 19.6685 3.1526 18.3864C1.87061 17.1044 1.87052 15.0183 3.15236 13.7362L12.4527 4.43605C14.5895 2.2993 18.0662 2.2993 20.2027 4.43605C21.2379 5.47106 21.808 6.84726 21.808 8.31102C21.808 9.77479 21.2378 11.151 20.2027 12.1861L10.9025 21.4866C10.4746 21.9146 10.4746 22.6085 10.9026 23.0366C11.0043 23.1385 11.1251 23.2193 11.2581 23.2744C11.3911 23.3295 11.5337 23.3578 11.6776 23.3576C11.8216 23.3577 11.9641 23.3295 12.0972 23.2744C12.2302 23.2193 12.351 23.1385 12.4526 23.0366L21.7527 13.7361C23.2019 12.2871 23.9999 10.3604 24 8.31107C24 6.26174 23.2019 4.33509 21.7527 2.88604Z"
+                                            fill="#7ABB4A" />
+                                    </g>
+                                    <defs>
+                                        <clipPath id="clip0_6301_36003">
+                                            <rect width="24" height="24" fill="white" />
+                                        </clipPath>
+                                    </defs>
+                                </svg>
+                            </span>
+                        </button>
+                        <button class="slds-button slds-p-left_small slds-button_icon" onclick={sendMassMessage}>
+                            <svg class="send-message send-icon" xmlns="http://www.w3.org/2000/svg" width="23"
+                                height="22" viewBox="0 0 23 22" fill="none">
+                                <path
+                                    d="M1.18219 10.103L1.18915 10.1054L9.26906 13.0648L12.3937 20.7258C12.5265 21.1 12.8869 21.3094 13.2945 21.3094C13.6776 21.3094 14.0321 21.0967 14.1932 20.7305L14.1938 20.7292L22.0357 2.15172L22.0357 2.15174L22.0369 2.14863C22.1644 1.81616 22.1039 1.41461 21.8083 1.16389C21.5497 0.920577 21.1369 0.831918 20.7864 0.952613L20.7864 0.952568L20.7835 0.953657L1.17893 8.38463L1.17893 8.38463L1.17757 8.38516C0.796112 8.53615 0.566962 8.87197 0.566962 9.24349C0.566962 9.64306 0.826512 9.98032 1.18219 10.103ZM10.0136 11.3413L4.18327 9.21426L19.3972 3.46353L13.3251 17.8882L11.2509 12.7932L14.3727 9.8349C14.7578 9.46998 14.7632 8.88311 14.3711 8.54082C13.989 8.18026 13.381 8.1758 13.0231 8.54338L10.0136 11.3413Z"
+                                    fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.2" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class={imageHolderStyle}  data-id={msgIndex} style="position: relative;">
+                <div class="close-image" lwc:if={imageUploaded}  data-id={msgIndex}>
+                    <button class="slds-button slds-button_brand btn-brand-padding slds-modal__close"
+                        onclick={removeSelection}>
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <img id="file-image" src="" class={classForFile}  data-id={msgIndex}>
+            </div>
+        </div>
+    </c-user-profile-modal>
+    <c-user-profile-modal data-id="notificationmessage" header="Notification message" month='' show-btn={isFalse}
+        modal-class={modalClass} header-class={headerClass} modal-content-style={modalcontentstyle}
+        style-header={styleHeader} close-btn-class="close-notify" subheader-class={subheaderClass}>
+        <div class="noti_Fields">
+            <div class="message-controlss" data-id={msgIndex}>
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_11-of-12 slds-p-right_medium">
+                    <textarea data-id="massNoti" rows="7" name="message" placeholder="Type a short message here"
+                        class="mass_noti">{massNotificationMsg}</textarea>
+                </div>
+                <div class="slds-col slds-p-horizontal_medium chat_button">
+                    <div class="file-upload-button">
+                        <button class="slds-button slds-p-left_small slds-button_icon" onclick={sendMassNotification}>
+                            <svg class="send-message send-icon" xmlns="http://www.w3.org/2000/svg" width="23"
+                                height="22" viewBox="0 0 23 22" fill="none">
+                                <path
+                                    d="M1.18219 10.103L1.18915 10.1054L9.26906 13.0648L12.3937 20.7258C12.5265 21.1 12.8869 21.3094 13.2945 21.3094C13.6776 21.3094 14.0321 21.0967 14.1932 20.7305L14.1938 20.7292L22.0357 2.15172L22.0357 2.15174L22.0369 2.14863C22.1644 1.81616 22.1039 1.41461 21.8083 1.16389C21.5497 0.920577 21.1369 0.831918 20.7864 0.952613L20.7864 0.952568L20.7835 0.953657L1.17893 8.38463L1.17893 8.38463L1.17757 8.38516C0.796112 8.53615 0.566962 8.87197 0.566962 9.24349C0.566962 9.64306 0.826512 9.98032 1.18219 10.103ZM10.0136 11.3413L4.18327 9.21426L19.3972 3.46353L13.3251 17.8882L11.2509 12.7932L14.3727 9.8349C14.7578 9.46998 14.7632 8.88311 14.3711 8.54082C13.989 8.18026 13.381 8.1758 13.0231 8.54338L10.0136 11.3413Z"
+                                    fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.2" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </c-user-profile-modal>
+    <input type="file" data-id="upload" class="hidden" onchange={handleFileChange} />
+</template>

@@ -1,0 +1,66 @@
+<apex:page controller="TripDetailReportController" contentType="txt/xml#Trip Detail Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Trip Detail Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>                
+                <Row>
+                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Driver</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Email</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Date</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Day</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Start Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >End Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Mileage (mi)</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >From Location Name</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >From Location Address</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >To Location Name</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >To Location Address</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Notes</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Tracking Method</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >From Location Lat</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >From Location Long</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >To Location Lat</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >To Location Long</Data></Cell>
+                </Row>
+                <apex:repeat value="{!mileageWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.driverName}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.driverEmail}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.tripDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.tripDay}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.starttime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.endTime}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.mileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.FLocationName}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.FLocationAdd}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.TLocationName}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.TLocationAdd}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.notes}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.trackingMethod}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.FLocationLatitude}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.FLocationLongitude }</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.TLocationLatitude}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.TLocationLongitude}</Data></Cell>
+                    </Row>
+                </apex:repeat>                
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

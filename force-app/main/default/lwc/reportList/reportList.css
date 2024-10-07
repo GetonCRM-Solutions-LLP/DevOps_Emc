@@ -1,0 +1,390 @@
+.Contact_List{
+  font-size: 20px;
+    font-family: 'Proxima Nova Bold';
+    color: #7ABB4A !important;
+    margin-bottom: 15px;
+    margin-left: 10px;
+}
+.report_list{
+    flex-basis: 340px;
+    margin: 10px 20px 10px 10px;
+    border-radius: 20px;
+    border: 1px solid #D7D7D7;
+    background: #FFF;
+}
+
+.report_title{
+    color: #7ABB4A;
+    margin: 16px;
+    font-weight: 500;
+    font-size: 20px;
+    font-family: 'Proxima Nova Bold';
+}
+.report_list_all{
+    margin-left: 15px;
+    color: #00AFE8;
+    font-size: 14px;
+    font-family: 'Proxima Nova';
+    line-height: 232.8%;
+    /* text-decoration-line: underline; */
+    margin-bottom: 6px;
+    cursor: pointer;
+}
+.report_list_all:hover{
+  color: #00AFE8;
+}
+
+.report-list-container{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card_style{
+  margin: 15px 5px;
+  padding: 0px 15px 0px 0px;
+}
+.bc-green {
+    background: none !important;
+    background-color: #7ABB4A!important;
+    font-family: 'Proxima Nova Bold' !important;
+    font-weight: 700;
+    color: #FFFFFF;
+  }
+  
+  .bc-black{
+  background: none !important;
+  background-color: #404B5B!important;
+  font-family: 'Proxima Nova' !important;
+  font-weight: 700;
+  color: #FFFFFF;
+  }
+  .slds-btn{
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+  }
+  
+  .waves-effect:focus {
+    outline: none !important;
+  }
+  
+  .slds-btn-sm {
+    margin: 0 0.4em;
+    padding: 11px 20px;
+    height: 43px;
+    font-size: 14px;
+  }
+  .btn-trip{
+    border-radius: 9px;
+    text-decoration: none !important;
+    color: #FFFFFF !important;
+  }
+  
+  .button_class_modal{
+    margin: 15px 0px;
+    /* position: relative;
+    left: 267px; */
+  }
+  .modal_content-class{
+    color: black;
+    margin: -17px 10px 0px 10px;
+  }
+  .modal_content-class_1{
+    color: black;
+    margin: 10px 10px 20px 10px;
+  }
+  @-moz-keyframes spinner-border {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
+  }
+  
+  @-webkit-keyframes spinner-border {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes spinner-border {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+  }
+  
+  .text-light {
+    color: #7ABB4A!important;
+  }
+  
+  .spinner-border {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    vertical-align: text-bottom;
+    border: .25em solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    -webkit-animation: spinner-border .75s linear infinite;
+    animation: spinner-border .75s linear infinite;
+  }
+  
+  .spinner-background {
+    width: 100%;
+    height: 100%;
+    background: white;
+    opacity: 0.4;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 1000000;
+  }
+  
+  .spinner-load {
+    position: fixed;
+    top: 49%;
+    left: 49%;
+    z-index: 1000000;
+  }
+  
+  .sr-only {
+    border: 0;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .flat-container{
+    display: flex;
+    border: 1px solid #e0dbdb !important;
+    padding: 0px 0 0px 9px !important;
+    width: 282px;
+    border-radius: 10px;
+    position: relative;
+    height: 34px;
+    bottom: 29px;
+    background: white;
+    left: 72px;
+  }
+  .flat-input{
+    padding: 8px 0 8px 9px !important;
+    color: #1D1D1D !important;
+    width: 100%;
+    border: none;
+    border: 0;
+    padding-left: 0;
+    border-radius: 8px;
+    font-family: 'Proxima Nova' !important;
+    font-size: 12px !important;
+  }
+  .flat-input:focus-visible{
+    outline: 0 !important;
+    outline-color: #FFFFFF!important;
+  }
+  .input-button{
+    width: 50px;
+    height: 34px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* .modal_header{
+    margin-left: 10px;
+  } */
+  .date_label_02{
+    font-size: 14px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1D1D1D;
+  }
+  .modal_position_new{
+    position: fixed;
+  }
+  .pay_period{
+    width: 200px;
+    position: relative;
+    bottom: 29px;
+    left: 87px;
+  }
+  .pay_period_01{
+    width: 204px;
+    position: relative;
+    bottom: 29px;
+    left: 103px;
+  }
+  /* .main_contact_list{
+    margin-left: 10px;
+  } */
+  .tax_name{
+    list-style-type: none;
+    font-size: 14px;
+    color: #1D1D1D;
+    /* border: 1px solid lightgray; */
+    padding: 6px 20px 5px 12px;
+    /* border-radius: 0px 8px 8px 0px; */
+    width: 270px;
+  }
+  .display_div{
+    display: flex;
+    margin: 0 6px 0 0;
+    border-radius: 10px;
+    padding: 3px 15px;
+    /* max-height: 26px; */
+  }
+  .checkbox_style{
+    /* padding: 9px; */
+    /* border: 1px solid lightgray;
+    border-radius: 8px 0px 0px 8px; */
+    margin-top: 8px;
+  }
+  .year_div{
+    margin-right: 30px;
+  }
+  .pagination{
+    position: relative;
+    padding: 14px 0px;
+    /* top: 45px; */
+  }
+  .year_list{
+    position: relative;
+    width: 95px;
+    bottom: 28px;
+    left: 40px;
+  }
+  .toast_msg{
+    padding: 10px;
+    background: #78bc42;
+    color: black;
+    font-size: 15px;
+    width: max-content;
+    font-family: 'Proxima Nova Bold' !important;
+    border-radius: 12px;
+  }
+  .area_disable{
+    pointer-events: none;
+    cursor:not-allowed
+  }
+  button:disabled,
+button[disabled]{
+  /* border: 1px solid #999999; */
+  background-color: #a2c586 !important;
+  cursor:not-allowed;
+  /* color: #666666; */
+}
+input[type=checkbox]:checked  + label > span{
+  --sds-c-checkbox-color-background : #7ABB4A !important ;
+  --sds-c-checkbox-mark-color-foreground: white !important;
+  --sds-c-checkbox-color-border-checked: white !important;
+  --slds-c-checkbox-color-border: lightgray !important;
+  --slds-c-checkbox-shadow : white !important; 
+} 
+.green_checkbox{
+  border-radius: 4px !important;
+  position: relative !important;
+   
+}
+input[type=checkbox]  + label > span{
+  --slds-c-checkbox-color-border: lightgray !important;
+  --slds-c-checkbox-shadow : white !important;
+} 
+.progress-background{
+  width: 100%;
+    height: 100%;
+    background: #000;
+    opacity: 0;
+    top: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 1000000;
+}
+
+.display_div:nth-of-type(even){
+  background-color: #F7F7F7 !important;
+}
+.display_div:nth-of-type(odd){
+  background-color: #FFFFFF !important;
+}
+.PAYPERIOD_DIV{
+  padding: 0px 35px;
+}
+.PAYPERIOD_DIV_1{
+  padding: 0px 25px;
+}
+.PAYPERIOD_DIV_2{
+  padding: 0px 59px;
+}
+.pay_period_new{
+  left: 45px;
+}
+
+/* Add CSS for download button and style adjustment */
+.btn-trip-download{
+  display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: 1px solid transparent;
+  height: 32px;
+  padding: 0.275rem 1rem 0.275rem 0.85rem !important;
+  line-height: 1.5;
+  border-radius: 6px;
+  color: var(--even-row-color) !important;
+  font-size: 12px !important;
+  letter-spacing: 0.03em !important;
+}
+
+.listContact {
+  overflow-y: auto;
+  height: calc(100% - 230px);
+}
+
+.back_button{
+  margin-left: 0px !important;
+  border-radius: 10px !important;
+  border: 1px solid #C9C9C9;
+  /* padding: 10px; */
+  --sds-c-icon-color-foreground-default: #65B244;
+  font-family: 'Proxima Nova Bold' !important;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  padding: 1rem 1rem !important;
+  /* border-radius: 10px !important; */
+  box-shadow: none !important;
+  cursor: pointer;
+}
+
+@media only screen 
+  and (min-device-width: 768px) 
+  and (max-device-width: 1024px) 
+  and (-webkit-min-device-pixel-ratio: 1) {
+    .listContact {
+      height: calc(100% - 230px);
+    }
+}
+@media screen 
+  and (min-device-width: 1200px) 
+  and (max-device-width: 1600px) 
+  and (-webkit-min-device-pixel-ratio: 2)
+  and (min-resolution: 192dpi) { 
+    .listContact {
+      height: calc(100% - 230px);
+    }
+}
+/* Added by Raj */

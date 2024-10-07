@@ -1,0 +1,15 @@
+.content-input {
+    border: 2px solid #e4e4e4 !important;
+    padding: 10px 0 10px 9px !important;
+    color: var(--link-color) !important;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 14px !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.content-drop-down {
+    float: left;
+    width: 100%;
+    margin-top: 10px;
+}

@@ -1,0 +1,129 @@
+<template>
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title slds-text-heading_medium slds-p-bottom_large slds-text-align_center">{header}</h5>
+                </div>
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick={closePopup}>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="instruction"  if:true={showInsight}>
+                        <button class="tips-button" onclick={popOut}><i class="fa-solid fa-info"></i></button>
+                        <template if:true={carousel}>
+                            <c-carousel-popover onpop={handlePopover} total-contacts={carouselLists} style-carousel="slds-popover slds-nubbin_top  slds-popover_large" style-header="slds-popover__header bg-green"  style-body="slds-popover__body" style-footer="slds-popover__footer" header-title="Instructions"></c-carousel-popover>
+                        </template>
+                    </div>
+                    <!-- 16:9 aspect ratio -->
+                    <div class="embed-responsive" if:true={isInsurance}>
+                        <div class="footer-text slds-text-heading_medium slds-p-top_large">
+                            <div class="font-color"><strong>Insurance Minimums:</strong>
+                                <table class="slds-m-top_small insurance-table">
+                                    <tbody>
+                                    <tr  if:true={client.bodilyInjury}>
+                                        <td>Bodily Injury</td>
+                                        <td>${client.bodilyInjury}</td>
+                                    </tr>
+                                    <tr  if:true={client.unInsuranceMotorist}>
+                                        <td>Uninsured Motorist</td>
+                                        <td>${client.unInsuranceMotorist}</td>
+                                    </tr>
+                                    <tr  if:true={client.propertyDamage}>
+                                        <td>Property Damage</td>
+                                        <td>$<lightning-formatted-number value={client.propertyDamage}></lightning-formatted-number></td>
+                                    </tr>
+                                    <tr if:true={client.comprehensive}>
+                                        <td>Comprehensive Deductible</td>
+                                        <td>$<lightning-formatted-number value={client.comprehensive}></lightning-formatted-number></td>
+                                    </tr>
+                                    <tr if:true={client.collision}>
+                                        <td>Collision Deductible</td>
+                                        <td>$<lightning-formatted-number value={client.collision}></lightning-formatted-number></td>
+                                    </tr>
+                                    <tr if:true={client.umbrella}>
+                                        <td>Umbrella Coverage</td>
+                                        <td>$<lightning-formatted-number value={client.umbrella}></lightning-formatted-number></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="font-color">
+                                <table class="slds-m-top_medium content-table">
+                                    <tbody>
+                                    <tr if:true={client.vehicleValue}>
+                                        <td class="vVTd"><strong>Vehicle Value:</strong></td><!--style="padding-right: 2px !important" -->
+                                        <td>$<lightning-formatted-number value={client.vehicleValue}></lightning-formatted-number></td>
+                                    </tr>
+                                    <tr if:true={client.planYear}>
+                                        <td  class="veTd"> <strong>Vehicle Age:</strong></td> <!--style="padding-right: 10px !important"-->
+                                        <td>{client.planYear} Years</td>
+                                    </tr>
+                                    <tr if:true={client.complianceMileage}>
+                                        <td><strong>Annual Compliance Mileage:</strong></td>
+                                        <td class="mTd">{client.complianceMileage} Miles</td> <!--style="padding-right: 66px !important" -->
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- <div class="font-color">
+                                <table class="slds-m-top_small">
+                                    <tbody>
+                                    <tr>
+                                        <td style="padding-right: 10px !important" class="veTd"> <strong>Vehicle Age:</strong></td>
+                                        <td>{client.planYear} Years</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="font-color">
+                                <table class="slds-m-top_small">
+                                    <tbody>
+                                    <tr>
+                                        <td><strong>Annual Compliance Mileage:</strong></td>
+                                        <td style="padding-right: 66px !important" class="mTd">{client.complianceMileage} Miles</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div> -->
+                            
+                            <div class="overlay"  if:true={docUrl}>
+                                <div class="video-title"><strong>Download</strong></div>
+                                <div>
+                                    <a  href={docUrl}>
+                                        <img src={downloadIconUrl} class="img-icon-fluid" alt="logo" />
+                                    </a>
+                                </div>
+                                <p><span style="margin-left: 6px"><strong>Your Plan</strong></span><span><strong>Parameters</strong></span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <template if:false={isInsurance}>
+                        <div class="embed-responsive" if:false={showInsight}>
+                            <video if:false={watchMeeting} id="video-source" width={videoWidth} height={videoHeight}  autoplay controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                                <source  type="video/mp4" src={frameUrl}/>
+                            </video>
+                            <div  if:true={watchMeeting} class="frame-container">
+                                <iframe name="stats" src={frameUrl} width="100%" height="100%" frameborder="0"></iframe>
+                            </div>
+                        </div>
+                        <div class="embed-responsive" if:true={showInsight}>
+                            <template if:true={sending}>
+                                <div id="spinner">
+                                    <div class="spinner-background"></div>
+                                    <div class="spinner-load">
+                                        <div class="spinner-border text-light" role="status">
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <c-m-burse-download-insight onsend={emailSent}></c-m-burse-download-insight>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="slds-backdrop slds-backdrop_open  modalBackdrops" id="modalBackdrops"></div>
+</template>

@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Job Title --></label>
+    <name>Job_Title__c</name>
+    <picklistValues>
+        <masterLabel>Account Manager</masterLabel>
+        <translation><!-- Account Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Accounting Manager</masterLabel>
+        <translation><!-- Accounting Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Admin</masterLabel>
+        <translation><!-- Admin --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Adult Beverage Reset Coor</masterLabel>
+        <translation><!-- Adult Beverage Reset Coor --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Area Manager</masterLabel>
+        <translation><!-- Area Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>CFO/COO</masterLabel>
+        <translation><!-- CFO/COO --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Commercial Sales Manager</masterLabel>
+        <translation><!-- Commercial Sales Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Design Engineer Lead</masterLabel>
+        <translation><!-- Design Engineer Lead --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Director of Human Resources</masterLabel>
+        <translation><!-- Director of Human Resources --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Director of Product Strategy &amp; Marketing</masterLabel>
+        <translation><!-- Director of Product Strategy &amp; Marketing --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Director of Product Strategy &amp; Technical Support</masterLabel>
+        <translation><!-- Director of Product Strategy &amp; Technical Support --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Director of Safety</masterLabel>
+        <translation><!-- Director of Safety --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Director of Sales</masterLabel>
+        <translation><!-- Director of Sales --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Div Mapping Specialist</masterLabel>
+        <translation><!-- Div Mapping Specialist --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Environmental Consultant</masterLabel>
+        <translation><!-- Environmental Consultant --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>FT Fulfillment Associate</masterLabel>
+        <translation><!-- FT Fulfillment Associate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Forced Air Product Manager</masterLabel>
+        <translation><!-- Forced Air Product Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Hydronics Application Specialist</masterLabel>
+        <translation><!-- Hydronics Application Specialist --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Inspector/Consultant</masterLabel>
+        <translation><!-- Inspector/Consultant --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>KOMPASS Manager</masterLabel>
+        <translation><!-- KOMPASS Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>KOMPASS Supervisor</masterLabel>
+        <translation><!-- KOMPASS Supervisor --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Manager</masterLabel>
+        <translation><!-- Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Order Fulfillment Superv</masterLabel>
+        <translation><!-- Order Fulfillment Superv --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Our Brands Manager</masterLabel>
+        <translation><!-- Our Brands Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>President</masterLabel>
+        <translation><!-- President --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Safety Consultant</masterLabel>
+        <translation><!-- Safety Consultant --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Sales</masterLabel>
+        <translation><!-- Sales --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Service</masterLabel>
+        <translation><!-- Service --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Set Team Leader</masterLabel>
+        <translation><!-- Set Team Leader --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Set Team Member</masterLabel>
+        <translation><!-- Set Team Member --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Set/Remodel Manager</masterLabel>
+        <translation><!-- Set/Remodel Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Surge Set Team Member</masterLabel>
+        <translation><!-- Surge Set Team Member --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Technical Support</masterLabel>
+        <translation><!-- Technical Support --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Territory Manager</masterLabel>
+        <translation><!-- Territory Manager --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>VP of Environmental</masterLabel>
+        <translation><!-- VP of Environmental --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>VP of Florida Region</masterLabel>
+        <translation><!-- VP of Florida Region --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

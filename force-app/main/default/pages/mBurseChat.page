@@ -1,0 +1,31 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=f696683e-2f24-4e6c-97b0-b3da9d4e0a8e"> </script>
+    <script type="text/javascript">
+        var lexOrigin = location.origin;
+        /* var lexOrigin ="https://mburse.force.com"; 
+          var resultActive = false; */
+          window.zESettings = {
+                webWidget: {
+                position: { horizontal: 'left'}
+                }
+          };
+          zE(function() {
+            zE.activate();
+         });
+          zE('webWidget:on', 'open', function() {
+                console.log('The widget has been opened!');
+            });
+            zE('webWidget:on', 'close', function() {
+                console.log('The widget has been closed!');
+            });
+        // Listening from iframe ! mBurseDownloadMlogComponent - LWC component
+        window.addEventListener("message", function (event) {
+            if (event.origin !== lexOrigin) {
+                // Not the expected origin: reject message!
+                return;
+            }
+         
+            console.log("Received message", event)
+        })
+    </script>
+</apex:page>

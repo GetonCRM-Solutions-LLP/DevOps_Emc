@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Remove_Current_Month_Reimbursement__c</fullName>
+    <formula>IF(MONTH(TODAY())&lt;10,IF(Month__c == &apos;0&apos; + TEXT(MONTH(TODAY()))+&apos;-&apos;+ TEXT(YEAR(TODAY())), true, false),IF(Month__c == TEXT(MONTH(TODAY()))+&apos;-&apos;+ TEXT(YEAR(TODAY())), true, false))</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Remove Current Month Reimbursement</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

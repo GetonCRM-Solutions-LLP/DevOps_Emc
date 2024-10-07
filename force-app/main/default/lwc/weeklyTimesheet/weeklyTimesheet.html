@@ -1,0 +1,134 @@
+<template>
+    <div class="transition">
+        <template lwc:if={isTimesheet}>
+            <div>
+                <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_medium font-bold">{headerTitle}</div>
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style">
+                {payPeriod}
+            </div>
+            <div class="container">
+                <div>
+                    <table class="slds-table slds-table_cell-buffer slds-table_col-bordered slds-table_bordered mileage">
+                        <thead class="">
+                            <tr class="slds-line-height_reset">
+                                <template lwc:if={columns}>
+                                    <template for:each={columns} for:item="head">
+                                        <th class="header-title" scope="col" key={head.id}>
+                                            {head.name}
+                                        </th>
+                                    </template>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template for:each={rows} for:item="trip">
+                                <tr key={trip.id}>
+                                    <template for:each={trip.keyFields} for:item="mapKey">
+                                        <td key={mapKey.key}>{mapKey.value}</td>
+                                    </template>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="slds-p-top_small">
+                    <table class="slds-table slds-table_cell-buffer slds-table_header-hidden footer-table">
+                            <tr>
+                                <td>
+                                    <div class="check-input slds-checkbox"> 
+                                        <input type="checkbox" name="confirm-checkbox" id="confirm-check" class="checkbox-input confirm-check" onchange={confirmToggle}>
+                                        <label class="slds-checkbox__label" for="confirm-check">
+                                            <span class="slds-checkbox_faux"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="font-style text-td">{confirmMessage}</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="check-input slds-checkbox"> 
+                                        <input type="checkbox" name="error-checkbox" id="error-check" class="checkbox-input error-check" onchange={errorToggle}>
+                                        <label class="slds-checkbox__label"  for="error-check">
+                                            <span class="slds-checkbox_faux"></span>
+                                        </label>
+                                    </div>
+                                </td>
+                                <td class="font-style text-td" id="Error_td" >{errorMessage}</td>
+                            </tr>
+                    </table>
+                </div>
+    
+                <div class="footer-button slds-text-align_center slds-p-top_x-large">
+                    <button class="slds-btn btn-outline slds-btn-report waves-effect bc-blue waves-light" onclick={downloadAllTrips} lwc:if={downloadBtn}>
+                        Download detailed report
+                    </button>
+                    <button class="slds-btn slds-btn-primary slds-btn-report waves-effect bc-blue waves-light" disabled={submitRequestBtn} onclick={submitRequest}>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </template>
+        <template lwc:else>
+            <div>
+                <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_medium font-bold">Instruction</div>
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_small font-style">
+                Please follow these instructions to correct your <br/> {message}
+            </div>
+            <div class="container">
+                <div class="steps-div">
+                    <ul class="slds-has-block-links_space">
+                        <li>
+                            <div class="instruction-div">
+                                <span class="steps-num">Step 1.</span><div>Review your trips (Ensure all trips are categorized properly)</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="instruction-div">
+                                <span class="steps-num">Step 2.</span><div>Add or edit your mileage</div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="instruction-div">
+                                <span class="steps-num">Step 3.</span><div>Re-sync your mileage</div>
+                            </div>
+                            <div class="video-container">
+                                <iframe width="457" height="215" src="https://www.youtube.com/embed/Yc21UqzygTU" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="allowfullscreen"></iframe>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="instruction-div">
+                                <span class="steps-num">Step 4.</span><div class="last-info">Do not close this window until your sync is complete!<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26" fill="none">
+                                    <circle cx="13" cy="13" r="12.0394" stroke="#7ABB4A" stroke-width="1.92118"/>
+                                    <path d="M14.5039 14.6C14.4759 15.2291 13.9578 15.7247 13.328 15.7247C12.6993 15.7247 12.1816 15.2306 12.1523 14.6026L11.8546 8.22386C11.8156 7.38719 12.4834 6.6875 13.3209 6.6875C14.1572 6.6875 14.8246 7.38514 14.7874 8.22061L14.5039 14.6ZM14.474 19.8015C14.1527 20.1229 13.7711 20.2835 13.3293 20.2835C12.8875 20.2835 12.5059 20.1229 12.1846 19.8015C11.8766 19.4802 11.7227 19.1053 11.7227 18.6769C11.7227 18.2351 11.8766 17.8535 12.1846 17.5322C12.5059 17.2109 12.8875 17.0502 13.3293 17.0502C13.7711 17.0502 14.1527 17.2109 14.474 17.5322C14.7953 17.8535 14.956 18.2351 14.956 18.6769C14.956 19.1053 14.7953 19.4802 14.474 19.8015Z" fill="#7ABB4A"/>
+                                  </svg></div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="instruction-div">
+                                <div class="check-input slds-checkbox complete-step-chk"> 
+                                    <input type="checkbox" name="error-checkbox" id="complete-check" class="checkbox-input" onchange={completeToggle}>
+                                    <label class="slds-checkbox__label"  for="complete-check">
+                                        <span class="slds-checkbox_faux"></span>
+                                    </label>
+                                </div>
+                                <div class="complete-step">I have completed all of the steps</div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+    
+                <div class="footer-button slds-text-align_center slds-p-top_x-small">
+                    <!-- <button class="slds-btn btn-outline slds-btn-report waves-effect bc-blue waves-light" onclick={downloadAllTrips} lwc:if={downloadBtn}>
+                        Download detailed report
+                    </button> -->
+                    <button class="slds-btn slds-btn-primary slds-btn-report waves-effect bc-blue waves-light" disabled={submitRequestSyncBtn} onclick={submitRequestSync}>
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </template>
+    </div>
+    <c-export-excel></c-export-excel>
+</template>

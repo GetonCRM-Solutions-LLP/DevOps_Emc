@@ -1,0 +1,22 @@
+<apex:page standardController="Contact"  extensions="RG_AttachmentforContact">
+<Style>
+.headerRow div{
+padding-left:12px;
+
+}
+.headerRow{
+text-align:left;
+
+}
+</style>
+<!--<apex:form id="frm" style="margin-top:10px; margin-left:110px; margin-Right:110px;">-->
+<apex:pageBlock rendered="{!AttachList.size>0}"  >
+<apex:pageBlockTable value="{!AttachList}" var="attach" style="text-align:left">
+<apex:column value="{!attach.name}"  headerValue="Attachment" style="text-align:left"/>
+
+</apex:pageBlockTable>
+</apex:pageBlock>
+<!--</apex:form>-->
+
+  
+</apex:page>

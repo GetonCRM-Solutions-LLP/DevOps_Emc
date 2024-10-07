@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>PartTime_and_FullTime_Driver</name>
+        <label>PartTime and FullTime Driver</label>
+        <locationX>314</locationX>
+        <locationY>636</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>FulltimeandPartTimeDriverEmailTemplate</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Contact__r.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Approve your weekly mileage.</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Salary_Type_Driver_Email_Send</name>
+        <label>Salary Type Driver Email Send</label>
+        <locationX>50</locationX>
+        <locationY>636</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>SalaryTypeDriverEmail</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Contact__r.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>sendRichBody</name>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue> Approve your weekly mileage.</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>57.0</apiVersion>
+    <decisions>
+        <name>Check_for_Ermi_account</name>
+        <label>Check for Ermi account</label>
+        <locationX>611</locationX>
+        <locationY>276</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Ermi_Account</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact__r.AccountId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>001i000001LwNSmAAN</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Reimbursement_End_date_minus_1</targetReference>
+            </connector>
+            <label>Ermi Account</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_For_Salary_Type_Driver</name>
+        <label>Check For Salary Type Driver</label>
+        <locationX>182</locationX>
+        <locationY>516</locationY>
+        <defaultConnector>
+            <targetReference>PartTime_and_FullTime_Driver</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Part-time and Full-time</defaultConnectorLabel>
+        <rules>
+            <name>Salary_Type</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Contact__r.Driver_Type__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Driver - Salary</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Salary_Type_Driver_Email_Send</targetReference>
+            </connector>
+            <label>Salary Type</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Reimbursement_End_date_minus_1</name>
+        <label>Reimbursement End date minus 1</label>
+        <locationX>380</locationX>
+        <locationY>396</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>End_Date_Minus_1</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.End_Date__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>Enddateminus1</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_For_Salary_Type_Driver</targetReference>
+            </connector>
+            <label>End Date Minus 1</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Enddateminus1</name>
+        <dataType>Date</dataType>
+        <expression>TODAY()-1</expression>
+    </formulas>
+    <interviewLabel>Schedule Ermi mail {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Schedule Ermi mail</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>485</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>Check_for_Ermi_account</targetReference>
+        </connector>
+        <object>Bi_Weekly_Reimbursement__c</object>
+        <schedule>
+            <frequency>Weekly</frequency>
+            <startDate>2023-04-02</startDate>
+            <startTime>03:00:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>FulltimeandPartTimeDriverEmailTemplate</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium;&quot;&gt;Hi {!$Record.Contact__r.FirstName},&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium;&quot;&gt;Please select this link&amp;nbsp;&lt;/span&gt;&lt;a href=&quot;https://mburse.force.com/app/adminlogin&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium;&quot;&gt;HERE&lt;/a&gt;&lt;span style=&quot;font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium; color: rgb(0, 0, 0);&quot;&gt;&amp;nbsp;on a computer or tablet to confirm or correct your Weekly Time and Mileage for the week of {!$Record.Name}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium;&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium;&quot;&gt;The mBurse Team&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://mburse--partialdev.sandbox.file.force.com/sfc/servlet.shepherd/version/download/0688H000001PO2r?asPdf=false&amp;amp;operationContext=CHATTER&quot; alt=&quot;Logo.jpeg&quot;&gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <textTemplates>
+        <name>SalaryTypeDriverEmail</name>
+        <isViewedAsPlainText>false</isViewedAsPlainText>
+        <text>&lt;p&gt;&lt;span style=&quot;color: rgb(0, 0, 0); font-family: &amp;quot;Times New Roman&amp;quot;; font-size: medium; background-color: rgb(255, 255, 255);&quot;&gt;Hi {!$Record.Contact__r.FirstName},&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: medium; font-family: &amp;quot;Times New Roman&amp;quot;; color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);&quot;&gt;Please select this link&amp;nbsp;&lt;/span&gt;&lt;a href=&quot;https://mburse.force.com/app/adminlogin&quot; rel=&quot;noopener noreferrer&quot; target=&quot;_blank&quot; style=&quot;font-size: medium; font-family: &amp;quot;Times New Roman&amp;quot;; background-color: rgb(255, 255, 255);&quot;&gt;HERE&lt;/a&gt;&lt;span style=&quot;font-size: medium; font-family: &amp;quot;Times New Roman&amp;quot;; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);&quot;&gt;&amp;nbsp;on a computer or tablet to confirm or correct your Mileage for the week of {!$Record.Name}.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: medium; font-family: &amp;quot;Times New Roman&amp;quot;; color: rgb(0, 0, 0);&quot;&gt;Regards,&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot;font-size: medium; font-family: &amp;quot;Times New Roman&amp;quot;; color: rgb(0, 0, 0);&quot;&gt;The mBurse Team&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;img src=&quot;https://mburse--partialdev.sandbox.file.force.com/sfc/servlet.shepherd/version/download/0688H000001PO2w?asPdf=false&amp;amp;operationContext=CHATTER&quot; alt=&quot;Logo.jpeg&quot;&gt;&lt;/p&gt;</text>
+    </textTemplates>
+    <variables>
+        <name>CCEmail</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <value>
+            <stringValue>paras.dhanani@getoncrm.com</stringValue>
+        </value>
+    </variables>
+</Flow>

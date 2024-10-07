@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>High_Risk_Mileage__c</fullName>
+    <formula>(Mileage__c &gt; 250 || ( Mileage__c &gt; 0 &amp;&amp; (Day_Of_Week__c = &apos;Sunday&apos; || Day_Of_Week__c = &apos;Saturday&apos;)) || Origin_Equal_Destination__c = true || (Mileage__c &gt; 100 &amp;&amp; Tracing_Style__c = &apos;Manual GPS Tracking&apos;) || (Mileage__c &gt; 150 &amp;&amp; Tracing_Style__c = &apos;App Manual Entry&apos;) || (Mileage__c &gt; 150 &amp;&amp; Tracing_Style__c = &apos;Web Manual Entry&apos;) || Time_In_High_Risk__c = true)&amp;&amp;ISPICKVAL( Activity__c ,&quot;Business&quot;)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>High Risk Mileage</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

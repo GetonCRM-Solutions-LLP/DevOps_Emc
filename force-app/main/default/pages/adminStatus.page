@@ -1,0 +1,463 @@
+<apex:page showHeader="false" sidebar="false" controller="adminstatuscontroller" standardStylesheets="false">
+    <link rel='stylesheet' href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}" type='text/css' media='all'/>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="{!$Resource.Table2Excel}"> </script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- <apex:includeScript value="{!URLFOR($Resource.tabletoscv,'/tabletocsv/table2csv.js')}" ></apex:includeScript> -->
+    
+    <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+    <style>
+        .panel-group .panel-footer
+        {
+            float: left;
+            width: 100%;
+        }
+        .panel.panel-default
+        {
+            float: left;
+            width: 100%;
+        }
+        .widthundred
+        {
+            width: 100%;
+        }
+        .displaynone
+        {
+            display:none !important;
+        }
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {   
+            background-color: #5bc0de !important;    
+        }
+    </style>
+    <apex:form id="frm">
+        <apex:actionFunction name="updatestatus_function" action="{!updatestatus}" reRender="">
+            <apex:param id="status" name="status" value="" assignTo="{!obj_status}" />
+            <apex:param id="category" name="category" value="" assignTo="{!obj_category}" />
+        </apex:actionFunction>
+        <div class="container">
+            <div class="row">
+                <div class="panel-group">
+                    <div class="panel with-nav-tabs panel-default">
+                        <div class="panel-heading">
+                            <ul class="nav nav-tabs">
+                                <!--<li><a href="#tab1default" data-toggle="tab">Driver Packet</a></li>                              
+                                <li><a href="#tab2default" data-toggle="tab">Driver Meeting</a></li> -->
+                                <!-- <li><a href="#tab3default" data-toggle="tab">Signed Packet</a></li> -->
+                               <!-- <li><a href="#tab4default" data-toggle="tab">Insurance</a></li>
+                                <li id="mvrcheck"><a href="#tab5default" data-toggle="tab">MVR Check</a></li> -->
+                                <li class="active" id="Compliance"><a href="#tab6default" data-toggle="tab">Compliance</a></li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                               <!-- <div class="tab-pane fade" id="tab1default">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Being Generated">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Sent for Signatures" >
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Waiting for Signatures">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Complete">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade" id="tab2default">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" id="sent" value="Invite Sent to Driver">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" id="Scheduled" value="Driver Scheduled Meeting" >
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Driver Completed Meeting" id="completed">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Driver Did not Attend" id="didnotattaend">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class="tab-pane fade" id="tab3default">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Sent">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Driver Signed" >
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="HR Signed">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <apex:commandButton styleClass="btn btn-info widthundred" value="Completed">
+                                                        </apex:commandButton>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                           <!--     <div class="tab-pane fade" id="tab4default">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                    </div>
+                                                    <apex:outputPanel rendered="{!obj_attachementsize==0}">
+                                                    <div class="col-md-4">
+                                                        <h5>No Insurance Documents Found</h5>
+                                                    </div>
+                                                        
+                                                        
+                                                    </apex:outputPanel>
+                                                    <apex:outputPanel rendered="{!obj_attachementsize>0}">
+                                                        <div class="col-md-4">
+                                                            <table class="table table-striped">
+                                                                <apex:repeat id="rptr_insurancedocs" var="obj_current" value="{!obj_driver_insurance}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a target="_blank" href="{!URLFOR($Action.Attachment.Download, obj_current)}">{!obj_current.name}</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </apex:repeat>
+                                                            </table>
+                                                        </div>
+                                                    </apex:outputPanel>
+                                                    <div class="col-md-4">
+                                                    </div>     
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                                    <div class="tab-pane fade" id="tab5default">
+                                        <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-4">
+                                                    </div>
+                                                    <apex:outputPanel rendered="{!obj_attachementsize==0}">
+                                                    <div class="col-md-4">
+                                                        <h5>No MVR Documents Found</h5>
+                                                    </div>
+                                                        
+                                                        
+                                                    </apex:outputPanel>
+                                                    <apex:outputPanel rendered="{!obj_attachementsize>0}">
+                                                        <div class="col-md-4">
+                                                            <table class="table table-striped">
+                                                                <apex:repeat var="obj_current" value="{!obj_driver_insurance}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <a target="_blank" href="{!URLFOR($Action.Attachment.Download, obj_current)}">{!obj_current.name}</a>
+                                                                        </td>
+                                                                    </tr>
+                                                                </apex:repeat>
+                                                            </table>
+                                                        </div>
+                                                    </apex:outputPanel>
+                                                    <div class="col-md-4">
+                                                    </div>     
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>-->
+                                                        
+                                <div class="tab-pane fade in active" id="tab6default">
+                                <!-- <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-12">
+                                                        <div class="col-md-3">
+                                                        </div> 
+                                                        <div class="col-md-6">
+                                                        <apex:outputPanel rendered="{!compliancestatus!='Yes'}">
+                                                        <h4> Compliance : {!compliancestatus} </h4>
+                                                        </apex:outputPanel>
+                                                        </div> 
+                                                        <div class="col-md-3">
+                                                        </div>                                                      
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                    <div class="col-md-12"> 
+                                                         <apex:repeat id="rptr_tax" value="{!wrapppertaxList}"  rendered="{!quarters>0}" var="current">
+                                                            <div class="col-md-3">
+                                                                <table class="table table-striped">
+                                                                    <tr>
+                                                                        <td colspan="2"><h4> Quarter {!current.quarterno} Tax Analysis </h4></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Mileage</b></td>
+                                                                        <td>
+                                                                        <apex:outputText value="{0, number, ###,###,##0.00}"><apex:param value="{!current.Mileages}"/>
+                                                                        </apex:outputText>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Total Reimbursements</b></td>
+                                                                        <td><apex:outputText value="{0, number, ###,###,##0.00}">$ <apex:param value="{!current.Reimbursements}"/>
+                                                                        </apex:outputText></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Max IRS Amount</b></td>
+                                                                        <td><apex:outputText value="{0, number, ###,###,##0.00}">$ <apex:param value="{!current.MaxIRSrate}"/>
+                                                                        </apex:outputText></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><b>Q{!current.quarterno} Tax Liability</b></td>
+                                                                         <td><apex:outputText value="{0, number, ###,###,##0.00}">$  <apex:param value="{!current.ImputedAmount}"/>
+                                                                        </apex:outputText></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </div>    
+                                                         </apex:repeat>                                                         
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <apex:outputPanel rendered="{!quarters>0}">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="form-horizontal">
+                                                <div class="form-group">
+                                                 <div class="col-md-12">
+                                                    <div class="col-md-3">
+                                                     
+                                                     <table class="table table-striped">
+                                                            <tr>
+                                                                <td colspan="2"><h4> Annual Tax Analysis </h4></td>
+                                                            </tr>        
+                                                            <tr>
+                                                                <td><b>Total Reimbursements</b></td>
+                                                                <td><apex:outputText value="{0, number, ###,###,##0.00}">$    
+                                                                           <apex:param value="{!TotalActualReimbursements}"/>
+                                                                        </apex:outputText></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Maximum Allowable</b></td>
+                                                                <td><apex:outputText value="{0, number, ###,###,##0.00}">$    
+                                                                           <apex:param value="{!ROUND(MaximumAllowable, 2)}"/>
+                                                                        </apex:outputText></td> 
+                                                            </tr>
+                                                            <tr>
+                                                                <td><b>Annual Tax Liability</b></td>
+                                                                 <td><apex:outputText value="{0, number, ###,###,##0.00}">$    
+                                                                           <apex:param value="{!AnnualTaxLiability}"/>
+                                                                        </apex:outputText></td>
+                                                            </tr>
+                                                        </table>
+                                                    
+                                                                                                         
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                     <table class="table table-striped">
+                                                        <tr>
+                                                            <td>
+                                                                <b>Annual Tax Liability Detail Report</b>
+                                                            </td>
+                                                            <td>
+                                                                <button type="Button" class="btn" id="DownloadExcel">
+                                                                Download
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <b>Annual Tax Liability Summary Report </b>
+                                                            </td>
+                                                            <td>
+                                                                 <button type="Button" class="btn" id="DownloadExcel2">
+                                                                Download 
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- <tr>
+                                                            <td>
+                                                                <b>Total Mileages and Reimbursements</b>
+                                                            </td>
+                                                            <td>
+                                                                <button type="Button" class="btn" id="DownloadExcel3">
+                                                                Download 
+                                                                </button>
+                                                            </td>
+                                                        </tr> -->
+                                                     </table> 
+                                                           
+                                                                                                     
+                                                    </div>
+                                                    <!-- <div class="col-md-3"> 
+                                                                                                        
+                                                    </div> -->
+                                                    <div class="col-md-3"> 
+                                                                                                        
+                                                    </div>
+                                                    </div>
+                                                </div>  
+                                            </div>
+                                        </div>
+                                    </div>
+                                     </apex:outputPanel> 
+                                    <div class="row displaynone">
+                                        <div class="col-md-12">                 
+                                            <table class="table" id="table1">
+                                                <tr>
+                                                    <th>Driver Name</th>
+                                                    <th>Employee ID</th>
+                                                    <th>Employee Email</th>
+                                                    <th>Month - Year</th>
+                                                    <th>Approved Mileage</th>
+                                                    <th>Total Reimbursements</th>
+                                                    <th>IRS Maximum Allowable</th>
+                                                    <th>Imputed Income</th>
+                                                </tr>
+                                                <apex:repeat value="{!obj_wrapperTaxReport}" var="Taxreport">
+                                                    <tr>
+                                                        <td>{!Taxreport.drivername}</td>
+                                                        <td>{!Taxreport.employeeid}</td>
+                                                        <td>{!Taxreport.emailid}</td>
+                                                        <td>{!Taxreport.month} - {!Taxreport.year}</td>
+                                                        <td>{!Taxreport.approvedmileages}</td>
+                                                        <td>{!Taxreport.totalreim}</td>
+                                                        <td>{!Taxreport.iRSallowable}</td>
+                                                        
+                                                        <td>{!Taxreport.imputedincome}</td>
+                                                    </tr>
+                                                </apex:repeat>
+                                                <tr>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>{!totalmileages}</td>
+                                                    <td>{!TotalActualReimbursements}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row displaynone">
+                                        <div class="col-md-12">
+                                            <table class="table" id="table2">
+                                                <tr>
+                                                    <th>Driver Name</th>
+                                                    <th>Employee ID</th>
+                                                    <th>Employee Email</th>
+                                                    <th>Imputed Income</th>
+                                                </tr>
+                                                <apex:repeat value="{!obj_wrapperTaxReport2}" var="Taxreport">
+                                                    <tr>
+                                                        <td>{!Taxreport.drivername}</td>
+                                                        <td>{!Taxreport.employeeid}</td>
+                                                        <td>{!Taxreport.emailid}</td>
+                                                        <td>{!Taxreport.imputedincome}</td>
+                                                    </tr>
+                                                </apex:repeat>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                                
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                        </div>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+         $('#DownloadExcel').click(function() {
+               $("#table1").table2excel( {
+                name: "Annual Tax Liability Detail Report",
+                filename: "Annual_Tax_Liability_Detail_Report" 
+               }); 
+               return false;
+
+           } );
+         $('#DownloadExcel2').click(function() {
+               $("#table2").table2excel( {
+                name: "Annual Tax Liability Report",
+                filename: "Annual_Tax_Liability_Report" 
+               }); 
+               return false;
+
+           } );
+            
+            $(document).ready(function() {
+                var isMVRCheck= '{!isMVRCheck}';
+                var quarters = {!quarters} ;
+                if(quarters>0)
+                {
+                    $("#Compliance").removeClass("displaynone");
+                    $("#tab6default").removeClass("displaynone");
+                }
+                else
+                {
+                    $("#Compliance").addClass("displaynone");
+                    $("#tab6default").addClass("displaynone");
+                }
+                if(isMVRCheck=='true')
+                {
+
+                    $("#mvrcheck").removeClass("displaynone");
+                    $("#tab5default").removeClass("displaynone");
+                }
+                else if(isMVRCheck =='false')
+                {
+                    
+                    $("#mvrcheck").addClass("displaynone");
+                    $("#tab5default").addClass("displaynone");
+                }      
+            });
+        </script>
+    </apex:form>
+</apex:page>

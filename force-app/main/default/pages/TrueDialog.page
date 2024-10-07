@@ -1,0 +1,70 @@
+<apex:page standardController="Account" extensions="TrueDIalogVFPageController"  lightningStylesheets="true" showHeader="false" sidebar="false" >
+     <apex:slds /> 
+     <apex:form >
+
+     <apex:actionFunction name="callAction" action="{!onSubmit}" />
+          <article class="slds-card">
+
+               <div class="slds-card__header slds-grid slds-assistive-text large">
+                    <header class="slds-media slds-media_center slds-has-flexi-truncate">
+                         <div class="slds-media__body">
+                         <h2 class="slds-card__header-title">
+                              <a href="#" class="slds-card__header-link slds-truncate" title="Card Header">
+                              <span>Card Header</span>
+                              </a>
+                         </h2>
+                         </div>
+                    </header>
+               </div>
+               <div class="slds-card__body slds-card__body_inner slds-p-around_large">
+                    <b>
+                    <apex:outputpanel rendered="{!(account.True_Dialog__c == false && hideSubmitButton==false)}">
+                         <b>  TrueDialog Checkbox is not selected in account record.So You can not migrate contact to truedialog.</b>
+                    </apex:outputpanel>
+
+                    <apex:outputpanel rendered="{!(account.True_Dialog__c == true && hideSubmitButton==false && contactCount>0 )}">
+
+                         Contact Available for Transfer to TrueDialog : {!contactCount} 
+                         <br/>Do you want to transfer contacts to true dialog?
+                    
+                    </apex:outputpanel>
+
+                     <apex:outputpanel rendered="{!contactCount==0 && account.True_Dialog__c == true }">
+
+                         No Contact Available For Migrating to TrueDialog.
+                    
+                    </apex:outputpanel>
+
+                    
+
+                    <apex:outputpanel rendered="{!hideSubmitButton==true}">
+                         <b>  A Batch is running in background.You will get a mail On Batch Completion.</b>
+                    </apex:outputpanel>
+                    </b>
+               </div>
+
+               <div class="slds-scope ">              
+                    <footer class="slds-card__footer">                                   
+                         <apex:commandbutton onClick="window.top.close();" value="Cancel" styleClass="slds-button slds-button_text-destructive "  /> 
+                       
+                         <apex:outputpanel rendered="{!(account.True_Dialog__c == true && contactCount != 0 && hideSubmitButton==false)}">
+                              <apex:commandButton action="{!onSubmit}" value="Submit"  styleClass="slds-button slds-button_success" style="margin: 10px;"  />  
+                         </apex:outputpanel>
+                    
+                    </footer>
+               </div >
+          </article>
+     </apex:form>
+
+
+     <script>
+        function closeWindow() {
+            alert(1);
+            window.self.close();
+        }
+        function closeWin() {
+         window.close();   // Closes the new window
+        }
+    </script>
+
+</apex:page>

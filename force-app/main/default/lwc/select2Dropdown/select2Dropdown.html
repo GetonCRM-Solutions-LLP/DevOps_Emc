@@ -1,0 +1,87 @@
+<template>
+    <div onclick={insideDivElement}>
+        <div class="slds-form-element__control">
+            <div class="slds-combobox_container">
+                <div class={classes}  tabindex="0" onblur={handleBlur}>
+                    <div class="slds-combobox__form-element slds-input-has-icon slds-input-has-icon_right" role="none">
+                        <div class="slds-form-element">
+                            <div class="slds-form-element__control">
+                                <div class={mainClass} onclick={handleFocus}>
+                                    <template lwc:if={selectedValue}>
+                                        <span class="selection__rendered" id="single-action-container" role="textbox"
+                                        aria-readonly="true">{selectedValue}</span>
+                                    </template>
+                                    <template lwc:else>
+                                        <span class="selection__rendered" role="textbox"
+                                        aria-readonly="true">{title}</span>
+                                    </template>
+                                    <template lwc:if={isOpen}>
+                                        <i  class="fa-solid fa-chevron-up sort_icon" style="position: absolute;
+                                        right: 11px;
+                                        top: 12px;"></i>
+                                    </template>
+                                    <template lwc:else>
+                                        <i  class="fa-solid fa-chevron-down sort_icon" style="position: absolute;
+                                        right: 11px;
+                                        top: 11px;"></i>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="listbox-id-4" class="slds-dropdown  slds-dropdown_fluid" role="listbox"
+                        onmousedown={handleDropdownMouseDown} onmouseup={handleDropdownMouseUp}
+                        onmouseleave={handleDropdownMouseLeave}>
+                        <span class="search--dropdown">
+                            <div>
+                                <div  class="slds-input-has-icon slds-m-horizontal_x-small slds-input-has-icon_right search-holder">
+                                    <div class="search-icon-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" fill="none">
+                                            <g clip-path="url(#clip0_711_5970)">
+                                                <circle cx="12.1096" cy="11.3827" r="8.11966" transform="rotate(49.1347 12.1096 11.3827)" stroke="#7ABB4A"
+                                                    stroke-width="1.88877" />
+                                                <rect x="20.5156" y="18.6641" width="9.5146" height="3.4445" rx="1.72225"
+                                                    transform="rotate(49.1347 20.5156 18.6641)" stroke="#7ABB4A" stroke-width="1.88877" />
+                                                <path d="M16.7891 16.8906L19.6187 20.1613" stroke="#7ABB4A" stroke-width="1.60896" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_711_5970">
+                                                    <rect width="30" height="30" fill="white" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <!-- <img class="search-icon" src={searchIcon} /> -->
+                                    </div>
+                                    <input  class={inputClasses}  type="text" placeholder="Search..." value={value}
+                                    onkeyup={handleChange} oninput={handleInput} onkeydown={handleKeyDown}/>
+                                </div>
+                            </div>
+                        </span>
+                        <span lwc:ref="ddContent" class="dropdown--results slds-dropdown_length-10">
+                            <ul class="slds-listbox slds-listbox_vertical" role="presentation">
+                                <template lwc:if={message}>
+                                    <li class="slds-listbox__item">
+                                        <span
+                                            class="no-message">{message}</span>
+                                    </li>
+                                </template>
+                                <template lwc:else>
+                                    <li for:each={tempOptions} for:item="option" key={option.value} role="presentation"
+                                        class={option.listclass}>
+                                        <div onclick={handleSelect} data-label={option.label} data-id={option.id} class={option.classes}
+                                            role="option" data-focused={option.focused}>
+                                            <span class="slds-media__body">
+                                                <span class="slds-truncate" title={option.label}>{option.label}</span>
+                                            </span>
+                                        </div>
+                                    </li>
+                                </template>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

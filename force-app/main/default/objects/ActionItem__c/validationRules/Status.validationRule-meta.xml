@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status</fullName>
+    <active>false</active>
+    <errorConditionFormula>IF(NOT(AND(ISPICKVAL(Status__c, &quot;Not Started&quot;),ISPICKVAL(Status__c, &quot;Requirement Confirmed By Client&quot;),ISPICKVAL(Status__c, &quot;Analyzed and Estimated&quot;))),IF(  AND(ISNULL(Start_Date__c),ISBLANK(Start_Date__c),ISBLANK(Effort_Estimation_In_Hours__c)),false, true),false)</errorConditionFormula>
+    <errorMessage>Please enter value of Start Date, End Date and Effort Estimation In Hours</errorMessage>
+</ValidationRule>

@@ -1,0 +1,58 @@
+<template>
+    <div class="transition">
+        <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_large  p_bottom font-style">
+          Select the green button to download and install mLog.
+        </div>
+        <div class="video-flow slds-p-bottom_large slds-p-top_large">
+            <div class="mright slds-m-left_x-large slds-m-right_large">
+                <div class="video-container">
+                    <template if:false={isPlay}>
+                        <div class="apple_icon_box slds-p-bottom_small"> 
+                            <img class="apple_icon slds-m-left_xx-small" src={appleUrl}/>
+                        </div>
+                        <div class="slds-align_absolute-center img-header">IOS Getting Started Video</div>
+                        <div class="slds-size_5-of-12 slds-align_absolute-center slds-m-top_small slds-p-bottom_large slds-p-right_xx-large slds-p-left_xx-large img-container">
+                            <img src={videoLogoUrl}  class="img-logo" onclick={playVideo} />
+                        </div>
+                    </template>
+                    <template if:true={isPlay}>
+                        <iframe width={videoWidth} height={videoHeight} src={iosVideoUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </template>
+                </div>
+            </div>
+            <div class="mleft">
+                <div class="video-container">
+                    <template if:false={isPlayAndroid}>
+                        <div  class="android_icon_box slds-p-bottom_small">
+                            <img class="android_icon slds-m-left_xx-small" src={androidUrl}/>
+                        </div>
+                        <div class="slds-align_absolute-center img-header">Android Getting Started Video</div>
+                        <div class="slds-size_5-of-12 slds-align_absolute-center slds-m-top_small slds-p-bottom_large slds-p-right_xx-large slds-p-left_xx-large img-container">
+                            <img src={videoLogoUrl} class="img-logo" onclick={playVideoAndroid} />
+                        </div>
+                    </template>
+                    
+                    <template if:true={isPlayAndroid}>
+                        <iframe width={videoWidth} height={videoHeight} src={androidVideoUrl} title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <div class="slds-clearfix slds-p-top_large">
+            <!-- <div class="footer-text  slds-align_absolute-center p_top font-style slds-text-heading_small">
+                <div><strong>Follow these tips and download instructions <a href={instructionUrlAndroid} target="_blank" onclick={handleRedirect}>here</a> and <a href={mLogTracking} target="_blank">here</a>:</strong>
+                    <ul class="slds-list_dotted slds-p-top_x-small">
+                        <li>Select the mLog icon on your phone to open the app to track mileage each day automatically</li>
+                        <li>Review your trips daily if possible, weekly at a minimum</li>
+                        <li>Reclassify trips as business, personal, or delete trips you don't want to share</li>
+                    </ul>
+                </div>
+            </div> -->
+            <div class="footer-text slds-align_absolute-center p_top font-style slds-text-heading_small slds-p-top_large">
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={getmLog}>
+                   Get mLog Now
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

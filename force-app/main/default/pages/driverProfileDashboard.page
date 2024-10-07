@@ -1,0 +1,273 @@
+<apex:page showHeader="false" title="Driver Dashboard" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false" controller="DriverDashboardLWCController">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/siteConfig.css')}" />
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!-- Css Part Start -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/fontawesome.min.css')}" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/all.css')}"  />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/animate.min.css')}" />
+        <!--Toaster -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+        <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+        <link href="{!URLFOR($Resource.minifiedApp)}" rel="stylesheet" />
+        <link href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/mainDashboard.css')}" rel="stylesheet" />
+    </head>
+    <apex:slds />
+    <apex:includeLightning /> 
+    <body>
+        <div id="locationSpinner" class="d-none">
+            <div class="spinner-background"></div>
+                <div class="loader">
+                    <div class="svg-container">
+                        <div style="position:relative">
+                        <img style="width: 170px;" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/map-loading.gif')}" />
+                        </div>
+                    </div>
+                    <div class="mbloader-text" id="locationText"></div>
+                </div>
+            </div>
+    
+        <div id="mSpinner" class="d-none">
+                <div class="spinner-background"></div>
+                    <div class="loader">
+                        <span class="text-loading" id="welcome-text"></span>
+                        <div class="loading-text-sub" id="subtext-welcome"></div>
+                        <div class="mbloader-text">Please wait while we load your profile</div>
+                        <div class="svg-container">
+                            <div style="position:relative">
+                                <img style="width: 180px;" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/Bar-style.gif')}" />
+                            </div>
+                        </div>
+                    </div>
+        </div>
+    
+        <div id="mLoader" class="d-none">
+            <div class="spinner-background opacity-spinner"></div>
+            <div class="loader">
+                <!-- <span class="text-loading">Loading...</span>-->
+                <span class="data-text-loading">Loading data…</span>
+                <div class="mbloader-text">This may take a few seconds</div>
+                <div class="svg-container">
+                    <div style="position:relative">
+                       <img style="width: 180px;" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/Bar-style.gif')}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding-bottom: 24px" id="mainLwc" />
+        <c:mBurseChatBot />
+    </body>
+    <script>
+          var nameOfUser, ProfileId, videoWrapper, performanceProfile, url , path, meeting, userLogin, activationDate, systemNotification, chartDetail,
+                   chartlabels = [], chartDataValue = [{"Mileagechart": {}, "Reimbursementchart": {}}], activationDate = "", mileage = [], reimbursement = [],
+                   averageReimbursement = [], averageMileage = [], reimb, mil, avgReimb, avgMileage, midMonth = [];
+            url = location;
+            path = url.origin + url.pathname + url.search;
+            videoWrapper = {!videoCustom};
+            performanceProfile = window.performance.getEntriesByType("navigation")[0].type;
+            nameOfUser = '{!contactName}';
+            userLogin = '{!userLoginCount}';
+            ProfileId = "{!$User.ProfileId}";
+            activationDate = '{!activationDate}';
+            updatedDate = '{!activationDateForBatch}';
+            systemNotification = '{!systemNotification}';
+            meeting = '{!ScheduleGotoMeeting}';
+            last2Year = '{!last2Month}';
+            const idParamValue = new URL(url).searchParams.get('id');
+            /* Toaster Option */
+            this.setOptions = function () {
+                toastr.options.positionClass = "toast-top-right";
+                toastr.options.closeButton = true;
+                toastr.options.progressBar = false;
+                toastr.options.fadeOut = 5000;
+            }
+
+            this.setOptions();
+
+            fetch("/app/c/LWCLightningApp.app?aura.format=JSON&aura.formatAdapter=LIGHTNING_OUT")
+            .then(function (response) {
+                if (response.status !== 200) {
+                    var url , path;
+                    url = location;
+                    path = url.origin + "/app/secur/logout.jsp";
+                    document.getElementById("mLoader").classList.add("d-none");
+                    document.getElementById("locationSpinner").classList.add("d-none");
+                    document.getElementById("mSpinner").classList.add("d-none");
+                    location.replace(path);
+                }
+            })
+            .catch(function (error) {
+                ///if status code 401...
+            });
+           
+
+           function sortByMonth(arr) {
+                var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                arr.sort(function (a, b) {
+                    return months.indexOf(b.month)
+                        - months.indexOf(a.month);
+                });
+            }
+
+            function chartFormat(){
+                console.log("chartDetail", chartDetail)
+                chartDetail.forEach((ch) => {
+                                    if(ch.month != null && ch.month != undefined){
+                                        midMonth.push(ch.month);
+                                        chartlabels.push(ch.month);
+                                        activationDate = ch.ActivationDate;
+                                        reimb = (ch.reimbursement == null) ? null : ch.reimbursement;
+                                        mil = (ch.mileage == null) ? null : ch.mileage;
+                                        avgReimb = (ch.averagereimbursement == null) ? 0 :(ch.reimbursement == null) ? null : ch.averagereimbursement;
+                                        avgMileage = (ch.averageMileage == null) ? 0 : (ch.mileage == null) ? null : ch.averageMileage;
+                                        averageReimbursement.push(avgReimb);
+                                        averageMileage.push(avgMileage);
+                                        reimbursement.push(reimb);
+                                        mileage.push(mil);
+                                    }
+                                })
+                                chartDataValue[0].Mileagechart.chartLabel = chartlabels;
+                                chartDataValue[0].monthName = midMonth;
+                                chartDataValue[0].Mileagechart.date = activationDate;
+                                chartDataValue[0].Mileagechart.labelA = "Monthly";
+                                chartDataValue[0].Mileagechart.dataA = mileage;
+                                chartDataValue[0].Mileagechart.labelB = "Average";
+                                chartDataValue[0].Mileagechart.dataB = averageMileage;
+                                chartDataValue[0].Reimbursementchart.chartLabel = chartlabels;
+                                chartDataValue[0].Reimbursementchart.date = activationDate;
+                                chartDataValue[0].Reimbursementchart.labelA = "Monthly";
+                                chartDataValue[0].Reimbursementchart.dataA = reimbursement;
+                                chartDataValue[0].Reimbursementchart.labelB = "Average";
+                                chartDataValue[0].Reimbursementchart.dataB = averageReimbursement;
+                            
+            }
+
+            function getChartDetail(){
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.DriverDashboardLWCController.getChartData}', idParamValue,
+                    function (result, event) {
+                        if (event.status) {
+                            let escapeResult = escapeSpecialChars(result)
+                            chartDetail = JSON.parse(escapeResult);
+                            // sortByMonth(chartDetail);
+                            if (chartDetail != null && chartDetail != undefined) {
+                                 chartFormat();
+                            }
+                        }
+                        console.log("chart--->", chartDataValue);
+                    }
+                )
+            }
+
+            function escapeSpecialChars(str){
+                return str
+                .replace(/\\'/g, "\'")
+                .replace(/\\&#39;/g, "\'")
+                .replace(/(&quot\;)/g,"\"");
+            }
+           
+            getChartDetail();
+         
+            function eventListener(element, evt, listener) {
+                element.addEventListener(evt, function(e) {
+                    //element.removeEventListener(evt, arguments.callee);
+                    return listener(e);
+                });
+            }
+            
+            $(document).ready(function(){ 
+                const appName = "c:LWCLightningApp";
+                const componentName = "c:driverDashboardFrame";
+                const targetElement =  document.querySelector("#mainLwc");
+                if(performanceProfile === 'navigate' || performanceProfile === 'back_forward'){
+                    document.querySelector("#mSpinner").classList.remove("d-none");
+                    document.querySelector("#subtext-welcome").innerText = (userLogin > 1) ? 'Welcome back to mDash' : 'Welcome to mDash';
+                    document.querySelector("#welcome-text").innerText = (nameOfUser === '') ? 'Hi!' : 'Hi ' + nameOfUser + '!'
+                }else if(performanceProfile === 'reload'){
+                    document.querySelector("#mLoader").classList.remove("d-none");
+                }
+
+                const componentAttributes = {
+                    chartData: chartDataValue,
+                    profile: ProfileId,
+                    driverMeeting: meeting,
+                    loginCount: userLogin,
+                    last2Year: last2Year,
+                    activationDate: activationDate,
+                    updatedDate : updatedDate,
+                    systemNotification: systemNotification,
+                    customSetting: videoWrapper
+                };
+
+                $Lightning.use(
+                    appName, function () {
+                        $Lightning.createComponent( 
+                            componentName,
+                            componentAttributes,
+                            targetElement, 
+                            function (cmp) {
+                                console.log("Component Created Successfully");
+                                let mLoader, mSpinner, mainComponent = document.querySelector('c-driver-dashboard-frame');
+                                mLoader = document.querySelector("#mLoader");
+                                mSpinner = document.querySelector("#mSpinner");
+                                this.eventListener(mainComponent, 'show', function() {
+                                    mLoader.classList.add("d-none");
+                                    mSpinner.classList.add("d-none");
+                                });  
+                           
+                                this.eventListener(mainComponent, 'profile', function(e) {
+                                    if(e.detail === 'isShow'){
+                                        mLoader.classList.remove("d-none");
+                                    }else{
+                                        mLoader.classList.add("d-none");
+                                    }
+                                });  
+
+                                this.eventListener(mainComponent, 'toast', function() {
+                                    toastr.error('No mileage');
+                                });  
+
+                                this.eventListener(mainComponent, 'toastmessage', function(e) {
+                                    if (e.detail.type === 'error') {
+                                        toastr.error(e.detail.message)
+                                    } else if (e.detail.type === 'success') {
+                                        toastr.success(e.detail.message)
+                                    } else if (e.detail.type === 'info') {
+                                        toastr.info(e.detail.message)
+                                    }
+                                });  
+
+                                this.eventListener(mainComponent, 'sent', function(e) {
+                                    if(e.detail.contactEmail != undefined && e.detail.contactPhone != undefined){
+                                        toastr.success("The email was sent to "+ e.detail.contactEmail + " as well as a text message to " + e.detail.contactPhone +". Please check your email and text message to get started.") //  + " as well as a text message to " + contactPhone  Please check your email and text message to get started
+                                    }else{
+                                        if(e.detail.contactEmail != undefined){
+                                            toastr.success("The email was sent to "+ e.detail.contactEmail +". Please check your email to get started.")
+                                        }
+                                    }
+                                }); 
+
+                                this.eventListener(mainComponent, 'senterror', function(e) {
+                                    toastr.error(e.detail)
+                                }); 
+
+                                this.eventListener(mainComponent, 'location', function(e) {
+                                    if(e.detail != 'Hide'){
+                                        mLoader.classList.remove("d-none");
+                                    }
+                                    else{
+                                        mLoader.classList.add("d-none");
+                                    }
+                                }); 
+                            }
+                        );
+                    }
+                );
+            })
+
+          
+    </script>
+</apex:page>

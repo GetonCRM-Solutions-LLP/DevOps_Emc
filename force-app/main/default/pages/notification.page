@@ -1,0 +1,17 @@
+<apex:page standardController="Contact">
+  <apex:pageBlock >
+  <apex:pageBlockTable value="{!Contact.Employee_Reimbursements__r}" var="Item">
+  <apex:column value="{!Item.Name}"/>
+  
+       <apex:column value="{!Item.Month__c}"/>
+       <apex:column value="{!Item.MPG__c}"/>
+       <apex:column value="{!Item.Monthly_Mileage__c}"/>
+       <apex:column value="{!Item.Fuel_Price__c}"/>
+       <apex:column value="{!Item.Maintenance_and_Tires__c}"/>
+       <apex:column value="{!Item.Fixed_Amount__c}"/>
+       <apex:column value="{!Item.Total_Variable_Rate__c}"/>
+       <apex:column value="{!Item.Monthly_Variable_Amount__c}"/>
+  
+  </apex:pageBlockTable>
+  </apex:pageBlock>
+</apex:page>

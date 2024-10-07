@@ -1,0 +1,9 @@
+<apex:page >
+<apex:canvasApp applicationName="Tableau_Embed"
+    maxHeight="infinite"
+    width="100%"
+    parameters="
+    {
+        'location': '/t/ridgeant/views/EmployeeReimbursements/EmployeeReimbursements?:embed=y'
+    }" />
+</apex:page>

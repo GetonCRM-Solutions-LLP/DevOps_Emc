@@ -1,0 +1,32 @@
+<apex:page showHeader="false" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false">
+    <head>
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}"/>
+        <style>
+            body{
+               font-family: 'Proxima Nova' !important;
+            }
+        </style>
+        <script src="{!URLFOR($Resource.metaScript)}"></script>
+       
+    </head>
+    <apex:includeLightning />
+    
+    <div id="lwcDemo" />
+    <script>
+      //  var cmp;
+       // console.log(new google.maps.DirectionsService().route());
+        $Lightning.use("c:LWCLightningApp", function() {
+            $Lightning.createComponent("c:homePageComponent",{
+                //pass parameter values to lwc js controller
+               // objName : "Account" // optional parameter, I already declared value in lwc js controller.
+            },
+            "lwcDemo",
+            function(cmp){
+               // console.log(cmp.calculateAndDisplayRoute());
+            }
+           );
+        });
+        
+    </script>
+    
+</apex:page>

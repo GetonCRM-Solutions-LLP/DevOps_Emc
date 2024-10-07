@@ -1,0 +1,83 @@
+<apex:component >
+    <div class="back-btn my-3">
+        <h1 class="form-heading mb-30">{{empContact[0].Name}}</h1>
+    </div>
+    <div class="form-gray-divider"></div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xl-9 col-lg-9">
+            <div class="row">
+                <div class="col-12 col-md-4 col-sm-12 col-xl-4 col-lg-4">
+                    <div class="driver-detail-dashboard">
+                        <div class="locatio-info">
+                            <div class="driver-dashboard-address">
+                                <h5>Location</h5>
+                                <p>{{ empContact[0].MailingCity + ", " + empContact[0].MailingState + " " + empContact[0].MailingPostalCode}}</p>
+                            </div>
+                            <div class="driver-dashboard-address">
+                                <h5>Fixed Rate</h5>
+                                <p>${{ empContact[0].Fixed_Amount__c | number:2 }}</p>
+                            </div>
+                            <div class="driver-dashboard-address">
+                                <h5>Compliance</h5>
+                                <p>{{ empContact[0].compliancestatus__c }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-5 col-sm-12 col-xl-4 col-lg-5 ">
+                    <div class="col-12 col-md-12 col-lg-12 col-xl-12 pl-sm-0">
+                        <div class="driver-dashboard-milagedetail">
+                            <div class="row">
+                                <div class="col-3 col-sm-3 col-md-4 col-lg-3 col-xl-3 ">
+                                    <div class="flue-icon">
+                                        <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/fuelpump-icon.png')}" alt="icon"/>
+                                    </div>
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-8 col-lg-9 col-xl-9">
+                                    <div class="flue-icn-detail">
+                                        <h5>Fuel Price</h5>
+                                        <p ng-if="fuelprice == ''"></p>
+                                        <p ng-if="fuelprice != ''">${{fuelprice}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="driver-dashboard-milagedetail mt-2">
+                            <div class="row">
+                                <div class="col-3 col-sm-3 col-md-3">
+                                    <div class="flue-icon">
+                                        <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/car-icon.png')}" alt="icon"/>
+                                    </div>
+                                </div>
+                                <div class="col-9 col-sm-9 col-md-9">
+                                    <div class="flue-icn-detail">
+                                        <h5>Unapproved Mileage</h5>
+                                        <p ng-if="showunapprove">{{unapprovemileage | number:2}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-12 col-xl-4 col-lg-3 mb-3 mb-sm-0 mb-md-0 mt-3 mt-sm-0 mt-md-0">
+                    
+                    <div class="col-6 col-sm-6 col-md-6 float-right" ng-if="empContact.Account.Logo_Document_Id__c != undefined || empContact.Account.Logo_Document_Id__c != ''">
+                        <img class="img-fluid" ng-src="{{empContact[0].Account.Logo_Document_Id__c}}"></img>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12 col-xl-3 col-lg-3">
+            <div class="driver-dashboard-card">
+                
+                <div ng-if="empContact.Car_Image__c != undefined || empContact.Car_Image__c != ''">
+                    <img class="img-fluid img-fluid-width" ng-src="{{empContact[0].Car_Image__c}}"></img>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ empContact[0].Vehicle_Type__c }}</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:component>

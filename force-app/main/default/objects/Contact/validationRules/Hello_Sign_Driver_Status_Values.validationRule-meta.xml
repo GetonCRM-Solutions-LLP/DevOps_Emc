@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Hello_Sign_Driver_Status_Values</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(
+OR(
+ISBLANK(Hello_Sign_Status__c),
+Hello_Sign_Status__c  = &apos;awaiting_signature&apos;,
+Hello_Sign_Status__c  = &apos;signed&apos;
+)
+)</errorConditionFormula>
+    <errorDisplayField>Hello_Sign_Status__c</errorDisplayField>
+    <errorMessage>Field Value is not valid please add value as null or signed or awaiting_signature</errorMessage>
+</ValidationRule>

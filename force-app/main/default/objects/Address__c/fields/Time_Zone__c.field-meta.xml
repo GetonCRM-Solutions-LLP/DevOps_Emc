@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Time_Zone__c</fullName>
+    <label>Time Zone</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>America/Anchorage</fullName>
+                <default>false</default>
+                <label>(GMT-08:00) Alaska Daylight Time (America/Anchorage)</label>
+            </value>
+            <value>
+                <fullName>America/El_Salvador</fullName>
+                <default>false</default>
+                <label>(GMT-06:00) Central Standard Time (America/El_Salvador)</label>
+            </value>
+            <value>
+                <fullName>America/Chicago</fullName>
+                <default>false</default>
+                <label>(GMT-05:00) Central Daylight Time (America/Chicago)</label>
+            </value>
+            <value>
+                <fullName>Pacific/Honolulu</fullName>
+                <default>false</default>
+                <label>(GMT-10:00) Hawaii-Aleutian Standard Time (Pacific/Honolulu)</label>
+            </value>
+            <value>
+                <fullName>America/Phoenix</fullName>
+                <default>false</default>
+                <label>(GMT-07:00) Mountain Standard Time (America/Phoenix)</label>
+            </value>
+            <value>
+                <fullName>Pacific/Pitcairn</fullName>
+                <default>false</default>
+                <label>(GMT-08:00) Pitcairn Time (Pacific/Pitcairn)</label>
+            </value>
+            <value>
+                <fullName>US/Alaska</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Alaska</label>
+            </value>
+            <value>
+                <fullName>US/Central</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Central</label>
+            </value>
+            <value>
+                <fullName>US/Eastern</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Eastern</label>
+            </value>
+            <value>
+                <fullName>US/Hawaii</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Hawaii</label>
+            </value>
+            <value>
+                <fullName>US/Mountain</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Mountain</label>
+            </value>
+            <value>
+                <fullName>US/Pacific</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>US/Pacific</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

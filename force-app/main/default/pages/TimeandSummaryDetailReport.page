@@ -1,0 +1,84 @@
+<apex:page controller="TimeandSummaryDetailReportController" contentType="txt/xml#Time and Attendance Summary Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Time and Attendance Summary Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Dates</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Contact Name</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Email</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Driver Type</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Confirmed</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Confirmed Date/Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Initial Drive Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Initial Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Initial Total Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Initial Mileage  (mi)</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 1 Drive Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 1 Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 1 Total Hours</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 1 Mileage (mi)</Data></Cell>                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 2 Drive Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 2 Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 2 Total Hours</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 2 Mileage (mi)</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 3 Drive Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 3 Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 3 Total Hours</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Sync 3 Mileage (mi)</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Final Drive Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Final Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Final Total Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Last Login</Data></Cell>
+                </Row>
+                <apex:repeat value="{!mileageWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.dates}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.contactName}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.email}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.driverType}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.confirmTrips}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.confirmHours}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.initialDriveTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.initialStayTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.initiaTotalTime}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.intialmileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync1driveTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync1stayTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync1Hours}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.sync1Mileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync2driveTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync2stayTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync2Hours}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.sync2Mileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync3driveTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync3stayTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.sync3Hours}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.sync3Mileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.fnlDriveTime }</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.fnlStayTime }</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.fnlTotalTime }</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.loginHours}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

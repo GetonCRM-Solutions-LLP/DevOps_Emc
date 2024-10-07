@@ -1,0 +1,20 @@
+<apex:page controller="FindMissingFuelPriceController"  lightningStyleSheets="true">
+    <apex:slds />
+    <apex:form >
+        <br/>
+
+        &nbsp;&nbsp;<apex:outputLabel style="color:blue;font-size:16px;"><b>Find Missing Fuel Price</b></apex:outputLabel><br/><br/>
+        &nbsp;&nbsp;<apex:outputLabel >Month-Year:</apex:outputLabel>&nbsp;
+        <apex:selectList size="1" value="{!selectedValue}">
+            <apex:selectOptions value="{!dateMonthList}"></apex:selectOptions>
+        </apex:selectList>
+        &nbsp;&nbsp;<apex:outputLabel > Email:</apex:outputLabel>&nbsp;
+        <apex:inputText label="To" size="80" id="emailTo" value="{!emailTo}" />
+        &nbsp;&nbsp;<apex:commandbutton value="submit" action="{!submit}" rerender="outputTextId" />
+        <br/> <br/> 
+        &nbsp;&nbsp;
+        <apex:outputText style="color:red;" value="{!message}" id="outputTextId" />
+        
+    </apex:form>
+
+</apex:page>
