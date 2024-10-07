@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>GoTo Session</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>GoTo Sessions</value>
+    </caseValues>
+    <layouts>
+        <layout>GoTo Session Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- Session Performance Details --></label>
+            <section>Session Performance Details</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

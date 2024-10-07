@@ -1,0 +1,1438 @@
+<apex:page showHeader="false" title="Reports" sidebar="false" controller="ReportDetailsController" action="{!getRedirected}">
+     <head>
+        <apex:include pageName="EMC_Common_Head"/>
+        <apex:include pageName="EMC_Common_Scripts" />
+        <script src="{!URLFOR($Resource.modelJs)}"></script>
+        <script src="{!URLFOR($Resource.dirPagination)}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.2.61/jspdf.min.js"></script>
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/angular-sanitize.js')}"></script>
+        <script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/select.js')}"></script>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/select.css')}"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/select2.css')}"/>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/selectize.default.css')}"/>
+        <!--End Ui select dropdown by mitul-->
+
+        <style type="text/css">
+        .pagination {
+                display: inline-block;
+                padding-left: 0;
+                margin: 20px 0;
+                border-radius: 4px;
+            }
+            .pagination>li {
+                display: inline;
+            }
+            .pagination>li>a, .pagination>li>span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #78bc42;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+            .pagination>li:first-child>a, .pagination>li:first-child>span {
+                margin-left: 0;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+            .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+                    color: #777;
+                    cursor: not-allowed;
+                    background-color: #fff;
+                    border-color: #ddd;
+            }
+            .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+                    color: #78bc42;
+                    cursor: not-allowed;
+                    background-color: #fff;
+                    border-color: #ddd;
+            }
+            .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+                z-index: 3;
+                color: #fff;
+                cursor: default;
+                background-color: #78bc42;
+                border-color: #78bc42;
+            }
+            .toast-progress {
+                background-color: #000000 !important;
+            }
+            .toast-error {
+                background-color: #FF0000 !important;
+            }
+            #toast-container > div {
+                opacity: 5.8 !important;
+                border-radius: 3px 3px 3px 3px !important;
+                width: 100% !important;
+            }
+            .paginationformodal
+            {
+                margin: 0px 0px !important;
+            }
+            .paginationformodal1
+            {
+                margin: 0px 0 !important;
+            }
+            .piginationpages
+            {
+                color: #78bc42 !important;
+            }
+            .paginationformodal > a
+            {
+                color: #78bc42 !important;
+            }
+            .page-link
+            {
+                color: #78bc42 !important;
+            }
+            .page-link > a
+            {
+                color: #78bc42 !important;
+            }
+            table.dataTable thead th
+            {
+                padding: 10px 7px !important;
+            }
+            table.dataTable tbody td
+            {
+                padding: 5px 8px !important;
+            }
+            .table-nodata
+            {
+                text-align: center;
+            }
+            .disable-pagination{
+                pointer-events: none;
+            }
+            .spinner-background {
+                width: 100%;
+                height:100%;
+                background:#000;
+                opacity: 0.4;
+                top:0px;
+                left:0px;
+                position: fixed;
+                z-index:1000000;
+            }
+            .spinner-load {
+                position:fixed;
+                top:49%;
+                left:49%;
+                z-index:1000000;
+            }
+            .custom-dropdown{
+              background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%2328a745' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e")!important;
+              border-color: #28a745 !important;
+              padding-right: 2.25rem !important;
+              background-repeat: no-repeat !important;
+              background-position: center right calc(2.25rem / 4)!important;
+              background-size: calc(2.25rem / 2) calc(2.25rem / 2)!important;
+            }
+            .expenseBtn{
+                margin-left: 16px !important;
+            }
+            .ui-select-search{
+                font-size:16px !important;
+            }
+            .selectize-control.single .selectize-input:after {
+                display: contents !important;
+                content: ' ';
+            }
+            @media (min-width: 1200px){
+                .text-right1{
+                    text-align: right;
+                }
+                .pl-search{
+                    margin-left: -25px;
+                }
+                .ml-7{
+                    margin-left: 7px;
+                }
+            }
+            @media screen and (max-width: 767px) and (min-width: 320px){
+                .text-secondary{
+                    padding-left: 0;
+                }
+                .applybtn{
+                    margin-top: 13px;
+                    padding-left: 0;
+                }
+                .pl-search{
+                    margin-left: -16px;
+                }
+
+            }
+            @media screen and (max-width: 991px) and (min-width: 768px){
+                .applybtn{
+                    padding-left: 4px;
+                }
+                .pr{
+                    padding-right: 7px;
+                }
+                #example_filter input{
+                    width: 175px;
+                }
+                .text-right2{
+                    text-align: right;
+                }
+            }
+            @media screen and (max-width: 1024px) and (min-width: 992px){
+                .text-right1{
+                    padding-right: 6px;
+                }
+                .pr{
+                    margin-left: -45px;
+                }
+                .pl-search{
+                    margin-left: -77px;
+                }
+                .plr-0{
+                    padding-left: 3px !important;
+                }
+                .mr-6{
+                    margin-right: 6px;
+                }
+            }
+
+            .plr-0{
+                padding-left: 0;
+                padding-right: 0;
+            }
+            #example_filter {
+                position: relative;
+                margin-left: 3px !important;
+            }
+            .bg-transparent{
+                background-color: #efefef !important;
+                border: none;
+            }
+            /* AI-000236 - Starts */
+            #filtericon{
+                padding: 10px;
+                right: 0;
+                position: absolute;
+                display: block;
+                z-index: 4;
+                cursor: pointer;
+            }
+            #example_filter {
+                position: relative;
+                margin-left: 3px !important;
+            }
+             /* AI-000236 - Ends*/
+        </style>
+        <script type="text/javascript">
+            var app = angular.module('reportDetailModule',['ui.bootstrap','angularUtils.directives.dirPagination','ngSanitize','ui.select']);
+            app.filter('propsFilter', function() {
+                return function(items, props) {
+                var out = [];
+
+                if (angular.isArray(items)) {
+                var keys = Object.keys(props);
+
+                items.forEach(function(item) {
+                var itemMatches = false;
+
+                for (var i = 0; i < keys.length; i++) {
+                    var prop = keys[i];
+                    var text = props[prop].toLowerCase();
+                    if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                        itemMatches = true;
+                        break;
+                        }
+                    }
+                    if (itemMatches) {
+                        out.push(item);
+                    }
+                });
+                } else {
+                // Let the output be the input untouched
+                out = items;
+                }
+                return out;
+                };
+            });
+            app.controller('ReportDetailsController',['$scope','$filter',function($scope,$filter) {
+                var url_string = $(location).attr("href");
+                var url = new URL(url_string);
+                $scope.reportid = url.searchParams.get("reportid");
+                $scope.id = url.searchParams.get("id");
+                $scope.showteam = url.searchParams.get("showteam");
+                $scope.accid = url.searchParams.get("accid");
+                $scope.admindriver = false;
+                $scope.newArray = [];
+                $scope.admindriver = url.searchParams.get("admindriver");
+                $scope.plMAcc = '{!($Label.PLMarketing)}';
+                if($scope.admindriver == undefined || $scope.admindriver == ''){
+                    $scope.admindriver = false;
+                }
+                $scope.manId = url.searchParams.get("managerid");
+                $scope.manVisible = false;
+                if ($scope.manId == undefined || $scope.manId == '') {
+                    $scope.manVisible = false;
+                } else {
+                    $scope.manVisible = true;
+                }
+                var manDriverlist = {!managerdriverlist};
+
+                $scope.selectManagerFun = function(manager){
+                        $scope.selectedManager=manager.Id;
+                }
+                $scope.managerList = [];
+                 // AI-000226 START
+                $scope.SelectManagerName = {};
+                $scope.SelectManagerName = {Name: '---Select---',Id:''};
+                $scope.managerList = [$scope.SelectManagerName];
+                // AI-000226 END
+                $scope.search = "";
+
+                $scope.date = new Date();
+
+                if($scope.managerList == 'failed')
+                {
+                    $scope.managerList = [];
+                }
+                else
+                {
+                    angular.forEach(manDriverlist,function(item){
+                        $scope.managerList.push(item);
+                    });
+                }
+                $scope.managerList.sort(function(a, b){
+                
+                    if(a!='failed' && b!='failed')
+                    {
+                        var nameA=a.Name.toLowerCase(), nameB=b.Name.toLowerCase();
+                        if (nameA < nameB){ //sort string ascending
+                            return -1;
+                        }else if (nameA > nameB){
+                            return 1;
+                        }else{
+                        return 0; //default return value (no sorting)
+                        }
+                    }
+                    
+                })
+                $scope.keyPressed = function (keyEvent, len) {
+                        if (keyEvent.keyCode == 13 || (keyEvent.keyCode == 32 && !len)) {
+                            event.preventDefault();
+                        }
+                        // return keyEvent.which !== 32;
+                    };
+                $scope.report = {!obj_current_reportStr};
+                console.log($scope.report);
+                $scope.SPBSAcc = '{!($Label.SPBS_Account)}';
+                $scope.EngGypAcc = '{!($Label.NewEnglandGypsum)}';
+                $scope.reportname = $scope.report.Name;
+                $scope.headerfields = [];
+                $scope.numericheaderarray = [];
+                $scope.reporttype = $scope.report.Report_Type__c;
+                $scope.reportsoql = $scope.report.Report_Soql__c;
+                $scope.reportdatetimefields = [];
+                $scope.reportdatefields = [];
+                $scope.reportdatetimetotimefields = [];
+                $scope.reportbooleanfields = [];
+                $scope.reporttwodecimalfields = [];
+
+                if($scope.report.Boolean_Field__c != undefined)
+                {
+                    if($scope.report.Boolean_Field__c.includes(','))
+                    {
+                        $scope.reportbooleanfields = $scope.report.Boolean_Field__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.reportbooleanfields.push($scope.report.Boolean_Field__c.trim());
+                    }
+                }
+                if($scope.report.Numeric_Fields__c != undefined)
+                {
+                
+                    if($scope.report.Numeric_Fields__c.includes(','))
+                    {
+                        $scope.headerfields = $scope.report.Numeric_Fields__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.headerfields.push($scope.report.Numeric_Fields__c.trim());
+                    }
+                }
+
+                if($scope.report.Two_Decimal_Places__c != undefined){
+                    if($scope.report.Two_Decimal_Places__c.includes(','))
+                    {
+                        $scope.reporttwodecimalfields = $scope.report.Two_Decimal_Places__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.reporttwodecimalfields.push($scope.report.Numeric_Fields__c.trim());
+                    }
+                }
+
+                if($scope.report.Date_Time_Fields__c != undefined)
+                {
+                    if($scope.report.Date_Time_Fields__c.includes(','))
+                    {
+                        $scope.reportdatetimefields = $scope.report.Date_Time_Fields__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.reportdatetimefields.push($scope.report.Date_Time_Fields__c.trim());
+                    }
+                }
+                $scope.query1tosplit = $scope.report.Report_Soql__c.split('from');
+                $scope.queryfieldslist = $scope.query1tosplit[0].split('select')[1].trim().split(',');
+                if($scope.report.Date_Fields__c!= undefined)
+                {
+                    if($scope.report.Date_Fields__c.includes(','))
+                    {
+                        $scope.reportdatefields = $scope.report.Date_Fields__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.reportdatefields.push($scope.report.Date_Fields__c.trim());
+                    }
+                }
+                if($scope.report.Date_Time_To_Time__c!=undefined)
+                {
+                    if($scope.report.Date_Time_To_Time__c.includes(','))
+                    {
+                         $scope.reportdatetimetotimefields =  $scope.report.Date_Time_To_Time__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.reportdatetimetotimefields.push($scope.report.Date_Time_To_Time__c);
+                    }
+                }
+                if($scope.report.Report_Header__c!=undefined)
+                {
+                    if($scope.report.Report_Header__c.includes(','))
+                    {
+                         $scope.headerlisttosplit =  $scope.report.Report_Header__c.split(',');
+                    }
+                    else
+                    {
+                        $scope.headerlisttosplit.push($scope.report.Report_Header__c);
+                    }
+                }
+                if($scope.report.Use_Bussiness_Unit__c!=undefined)
+                {
+                    $scope.businessUnitSelectOrNot = $scope.report.Use_Bussiness_Unit__c;
+                }
+                if($scope.report.Use_Driver_List__c!=undefined)
+                {
+                     $scope.driverListSelectOrNot = $scope.report.Use_Driver_List__c;
+                }
+                if($scope.report.Use_Manager_List__c!=undefined)
+                {
+                    $scope.managerListSelectOrNot = $scope.report.Use_Manager_List__c;
+                }
+
+                $scope.reportformanagerordriver ='';
+                $scope.headerlist = [];
+                $scope.dataList = [];
+                $scope.headerlength =0;
+                if($scope.headerlisttosplit!=undefined)
+                {
+                   $scope.headerlength = $scope.headerlisttosplit.length;
+                }
+                $scope.emp = {
+                    startDate:'',
+                    endDate:''
+                }
+              
+                var headertoapifields = new Map();
+                for(var j = 0;j<$scope.queryfieldslist.length;j++)
+                {
+                    
+                    if($scope.queryfieldslist[j].includes('.'))
+                    {
+                        headertoapifields.set($scope.headerlisttosplit[j],$scope.queryfieldslist[j].split('.')[1]);
+                    }
+                    else
+                    {
+                        headertoapifields.set($scope.headerlisttosplit[j],$scope.queryfieldslist[j]);
+                    }
+                }
+              
+                var apifieldstoheader = new Map();
+                for(var j = 0;j<$scope.queryfieldslist.length;j++)
+                {
+                    if($scope.queryfieldslist[j].includes('.'))
+                    {
+                        apifieldstoheader.set($scope.queryfieldslist[j].split('.')[1],$scope.headerlisttosplit[j]);
+                    }
+                    else
+                    {
+                        apifieldstoheader.set($scope.queryfieldslist[j],$scope.headerlisttosplit[j]);
+                    }
+                }
+               
+                var numericheadertoapifields = new Map();
+                for(var j = 0;j<$scope.headerfields.length;j++){
+                     if(apifieldstoheader.has($scope.headerfields[j]))
+                     {
+                         numericheadertoapifields.set($scope.headerfields[j],apifieldstoheader.get($scope.headerfields[j]));
+                         $scope.numericheaderarray.push(numericheadertoapifields.get($scope.headerfields[j]));
+                     }
+                }
+               
+                var datetimefields = new Map();
+                for(var j = 0;j<$scope.reportdatetimefields.length;j++)
+                {
+                    if(apifieldstoheader.has($scope.reportdatetimefields[j]))
+                    {
+                        datetimefields.set($scope.reportdatetimefields[j],apifieldstoheader.get($scope.reportdatetimefields[j]));
+                    }
+                }
+
+                var booleanfields = new Map();
+                for(var j = 0; j<$scope.reportbooleanfields.length;j++)
+                {
+                    if(apifieldstoheader.has($scope.reportbooleanfields[j]))
+                    {
+                        booleanfields.set($scope.reportbooleanfields[j],apifieldstoheader.get($scope.reportbooleanfields[j]));
+                    }
+                }
+
+                var datefields = new Map();
+                for(var j = 0;j<$scope.reportdatefields.length;j++)
+                {
+                    if(apifieldstoheader.has($scope.reportdatefields[j]))
+                    {
+                        datefields.set($scope.reportdatefields[j],apifieldstoheader.get($scope.reportdatefields[j]));
+                    }
+                }
+                var datetotimefields = new Map();
+                for(var j = 0;j<$scope.reportdatetimetotimefields.length;j++)
+                {
+                    if(apifieldstoheader.has($scope.reportdatetimetotimefields[j]))
+                    {
+                        datetotimefields.set($scope.reportdatetimetotimefields[j],apifieldstoheader.get($scope.reportdatetimetotimefields[j]));
+                    }
+                }
+
+                var twodecimalfields = new Map();
+                for(var j = 0;j<$scope.reporttwodecimalfields.length;j++)
+                {
+                    if(apifieldstoheader.has($scope.reporttwodecimalfields[j]))
+                    {
+                        twodecimalfields.set($scope.reporttwodecimalfields[j],apifieldstoheader.get($scope.reporttwodecimalfields[j]));
+                    }
+                }
+
+                var temp = true;
+                if($scope.reporttype != 'Without Date Range')
+                {
+                    if($scope.emp.startDate == undefined || $scope.emp.endDate == undefined ||$scope.emp.startDate == '' || $scope.emp.endDate == '')
+                    {
+                        /*set the date */
+                        $scope.currentDate = new Date();
+                        
+                        $scope.defaultFromDate = new Date($scope.currentDate.getFullYear(), $scope.currentDate.getMonth() -1);
+                       
+                        $scope.defaultToDate = new Date($scope.currentDate.getFullYear(), $scope.currentDate.getMonth(), 0);
+                       
+                        $scope.emp.startDate = $scope.defaultFromDate;
+                        $scope.emp.endDate =  $scope.defaultToDate;
+                       
+                    }
+                }
+                else
+                {
+                    temp = true;
+                }
+                var getdataofdrivervar = "nodata";
+                    var getdataofmanagervar = "nodata";
+                    if ($scope.driverListSelectOrNot == true) {
+                        $scope.reportformanagerordriver = 'Driver';
+                        getdataofdrivervar = {!getdataofdriver}
+                    }
+                else if ($scope.managerListSelectOrNot == true) {
+                        $scope.reportformanagerordriver = 'Manager';
+                        getdataofmanagervar = {!getdataofmanager};
+                }
+                    if (getdataofdrivervar != "nodata") {
+                        $scope.getdataofmanager = getdataofdrivervar;
+                    }
+                    else if (getdataofmanagervar != "nodata") {
+                        $scope.getdataofmanager = getdataofmanagervar;
+                    }
+                    console.log($scope.getdataofmanager);
+                var map3 = new Map();
+                $scope.valueofkey = [];
+                for(var i = 0;i<$scope.getdataofmanager.length;i++)
+                {
+                    Object.keys($scope.getdataofmanager[i]).forEach(function(key){
+
+                        if(key != "attributes")
+                        {
+                            if(typeof $scope.getdataofmanager[i][key]=="object")
+                            {
+                                consolidatejson($scope.getdataofmanager[i][key],i);
+                            }
+                            else
+                            {
+                                if(apifieldstoheader.has(key))
+                                {
+                                    if(datetotimefields.has(key)){
+                                        $scope.timevalues = $filter('date')(new Date($scope.getdataofmanager[i][key]), "hh:mm a", 'UTC-5');
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.timevalues);
+                                    }
+                                    else if(datetimefields.has(key))
+                                    {
+                                        $scope.datevalues= $scope.getdataofmanager[i][key].split('T')[0].split('-');
+
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                    }
+                                    else if(datefields.has(key))
+                                    {
+                                        $scope.datevalues= $scope.getdataofmanager[i][key].split('-');
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                    }
+                                    else if(booleanfields.has(key))
+                                    {
+                                        $scope.booleanValues = ($scope.getdataofmanager[i][key] === true) ? 'Yes' : 'No';
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.booleanValues);
+                                    }
+                                    else if(twodecimalfields.has(key))
+                                    {
+                                        $scope.twodecimalValues = $scope.getdataofmanager[i][key].toFixed(2);
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.twodecimalValues);
+                                    }
+                                    else
+                                    {
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.getdataofmanager[i][key]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    map3.set(i,$scope.valueofkey);
+                  $scope.valueofkey = [];
+                }
+
+                $scope.finnalArr = [];
+                angular.forEach(map3, function(item, key) {
+                    $scope.arrayvalues = map3.get(key);
+                    $scope.finnalData = {};
+                        $scope.ind = -1;
+                        $scope.arrayvalues.forEach(function(element,index) {
+                        if(index>$scope.ind){
+                            let keyData=item[index];
+                            if (keyData === 'Variable Reimbursement') {
+                                    $scope.finnalData[keyData.replace(/\s/g, "")] = '$' + $scope.arrayvalues[index + 1]
+                            }else{
+                               $scope.finnalData[keyData.replace(/\s/g, "")]=$scope.arrayvalues[index+1]
+                             }
+                            for(i = 0 ; i < $scope.numericheaderarray.length; i++){
+                                if(keyData != 'Variable Rate'){
+                                    $scope.finnalData[keyData.replace(/\s/g, "")]=($scope.arrayvalues[index+1]).toLocaleString();
+                               }
+                            }
+                           
+                            $scope.ind = index+1;
+                            }
+                        });
+                        $scope.finnalArr.push($scope.finnalData);
+                    });
+            
+                 console.log("Final array", $scope.finnalArr);
+                $scope.pageSize = 250;
+                $scope.currentPage = 1;
+
+                function consolidatejson(getdata,i)
+                {
+                    Object.keys(getdata).forEach(function(key){
+                        if(key != "attributes")
+                        {
+                            if(typeof getdata[key]=="object")
+                            {
+                                consolidatejson(getdata[key],i);
+                            }
+                            else
+                            {
+                                if(apifieldstoheader.has(key))
+                                {
+                                    if(datetotimefields.has(key)){
+                                        $scope.timevalues = $filter('date')(new Date($scope.getdataofmanager[i][key]), "hh:mm a", 'UTC-5');
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.timevalues);
+                                    }
+                                   else if(datetimefields.has(key))
+                                    {
+                                        $scope.datevalues= getdata[key].split('T')[0].split('-');
+
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                    }
+                                    else if(datefields.has(key))
+                                    {
+                                        $scope.datevalues = getdata[key].split('-');
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                    }
+                                    else
+                                    {
+                                        $scope.valueofkey.push(apifieldstoheader.get(key),getdata[key]);
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+
+                $scope.showbtn = true;
+                $('#spinner').hide();
+                if($scope.reporttype == 'Without Date Range')
+                    $scope.showdatepicker = false;
+                else
+                    $scope.showdatepicker = true;
+
+                /* Toaster Option */
+                this.setOptions = function() {
+                    toastr.options.positionClass = "toast-bottom-right";
+                    toastr.options.closeButton = true;
+                    toastr.options.progressBar = true;
+                }
+                this.setOptions();
+                this.clear = function() {
+                    toastr.clear();
+                }
+                /* Toaster Option Complete with clear funtion */
+
+                $scope.relatedMileage = function(selectedManager, emp)
+                {                 
+                    if(selectedManager==undefined)
+                    {
+                        selectedManager ="";
+                    }
+               
+                  $('#spinner').show();
+                  Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ReportDetailsController.getAllReportSoql}',$scope.report.Report_Soql__c,$scope.report.Report_Type__c,selectedManager,emp.startDate,emp.endDate,$scope.id,$scope.accid,$scope.reportid,$scope.reportformanagerordriver,
+                    function(result, event){
+                            if(event.status && result != null)
+                            {
+                               $scope.$apply(function(){
+                                    $scope.getdataofmanager ="nodata";
+                                    $scope.getdataofmanager= JSON.parse(result);
+                                    $scope.sort("Month");
+                                    var map3 = new Map();
+                                    $scope.finnalArr = [];
+                                
+                                    for(var i = 0;i<$scope.getdataofmanager.length;i++)
+                                     {
+                                    Object.keys($scope.getdataofmanager[i]).forEach(function(key){
+                                        if(key != "attributes")
+                                        {
+                                            if(typeof $scope.getdataofmanager[i][key]=="object")
+                                            {
+                                                consolidatejson($scope.getdataofmanager[i][key],i);
+                                            }
+                                            else
+                                            {
+                                                if(apifieldstoheader.has(key))
+                                                {
+                                                    if(datetotimefields.has(key))
+                                                    {
+                                                        $scope.timevalues = $filter('date')(new Date($scope.getdataofmanager[i][key]), "hh:mm a", 'UTC-5');
+                                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.timevalues);
+                                                    }
+                                                   else if(datetimefields.has(key))
+                                                    {
+                                                        $scope.datevalues= $scope.getdataofmanager[i][key].split('T')[0].split('-');
+
+                                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                                    }
+                                                    else if(datefields.has(key))
+                                                    {
+                                                        $scope.datevalues= $scope.getdataofmanager[i][key].split('-');
+                                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.datevalues[1]+"/"+$scope.datevalues[2]+"/"+$scope.datevalues[0]);
+                                                    }
+                                                    else
+                                                    {
+                                                        $scope.valueofkey.push(apifieldstoheader.get(key),$scope.getdataofmanager[i][key]);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    map3.set(i,$scope.valueofkey);
+                                  $scope.valueofkey = [];
+                                }
+                            
+                                angular.forEach(map3, function(item,key) {
+                                
+                                    $scope.arrayvalues = map3.get(key);
+                                    $scope.finnalData = {};
+                                        $scope.ind = -1;
+                                        $scope.arrayvalues.forEach(function(element,index) {
+                                        if(index>$scope.ind){
+                                            let keyData=item[index];
+                                            $scope.finnalData[keyData.replace(/\s/g, "")]=$scope.arrayvalues[index+1]
+                                            for(i = 0 ; i < $scope.numericheaderarray.length; i++){
+                                                if(keyData != 'Variable Rate'){
+                                                    $scope.finnalData[keyData.replace(/\s/g, "")]=($scope.arrayvalues[index+1]).toLocaleString();
+                                                }
+                                             }
+                                            $scope.ind = index+1;
+                                            }
+                                        });
+
+                                        $scope.finnalArr.push($scope.finnalData);
+                                    console.log($scope.finnalArr);
+                                    });
+                                });
+                                $('#spinner').hide();
+                            }
+                    },{escape: false});
+                  
+                }
+                
+               
+
+                let headerArray=$scope.headerlisttosplit;
+                $scope.headerlisttosplit =[]
+                
+                headerArray.map(function(item){
+                    
+                    $scope.headerlisttosplit.push({
+                        key:item,
+                        alias:item.replace(/\s/g, "")
+                    })
+
+                });
+                
+                $scope.sortKey = $scope.headerlisttosplit[1].alias;//set the sortKey to the param passed
+                $scope.reverse = false;
+                let previousSortKey = "";
+                $scope.sort = function(keyname) {
+                    if(keyname != previousSortKey){
+                        $scope.reverse = false;
+                        previousSortKey=keyname;
+                    }
+                     /* AI - 000616 : added column name ComplianceStatus InsuranceDeclarationPage and ActiveDriver */
+                    if(keyname === 'Name' || keyname === 'Email' || keyname === 'CompletedOnboarding' || keyname === 'Insurance' || keyname === 'DriverName' || keyname === 'CoCode' || keyname === 'Manager' || keyname === 'ContactName'|| keyname === 'E-mail' || keyname === 'MileageApprover' || keyname === 'Status' || keyname === 'ComplianceStatus' || keyname === 'InsuranceDeclarationPage' || keyname === 'ActiveDriver' || keyname === 'WatchedDriverMeeting' || keyname === 'DriverSigned' || keyname === 'AdminSigned' || keyname === 'StartTime' || keyname === 'EndTime' || keyname === 'FromLocation' || keyname === 'ToLocation' || keyname === 'Notes' || keyname === 'Origin' || keyname === 'Destination' || keyname === 'FromLocationName' || keyname === 'FromLocationAddress' || keyname === 'ToLocationName'	|| keyname === 'ToLocationAddress' || keyname === 'TripType' || keyname === 'Tag' || keyname ==='DeactivatedBy' || keyname === 'Driver' || keyname === 'GLCode' || keyname === 'Sage100'){
+                        $scope.finnalArr.sort(function (a, b) {
+
+                                            var nameA = (a[keyname] == null) ? '' : (a[keyname].toLowerCase()),
+                                                nameB = (b[keyname] == null) ? '' : (b[keyname].toLowerCase())
+                                            if ($scope.reverse) {
+                                                if (nameA < nameB) //sort string ascending
+                                                    return -1
+                                                if (nameA > nameB)
+                                                    return 1
+                                                return 0 //default return value (no sorting)
+                                            } else {
+                                                if (nameA < nameB) //sort string ascending
+                                                    return 1
+                                                if (nameA > nameB)
+                                                    return -1
+                                                return 0 //default return value (no sorting)
+                                            }
+                                        })
+                    }
+                    if (keyname === 'Month' || keyname === 'FixedAmount'  || keyname === 'EmployeeID' || keyname === 'VariableReimbursement') {
+                                       $scope.finnalArr.sort(function (a, b) {
+                                            
+                                            var dateA = (a[keyname] == null) ? '' : (a[keyname]),
+                                                dateB = (b[keyname] == null) ? '' : (b[keyname])
+                                            if ($scope.reverse) {
+                                                if (dateA < dateB) //sort string ascending
+                                                    return -1
+                                                if (dateA > dateB)
+                                                    return 1
+                                                return 0 //default return value (no sorting)
+                                            } else {
+                                                if (dateA < dateB) //sort string ascending
+                                                    return 1
+                                                if (dateA > dateB)
+                                                    return -1
+                                                return 0 //default return value (no sorting)
+                                            }
+                                        })
+                    }
+                    if (keyname === 'TotalMileage' || keyname === 'StayTime'  || keyname === 'DriveTime' || keyname === 'Mileage' || keyname === 'MonthlyFixedAmount' || keyname === 'VariableAmount'  || keyname === 'VariableReimbursementRate' || keyname === 'TotalMonthlyReimbursement' || keyname === 'MonthlyVariableAmount' || keyname === 'MonthlyApprovedVariableAmount' || keyname === 'TotalApprovedMiles' || keyname === 'TotalApprovedVariable' || keyname === 'TotalReimbursement' || keyname === 'Division' || keyname === 'VariableRate' || keyname === 'ApprovedMileage' || keyname === 'ActualMileage' || keyname === 'NetMiles' || keyname === 'NetMileage' ||  keyname === 'TotalMileages' || keyname === 'Reimbursement') {
+
+                                $scope.finnalArr.sort(function (a, b) {
+                                            var nameA = (a[keyname] == null) ? '' : parseFloat(a[keyname]),
+                                                nameB = (b[keyname] == null) ? '' : parseFloat(b[keyname]);
+                                            if ($scope.reverse) {
+                                                if (nameA < nameB) //sort string ascending
+                                                    return -1
+                                                if (nameA > nameB)
+                                                    return 1
+                                                return 0 //default return valuscope.model.mileageList=e (no sorting)
+                                            } else {
+                                                if (nameA < nameB) //sort string ascending
+                                                    return 1
+                                                if (nameA > nameB)
+                                                    return -1
+                                                return 0 //default return value (no sorting)
+                                            }
+                                        })
+                    }
+                    if (keyname === 'ActivationDate' || keyname === 'DeactivatedDate' || keyname === 'DeactivationDate' || keyname === 'TripDate' || keyname === 'ApprovalDate' || keyname === 'LockDate') {
+                                       $scope.finnalArr.sort(function (a, b) {
+
+                                            var dateA = (a[keyname] == null) ? '' : new Date(a[keyname].toLowerCase()),
+                                                dateB = (b[keyname] == null) ? '' : new Date(b[keyname].toLowerCase())
+                                            if ($scope.reverse) {
+                                                if (dateA < dateB) //sort string ascending
+                                                    return -1
+                                                if (dateA > dateB)
+                                                    return 1
+                                                return 0 //default return value (no sorting)
+                                            } else {
+                                                if (dateA < dateB) //sort string ascending
+                                                    return 1
+                                                if (dateA > dateB)
+                                                    return -1
+                                                return 0 //default return value (no sorting)
+                                            }
+                                        })
+                    }
+
+                    $scope.reverse = !$scope.reverse;
+                    $scope.sortKey = keyname;
+                    /*console.log('keyname:--'+keyname);*/
+
+
+                }
+                $scope.showsearch = true;
+                $scope.totalRecords;
+                $scope.showData = [];
+                // $scope.showsearch = false;
+                $scope.currentPage = 1;
+
+                //Disable date
+                $scope.loadDatePicker = function(selectedDate) {
+                    loaddatepicker(selectedDate);
+                }
+
+                if($scope.report.Date_Fields__c){
+                    if ($scope.report.Date_Fields__c.includes("Activation_Date__c")) {
+                        $scope.sort("ActivationDate");
+                    } 
+                }
+               
+                // Concur Sync -->
+                $scope.submitExpense = function(){
+                    $('#spinner').show();
+                  Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ReportDetailsController.postTotalReimbursementForAllUser}',  $scope.accid,
+                        function (result, event) {
+                            if (event.status) {
+                                $scope.$apply(function () {
+                                    toastr.success('Expense is successfully send to triplog.');
+                                });
+                                $('#spinner').hide();
+                                setTimeout(function () {
+                                    location.reload();
+                                }, 2000);
+                            } else {
+                                toastr.error('Something went wrong');
+                            }
+
+                        }, { escape: false });
+                               
+                }
+                $scope.exportToExcel=function(){
+                 
+                    var title = [];
+                    var contentArr = [];
+                    var exportData = [];
+                    var contentData;
+                  
+                    $scope.finnalArr = angular.copy($scope.finnalArr);
+                 
+                    angular.forEach($scope.headerlisttosplit,function(item){
+                    
+                        title.push(item.key);
+                    });
+
+                    angular.forEach($scope.finnalArr,function(row){
+                        angular.forEach($scope.headerlisttosplit,function(header){
+                        
+                            contentArr.push(row[header.alias]);
+                         });
+                     
+                    });
+                  
+                    contentData =   _.chunk(contentArr,title.length);
+                    exportData = [title,...contentData];
+                    function getSheet(exportData){
+                     
+                                var ws = {};
+                                var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+                                  
+                                for(var R = 0; R != exportData.length; ++R) {
+                                    for(var C = 0; C != exportData[R].length; ++C) {
+                                        
+                                        if(range.s.r > R) range.s.r = R;
+                                        if(range.s.c > C) range.s.c = C;
+                                        if(range.e.r < R) range.e.r = R;
+                                        if(range.e.c < C) range.e.c = C;
+                                        var cell = {v: exportData[R][C] };
+                                        if(cell.v == null) continue;
+                                        var cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+                                       // console.log('cell', cell)
+                                        if(typeof cell.v === 'number') cell.t = 'n';
+                                        else if(typeof cell.v === 'boolean') cell.t = 'b';
+                                        else if(cell.v instanceof Date) {
+                                            cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                                            cell.v = datenum(cell.v);
+                                        }
+                                        else cell.t = 's';
+
+                                        ws[cell_ref] = cell;
+                                    }
+                                }
+                                if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+                                return ws;
+                    }
+                    function Workbook() {
+                                if(!(this instanceof Workbook)) return new Workbook();
+                                this.SheetNames = [];
+                                this.Sheets = {};
+                    }
+
+                     var wb = new Workbook() , ws = getSheet(exportData);
+
+                    $scope.FromDate = $filter('date')(new Date(), "MMddyyyyHHmmss");
+                    wb.SheetNames.push($scope.FromDate);
+                    wb.Sheets[$scope.FromDate] = ws;
+                    var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:false, type: 'binary'});
+                    function s2ab(s) {
+                                var buf = new ArrayBuffer(s.length);
+                                var view = new Uint8Array(buf);
+                                for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                                return buf;
+                    }
+                    $scope.rpname = $scope.reportname+' '+$scope.FromDate+".xls"
+                    saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), $scope.rpname);
+
+                }
+                $scope.exportToPdf = function() {
+                    $scope.FromDate = $filter('date')(new Date(), "MMddyyyyHHmmss");
+                    var rpname = $scope.reportname+' '+$scope.FromDate+".pdf"
+                    demoFromHTML(rpname);
+                }
+                $scope.createCSVFile = function() {
+                    $scope.FromDate = $filter('date')(new Date(), "MMddyyyyHHmmss");
+                    $scope.rpname = $scope.reportname+' '+$scope.FromDate+".pdf" 
+                    var tablehtml = jQuery('*[id*=maintablediv]')[0].outerHTML;       
+                    let date = new Date();
+                    export_table_to_csv(tablehtml,$scope.rpname + ' ' + date + '.csv');
+                }
+                function export_table_to_csv(html, filename) {
+                    var csv = [];
+                    var reg = /^0\d/g;
+                    var doc = document.implementation.createHTMLDocument("New Document");
+                    var p = doc.createElement("p");
+                    p.innerHTML = html;
+                    doc.body.appendChild(p);
+                    var rows = doc.querySelectorAll("table tr");
+
+                    for (var i = 0; i < rows.length; i++) {
+                    
+                        var row = [], cols = rows[i].querySelectorAll("td, th");
+
+                        for (var j = 0; j < cols.length; j++) {
+                            if(cols[j].innerText.trim().includes(',')){
+                                row.push('"'+cols[j].innerText.trim() +'"');
+                            } 
+                            if((cols[j].innerText.trim()).match(reg)){
+                                row.push('="' +cols[j].innerText.trim()+ '"');
+                            }
+                            else{
+                                if(!cols[j].innerText.trim().includes(',')){
+                                    row.push('="' +cols[j].innerText.trim()+ '"');
+                                }
+                             
+                            }
+                        }
+                    
+                        csv.push(row.join(","));
+                    }
+                    download_csv(csv.join("\n"), filename);
+                }
+                
+                function download_csv(csv, filename) {
+                    
+                    var csvFile;
+                    var downloadLink;
+                    csvFile = new Blob([csv], {type: "text/csv"});
+                    downloadLink = document.createElement("a");
+                    downloadLink.download = filename;
+                    downloadLink.href = window.URL.createObjectURL(csvFile);
+                    downloadLink.style.display = "none";
+                    document.body.appendChild(downloadLink);
+                    downloadLink.click();
+                }
+                $scope.printView = function() {
+                    createPDF();
+                }
+             
+            }]);
+        </script>
+    </head>
+    <body ng-app="reportDetailModule" ng-controller="ReportDetailsController" ng-cloak="true" >
+        <header>
+            <div class="main-header sticky" id="myHeader">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12 p-0">
+                            <nav class="navbar navbar-expand-md my-0 my-md-1 px-0">
+                                <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" ng-show="!admindriver" href="/app/admindashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">
+                                    <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)" alt="logo"/>
+                                </a>
+                                <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" ng-show="admindriver" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">
+                                    <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)" alt="logo"/>
+                                </a>
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                    <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+                                </button>
+                                <div class="collapse navbar-collapse flex-column col-12 col-sm-6 col-md-9 col-lg-9 col-xl-9 ml-3 ml-sm-0 ml-lg-0 align-items-end" id="collapsibleNavbar">
+                                    <ul class="navbar-nav flex-row">
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" ng-show="!admindriver && !manVisible" href="/app/admindashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">Dashboard</a>
+                                            <a class="nav-link text-white" ng-show="admindriver && !manVisible" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Dashboard</a>
+                                            <a class="nav-link text-white" ng-show="!admindriver && manVisible" href="/app/managerdashboardfromadmin?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Dashboard</a>
+                                            <a class="nav-link text-white" ng-show="admindriver && manVisible" href="/app/managerdashboardfromadmindriver?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Dashboard</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/MileageDashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Mileage</a>
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/MileageDashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">Mileage</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/roster?accid={{accid}}&id={{id}}&showteam={{showteam}}">Drivers</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/roster?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Drivers</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/roster?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Drivers</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/roster?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Drivers</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/ManageNotification?accid={{accid}}&id={{id}}&showteam={{showteam}}">Communications</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/ManageNotification?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Communications</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible && accid === plMAcc">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/ManageNotification?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Communications</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/ManageNotification?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Communications</a>
+                                        </li>
+                                        <li class="nav-item active" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}">Reports</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Reports</a>
+                                        </li>
+                                        <li class="nav-item active" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/reportlist?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Reports</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/reportlist?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Reports</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/driveradminmanagermydetail?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">My Details</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/driveradminmanagermydetail?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">My Details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="/app/secur/logout.jsp">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div id="copiedmsg" style="display:none;">
+            <div style="width: 100%; height:700px; background:#000; opacity: 0.4; top:0px; left:0px; position: fixed; z-index:105000;"></div>
+            <div class="dv_load" style="top: 40%;padding: 10px;left: 43%;  width: 150px;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                <span style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Copied to clipboard!</span>
+            </div>
+        </div>
+        <div id="spinner">
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <section class="container-fluid">
+            <div class="back-btn my-3">
+                <a ng-show="!admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}"><i class="fas fa-chevron-left"></i> Back</a>
+                <a ng-show="admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true"><i class="fas fa-chevron-left"></i> Back</a>
+            </div>
+            <h1 class="form-heading mb-30">{{reportname}}</h1>
+            <div class="form-divider"></div>
+            <form class="needs-validation col-xl-12 col-lg-12 col-md-12 col-sm-12" action="" novalidate ="true">
+                <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group-theme mb-0 row">
+                            <div class="col-12 col-sm-5 col-md-5 col-lg-5 col-xl-5 validate-div" ng-if="showdatepicker">
+                                <div class="row">
+                                    <label for="Date" class="col-xl-1 col-lg-1 col-md-2 col-sm-2 col-form-label form-lable text-secondary pl-0 mr-6">
+                                        Date
+                                    </label>
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 validate-div plr-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control rounded-0" ng-model="emp.startDate" ng-click="loadDatePicker1(emp.startDate);" id="adminreport-from" placeholder="Select Start Date" required="true" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="To" class="col-xl-2 col-lg-1 col-md-2 col-sm-2 col-form-label form-lable text-secondary pr-0 text-right1">
+                                        To
+                                    </label>
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 validate-div plr-0 ml-7">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control rounded-0" id="adminreport-to" ng-model="emp.endDate" placeholder="Select End Date" ng-click="loadDatePicker(emp.endDate);" required="true" />
+                                            <div class="input-group-prepend" id="">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <label for="Filter" class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-form-label form-lable" ng-if="businessUnitSelectOrNot">Filter By:</label>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 " ng-if="businessUnitSelectOrNot">
+
+                                <select class="form-control rounded-0" ng-model="selectedManager">
+                                    <option ng-selected="{{selectedManager}}" ng-repeat="manager in managerList" value="{{manager.Id}}" ng-modal="selectedManager">{{ manager.Name }}</option>
+                                </select>
+                            </div>
+                            <label for="Filter" class="col-xl-1 col-lg-1 col-md-1 col-sm-1 col-form-label form-lable" ng-if="paymentmethodSelectOrNot">Filter By: Payment Status</label>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-2 col-xl-2 " ng-if="paymentmethodSelectOrNot">
+                                <select class="form-control rounded-0" ng-model="selectedStatus">
+                                    <option ng-selected="{{selectedStatus}}" ng-repeat="paymentstatus in getPaymentStatusList" value="{{paymentstatus}}" ng-modal="selectedStatus">{{paymentstatus}}</option>
+                                </select>
+                            </div>-->
+                            <label for="Filter" class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-form-label form-lable text-secondary pr text-right2" ng-if="driverListSelectOrNot">Driver:</label>
+                            <label for="Filter" class="col-xl-2 col-lg-3 col-md-3 col-sm-2 col-form-label form-lable text-secondary pr" ng-if="managerListSelectOrNot">Manager:</label>
+                            <div class="col-12 col-sm-2 col-md-2 col-lg-3 col-xl-2 validate-div pl-search" style="font-size: 16px !important" ng-show="managerListSelectOrNot == true || driverListSelectOrNot == true">
+                                <!-- <select class="form-control rounded-0" ng-model="selectedManager">
+                                    <option ng-selected="{{selectedManager === manager.Id}}" ng-repeat="manager in managerList" value="{{manager.Id}}">{{manager.Name}}</option>
+                                </select> -->
+                                <ui-select ng-model="selectedManager" style="font-size: 16px;" theme="selectize" title="Search manager" ng-change="selectManagerFun(selectedManager)" append-to-body="true">
+                                    <ui-select-match placeholder="Search..." style="font-size: 16px;">{{$select.selected.Name}}</ui-select-match>
+                                        <!-- AI-000226 START -->
+                                        <ui-select-choices repeat="mg in managerList | filter: $select.search" null-option="SelectManagerName">
+                                            <span style="font-size: 16px;" ng-bind-html="mg.Name | highlight: $select.search"></span>
+                                        </ui-select-choices>
+                                        <!-- AI-000226 END -->
+                                        <ui-select-no-choice>
+                                            No result found
+                                        </ui-select-no-choice>
+                                </ui-select>
+                            </div>
+                            <div class="col-12 col-sm-1 col-md-1 col-lg-1 col-xl-3">
+                                <button class="btn btn-secondary" type="submit" ng-click="relatedMileage(selectedManager, emp);">Apply</button>
+                                <button ng-if="accid === SPBSAcc || accid === EngGypAcc" class="btn btn-primary expenseBtn" ng-click="submitExpense()">Concur Sync</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-divider">
+            </div>
+            <div class="pt-2 table-responsive" >
+                <div id="example_filter" class="dataTables_filter pull-left d-block" ng-show="showsearch">
+                    <div class="input-group">
+                        <i id="filtericon" class="fa fa-search" ng-if="search.length===0"></i>
+                        <input class="form-control py-2 border-right-0 border" type="search" ng-model="search" placeholder="Search" aria-controls="example" id="example-search-input" 
+                        ng-keypress="keyPressed($event, search.length)" />
+                    </div>
+                </div>
+                <div id="maintablediv">
+                    <table id="admin-report" class="table table-striped dt-responsive nowrap py-1 py-sm-2 dataTable" cellspacing="0"
+                        width="100%">
+                        <thead>
+                            <tr ng-if="showbtn">
+                                <th ng-repeat="header in headerlisttosplit" ng-click="sort(header.alias)"><span class="sort-icon pull-right" ng-show="sortKey==header.alias" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span> {{header.key}}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr dir-paginate="row in finnalArr|itemsPerPage:pageSize|filter:search" current-page="currentPage"><!-- dataList -->
+                                <!-- <td ng-repeat="header in headerlisttosplit">{{row[header]}}</td> -->
+                                 <td ng-repeat="header in headerlisttosplit">{{row[header.alias]}}</td>
+                                      
+                            </tr>
+                            <tr  ng-if="showbtn == true && (finnalArr | filter:search).length == 0">
+                                <td colspan="{{headerlength}}" class="table-nodata">No record available.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row pull-right" style="padding-right: 12px;">
+            <dir-pagination-controls max-size="5"  direction-links="true" boundary-links="true" auto-hide ="true" responsive="true" class="pull-right"></dir-pagination-controls>
+                <!-- <div class="col-md-6" ng-if="totalRecords > 200">{{currentPage}} of {{maxPage}} Page</div>
+                <div class="col-md-6">
+                    <ul ng-if="totalRecords > 200" class="pagination pull-right paginationformodal">
+                       <li class="page-item " ng-class="{'disable-pagination':currentPage === 1}"><a class="page-link" ng-click="previous()">Previous</a></li>
+                       <li class="page-item"><a class="page-link" >{{currentPage}}</a></li>
+                       <li class="page-item" ng-class="{'disable-pagination':currentPage === maxPage}"><a class="page-link" ng-click="next()" href="#">Next</a></li>
+                    </ul>
+                </div> -->
+            </div>
+            <div class="my-5" ng-if="showbtn == true && finnalArr.length > 0">
+                <label for="Export As" class="mr-2 col-form-label form-lable">Export As:</label>
+                <!-- <button class="btn btn-secondary rounded-0" id="btn" ng-click="exportToPdf()">PDF</button> -->
+                <button class="btn btn-secondary rounded-0" id="btn" ng-click="exportToExcel()">Excel</button>
+                <button class="btn btn-secondary rounded-0" id="btn" ng-click="createCSVFile()">CSV</button>
+                <button class="btn btn-secondary rounded-0" id="btn" ng-click="printView()">Print</button>
+                <button class="btn btn-secondary rounded-0" id="btn" onclick="selectElementContents();">Copy</button>
+                <!-- <button class="btn btn-secondary rounded-0" id="btn" ng-click="exportToPdf()">Mark Status As Paid</button>
+                <button class="btn btn-secondary rounded-0" id="btn" ng-click="exportToPdf()">Mark Status As Unpaid</button> -->
+            </div>
+        </section>
+        <apex:include pageName="EMC_Common_footer"/>
+        <script>
+        var el,table,currPage;
+            $(document).ready(function () {
+                var url_string = $(location).attr("href");
+                var url = new URL(url_string);
+                var report_Id =  url.searchParams.get("reportid");
+                var currentDate = new Date();
+                var defaultFromDate = new Date(currentDate.getFullYear(), currentDate.getMonth() -1);
+                var defaultToDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), 0);
+                $('#adminreport-from').datepicker('setDate', defaultFromDate);
+                $('#adminreport-to').datepicker('setDate', defaultToDate);
+
+                // AI-000226 -- Start
+                
+                // For Sonora Quest Account, Bi-Weekly Fixed Amount - Report -- Starts
+                //var minDate = new Date();
+                var minDate;
+                if(report_Id === 'a0Q3r00000Iq5fQEAR'){
+                    minDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
+                }else{
+                    minDate = new Date();
+                }
+                  // For Sonora Quest Account, Bi-Weekly Fixed Amount - Report -- ends
+                minDate.setDate(minDate.getDate());
+                var disabled = minDate;
+                $('#adminreport-to').datepicker('setEndDate', disabled);
+
+
+                $('#adminreport-to').datepicker().on('changeDate', function(date){
+                    var newDate = $(this).datepicker('getDate');
+                    var disabledYear = new Date(newDate.getFullYear() -2, newDate.getMonth());
+                    $('#adminreport-from').datepicker('setStartDate', disabledYear);
+                });
+                //AI-000226 -- End
+
+                //disable date
+                $('#adminreport-from').datepicker().on('changeDate', function (ev) {
+                    var endDate = $(this).datepicker('getDate');
+                    var minDate = $(this).datepicker('getDate');
+                    endDate.setDate(endDate.getDate() + 365);
+                    /*$("#adminreport-to").datepicker('setDate', minDate);
+                    $('#adminreport-to').datepicker('setStartDate',minDate);
+                    $('#adminreport-to').datepicker('setEndDate',endDate);*/
+                });
+                $('#adminreport-to').datepicker({
+                    dateFormat: "mm/dd/yy"
+                });
+                $('#adminreport-from').datepicker({
+                    dateFormat: "mm/dd/yy"
+                });
+            });
+            //Disable date function
+            function loaddatepicker(selectedDate) {
+                if(selectedDate != null && selectedDate !='') {
+                    let datesplit = selectedDate.split('/');
+                    let currentdate = new Date(datesplit[1] , datesplit[0] , datesplit[2]);
+                    currentdate.setDate(currentdate + 1);
+                    $('#adminreport-to').datepicker('setStartDate',currentdate);
+                } else {
+                    $('#adminreport-to').datepicker('setStartDate',new Date());
+                }
+            }
+            function loaddatepicker1(selectedDate) {
+                if(selectedDate != null && selectedDate !='') {
+                    let datesplit = selectedDate.split('/');
+                    let currentdate = new Date(datesplit[1] , datesplit[0] , datesplit[2]);
+                    currentdate.setDate(currentdate + 1);
+                    $('#adminreport-from').datepicker('setStartDate',currentdate);
+                } else {
+                    $('#adminreport-from').datepicker('setStartDate',new Date());
+                }
+            }
+
+            function createPDF() {
+                var sTable = document.getElementById('maintablediv').innerHTML;
+                var style = "<style>";
+                style = style + "table {width: 100%;font: 17px Calibri;}";
+                style = style + "table, th, td {border: solid 1px #DDD; border-collapse: collapse;";
+                style = style + "padding: 2px 3px;text-align: center;}";
+                style = style + "</style>";
+                var win = window.open('', '', 'height=700,width=700');
+                win.document.write('<html><head>');
+                win.document.write(style);          // ADD STYLE INSIDE THE HEAD TAG.
+                win.document.write('</head>');
+                win.document.write('<body>');
+                win.document.write(sTable);         // THE TABLE CONTENTS INSIDE THE BODY TAG.
+                win.document.write('</body></html>');
+                win.document.close();   // CLOSE THE CURRENT WINDOW.
+                win.print();    // PRINT THE CONTENTS.
+            }
+            function selectElementContents() {
+                var el = document.getElementById('maintablediv');
+                var body = document.body, range, sel;
+                if (document.createRange && window.getSelection) {
+                    range = document.createRange();
+                    sel = window.getSelection();
+                    sel.removeAllRanges();
+                    try {
+                        range.selectNodeContents(el);
+                        sel.addRange(range);
+                        document.execCommand("copy");
+                    } catch (e) {
+                        range.selectNode(el);
+                        sel.addRange(range);
+                    }
+                } else if (body.createTextRange) {
+                    range = body.createTextRange();
+                    range.moveToElementText(el);
+                    range.select();
+                }
+                copymessage();
+            }
+            function copymessage() {
+                jQuery("#copiedmsg").show();
+                setInterval(function() {
+                    jQuery("#copiedmsg").hide();
+                },2000);
+            }
+            function demoFromHTML(reportname) {
+                var pdf = new jsPDF('p', 'pt', 'letter');
+                source = $('#maintablediv')[0];
+                specialElementHandlers = {
+                    '#bypassme': function (element, renderer) {
+                        return true
+                    }
+                };
+                margins = {
+                    top: 20,
+                    bottom: 60,
+                    left: 40,
+                    width: 900
+                };
+                pdf.fromHTML(
+                source, // HTML string or DOM elem ref.
+                margins.left, // x coord
+                margins.top, { // y coord
+                    'width': margins.width, // max width of content on PDF
+                    'elementHandlers': specialElementHandlers
+                },
+                function (dispose) {
+                    pdf.save(reportname);
+                }, margins);
+            }
+        </script>
+    </body>
+</apex:page>

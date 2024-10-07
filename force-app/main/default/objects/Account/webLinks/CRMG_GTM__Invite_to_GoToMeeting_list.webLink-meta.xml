@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>CRMG_GTM__Invite_to_GoToMeeting_list</fullName>
+    <availability>online</availability>
+    <displayType>massActionButton</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Invite to GoToMeeting</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <requireRowSelection>true</requireRowSelection>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/9.0/connection.js&quot;)} 
+var namespace = &apos;CRMG_GTM&apos;;  
+var clsNamespace =&apos;&apos;;  
+if (namespace != &apos;&apos; &amp;&amp; namespace != null) {  
+clsNamespace = namespace +&apos;.&apos;; 
+namespace = namespace + &apos;__&apos;;  
+  
+}  
+else {  
+namespace = &apos;&apos;;  
+}  
+var records = {!GETRECORDIDS( $ObjectType.Event )}; 
+
+if (records[0] == null) { 
+alert(&quot;Please select at least one record.&quot;) } 
+else {
+location.href = &apos;/apex/&apos;+namespace+&apos;MeetingInvite?recordId=&apos;+records ;
+}</url>
+</WebLink>

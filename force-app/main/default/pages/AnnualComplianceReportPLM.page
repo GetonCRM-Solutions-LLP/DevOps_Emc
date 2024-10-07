@@ -1,0 +1,63 @@
+<apex:page controller="ComplianceReportPLM" contentType="txt/xml#Annual Tax Liability Report.xls" cache="true">
+<apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Annual Tax Liability Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Employee ID</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Name</Data></Cell>                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Email</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Divison</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Added Date</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Insurance</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Compliance Status</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Expiration Date</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Vehicle Value</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Vehicle Age</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Number Of Biweek Reim</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Approved Mileage</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Compliance Mileage</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Reimbursement</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Allowable</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Imputed Amount</Data></Cell>
+                </Row>
+                <apex:repeat value="{!obj_wrapperTaxReport}" var="Taxreport">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!Taxreport.employeeid}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.drivername}</Data></Cell>                        
+                        <Cell><Data ss:Type="String">{!Taxreport.emailid}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.divison}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.addedDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.insurance}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.complianceStatus}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.expirationDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.vehicleValue}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.vehicleAge}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!Taxreport.noOfBiweek}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!Taxreport.approvedmileages}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!Taxreport.complianceMileage}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!Taxreport.totalreim}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!Taxreport.iRSallowable}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!Taxreport.imputedincome}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

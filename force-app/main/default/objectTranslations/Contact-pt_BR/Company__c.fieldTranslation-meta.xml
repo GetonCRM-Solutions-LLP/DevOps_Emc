@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Company --></label>
+    <name>Company__c</name>
+    <picklistValues>
+        <masterLabel>Geneva</masterLabel>
+        <translation><!-- Geneva --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>NWP-SPP</masterLabel>
+        <translation><!-- NWP-SPP --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Park</masterLabel>
+        <translation><!-- Park --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>SOSSO</masterLabel>
+        <translation><!-- SOSSO --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

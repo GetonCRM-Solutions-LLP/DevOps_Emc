@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Filter_By__c</fullName>
+    <label>Filter By</label>
+    <required>false</required>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Dates</fullName>
+                <default>false</default>
+                <label>Dates</label>
+            </value>
+            <value>
+                <fullName>Biweek Reimbursement</fullName>
+                <default>false</default>
+                <label>Biweek Reimbursement</label>
+            </value>
+            <value>
+                <fullName>Monthly Reimbursement</fullName>
+                <default>false</default>
+                <label>Monthly Reimbursement</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

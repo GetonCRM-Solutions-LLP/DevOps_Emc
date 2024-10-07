@@ -1,0 +1,25 @@
+body button, body .x-btn, body .btn, body .btnDisabled, body .btnCancel, body .menuButton .menuButtonButton {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+ul li, ol li{
+    margin-left: 0em !important;
+    padding-left: 0 !important;
+}
+body .x-btn-pressed, body .x-btn-click, body .x-btn-menu-active, body button:active, body .btn:active, body .btnPressed, body .btnCancel:active, body .menuButton .menuButtonButton:active{
+    border-color: transparent;
+}

@@ -1,0 +1,19 @@
+<template>
+    <div class="slds-grid slds-gutters">
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_2-of-6">
+            <lightning-input type="text" date-style="short" name="date1" value={dateValue} onkeydown={handleEditInput}>
+            </lightning-input>
+        </div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_2-of-6">
+            <lightning-input type="text" name="timeinput1" value={strtimeValue} onkeydown={handleEditInput}
+                class="slds-p-left_large">
+            </lightning-input>
+        </div>
+        <div style="line-height: 2.3rem;">to</div>
+        <div class="slds-col slds-size_1-of-1 slds-medium-size_4-of-12 slds-large-size_2-of-6">
+            <lightning-input type="text" name="timeinput2" value={entimeValue} onkeydown={handleEditInput}
+                class="slds-p-right_large">
+            </lightning-input>
+        </div>
+    </div>
+</template>

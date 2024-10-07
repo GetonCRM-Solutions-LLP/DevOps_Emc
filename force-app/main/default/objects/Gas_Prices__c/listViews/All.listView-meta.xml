@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>All</fullName>
+    <columns>NAME</columns>
+    <columns>City__c</columns>
+    <columns>State__c</columns>
+    <columns>Month_Year__c</columns>
+    <columns>Fuel_Price__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>City__c</field>
+        <operation>equals</operation>
+        <value>Laguna Hills</value>
+    </filters>
+    <filters>
+        <field>Month_Year__c</field>
+        <operation>equals</operation>
+        <value>9/1/2024</value>
+    </filters>
+    <label>All</label>
+</ListView>

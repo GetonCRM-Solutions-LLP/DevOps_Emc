@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Email_Template_for_Expired</name>
+        <label>Email Template for Expired</label>
+        <locationX>698</locationX>
+        <locationY>757</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Email_for_Expired</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Important Notification – Final notice</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Email_Template_for_Insurance_Card</name>
+        <label>Email Template for Insurance Card</label>
+        <locationX>434</locationX>
+        <locationY>750</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Template_for_Insurance_Card</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Important Notification – Final notice</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Email_Template_for_No_Expiration_Date</name>
+        <label>Email Template for No Expiration Date</label>
+        <locationX>826</locationX>
+        <locationY>763</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Email_for_No_Expiration_Date</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Important Notification – Final notice</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <actionCalls>
+        <name>Email_Template_for_Not_Meeting_Plan_Minimum</name>
+        <label>Email Template for Not Meeting Plan Minimum</label>
+        <locationX>570</locationX>
+        <locationY>753</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <elementReference>Email_for_Not_Meeting_Plan_Minimum</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailAddresses</name>
+            <value>
+                <elementReference>$Record.Email</elementReference>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderAddress</name>
+            <value>
+                <stringValue>driverservices@mburse.com</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Important Notification – Final notice</stringValue>
+            </value>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <versionSegment>1</versionSegment>
+    </actionCalls>
+    <apiVersion>56.0</apiVersion>
+    <decisions>
+        <name>Check_Insurance_Picklist_Value</name>
+        <label>Check Insurance Picklist Value</label>
+        <locationX>604</locationX>
+        <locationY>528</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>For_Insurance_Card</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Insurance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Insurance Card</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Template_for_Insurance_Card</targetReference>
+            </connector>
+            <label>For Insurance Card</label>
+        </rules>
+        <rules>
+            <name>For_Not_Meeting_Plan_Minimum</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Insurance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Not Meeting Plan Minimum</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Template_for_Not_Meeting_Plan_Minimum</targetReference>
+            </connector>
+            <label>For Not Meeting Plan Minimum</label>
+        </rules>
+        <rules>
+            <name>For_Expired</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Insurance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Expired</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Template_for_Expired</targetReference>
+            </connector>
+            <label>For Expired</label>
+        </rules>
+        <rules>
+            <name>For_No_Expiration_Date</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Insurance__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>No Expiration Date</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Email_Template_for_No_Expiration_Date</targetReference>
+            </connector>
+            <label>For No Expiration Date</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>Check_Insurance_Value_Changed_Field_Value</name>
+        <label>Check Insurance Value Changed Field Value</label>
+        <locationX>613</locationX>
+        <locationY>318</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Insurance_Value_Changed</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>Insurance_Value_plus24</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <elementReference>$Flow.CurrentDate</elementReference>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>$Record.AccountId</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>0010Z00001ygUenQAE</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Check_Insurance_Picklist_Value</targetReference>
+            </connector>
+            <label>Insurance Value Changed</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <formulas>
+        <name>Insurance_Value_plus24</name>
+        <dataType>Date</dataType>
+        <expression>{!$Record.Insurance_Value_Changed__c}+23</expression>
+    </formulas>
+    <interviewLabel>Email Triggered based on Insurance Status Change {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Email Triggered based on Insurance Status Change</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <start>
+        <locationX>490</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Check_Insurance_Value_Changed_Field_Value</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Activation_Date__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Insurance_Value_Changed__c</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>false</booleanValue>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <schedule>
+            <frequency>Once</frequency>
+            <startDate>2023-01-05</startDate>
+            <startTime>21:24:00.000Z</startTime>
+        </schedule>
+        <triggerType>Scheduled</triggerType>
+    </start>
+    <status>Active</status>
+    <textTemplates>
+        <name>Email_for_Expired</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.FirstName},
+
+You still have not submitted your auto insurance declaration page with effective coverage dates. As a result, we cannot determine if your insurance is valid and meeting your company minimum for car insurance coverage or your compliance status. 
+
+In 5 days, you will risk forfeiting your fixed reimbursement amount until you submit your insurance declaration pages to your mBurse administrator or the mDash portal (https://mburse.force.com/app/adminlogin). If your fixed amount is forfeited, you will be eligible to receive any forfeited fixed amounts. Once you have submitted this document, we will re-evaluate your compliance status.
+
+If you have any questions, please contact driverservices@mburse.com.
+
+Cheers,
+The mBurse Team</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Email_for_No_Expiration_Date</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.FirstName},
+
+You still have not submitted your auto insurance declaration page with coverage dates. As a result, we cannot determine if your insurance is valid and meeting your company minimum for car insurance coverage or your compliance status. 
+
+In 5 days, you will risk forfeiting your fixed reimbursement amount until you submit your insurance declaration pages to your mBurse administrator or the mDash portal (https://mburse.force.com/app/adminlogin). If your fixed amount is forfeited, you will be eligible to receive any forfeited fixed amounts. Once you have submitted this document, we will re-evaluate your compliance status.
+
+If you have any questions, please contact driverservices@mburse.com.
+
+Cheers,
+The mBurse Team</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Email_for_Not_Meeting_Plan_Minimum</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.FirstName},
+
+You originally submitted insurance documentation that does not meet your plan minimum, a program requirement. You are being reimbursed for this level of insurance and must carry this level of insurance. 
+
+In 5 days, you will risk forfeiting your fixed reimbursement amount until you submit your insurance declaration pages meeting your plan minimums below: 
+
+
+Once you have upgraded your insurance, submit your insurance declaration pages to your mBurse administrator or the mDash portal (https://mburse.force.com/app/adminlogin). Once you have submitted this document, we will re-evaluate your compliance status. If your fixed amount is forfeited, you will be eligible to receive any forfeited fixed amounts.
+
+If you have any questions, please contact driverservices@mburse.com.
+
+Cheers,
+The mBurse Team</text>
+    </textTemplates>
+    <textTemplates>
+        <name>Template_for_Insurance_Card</name>
+        <isViewedAsPlainText>true</isViewedAsPlainText>
+        <text>Hi {!$Record.FirstName},
+
+You originally submitted an insurance card and still have not submitted your auto insurance declaration page. As a result, we cannot determine if you are meeting your company minimum for car insurance coverage or your compliance status. 
+
+In 5 days, you will risk forfeiting your fixed reimbursement amount until you submit your insurance declaration pages to your mBurse administrator or the mDash portal (https://mburse.force.com/app/adminlogin). Once you have submitted this document, we will re-evaluate your compliance status. If your fixed amount is forfeited, you will be eligible to receive any forfeited fixed amounts.
+
+If you have any questions, please contact driverservices@mburse.com.
+
+Cheers,
+The mBurse Team</text>
+    </textTemplates>
+</Flow>

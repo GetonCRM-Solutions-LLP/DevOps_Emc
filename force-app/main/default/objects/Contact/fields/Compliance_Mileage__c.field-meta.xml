@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Compliance_Mileage__c</fullName>
+    <externalId>false</externalId>
+    <inlineHelpText>Compliance Mileage calculation is based on the activation date of contact.
+If you want 5000 compliance mileage then select December month of last year</inlineHelpText>
+    <label>Compliance Mileage</label>
+    <precision>18</precision>
+    <required>false</required>
+    <scale>2</scale>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Number</type>
+    <unique>false</unique>
+</CustomField>

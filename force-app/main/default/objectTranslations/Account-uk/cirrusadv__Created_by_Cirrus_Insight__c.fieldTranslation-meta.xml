@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Created by Cirrus Insight --></label>
+    <name>cirrusadv__Created_by_Cirrus_Insight__c</name>
+</CustomFieldTranslation>

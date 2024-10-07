@@ -1,0 +1,25 @@
+<template>
+    <template if:true={promiseError}>
+        <c-m-burse-error message={errorMessage}></c-m-burse-error>
+    </template>
+    <div class="transition">
+        <div>
+            <c-m-burse-header-text head-text={textForHeader}></c-m-burse-header-text>
+        </div>
+        <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style emcFont">
+          {description}
+        </div>
+        <div class="slds-clearfix slds-p-bottom_small m-left m-right">
+            <div class="footer-button slds-float_right mright-0 mleft-0"  if:true={allowRedirect}>
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={redirectToDashboard}>
+                    Go To My Account
+                </button>
+            </div>
+        </div>
+        <div class="margin_left margin_right">
+            <div  class="frame-container">
+                <iframe name="stats" src={frameUrl} width="100%" height="100%" frameborder="0" webkitallowfullscreen="true" allowfullscreen="true" allow="fullscreen;"></iframe>
+            </div>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,111 @@
+.myteamcheckbocImportProcess .checkhead {
+    float: left;
+    width: 100%;
+    background: $primary-color;
+    color: $white;
+    padding: 5px 0px;
+}
+.myteamcheckbocImportProcess .checkhead h4 {
+    font-size: 18px;
+}
+.myteamcheckbocImportProcess .modal-body {
+    padding: 0px !important;
+    position: unset !important;
+}
+
+.myteamcheckbocImportProcess button.close.popup-close-btn {
+    margin: 0px !important;
+}
+
+.myteamcheckbocImportProcess .modal-content {
+    border-color: transparent !important; 
+}
+
+.myteamcheckbocImportProcess .modal-dialog.modal-lg.modal-dialog-centered {
+    justify-content: center;
+}
+
+.myteamcheckbocImportProcess .modal-content.rounded-0 {
+    width: 456px;
+}
+
+.myteamcheckbocImportProcess .check-in-info {
+    float: left;
+    padding: 0px 30px;
+}
+
+.myteamcheckbocImportProcess .check-in-info p {
+    line-height: 24px;
+}
+
+.myteamcheckbocImportProcess .check-submit {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.manage-back-btn {
+    margin-top: 70px;
+    float: left;
+    width: 100%;
+}
+
+@media only screen and (min-width:320px) and (max-width:767px) {
+    .manage-back-btn {
+        margin-top: 20px;
+    }
+
+}
+
+
+
+.drivermanagercheckbocImportProcess .checkhead {
+    float: left;
+    width: 100%;
+    background: $primary-color;
+    color: $white;
+    padding: 5px 0px;
+}
+.drivermanagercheckbocImportProcess .checkhead h4 {
+    font-size: 18px;
+}
+.drivermanagercheckbocImportProcess .modal-body {
+    padding: 0px !important;
+    position: unset !important;
+}
+
+.drivermanagercheckbocImportProcess button.close.popup-close-btn {
+    margin: 0px !important;
+}
+
+.drivermanagercheckbocImportProcess .modal-content {
+    border-color: transparent !important; 
+}
+
+.drivermanagercheckbocImportProcess .modal-dialog.modal-lg.modal-dialog-centered {
+    justify-content: center;
+}
+
+.drivermanagercheckbocImportProcess .modal-content.rounded-0 {
+    width: 456px;
+}
+
+.drivermanagercheckbocImportProcess .check-in-info {
+    float: left;
+    padding: 0px 30px;
+}
+
+.drivermanagercheckbocImportProcess .check-in-info p {
+    line-height: 24px;
+}
+
+.drivermanagercheckbocImportProcess .check-submit {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.info-timeline .nav .nav-item {
+    background: transparent !important;
+    border: 1px solid #78bc42;
+}

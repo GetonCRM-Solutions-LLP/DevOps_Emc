@@ -1,0 +1,139 @@
+<apex:component >
+    <style type="text/css">
+        .grey-fluid{
+            width: 100%;
+            background-color: rgb(203, 207, 212);
+            height: 573px;
+        }
+        .middle-header{
+            text-align: center;
+            padding-top: 3rem;
+        }
+        .insurance_title{
+            font-size: 22px !important;
+        }
+        .image_menu{
+            margin-top: 30px;
+        }
+        .account_info{
+            margin-top: 41px;
+            display: inline-block;
+        }
+        .span-account_heading{
+            font-size: 20px !important;
+        }
+        tr td{
+            padding: 0px 10px;
+        }
+        td{
+            text-align: left;
+            font-size: 17px;
+            color: #404b5b !important;
+        }
+        .account_content{
+            margin-left: 1rem;
+            margin-top: 15px;
+        }
+
+            /* Mobile View */
+        @media (max-width: 767px) and (min-width: 320px){
+            header{
+                margin-bottom: 66px !important;
+            }
+            .grey-fluid{
+                position: fixed;
+                height: 800px;
+            }
+            .middle-header{
+                padding-top: 1rem;
+            }
+            .account_content{
+                margin-left: 1rem;
+            }
+        }
+
+        /* For  IPad */
+        @media (max-width: 991px) and (min-width: 768px){
+            header{
+                margin-bottom: 74px !important;
+            }
+            .account_content{
+                margin-left: 1rem;
+            }
+            .grey-fluid{
+                height: 950px;
+            }
+        }
+
+        /* For IPad Pro */
+        @media (max-width: 1024px) and (min-width: 992px){
+            .grey-fluid{
+                height: 1277px;
+            }
+            .account_content{
+                margin-left: 1rem;
+            }
+        }
+
+        /* Desktops and laptops ----------- */
+        @media only screen  and (min-width : 1224px) {
+        /* Styles */
+            .grey-fluid{
+                    height: 664px;
+            }
+        }
+
+        /* Large screens ----------- */
+        @media only screen  and (min-width : 1824px) {
+            /* Styles */
+            .grey-fluid{
+                        height: 936px;
+                }
+        }
+    </style>
+   
+    <div class="grey-fluid">
+        <div class="middle-header">
+            <h3 class="font-weight-bold insurance_title">You Must Upload Your Insurance Declaration Page to Continue</h3>
+            <div class="image_menu">
+                <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/insurance_image.png')}" class="img-fluid" href="javascript:void(0)" />
+            </div>
+            <div class="account_info">
+                <div class="account_heading">
+                    <span class="span-account_heading">Your Company Insurance Parameters are:</span>
+                </div>
+                <div class="account_content">
+                  
+                        <table ng-repeat="parameters in insurance_parameters">
+                            <tbody>
+                            <tr>
+                                <td>Bodily Injury</td>
+                                <td>${{parameters.Bodily_Injury__c}}</td>
+                            </tr>
+                            <tr>
+                                <td>Uninsured Motorist</td>
+                                <td>${{parameters.Uninsured_Motorist__c}}</td>
+                            </tr>
+                            <tr>
+                                <td>Property Damage</td>
+                                <td>${{parameters.Property_Damage__c | number:0}}</td>
+                            </tr>
+                            <tr>
+                                <td>Comprehensive</td>
+                                <td>${{parameters.Comprehensive__c | number:0}} Deductible</td>
+                            </tr>
+                            <tr>
+                                <td>Collision</td>
+                                <td>${{parameters.Collision__c | number:0}} Deductible</td>
+                            </tr>
+                            <tr ng-if="accid === gpsid">
+                                <td>Umbrella Coverage</td>
+                                <td>${{parameters.Umbrella_Coverage__c | number:0}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</apex:component>

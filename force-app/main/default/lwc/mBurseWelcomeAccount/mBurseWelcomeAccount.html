@@ -1,0 +1,30 @@
+<template>
+    <div>
+        <div>
+            <div class="header-text">Your Onboarding Process</div>
+        </div>
+       <div class="slds-text-heading_small slds-text-align_center font-style emcFont p_bottom">Follow these steps to get started:</div>
+       <div>
+           <c-m-burse-step account={accountType} cellphone={cellphoneType}></c-m-burse-step>
+       </div>
+       <div class="slds-clearfix slds-align_absolute-center plr content" style="flex-flow: column;"> 
+           <div class="footer-text">
+               <div class="font-style display"><div class="info-text">It's helpful to have the following:</div>
+                   <ul class="slds-list_dotted slds-p-top_x-small">
+                       <li>Your insurance declaration pages</li>
+                       <li>Your work cell phone</li>
+                       <li>Approximately 10-15 minutes time to complete setup</li>
+                   </ul>
+               </div>
+           </div>
+           <div class="footer-button footer-padding">
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light mleft-0 mright-0" onclick={redirectToInsurance}>
+                    {renderBtnText}
+                </button>
+           </div>
+       </div>
+    </div>
+    <template lwc:if={showWelcomeVideo}>
+        <c-m-burse-welcome custom-setting={customSetting} onredirect={redirectToStep}></c-m-burse-welcome>
+    </template>
+</template>

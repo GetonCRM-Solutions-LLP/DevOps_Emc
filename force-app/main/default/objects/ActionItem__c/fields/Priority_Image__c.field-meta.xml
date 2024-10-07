@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Priority_Image__c</fullName>
+    <description>Set Button&apos;s image as per Priority__c</description>
+    <externalId>false</externalId>
+    <formula>IMAGE(
+CASE(Priority__c,
+&quot;High&quot;, &quot;/resource/1564477019000/RedButton&quot;,
+&quot;Medium&quot;, &quot;/resource/1564477019000/YellowButton&quot;,
+&quot;Low&quot;,&quot;/resource/1564477019000/GreenButton&quot;,
+&quot;Critical&quot;,&quot;/resource/1569412214000/OrangeButton&quot;,
+&quot;/resource/1564477019000/BlueButton&quot;),
+&quot;Priority Button&quot;,20,20)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <inlineHelpText>High=Red, Medium=Yellow, Low=Green, None=Blue</inlineHelpText>
+    <label>Priority Image</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

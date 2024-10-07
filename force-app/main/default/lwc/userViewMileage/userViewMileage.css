@@ -1,0 +1,208 @@
+:host {
+  --grey-color: #D7D7D7;
+  --green-color: #7ABB4A;
+  --link-color: #1D1D1D;
+  --text-color: #6C6C6C;
+  --even-row-color: #FFFFFF;
+  --odd-row-color: #F7F7F7;
+  --scroll-color: #F6F6F6;
+  --active-color: #404B5B;
+  --red-color: #FA7800;
+  --border-color: #E4E4E4;
+}
+
+* {
+  font-family: 'Proxima Nova' !important;
+}
+
+.fa,
+.fas,
+.fa-solid,
+.fa-regular {
+  font-family: "Font Awesome 6 Free" !important
+}
+
+.fa-icon {
+  padding-right: 6px;
+}
+
+.message {
+  font-size: 15px;
+  color: var(--link-color);
+}
+
+.message:focus-visible {
+  outline: 0 !important;
+}
+
+.row {
+  display: flex;
+  padding-top: 6px;
+}
+
+.slds-btn {
+  /* margin: .375rem; */
+  word-wrap: break-word;
+  white-space: normal;
+  cursor: pointer;
+  border: 0;
+  border-radius: .125rem;
+  /* -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); */
+}
+
+.waves-effect:focus {
+  outline: none !important;
+}
+
+.slds-btn-sm {
+  padding: 7px 14px;
+  font-size: 14px;
+}
+
+.btn-style {
+  border-radius: 10px;
+  display: inline-block;
+  text-decoration: none !important;
+  color: var(--even-row-color) !important;
+  margin-left: 12px;
+}
+
+.btn-outline {
+  border-radius: 10px;
+  display: inline-block;
+  text-decoration: none !important;
+  color: var(--green-color) !important;
+}
+
+.btn-trip {
+  /* border-radius: 8px;
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
+  align-items: center;
+  text-decoration: none !important;
+  color: var(--even-row-color) !important;
+  padding: 7px 18px !important;
+  font-size: 15px !important;
+  letter-spacing: 0.02em !important; */
+  display: inline-block;
+  /* font-weight: 600; */
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  /* border: 1px solid transparent; */
+  font-size: 12px !important;
+  line-height: 1.5;
+  border-radius: 8px;
+  height: 32px;
+  padding: 0.275rem 1rem 0.275rem 0.85rem !important;
+  color: var(--even-row-color) !important;
+  /* letter-spacing: 0.03em !important; */
+  /* box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); */
+}
+
+.bc-outline--background {
+  background: none !important;
+  background-color: var(--even-row-color) !important;
+  font-family: 'Proxima Nova Bold' !important;
+  border: 1px solid var(--green-color) !important;
+  padding: 9px 15px;
+  font-size: 14px;
+}
+
+.bc-green {
+  background: none !important;
+  background-color: var(--green-color) !important;
+  font-family: 'Proxima Nova Bold' !important;
+  color: var(--even-row-color);
+}
+
+.checkbox-slot-div {
+  line-height: 156%;
+  margin-top: 7px;
+  width: 32%;
+  text-align: end;
+}
+
+.filter-input {
+  border: 0;
+  padding-left: 0;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.search-icon {
+  width: 19px;
+  height: 19px;
+  margin: 10px 24px 10px 15px;
+}
+
+.search-holder {
+  display: flex;
+  border: 1px solid #e4e4e4;
+  border-radius: 10px;
+  width: 221px;
+  height: 40px;
+}
+
+.slds-input:focus {
+  --slds-c-input-shadow: none !important;
+  box-shadow: none !important;
+}
+
+.search-icon-block {
+  background: var(--even-row-color);
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.checkbox-slot-div-select {
+  margin-top: 7px;
+  width: 14rem;
+  right: 12px;
+}
+
+.corner-loop {
+  float: left;
+}
+
+.corner-select {
+  float: right;
+}
+
+.download-svg {
+  margin-bottom: 2px;
+  margin-right: 5px;
+}
+
+.dropdown-div {
+  width: 103px;
+}
+
+.slds-back-btn {
+  font-family: 'Proxima Nova Bold' !important;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  padding: 1rem 1rem !important;
+  border-radius: 10px !important;
+  box-shadow: none !important;
+}
+
+.btn-grey {
+  color: var(--green-color) !important;
+  border: 1px solid var(--grey-color) !important;
+  background: var(--even-row-color) !important;
+}
+
+.close-btn{
+  background: var(--even-row-color);
+  position: absolute;
+  right: 7px;
+  top: 9px;
+}

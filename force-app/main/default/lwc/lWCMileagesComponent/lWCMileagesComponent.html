@@ -1,0 +1,37 @@
+<template>
+    <table>
+        <tr>
+            <td style="width: 6vw;"><label class="slds-form-element__label" for="mileageInput-01">Mileage</label></td>
+            <td style="width: 78px;padding-left: 1px;">
+                <lightning-input data-entry name="input3" value={formatNumberStart} onchange={handleChangeStart}
+                    onkeypress={keyHandler} onblur={handleBlur} type="text">
+                </lightning-input>
+            </td>
+            <td style="padding-left: 5px;"><label class="slds-form-element__label" for="mileageInput-02">to</label></td>
+            <td style="width: 78px;
+            padding-right: 2px;">
+                <lightning-input data-entry name="input4" value={formatNumberEnd} onchange={handleChangeEnd}
+                    onkeypress={keyHandler} onblur={handleBlur} type="text">
+                </lightning-input>
+            </td>
+            <td style="padding-left: 3px;">
+                <div class="slds-text-heading_small unitStyle">mi</div>
+            </td>
+        </tr>
+    </table>
+    <!-- <div class="slds-size_1-of-6 slds-float_left">
+        <label class="slds-form-element__label mileageLabelStyle1" for="mileageInput-01">Mileage</label>
+        <lightning-input data-entry name="input3" value={formatNumberStart} class="mileageInputStyle1" onchange={handleChangeStart} onkeypress={keyHandler}
+            onblur={handleBlur} type="text">
+        </lightning-input>
+        <p style="color:red;font-size:12px;">{error}</p>
+    </div>
+    <div class="slds-size_1-of-6 slds-float_right">
+        <label class="slds-form-element__label mileageLabelStyle2" for="mileageInput-02">to</label>
+        <lightning-input data-entry name="input4" value={formatNumberEnd} class="mileageInputStyle2" onchange={handleChangeEnd} onkeypress={keyHandler}
+            onblur={handleBlur} type="text">
+        </lightning-input>
+        <div class="slds-text-heading_small unitStyle">mi</div>
+        <p style="color:red;font-size:12px;">{error}</p>
+    </div> -->
+</template>

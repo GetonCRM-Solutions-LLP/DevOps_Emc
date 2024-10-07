@@ -1,0 +1,28 @@
+<template>
+    <table>
+        <tbody>
+            <tr>
+                <td style="width: 5vw;"><label class="slds-form-element__label" for="startdate">Date</label></td>
+                <td style="width: 236px;padding-left: 4px;padding-right: 5px;">
+                    <lightning-input type="date" name="input1" onchange={changeHandler} onkeypress={keyHandler}
+                        value={startDate} date-style="short"
+                        message-when-bad-input="Enter valid input in format M/d/yyyy">
+                    </lightning-input>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 5vw;padding-left: 1px;
+                padding-right: 45px;"><label class="slds-form-element__label" for="startdate">to</label></td>
+                <td style="width: 236px;padding-right: 5px;padding-left: 4px;">
+                    <lightning-input class="" type="date" name="input2" value={endDate} onchange={changeEndDateHandler}
+                        onkeypress={keyHandler} date-style="short"
+                        message-when-bad-input="Enter valid input in format M/d/yyyy">
+                    </lightning-input>
+                </td>
+            </tr>
+
+
+        </tbody>
+
+    </table>
+</template>

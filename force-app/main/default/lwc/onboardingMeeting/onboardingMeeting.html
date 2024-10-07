@@ -1,0 +1,73 @@
+<template>
+    <template lwc:if={promiseError}>
+        <c-m-burse-error message={errorMessage}></c-m-burse-error>
+    </template>
+    <div class="transition">
+        <div>
+            <c-m-burse-header-text head-text="Step 1">
+                <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style emc-font">Watch the Driver Meeting</div>
+            </c-m-burse-header-text>
+        </div>
+        <div class="slds-align_absolute-center video-container">
+            <video id="video-source"  class="video-frame" width={videoWidth} height={videoHeight}  controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                <source  type="video/mp4" src={schedule}/>
+            </video>
+        </div>
+        <div class="slds-clearfix slds-align_absolute-center slds-p-top_x-large p_top" style="flex-flow: column; width: 29%;">
+            <div class="footer-text slds-p-bottom_large" style="width: -webkit-fill-available;">
+                <div class="font-style">
+                    <div class="header">To Move to the Next Step Choose an Option</div>
+                    <ul class="list-item slds-p-top_x-small">
+                        <li><div class="check-input slds-checkbox"> 
+                            <input type="checkbox" name="error-checkbox" id="error-check" checked={checked} class="checkbox-input complete-check" onchange={handleNextMeeting}>
+                            <label class="slds-checkbox__label"  for="error-check">
+                                <span class="slds-checkbox_faux"></span>
+                            </label>
+                        </div><div class="dont-message" onclick={handleNextMeeting}>I watched the Driver Meeting</div></li>
+                        <li style="margin-top: 10px;"><div class="check-input slds-checkbox"> 
+                            <input type="checkbox" name="error-checkbox" id="error-check-2" checked={checkedskip} class="checkbox-input skip-check"  onchange={handleSkipMeeting}>
+                            <label class="slds-checkbox__label"  for="error-check-2">
+                                <span class="slds-checkbox_faux"></span>
+                            </label>
+                        </div><div class="dont-message" onclick={handleSkipMeeting}>I will watch the Driver Meeting Later</div></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-button slds-p-bottom_medium mright-0 mleft-0">
+                <div style="margin: 0.375rem 7rem 0.375rem 0;">
+                    <ul class="slds-list_horizontal slds-has-block-links_space border-radius">
+                        <li class="slds-item navigate">
+                            <a 
+                            name="buttonBackwards"
+                            label="Previous" 
+                            title="Back" 
+                            onclick={backToPrevious}  >
+                            <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- <div class="back_to_previous slds-float_left">
+                        <a class="font-s" onclick={backToPrevious}><i class="fa-solid fa-angle-left"></i> Back</a>
+                    </div> -->
+                    <!-- <div class="back_to_previous  slds-float_right" if:true={nextPreview}>
+                        <a class="font-s" onclick={skipToNext}>Skip<i class="fa-solid fa-angle-right"></i></a>
+                    </div> -->
+                </div>
+                <div lwc:if={showBtn}>
+                    <template lwc:if={accountBtn}>
+                        <button class="slds-btn bc-outline slds-btn-sm waves-effect bc-blue waves-light step-btn" onclick={nextStep}>
+                            {renderText}
+                        </button>
+                    </template>
+                    <template lwc:else>
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light step-btn" onclick={nextStep}>
+                            {renderText}
+                        </button>
+                    </template>
+                    <!-- <div class="align_message slds-p-top_small">  <a class="dont-font" onclick={removePreview}>Don’t show this page again</a> </div> -->
+                </div>
+             
+            </div>
+        </div>
+    </div>
+</template>

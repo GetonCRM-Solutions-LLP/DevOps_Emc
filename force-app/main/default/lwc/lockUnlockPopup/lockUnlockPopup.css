@@ -1,0 +1,47 @@
+.modal_position_new {
+    position: fixed;
+}
+
+.modal_content-class {
+    color: black;
+    margin: -17px 10px 0px 10px;
+}
+
+.button_class_modal{
+    margin: 15px 0px;
+    /* position: relative;
+    left: 267px; */
+}
+
+.slds-btn{
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+}
+
+.slds-btn-sm {
+    margin: 0 0.4em;
+    padding: 11px 20px;
+    height: 43px;
+    font-size: 14px;
+}
+
+.waves-effect:focus {
+    outline: none !important;
+}
+
+.bc-green {
+    background: none !important;
+    background-color: #7ABB4A!important;
+    font-family: 'Proxima Nova Bold' !important;
+    font-weight: 700;
+    color: #FFFFFF;
+}
+
+.btn-trip{
+    border-radius: 9px;
+    text-decoration: none !important;
+    color: #FFFFFF !important;
+}

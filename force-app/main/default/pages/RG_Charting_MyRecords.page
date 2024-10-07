@@ -1,0 +1,120 @@
+<apex:page controller="RG_Charting_MyRecordsClass" cache="false">
+
+ 
+
+    
+<link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+ 
+
+             
+
+                <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/amcharts.js')}"></script>
+                <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/serial.js')}"></script>
+                <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/plugins/export/export.min.js')}"></script>
+                <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/plugins/export/export.css')}" type="text/css" media="all" />
+                <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/amcharts/themes/none.js')}"></script>
+                <div id="chartdiv"></div>
+                <div id="legend" style="">
+                    <div class="litem">
+                        <div id="icn_gasprices"></div>
+                        <div class="legendti"> - Fuel Price</div>
+                    </div>
+                    <div class="litem">
+                        <div id="icn_reimburse"></div>
+                        <div class="legendti">- Mileage</div>
+                    </div>
+                </div>
+                <script>
+                var chart = AmCharts.makeChart( "chartdiv", {
+                  "type": "serial",
+                  "addClassNames": true,
+                  "theme": "none",
+                  "autoMargins": false,
+                  "marginLeft": 50,
+                  "marginRight": 8,
+                  "marginTop": 10,
+                  "marginBottom": 26,
+                  "balloon": {
+                    "adjustBorderColor": false,
+                    "horizontalPadding": 10,
+                    "verticalPadding": 8,
+                    "color": "#ffffff"
+                  },
+
+                  "dataProvider":[{!getdata}] , 
+                  "valueAxes": [ {
+                    
+                    //"axisAlpha": 0,
+                    "position": "left",
+                    "unitPosition":"left"
+                  } ],
+                  "startDuration": 1,
+                  "graphs": [ {
+                    "alphaField": "alpha",
+                    "balloonText": "<span align=\"center\" style='font-size:12px;font-family:\"proxima-nova\",sans-serif;text-align:\"center\";padding-left:100px;'>[[title]]:<br/><span style='font-family:\"proxima-nova\",sans-serif;font-size:20px;padding-left:100px;'>[[value]]</span> [[additional]]</span>",
+                    "fillAlphas": 1,
+                    "title": "Mileage",
+                    "fillColors":"#76BD1D",
+                    "lineColor":"#518726",
+                    "type": "column",
+                    "valueField": "Mileage",
+                    "dashLengthField": "dashLengthColumn"
+                  }, {
+                    "id": "graph2",
+                    "balloonText": "<span align=\"center\" style='font-family:\"proxima-nova\",sans-serif;font-size:12px;text-align:\"center\";padding-left:90px;'>[[title]]:<br/><span style='font-family:\"proxima-nova\",sans-serif;font-size:20px;padding-left:100px;'>$[[value]]</span> [[additional]]</span>",
+                    "bullet": "round",
+                    "lineThickness": 3,
+                    "bulletSize": 10,
+                    "bulletBorderAlpha": 1,
+                    "bulletColor": "#FFFFFF",
+                    "useLineColorForBulletBorder": true,
+                    "bulletBorderThickness": 3,
+                    "lineColor":"#2d8bca",
+                    "fillAlphas": 0,
+                    "lineAlpha": 1,
+                    "title": "Fuel Price",
+                    "valueField": "Fuel Price",
+                    "dashLengthField": "dashLengthLine"
+                  } ],
+                  "categoryField": "year",
+                  "categoryAxis": {
+                    "gridPosition": "start",
+                    "gridAlpha": 0,
+                    "tickLength": 2,
+                    "dashLength":7
+                  },
+                  "export": {
+                    "enabled": true
+                  }
+                } );
+                </script>
+
+
+
+        
+ 
+  <!--   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+       <div id="chart_div" style="width: 900px; height: 500px;"></div>
+   <script>
+           google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawVisualization);
+
+
+      function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable({!getdata});
+
+    var options = { 
+      title : 'Months vs Mileages ',
+      vAxis: {title: 'Mileages'},
+      hAxis: {title: 'Months'},
+      seriesType: 'bars',
+      series: {1: {type: 'line'}}
+    };
+
+    var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+  }      
+           </script>
+           -->
+</apex:page>

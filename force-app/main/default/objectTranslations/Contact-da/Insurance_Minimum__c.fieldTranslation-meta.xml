@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Insurance (Minimum) --></label>
+    <name>Insurance_Minimum__c</name>
+    <picklistValues>
+        <masterLabel>100/300/100</masterLabel>
+        <translation><!-- 100/300/100 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>100/300/50 (Recommended minimum)</masterLabel>
+        <translation><!-- 100/300/50 (Recommended minimum) --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>250/500/100</masterLabel>
+        <translation><!-- 250/500/100 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>300/Single Limit</masterLabel>
+        <translation><!-- 300/Single Limit --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

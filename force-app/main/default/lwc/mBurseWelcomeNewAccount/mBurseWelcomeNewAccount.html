@@ -1,0 +1,27 @@
+<template>
+    <div>
+        <div>
+            <c-m-burse-header-text head-text="Welcome to the mBursement Plan!"></c-m-burse-header-text>
+        </div>
+       <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style">Follow this steps to get started:</div>
+       <div>
+           <c-m-burse-step></c-m-burse-step>
+       </div>
+       <div class="slds-clearfix m-left m-right plr slds-p-top_x-large">
+           <div class="footer-text slds-float_left">
+               <div><strong>It's helpful to have the following:</strong>
+                   <ul class="slds-list_dotted slds-p-top_x-small">
+                       <li>A copy of insurance declaration pages</li>
+                       <li>Your work cell phone</li>
+                       <li>Approximately 10-15 minutes time to complete setup</li>
+                   </ul>
+               </div>
+           </div>
+           <div class="footer-button slds-float_right">
+            <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light mleft-0 mright-0" onclick={redirectToInsurance}>
+                 Get Started
+            </button>
+           </div>
+       </div>
+    </div>
+</template>

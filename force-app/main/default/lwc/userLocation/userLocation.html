@@ -1,0 +1,29 @@
+<template>
+    <div class="animate__animated animate__slideInLeft animate__delay-1s">
+        <div style="position: relative;">
+            <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_x-small slds-p-top_small font-bold" lwc:if={addLocation}>Location upload</div>
+            <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_x-small slds-p-top_small font-bold" lwc:if={myLocation}>Manage Locations</div>
+            <div class="slds-p-top_x-small slds-p-left_large toggle-container">
+                <div class="flex-row">
+                    <div class="slds-m-right_small"><button style="border-color:  var(--green-color) !important;"
+                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-white waves-light mleft-0 my-trip btn-toggle is-normal" onclick={handleSingleLocation}>
+                            Add New Location</button></div>
+                    <div class="slds-m-left_small slds-m-right_small"><button style="border-color:  var(--green-color) !important;"
+                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-white waves-light mleft-0 btn-toggle add-trip is-normal" onclick={handleAddLocation}>
+                            Upload Multiple Locations</button></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <template lwc:if={myLocation}>
+                <c-view-user-location location={locationsList} map-country={mapCountry} contact-id={contactId} onmodal={showListModal} ontoast={showSpinner} onerror={showErrorToast}></c-view-user-location>
+            </template>
+            <template lwc:if={addLocation}>
+                <c-location-upload account-id={accountId} contact-id={contactId} map-country={mapCountry} user-triplog-id={userTriplogId} ontoast={showSpinner} onmodal={showModal} onshowlocations={handleShowLocations}></c-location-upload>
+            </template>
+        </div>
+    </div>
+    <!-- <template lwc:if={addSingleLocation}> -->
+        <c-add-update-location account-id={accountId} user-triplog-id={userTriplogId} map-country={mapCountry} ontoast={handleToast} onloading={showSpinner} onloaded={hideSpinner} onlocationadd={handleShowLocations} onclose={handleCloseModal}></c-add-update-location>
+    <!-- </template> -->
+</template>

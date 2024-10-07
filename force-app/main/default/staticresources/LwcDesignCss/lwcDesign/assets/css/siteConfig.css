@@ -1,0 +1,22 @@
+*{
+    --app-white-color: #FFFFFF;
+    --app-grey-color: #D7D7D7;
+    --app-green-color: #7ABB4A;
+    --app-black-color: #1D1D1D;
+    --app-dark-grey-color: #6C6C6C;
+    --app-odd-row-color: #F7F7F7;
+    --app-scroll-color: #F6F6F6;
+    --app-dark-blue-color: #404B5B;
+    --app-red-color: #FA7800;
+    --app-border-color: #E4E4E4;
+    --app-blue-color: #00AFE8;
+    --app-box-shadow-none: none;
+}
+
+.header-title, .header-title--v1, .download-th, .header-checkbox, .preview-holder, .preview-cell{
+    background-color: var(--app-white-color) !important;
+}
+
+.app-dropdown{
+    box-shadow: var(--app-box-shadow-none) !important;
+}

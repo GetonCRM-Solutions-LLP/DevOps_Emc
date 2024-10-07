@@ -1,0 +1,26 @@
+.imgSpinner {
+                    top: 50.5%;
+                    left: 50%;
+                    position: fixed;
+                    width:15px;
+                    height:15px;
+                }
+                .textSpinner {
+                    top: 50%;
+                    left: 51.5%;
+                    position: fixed;
+                    color: white;
+                    font-size: 16px;
+                }
+                .spinner {
+                    position: fixed;
+                    top:0;
+                    left:0;
+                    text-align:center;
+                    z-index: 1000 !important;
+                    overflow: auto;
+                    width: 100%;
+                    height:100%;
+                    opacity: 0.5;
+                    background-color: black;
+                }

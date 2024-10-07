@@ -1,0 +1,61 @@
+<template>
+    <div  class="transition">
+        <div>
+            <c-m-burse-header-text head-text="Step 1">
+                <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Plan Preview</div>
+            </c-m-burse-header-text>
+        </div>
+        <div class="slds-align_absolute-center video-container">
+            <video id="video-source"  class="video-frame" width={videoWidth} height={videoHeight}  controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                <source  type="video/mp4" src={welcomeVideoUrl}/>
+            </video>
+        </div>
+        <div class="slds-clearfix slds-align_absolute-center slds-p-top_x-large p_top" style="flex-flow: column; width: 29%;">
+            <div class="footer-text slds-p-bottom_large">
+                <div class="font-style"><strong>Key Takeaways:</strong>
+                    <ul class="slds-list_dotted slds-p-top_x-small">
+                        <li>Your reimbursement is based on a reasonable size job appropriate vehicle.</li>
+                        <li>If you follow all of the guidelines you will receive a 100% tax free reimbursement.</li>
+                        <li>If you are not following all of the guidelines there may be the posibility of some end of the year taxation.</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-button slds-p-bottom_medium mright-0 mleft-0">
+                <div style="margin: 0.375rem 7rem 0.375rem 0;">
+                    <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                        <li class="slds-item navigate">
+                            <a 
+                            name="buttonBackwards"
+                            label="Previous" 
+                            title="" 
+                            onclick={backToPrevious}  >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="12" viewBox="0 0 16 12" fill="none">
+                                    <path d="M5.27083 0.518159L5.23057 0.477898C5.6416 0.0668681 6.30443 0.0668665 6.71544 0.477899C7.12647 0.888928 7.12647 1.55176 6.71543 1.96277L3.746 4.93219L14.0082 4.9322C14.587 4.9322 15.0569 5.4021 15.0569 5.9809C15.0569 6.55971 14.587 7.02961 14.0082 7.02961L3.746 7.02961L6.71544 9.99904C7.12647 10.4101 7.12647 11.0729 6.71543 11.4839C6.3044 11.8949 5.64158 11.8949 5.23057 11.4839L0.470134 6.72348C0.419224 6.67257 0.377458 6.61808 0.340662 6.56474L0.340063 6.56387L0.340071 6.56386C0.330253 6.54905 0.322986 6.53451 0.317282 6.5231L0.316818 6.52217C0.310691 6.50992 0.306186 6.50105 0.300501 6.49247L0.299683 6.49124L0.2997 6.49123L0.298833 6.48984C0.279756 6.45938 0.256998 6.42303 0.242799 6.38092C0.235564 6.36144 0.228728 6.33906 0.222278 6.31794C0.218253 6.30476 0.214378 6.29207 0.21065 6.28089L0.209939 6.27875L0.209981 6.27874C0.20712 6.26887 0.203734 6.25909 0.199711 6.24746C0.198801 6.24483 0.197858 6.2421 0.196881 6.23926C0.191834 6.22458 0.186218 6.20769 0.181699 6.18929L0.180949 6.18624L0.181035 6.18622C0.168689 6.12048 0.160134 6.04931 0.160134 5.98146C0.160134 5.91361 0.168689 5.84243 0.181035 5.77669L0.18168 5.77325L0.181785 5.77327C0.189579 5.74237 0.197798 5.71243 0.210502 5.68192C0.211025 5.67982 0.211559 5.67764 0.212108 5.67541C0.218947 5.6476 0.228105 5.61036 0.245014 5.57659M5.27083 0.518159L0.296489 5.60096M5.27083 0.518159L5.23056 0.477903L0.47013 5.23944L0.470007 5.23956C0.42453 5.28533 0.378151 5.33978 0.33984 5.3994M5.27083 0.518159L0.510395 5.27969C0.466948 5.32342 0.423227 5.37488 0.38753 5.43051M0.245014 5.57659C0.245255 5.57611 0.245498 5.57562 0.245744 5.57514L0.296489 5.60096M0.245014 5.57659C0.244812 5.57704 0.244611 5.5775 0.244409 5.57795L0.296489 5.60096M0.245014 5.57659C0.253735 5.55701 0.263352 5.5389 0.27224 5.52261C0.281685 5.5053 0.28975 5.491 0.297034 5.47644L0.297599 5.47531C0.309131 5.45224 0.32227 5.42596 0.33984 5.3994M0.296489 5.60096C0.306126 5.57915 0.317312 5.55879 0.328155 5.53905C0.335059 5.52648 0.341823 5.51417 0.347959 5.5019L0.347982 5.50186C0.359874 5.47807 0.371767 5.45429 0.38753 5.43051M0.33984 5.3994C0.339764 5.39952 0.339688 5.39964 0.339613 5.39975L0.38753 5.43051M0.33984 5.3994C0.339917 5.39928 0.339994 5.39917 0.340071 5.39905L0.38753 5.43051" fill="#7ABB4A" stroke="#7ABB4A" stroke-width="0.113874"/>
+                                </svg>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <template lwc:if={renderMeeting}>
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"  onclick={nextMeeting}>
+                            {buttonRender}
+                        </button>
+                    </template>
+                    <template lwc:elseif={renderAccount}>
+                        <button class="slds-btn slds-btn-sm waves-effect bc-outline waves-light"  onclick={loggedInToAccount}>
+                            Go to my account
+                        </button>
+                    </template>
+                    <template lwc:else>
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={nextTour}>
+                            Go to mDash tour
+                        </button>
+                    </template>
+                    <div class="align_message slds-p-top_small">  <a class="dont-font" onclick={removePreview}>Don’t show this page again</a> </div>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+</template>

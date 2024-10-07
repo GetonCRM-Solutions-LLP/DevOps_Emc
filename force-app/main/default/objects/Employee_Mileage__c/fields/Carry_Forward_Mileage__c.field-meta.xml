@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Carry_Forward_Mileage__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>If this checkbox is true then it should be carry forward mileage to next months reimbursement and if false it should be as it is</inlineHelpText>
+    <label>Carry Forward Mileage</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

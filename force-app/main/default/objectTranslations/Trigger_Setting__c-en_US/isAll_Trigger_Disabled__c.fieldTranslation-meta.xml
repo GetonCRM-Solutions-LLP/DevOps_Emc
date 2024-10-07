@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Mark this checkbox to true if all triggers needs to be disabled --></help>
+    <label><!-- All Trigger Disabled? --></label>
+    <name>isAll_Trigger_Disabled__c</name>
+</CustomFieldTranslation>

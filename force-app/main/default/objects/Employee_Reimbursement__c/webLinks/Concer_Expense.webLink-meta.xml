@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Concer_Expense</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Concer Expense</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/42.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/42.0/apex.js&quot;)}
+var todayDate = &apos;{!Employee_Reimbursement__c.Month__c}&apos;;
+var accounts = sforce.connection.query(&quot;SELECT id, Contact_Id__r.AccountId FROM Employee_Reimbursement__c WHERE id = &apos;{!Employee_Reimbursement__c.Id}&apos;&quot;);
+var accid = accounts.records.Contact_Id__r.AccountId;
+sforce.apex.execute(&quot;UploadConcurQuickExpenseTriplog&quot;,&quot;postTotalReimbursement&quot;,{accid:accid,empReMonth:todayDate,contactEmail:&apos;{!Employee_Reimbursement__c.Contact_Email__c}&apos;,totalReimburement:&apos;{Employee_Reimbursement__c.Total_Monthly_Reimbursement__c}&apos;});
+location.reload(true);</url>
+</WebLink>

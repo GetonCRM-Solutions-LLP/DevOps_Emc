@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>mlog_App__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This field is used on mburse dashboard to check new driver completed 4th step or not</description>
+    <label>Download mlog App</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

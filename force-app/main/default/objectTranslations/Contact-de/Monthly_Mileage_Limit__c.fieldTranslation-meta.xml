@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Manager selects how many miles can be driven for auto approval. --></help>
+    <label><!-- Monthly Mileage Limit --></label>
+    <name>Monthly_Mileage_Limit__c</name>
+</CustomFieldTranslation>

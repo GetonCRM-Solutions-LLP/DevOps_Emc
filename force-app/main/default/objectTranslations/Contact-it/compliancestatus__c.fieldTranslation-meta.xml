@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- compliance status --></label>
+    <name>compliancestatus__c</name>
+    <picklistValues>
+        <masterLabel>Expired Insurance</masterLabel>
+        <translation><!-- Expired Insurance --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No - Insurance Not Provided</masterLabel>
+        <translation><!-- No - Insurance Not Provided --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No - Mileage</masterLabel>
+        <translation><!-- No - Mileage --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No - Missing Coverage Dates</masterLabel>
+        <translation><!-- No - Missing Coverage Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No – Insurance Card</masterLabel>
+        <translation><!-- No – Insurance Card --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No – Insurance Not Meeting Minimum</masterLabel>
+        <translation><!-- No – Insurance Not Meeting Minimum --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No – Vehicle Age</masterLabel>
+        <translation><!-- No – Vehicle Age --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>No – Vehicle Value</masterLabel>
+        <translation><!-- No – Vehicle Value --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Yes</masterLabel>
+        <translation><!-- Yes --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

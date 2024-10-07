@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Bi_Week_Fixed_Amount__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Use to display bi weekly fixed amount</description>
+    <inlineHelpText>display fixed 1, fixed 2 ..</inlineHelpText>
+    <label>Bi Week Fixed Amount</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

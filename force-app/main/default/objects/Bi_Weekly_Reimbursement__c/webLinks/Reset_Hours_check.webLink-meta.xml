@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reset_Hours_check</fullName>
+    <availability>online</availability>
+    <description>This button resets specific fields on the current record:
+
+1. Error Hours checkbox is set to false.
+2. Confirm Hours checkbox is set to false.
+3. Count Error Check field is set to 0</description>
+    <displayType>button</displayType>
+    <height>600</height>
+    <linkType>page</linkType>
+    <masterLabel>Reset Hours check</masterLabel>
+    <openType>sidebar</openType>
+    <page>ResetHourscheckPage</page>
+    <protected>false</protected>
+</WebLink>

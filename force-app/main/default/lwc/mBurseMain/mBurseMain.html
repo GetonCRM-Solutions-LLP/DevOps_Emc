@@ -1,0 +1,19 @@
+<template>
+    <c-m-burse-welcome-account lwc:if={welcomePage} onnavigate={navigateToInsurance} contact-id={contactId} account-type={accountType}
+        cellphone-type={cellphoneType} custom-setting={settings} ontoast={showToast} day-left={leftDays}></c-m-burse-welcome-account>
+    <c-m-burse-welcome-insurance contact-id={contactId} welcome-insurance={isInsurance}
+        insurance-declaration={isDeclaration} lwc:if={nextInsurance} onnextskip={renderView} onnavigate={navigateToDeclaration}
+        day-left={leftDays} onnext={nextView} onskip={skipToDriverPacket} onback={backToWelcome} driver-meeting-url={scheduleMeeting} custom-setting={settings}></c-m-burse-welcome-insurance>
+    <c-m-burse-upload-declaration lwc:if={nextDeclationUpload} is-upload-show={uploadVal} is-upload-skip={skipUpload}
+        account-id={accountId} contact-id={contactId} attachmentid={attachmentid} contact-name={contactFirstName} driver-meeting={meetingType}
+        contact-email={contactEmail} meeting={registerMeeting} schedule={scheduleMeeting} account-type={accountType} client={information} onnavigate={navigateToDriverPacket}
+        onskip={skipToDriverPacket} day-left={leftDays} onback={backToInsurance}></c-m-burse-upload-declaration>
+    <c-m-burse-driver-packet lwc:if={nextDriverPacket} onnavigate={navigateTomLog} contact-id={contactId} driver-meeting={meetingType}
+        days={leftDays} email-of-driver={contactEmail} cell-type={cellphoneType}  account-type={accountType} contact-of-driver={contactName}
+        meeting={registerMeeting} schedule={scheduleMeeting} onskip={skipTomLogPreview} onback={backToDeclaration}></c-m-burse-driver-packet>
+    <c-m-burse-mlog lwc:if={nextmLogPreview} onnavigate={navigateTomLogDownload} onback={backToDriverPacket}
+        contact-id={contactId} cell-type={cellphoneType} custom-setting={settings}></c-m-burse-mlog>
+    <c-m-burse-download-mlog lwc:if={nextmLogDownload}  onback={backTomLog} first-name={contactFirstName}
+        account-id={accountId} contact-id={contactId} contact-email={contactEmail} meeting={registerMeeting} mobile-phone={mobilePhone} driver-meeting={meetingType}
+        day-left={leftDays} schedule={scheduleMeeting} account-type={accountType} cell-type={cellphoneType} onsend={handleLink} onnavigate={navigateToMeeting}></c-m-burse-download-mlog>
+</template>

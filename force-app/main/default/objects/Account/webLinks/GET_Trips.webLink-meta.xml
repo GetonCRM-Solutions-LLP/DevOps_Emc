@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GET_Trips</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>GET Trips</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/41.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/41.0/apex.js&quot;)}
+
+var apiToken = &apos;{!Account.Triplog_API__c}&apos;;
+if(apiToken != null &amp;&amp; apiToken != &apos;&apos;) {
+    var result = sforce.apex.execute(&quot;GetTripsForAccount&quot;,&quot;GetTripsForAcc&quot;,{acc:&apos;{!Account.Id}&apos;,tripStatus:&apos;{!Account.Triplog_Status__c}&apos;});
+    location.reload(true);
+} else {
+    alert(&apos;Please fill Token API Field&apos;);
+}</url>
+</WebLink>

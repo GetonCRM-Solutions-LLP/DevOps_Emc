@@ -1,0 +1,134 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src: url("../font/ProximaNovaReg.ttf?orgId=00Di0000000axNC&orgId=00D3I0000000nxp&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC"), url("../font/ProximaNovaReg.woff?orgId=00Di0000000axNC&orgId=00D3I0000000nxp&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC") format("woff"), url("../font/ProximaNovaReg.eot?orgId=00Di0000000axNC&orgId=00D3I0000000nxp&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC"), url("../font/ProximaNovaReg.svg?orgId=00Di0000000axNC&orgId=00D3I0000000nxp&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC&orgId=00Di0000000axNC#svgFontName") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: 'Proxima Nova';
+  background: url("../images/mBurse-login/Blue.png") center / contain no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+}
+
+.brand-wrapper {
+  margin-bottom: 19px;
+}
+
+.brand-wrapper .logo {
+  height: 37px;
+}
+
+.login-card {
+  border: 0;
+  border-radius: 27.5px;
+  box-shadow: 0 10px 30px 0 rgba(172, 168, 168, 0.43);
+  overflow: hidden;
+}
+
+.login-card-img {
+  border-radius: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+  object-fit: cover;
+}
+
+.login-card .card-body {
+  padding: 85px 60px 34px;
+}
+
+@media (max-width: 422px) {
+  .login-card .card-body {
+    padding: 35px 24px;
+  }
+}
+
+.login-card-description {
+  font-size: 25px;
+  color: #000;
+  font-weight: normal;
+  margin-bottom: 16px;
+}
+
+.form-group {
+  margin-bottom: 0 !important;
+}
+
+.mb-4 {
+  margin-bottom: 4px !important;
+}
+
+.login-card .form-control {
+  border: 1px solid #d5dae2;
+  padding: 15px 25px;
+  margin-bottom: 20px;
+  min-height: 45px;
+  font-size: 16px;
+  line-height: 15;
+  font-weight: normal;
+  width: 65% !important;
+}
+
+.login-card .form-control::-webkit-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::-moz-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control:-ms-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::-ms-input-placeholder {
+  color: #919aa3;
+}
+
+.login-card .form-control::placeholder {
+  color: #919aa3;
+}
+
+.login-card .login-btn {
+  padding: 13px 20px 12px;
+  background-color: #000;
+  border-radius: 4px;
+  font-size: 17px;
+  font-weight: bold;
+  line-height: 20px;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.login-card .login-btn:hover {
+  border: 1px solid #000;
+  background-color: transparent;
+  color: #000;
+}
+
+.login-card .forgot-password-link {
+  font-size: 14px;
+  color: #919aa3;
+  margin-bottom: 12px;
+  padding-left: 3px;
+}
+
+.login-card-footer-text {
+  font-size: 16px;
+  color: #0d2366;
+  margin-bottom: 60px;
+}
+
+@media (max-width: 767px) {
+  .login-card-footer-text {
+    margin-bottom: 24px;
+  }
+}
+
+.login-card-footer-nav a {
+  font-size: 14px;
+  color: #919aa3;
+}

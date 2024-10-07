@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>No_of_Bi_Weekly_Reim_for_current_year__c</fullName>
+    <label>No of Bi-Weekly Reim for current year</label>
+    <summaryFilterItems>
+        <field>Bi_Weekly_Reimbursement__c.Year__c</field>
+        <operation>equals</operation>
+        <value>2023</value>
+    </summaryFilterItems>
+    <summaryForeignKey>Bi_Weekly_Reimbursement__c.Contact__c</summaryForeignKey>
+    <summaryOperation>count</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

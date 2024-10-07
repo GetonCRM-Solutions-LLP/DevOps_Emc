@@ -1,0 +1,312 @@
+<apex:page Controller="RG_CreateNewUserPageClass" standardStyleSheets="true" showHeader="false" docType="html-5.0" title="New Driver Upload" >
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link rel='stylesheet' id='rcap-style-css'  href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}" type='text/css' media='all' />
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/md_responsive.css')}"/>
+    
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+
+    <style>
+        .dataImporterDiLanding.landing-help-banner, .dataImporterDiLanding.landing-help-banner.hide {
+                
+                position: relative;
+                -webkit-transition: all 1000ms;
+                transition: all 1000ms;
+                -webkit-transform-origin: 70% 0% 0 50%;
+                -ms-transform-origin: 70% 0% 0 50%;
+                transform-origin: 70% 0% 0 50%;
+                -webkit-transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+                -ms-transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+                transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+        }
+        .dataImporterDiLanding {
+        }
+        .slds-scope *, .slds-scope *:before, .slds-scope *:after {
+            box-sizing: border-box;
+        }
+        .landing-help-banner-right {
+            width: 700px;
+            padding: 14px 0px 40px 30px;
+            float: left;
+            background: url(/img/setup/dataimporter/landing-help-banner-divider.png) left center no-repeat;
+            box-sizing: border-box;
+            color: #5d5d5d;
+        }
+        .landing-help-banner-left {
+            width: 264px;
+            padding: 130px 20px 0 20px;
+            float: left;
+            background: url(/img/setup/dataimporter/landing-help-banner-icon.png) center 64px no-repeat;
+            text-align: center;
+            color: #5d5d5d;
+            font-size: 24px;
+            font-family: "HelveticaNeue-Light",Arial,sans-serif;
+            box-sizing: border-box;
+        }
+        .landing-help-banner-collapse {
+            position: absolute;
+            right: 32px;
+            top: 26px;
+            font-size: 11px;
+        }
+        .dataImporterDiLanding a {
+            color: #305cb9;
+            vertical-align: middle;
+            text-decoration: none;
+        }
+        .overlay-content {
+            position: absolute;
+            left: 50%;
+            width: 500px;
+            min-height: 100px;
+            max-height: 450px;
+            margin: 0 0 0 -250px;
+            padding: 1em;
+            background-color: #fff;
+            border-radius: 4px;
+            overflow: hidden;
+            box-sizing: border-box;
+            box-shadow: 0 0 14px 0 rgba(0, 0, 0, 0.45);
+            margin: 0 0 0 -250px;
+        }
+        .overlay-content-inner {
+            padding: 10px 10px 50px 10px;
+        }
+        .dataImporterDiOverlay .overlay-content-inner {
+            margin-bottom: 80px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+        .dataImporterDiLanding .li-hdr {
+            display: block;
+            margin: 0 0 .25em 0;
+            font-weight: bold;
+            color: #353535;
+            font-size: 13px;
+        }
+        .headerStyle::before { 
+            content: '*'; 
+            color: red !important; 
+            position: absolute; 
+            -webkit-column-break-after: 24; 
+            margin-top: -6px; 
+            margin-left: -4px; 
+            justify-content: 3; 
+        }
+        .theCursor {
+           cursor: url(https://www.shareicon.net/data/12x12/2016/11/15/853440_edit_512x512.png), auto !important;
+           background-color: black !important;
+        }
+        .slds .slds-theme--default {
+            background-color: #35bfbf0d;
+        }
+        .slds .slds-p-vertical--large {
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        .editCursor{
+            background-color: black !important;
+            cursor:pointer !important;
+        }
+        .slds .slds-notify--toast {      
+            display: block;                       
+        }
+
+    </style>
+    <script >
+        function hideInstruction(){
+        if({!readSuccess} == true)    
+            document.getElementById($("[id$='instruction']")[0].id).style.display = "none";
+        }
+        $(document).ready(function(){                
+            hideInstruction();
+        });
+    </script>
+    <apex:form id="frm">
+      <div class="slds">
+        <apex:pageBlock id="controlPanel" mode="maindetail">  
+        
+        <center>
+            
+            <apex:outputText style="margin-top: 30px;font-weight: bold;font-size: 20px;" styleClass="slds-form-element__label" value="Upload CSV file to Create User"></apex:outputText>
+        </center>
+            <br/>
+            <apex:outputPanel >
+                <div style="width: 100%" class="col-md-12">
+                <div  class="col-md-3" ></div>
+                <div  class="col-md-2" style="width: 15%;">
+                    <apex:commandLink styleClass="btn" style="text-decoration:none;padding:4px;" value="{!$Label.csv_button_name}" onclick="window.open('{!$Label.Org_link}/servlet/servlet.FileDownload?file={!sampleDocId}')"  />  
+                </div> 
+                <div  class="col-md-2" style="width: 19%;">
+                    <apex:inputFile value="{!csvFileBody}" styleClass="slds-input slds-size-1-of-12"  accept="csv" contentType="text/csv" />
+                </div>
+
+                <div  class="col-md-4">
+                
+                <apex:commandLink styleClass="btn" style="text-decoration:none;padding:4px;" value="Upload CSV" action="{!readFromFile}"/>
+                &nbsp;&nbsp;&nbsp;
+                
+                    <apex:commandLink styleClass="btn" style="text-decoration:none;padding:4px;" value="Back" action="{!backMethod}"/>
+                </div>
+                    </div> 
+            </apex:outputPanel><br/><br/><br/>
+        
+        <center>        
+            <apex:messages styleClass="slds-notify slds-notify_toast slds-theme_info slds-notify--toast"/>
+        </center>
+
+            <apex:outputPanel id="instruction">
+                <fieldset class="slds-box slds-theme--default slds-container--large" style="margin-left: 10%;margin-right: 10%;">
+
+                    <legend  class="slds-text-heading--medium slds-p-vertical--large" style="width: 27%;margin-left: 360px;">Important Instructions</legend>
+                    <form class="slds-form--stacked">
+                        <div class="slds-form-element">
+                            <div class="landing-help-banner dataImporterDiLanding"  data-aura-rendered-by="50:2;a" data-aura-class="dataImporterDiLanding" >
+                                <div class="landing-help-banner-left" data-aura-rendered-by="51:2;a">Before you upload new users . . .
+                                </div>
+                                <div class="landing-help-banner-right" data-aura-rendered-by="53:2;a">
+                                    <ul class="ul-no-bullet" data-aura-rendered-by="54:2;a">
+                                        <li data-aura-rendered-by="55:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="56:2;a">Text:
+                                            </span>
+                                        </li>
+                                        <li data-aura-rendered-by="55:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="56:2;a">Step 1. Download Sample CSV by clicking on button. 
+                                            </span>
+                                        </li>
+                                        <li data-aura-rendered-by="55:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="56:2;a">Step 2. Add data in that CSV and select Choose file and click on upload.
+                                            </span> 
+                                        </li>
+                                        <li data-aura-rendered-by="55:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="56:2;a">Step 3. Make sure data is accurate
+                                            </span>You'll have fewer errors to resolve if your data file is clean and free of duplicates. 
+                                        </li>
+                                        <br/>
+                                        <li data-aura-rendered-by="55:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="56:2;a">Tips:
+                                            </span>
+                                        </li>
+                                        <li data-aura-rendered-by="61:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="62:2;a">Review to verify data is accurate.
+                                            </span>
+                                            You will have fewer errors to correct if your data is free of duplicates, errors and the correct data is entered in the correct columns.<br></br>
+                                            Please see the list of mandatory fields, any missing data for a new employee will cause that employee not to upload and delay the provisioning process.
+                                        </li> 
+
+                                        <li data-aura-rendered-by="67:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="68:2;a">Here is a list of the mandatory fields:
+                                            </span>                            
+                                            
+                                            <div style="font-size: 13px; line-height: 133%;">
+                                                <strong>First Name</strong> <br></br>
+                                                <strong>Last Name</strong> <br></br>
+                                                <strong>Email Address</strong> <br></br>
+                                                <strong>Activation Date</strong>: Date format as (MM/DD/YYYY). e.g. December 11,2018 should be entered as 12/11/2018.<br></br>
+                                                <strong>Zip Code</strong>: Only 5 digit home zip code.<br></br>
+                                                <strong>City</strong>: Only characters. e.g. Denver<br></br>
+                                                <strong>State</strong>: Only two letter abbreviations. e.g. The state code for Colorado is CO<br></br>
+                                                <strong>Manager</strong>: Must be an active manager<br></br>                                
+                                            </div>
+                                        </li>
+                                        <li data-aura-rendered-by="67:2;a">
+                                            <span class="li-hdr" data-aura-rendered-by="68:2;a"><br/>Dont import over 100 new drivers at once
+                                            </span>
+                                            Keep imports to 100 new drivers or less at once. If importing more 100 new drivers repeat the upload process multiple times or contact your Account Manager.
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>                        
+                    </form>
+                </fieldset>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        <apex:pageBlock id="dataPanel" rendered="{!lstContacts.size>0}">
+        <div style="text-align: -webkit-right;margin-bottom: 5px;" >        
+            <b>         
+                <span style="color: red">*</span> = Required Information        
+            </b>        
+        </div>
+            <apex:pageblocktable value="{!lstContacts}"  var="contact"  >
+                <div class="editCursor" >
+                    <apex:column headerValue="First Name" headerClass="headerStyle" >
+                        <apex:outputField value="{!contact.FirstName}" styleClass="slds-cell-edit" >
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick" />
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Last Name" headerClass="headerStyle">
+                        <apex:outputField value="{!contact.LastName}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Role">
+                        <apex:outputField value="{!contact.Role__c}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Manager" headerClass="headerStyle">
+                        <apex:outputField value="{!contact.Manager__c}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Email" headerClass="headerStyle">
+                        <apex:outputField value="{!contact.External_Email__c}" styleClass="theCursor">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Employee ID">
+                        <apex:outputField value="{!contact.Employee_ID__c}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Activation Date" headerClass="headerStyle">
+                        <apex:outputField value="{!contact.Activation_Date__c}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="City">
+                        <apex:outputField value="{!contact.MailingCity}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="State">
+                        <apex:outputField value="{!contact.MailingState}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Postal Code">
+                        <apex:outputField value="{!contact.MailingPostalCode}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Mobile">
+                        <apex:outputField value="{!contact.MobilePhone}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+                    <apex:column headerValue="Driving States">
+                        <apex:outputField value="{!contact.Driving_States__c}">
+                            <apex:inlineEditSupport showOnEdit="Save to Contacts" event="ondblclick"/>
+                        </apex:outputField>
+                    </apex:column>
+
+                </div>    
+            </apex:pageblocktable>
+              <center>
+                <apex:commandLink value="Save to Contacts" styleClass="btn" style="text-decoration:none;padding:4px;" action="{!saveData}" rendered="{!readSuccess}">
+                </apex:commandLink>
+                &nbsp;&nbsp;
+                <apex:outputPanel >
+                <apex:commandLink rendered="{!IF(isSuccessFile==true,true,false)}" value="Download Success File" onclick="window.open('{!$Label.Org_link}/servlet/servlet.FileDownload?file={!insertedDocId}')" styleClass="btn" style="text-decoration:none;padding:4px;"/>
+                &nbsp;&nbsp;
+                <apex:commandLink value="Download Error File" styleClass="btn" style="text-decoration:none;padding:4px;" rendered="{!IF(isDuplicateFile==true,true,false)}" onclick="window.open('{!$Label.Org_link}/servlet/servlet.FileDownload?file={!dupDocId}')"/>
+                </apex:outputPanel>
+            </center>
+        </apex:pageBlock>
+        </div>
+    </apex:form>   
+</apex:page>

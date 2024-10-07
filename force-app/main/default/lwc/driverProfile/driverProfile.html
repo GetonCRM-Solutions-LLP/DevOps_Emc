@@ -1,0 +1,400 @@
+<template>
+    <template if:true={isInformation}>
+        <div class="back-btn my-3">
+            <h1 class="form-heading mb-19">{contactDetails.contactName} <img class="slds-p-left_medium"
+                    src={contactDetails.accountLogo} style="height: 40px" /></h1>
+        </div>
+        <div class="slds-grid slds-wrap dProfileGrid">
+            <div
+                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 slds-p-right_medium dProfile ">
+                <lightning-layout multiple-rows="true"
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                    <lightning-layout-item size="12">
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 dProfile-header-section dProfile-header">
+                            <h2 class="profile-heading">Profile</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12">
+                        <lightning-layout>
+                            <lightning-layout-item class="slds-p-around_x-small" size="6">
+                                <lightning-layout>
+                                    <lightning-layout-item  class="slds-p-around_xx-small" size="4">
+                                        <div class="dProfile-section pdl-3 slds-grid slds-grid_vertical">
+                                            <div class="slds-col slds-size_12-of-12 slds-p-top_x-small">
+                                                <img class="common_size" src={locationIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-vertical_x-small">
+                                                <p class="text-font-align" style="word-break: break-word;">{contactDetails.city},&nbsp;{contactDetails.state}&nbsp;{contactDetails.zipCode}</p>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item  class="slds-p-around_xx-small" size="4">
+                                        <div class=" dProfile-section pdl-3 slds-grid slds-grid_vertical">
+                                            <div class="slds-col slds-size_12-of-12 slds-p-top_x-small">
+                                                <img class="common_size_50" src={moneyIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-vertical_x-small">
+                                                <p class="text-font-align">${fixedAmount}/{renderText} <br/> fixed amount</p>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item  class="slds-p-around_xx-small" size="4">
+                                        <div class=" dProfile-section pdl-3 slds-grid slds-grid_vertical">
+                                            <div class="slds-col slds-size_12-of-12 slds-p-top_x-small">
+                                                <img class="common_size" src={variableRateUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-vertical_x-small">
+                                                <p class="text-font-align">${variableRate}/mile <br/> mileage rate</p>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-layout>
+                                    <lightning-layout-item  class="slds-p-around_xx-small" size="4">
+                                        <div class="dProfile-section pdl-3 slds-grid slds-grid_vertical">
+                                            <div class="slds-col slds-size_12-of-12 slds-p-top_x-small">
+                                                <img class="common_size" src={milesIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_12-of-12 slds-p-top_x-small">
+                                                <p class="text-font-align" if:true={mileageText}>{mileageUnapproved} (miles) <br/> unapproved</p>
+                                                <p class="text-font-align" if:false={mileageText}>{mileageUnapproved} unapproved <br/> miles</p>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item  class="slds-p-around_xx-small" size="4">
+                                        <div class=" dProfile-section pdl-3 slds-grid slds-grid_vertical">
+                                            <div class="slds-col slds-size_12-of-12">
+                                                <img class="common_size" src={fuelIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_12-of-12">
+                                                <!-- <p class="text-font-align text-padding"  >$2.67/gallon <br/> last month</p>  -->
+                                                <p class="text-font-align" if:true={isfuelPrice}>
+                                                    ${fuelPrice}/gallon <br/> last month</p>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                            <lightning-layout-item class="slds-p-around_x-small" size="6">
+                                <lightning-layout>
+                                    <lightning-layout-item padding="small" size="7" class="custom-layout">
+                                        <div class="carProfile slds-grid slds-wrap">
+                                            <figure>
+                                                <template if:false={isShowMessage}>
+                                                    <img class="car-image-pl" src={contactDetails.carImage}
+                                                        alt="icon" />
+                                                </template>
+                                                <template if:true={isShowMessage}>
+                                                    <img class="car-image" src={contactDetails.carImage} alt="icon" />
+                                                </template>
+                                                <figcaption><strong>Your Reimbursement Vehicle</strong></figcaption>
+                                                <figcaption>{contactDetails.vehicalType}</figcaption>
+                                            </figure>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item padding="around-small" size="5">
+                                        <div class="dProfile-section page-main">
+                                            <h2 class="dProfile-states">Driving States:</h2>
+                                            <div class="dPara slds-grid slds-wrap slds-m-top_x-small">
+                                                <template if:true={drivingState} for:each={drivingState}
+                                                    for:item="state" for:index="index">
+                                                    <div class="slds-col slds-size_3-of-12" key={state}>{state}</div>
+                                                </template>
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <!-- <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12 dProfile-section dProfile-header">
+                    <h2 class="profile-heading">Profile</h2>
+                </div> -->
+
+
+            </div>
+            <div
+                class="slds-col slds-grid_vertical slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 dProfile-header-section dProfile-right-header">
+                    <h2 class="profile-heading">Notifications</h2>
+                </div>
+                <template if:true={isShowMessage}>
+                    <div
+                        class="slds-col slds-grid slds-wrap slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                        <template if:true={isNotify}>
+                            <template for:each={notifyList} for:item="notify" for:index="index">
+                                <div data-id={index}
+                                    class="slds-notify slds-notify_alert slds-alert_warning slds-m-top_small received"
+                                    role="alert" key={notify.Id}>
+                                    <span class="slds-assistive-text">warning</span>
+                                    <!-- <span class="slds-icon_container slds-icon-utility-warning slds-m-right_x-small" title="Description of icon when needed">
+                                    <svg class="slds-icon slds-icon_x-small bell-icon" aria-hidden="true">
+                                        <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#notification"></use>
+                                    </svg>
+                                    <lightning-icon icon-name="utility:notification" size="x-small" class="bell-icon">
+                                   </lightning-icon>
+                                </span> -->
+                                    <h2 class="notify-head"> {notify.message}</h2>
+                                    <div class="slds-notify__close">
+                                        <button data-id={index}
+                                            class="slds-button slds-button_icon slds-button_icon-small slds-button_icon-inverse btnClose"
+                                            title="Close" onclick={handleClose}>
+                                            <!-- <lightning-icon icon-name="utility:close" size="x-small" class="close_icon">
+                                          </lightning-icon> -->
+                                            <svg class="slds-button__icon slds-button_icon_x-small close_icon"
+                                                aria-hidden="true">
+                                                <use xlink:href="/_slds/icons/utility-sprite/svg/symbols.svg#close">
+                                                </use>
+                                            </svg>
+                                            <span class="slds-assistive-text">Close</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                        </template>
+                        <template if:false={isNotify}>
+                            <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-top_small">
+                        <img src={noNotification} />
+                       </div> -->
+                            <div
+                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-top_medium notify_text">
+                                You have no notifications right now.
+                            </div>
+
+                        </template>
+                    </div>
+                </template>
+
+            </div>
+        </div>
+        <div class="slds-grid slds-wrap dInfoGrid slds-p-bottom_large slds-is-close" data-id="profileSection">
+            <div
+                class="slds-col slds-grid_vertical slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 slds-p-right_medium dProfile">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 dProfile-header-section dProfile-header">
+                    <h2 class="profile-heading">Mileage</h2>
+                </div>
+                <div class="slds-col slds-grid slds-wrap size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                    <div
+                        class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_9-of-12 slds-m-top_large slds-p-left_medium">
+                        <table>
+                            <tr>
+                                <td class="t-width black"><strong>YTD Mileage:</strong></td>
+                                <template if:true={isComplete}>
+                                    <td class="complete-td">{formattedMileage} miles</td>
+                                </template>
+                                <template if:false={isComplete}>
+                                    <td class="ytd-green">{formattedMileage} miles</td>
+                                    <td class="ytd-grey"></td>
+                                </template>
+                            </tr>
+                        </table>
+
+                        <!-- <table>
+                       <tr>
+                           <td> <c-canvas-chart></c-canvas-chart></td>
+                       </tr>
+                   </table> -->
+                    </div>
+                    <div class="relative-position flag-fluid">
+                        <img src={flagIconUrl} />
+                        <div class="flag-text"><strong><lightning-formatted-number value={complianceMileage} maximum-fraction-digits="2"></lightning-formatted-number></strong></div>
+                    </div>
+                </div>
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-p-horizontal_medium">
+                    <c-canvas-chart chart-data={contactChart.Mileagechart} default-month={contactChart.monthName}
+                        chart-component="Mileage">
+                    </c-canvas-chart>
+                </div>
+            </div>
+            <div
+                class="slds-col  slds-grid_vertical slds-size_1-of-1 slds-large-size_4-of-12 slds-p-right_medium dProfile">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 dProfile-header-section dProfile-header">
+                    <h2 class="profile-heading">Reimbursement</h2>
+                </div>
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-top_large  slds-m-bottom_x-small slds-p-horizontal_medium">
+                    <table>
+                        <tr>
+                            <td class="td-width black"><strong>YTD Reimbursement:</strong></td>
+                            <td class="ytd-reimb">${formattedReim}</td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-p-horizontal_medium">
+                    <c-canvas-chart chart-data={contactChart.Reimbursementchart} default-month={contactChart.monthName}
+                        chart-component="Reimbursement">
+                    </c-canvas-chart>
+                </div>
+            </div>
+            <div class="slds-col  slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                <lightning-layout multiple-rows="true" class="full-width">
+                    <lightning-layout-item size="12">
+                        <div
+                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 dProfile-header-section dProfile-right-header">
+                            <h2 class="profile-heading">Plan Parameters</h2>
+                        </div>
+                    </lightning-layout-item>
+                    <lightning-layout-item size="12" class="slds-m-top_large">
+                        <lightning-layout class="slds-p-bottom_xx-large">
+                            <lightning-layout-item size="12">
+                                <lightning-layout>
+                                    <lightning-layout-item size="6" class="slds-p-right_x-small">
+                                        <div class="slds-p-vertical_xx-small border-css slds-grid slds-wrap insurance">
+                                            <div class="slds-col slds-size_3-of-12">
+                                                <img class="icon-size" src={umbrellaIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_7-of-12 slds-p-vertical_small vertical-padding">
+                                                <p class="text-align"><strong>{contactDetails.planInsurance}</strong>
+                                                </p>
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_2-of-12 slds-p-right_xx-small slds-p-top_x-small">
+                                                <img class="heck-size greencheck" src={heckTickUrl} alt="icon" />
+                                                <img class="heck-size blur" src={blurTickUrl} alt="icon" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item size="6" class="slds-p-left_xx-small ">
+                                        <div
+                                            class="slds-p-vertical_xx-small border-css slds-grid slds-wrap annualMileage">
+                                            <div class="slds-col slds-size_3-of-12">
+                                                <img class="icon-size" src={speedometerIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_7-of-12 slds-p-vertical_small vertical-padding">
+                                                <p class="text-align"><strong><lightning-formatted-number value={complianceMileage} maximum-fraction-digits="2"></lightning-formatted-number> miles</strong></p>
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_2-of-12 slds-p-right_xx-small slds-p-top_x-small">
+                                                <img class="heck-size greencheck" src={heckTickUrl} alt="icon" />
+                                                <img class="heck-size blur" src={blurTickUrl} alt="icon" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                                <lightning-layout size="12" class="slds-m-top_medium">
+                                    <lightning-layout-item size="6" class="slds-p-right_x-small">
+                                        <div
+                                            class="slds-p-vertical_xx-small border-css slds-grid slds-wrap vehicle-age">
+                                            <div class="slds-col slds-size_3-of-12">
+                                                <img class="icon-size" src={calendarIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_7-of-12 slds-p-vertical_small vertical-padding">
+                                                <p class="text-align"><strong>&lt; {contactDetails.planYears}
+                                                        years</strong></p>
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_2-of-12 slds-p-right_xx-small slds-p-top_x-small">
+                                                <img class="heck-size greencheck" src={heckTickUrl} alt="icon" />
+                                                <img class="heck-size blur" src={blurTickUrl} alt="icon" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                    <lightning-layout-item class="slds-p-left_xx-small" size="6">
+                                        <div
+                                            class="border-css slds-p-vertical_xx-small slds-grid slds-wrap vehicle-value">
+                                            <div class="slds-col slds-size_3-of-12">
+                                                <img class="icon-size" src={carIconUrl} alt="icon" />
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_7-of-12 slds-p-vertical_small vertical-padding">
+                                                <p class="text-align"><strong>&lt; ${vehicleValue}</strong></p>
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_2-of-12 slds-p-right_xx-small slds-p-top_x-small">
+                                                <img class="heck-size greencheck" src={heckTickUrl} alt="icon" />
+                                                <img class="heck-size blur" src={blurTickUrl} alt="icon" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+
+                                </lightning-layout>
+                                <lightning-layout size="12" class="slds-m-top_medium">
+                                    <lightning-layout-item size="12">
+                                        <div class="border-css slds-p-vertical_xx-small slds-grid slds-wrap compliance">
+                                            <div class="slds-col slds-size_1-of-12">
+                                                <img class="icon-size slds-m-left_xx-small" src={complianceIconUrl}
+                                                    alt="icon" />
+                                            </div>
+                                            <div class="slds-col slds-size_10-of-12 slds-p-vertical_small">
+                                                <p class="text-align slds-p-left_small">
+                                                    <strong>{contactDetails.compliancestatus}</strong></p>
+                                            </div>
+                                            <div
+                                                class="slds-col slds-size_1-of-12 slds-p-right_xx-small slds-p-top_x-small">
+                                                <img class="heck-size greencheck" src={heckTickUrl} alt="icon" />
+                                                <img class="heck-size blur" src={blurTickUrl} alt="icon" />
+                                            </div>
+                                        </div>
+                                    </lightning-layout-item>
+                                </lightning-layout>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </lightning-layout-item>
+                </lightning-layout>
+                <!-- <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12 dProfile-section dProfile-header">
+                    <h2 class="profile-heading">Plan Parameters</h2>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-large-size_12-of-12">
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                        <div class="slds-grid slds-wrap slds-p-top_medium">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                                <span>1</span>
+                              </div>
+                              <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                                <span>2</span>
+                              </div>
+                        </div>
+                      </div>
+                      <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                        <div class="slds-grid slds-wrap slds-p-top_medium">
+                            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                                <span>1</span>
+                              </div>
+                              <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 dProfile">
+                                <span>2</span>
+                              </div>
+                        </div>
+                      </div>
+                  </div> -->
+            </div>
+        </div>
+        <div class="pad-top expand" if:true={isExpand}>
+            <span class="slds-truncate expand-font" title="Profile">Collapse Profile</span>
+            <span onclick={toggleSection} data-id="profileSection" class="icon-arrow">
+                <lightning-icon icon-name="utility:chevronup" alternative-text="button icon" size="x-small"
+                    class="slds-button__icon_left slds-p-left_x-small green__icon"></lightning-icon>
+            </span>
+        </div>
+        <div class="pad-top expand" if:false={isExpand}>
+            <span class="slds-truncate expand-font" title="Profile">Expand Profile</span>
+            <span onclick={toggleSection} data-id="profileSection" class="icon-arrow">
+                <lightning-icon icon-name="utility:switch" alternative-text="button icon" size="x-small"
+                    class="slds-button__icon_left slds-p-left_x-small green__icon"></lightning-icon>
+            </span>
+        </div>
+        <div class="form-green-divider"></div>
+    </template>
+    <template if:false={isInformation}>
+        <div class="slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+            <div class="slds-align_absolute-center notify_text">
+                No Driver Information Available
+            </div>
+        </div>
+    </template>
+</template>

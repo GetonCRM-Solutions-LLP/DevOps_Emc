@@ -1,0 +1,63 @@
+<apex:page controller="BiWeeklyComplianceReportController" contentType="txt/xml#Bi-Weekly Compliance Report.xls" cache="true">
+<apex:outputText value="{!xlsHeader}"/>
+    
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+    <Styles>
+        <Style ss:ID="s1">
+            <Alignment/>
+            <Borders/>
+            <Font ss:Bold="1"/>
+            <Interior/>
+            <NumberFormat/>
+            <Protection/>
+        </Style>
+    </Styles>
+
+    <Worksheet ss:Name="Bi-Weekly Reimbursement Report">
+        <Table x:FullColumns="1" x:FullRows="1">
+            <Column ss:Width="100"/>
+            <Column ss:Width="100"/>
+            <Column ss:Width="100"/>
+            <Column ss:Width="100"/>
+            <Row>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Start Date</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >End Date</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Gas Prices</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Fixed Total</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Variable Rate</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Reimbursement</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Mileage</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >IRS Rate</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Max Allowable</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Imputed Income</Data></Cell>
+            </Row>
+            <apex:repeat value="{!BiweeklyComplianceWrapperList}" var="wrap">
+                <Row>
+                    <Cell><Data ss:Type="String">{!wrap.StartDate}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.EndDate}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.GasPrices}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.FixedTotal}</Data></Cell>
+                    <Cell><Data ss:Type="Number">{!wrap.VariableRate}</Data></Cell>
+                    <Cell><Data ss:Type="Number">{!wrap.TotalReimbursement}</Data></Cell>
+                    <Cell><Data ss:Type="Number">{!wrap.Mileage}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.IRSRate}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.MaxAllowable}</Data></Cell>
+                    <Cell><Data ss:Type="String">{!wrap.ImputedIncome}</Data></Cell>
+                </Row>
+            </apex:repeat>
+            <!--<Row>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" >Total</Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="String" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" ></Data></Cell>
+                <Cell ss:StyleID="s1"><Data ss:Type="Number" >totalImputedIncome</Data></Cell>
+            </Row>--> 
+        </Table>
+    </Worksheet>
+</Workbook>
+</apex:page>

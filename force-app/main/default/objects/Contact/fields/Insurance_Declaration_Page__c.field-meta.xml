@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Insurance_Declaration_Page__c</fullName>
+    <formula>IF(Insurance_Attachment_Id__c &lt;&gt; &apos;&apos; , True, False)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Insurance Declaration Page</label>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

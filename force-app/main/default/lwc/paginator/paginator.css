@@ -1,0 +1,24 @@
+.slds_link {
+    color: #666;
+    display: inline-block;
+    margin: 0 .1em;
+    padding: .25em .7em;
+    text-decoration: none;
+    border-radius: .3em;
+    font-size: 13px !important;
+}
+.disable{
+    pointer-events: none;
+    cursor: none;
+}
+.slds_link:hover,
+.slds_link:focus {
+    background-color: #2e8ae7 !important;
+    color: white !important;
+    text-decoration: none !important;
+    outline: 0;
+}
+
+.slds-align_absolute-center {
+    margin-left: 407px;
+}

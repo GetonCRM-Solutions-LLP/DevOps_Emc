@@ -1,0 +1,148 @@
+.main_Spring{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 95vh;
+    background-image: url('/resource/adminLoginImages');
+    background-size: cover;
+    background-position: center;
+}
+.main_Summer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 95vh;
+    background-image: url('/resource/adminLoginImages');
+    background-size: cover;
+    background-position: center;
+}
+.main_Autumn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 95vh;
+    background-image: url('/resource/adminLoginImages');
+    background-size: cover;
+    background-position: center;
+}
+.main_Winter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 95vh;
+    background-image: url('/resource/adminLoginImages');
+    background-size: cover;
+    background-position: center;
+}
+.sub2{
+    background-color: white;
+    padding: 25px;
+    border: 1px solid lightgray;
+    border-radius: 20px;
+    height: 430px;
+    /* height: auto; */
+    width: 392px;
+}
+.button1{
+    margin-top: 12px;
+    /* --sds-c-button-brand-color-background: #7ABB4A; */
+    /* --sds-c-button-text-color: white; */
+    /* --slds-c-button-brand-color-border: #7ABB4A !important; */
+    /* --slds-c-button-radius-border: 8px; */
+    border-radius: 8px;
+    border: 0.1px solid #7ABB4A;
+    background: #7ABB4A;
+    color: white;
+    padding: 5px 11px;
+    /* font-weight: 500; */
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+}
+
+.button2{
+    margin-bottom: 10px;
+    font-weight: 500;
+    background: transparent;
+    color: #7ABB4A;
+    border: 0;
+    padding: 15px ;
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+}
+.submit_button{
+    margin-bottom: 10px;
+}
+.svgData{
+    margin-top: 6px;
+    color: #909090;
+    text-align: center;
+}
+.welcomeText{
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.mBurseImg{
+    height: 40px;
+    width: auto;
+    margin-bottom: 18px;
+}
+.errorMSG{
+    font-weight: bold;
+    font-size: 12px;
+}
+.inputArea{
+    gap: 12px;
+    padding: 10px 34px;
+}
+.footer_div{
+    padding: 20px 100px;
+}
+
+.flat-container1{
+    display: flex;
+    border: 1px solid #e0dbdb ;
+    /* padding: 0px 0 0px 9px !important; */
+    width: 100%;
+    border-radius: 6px;
+    position: relative;
+  }
+  .flat-container2{
+    display: flex;
+    border: 1px solid #e0dbdb ;
+    /* padding: 0px 0 0px 9px !important; */
+    width: 100%;
+    border-radius: 6px;
+    position: relative;
+  }
+  .field_label{
+    border-color: #f96b0efa;
+  }
+  .flat-input{
+    padding: 8px 0 8px 9px !important;
+    color: #1D1D1D !important;
+    width: 100%;
+    border: none;
+    border: 0;
+    padding-left: 0;
+    border-radius: 6px;
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px !important;
+  }
+  .flat-input:focus-visible{
+    outline: 0 !important;
+    outline-color: #FFFFFF!important;
+  }
+  .input-button{
+    width: 50px;
+    height: 34px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }

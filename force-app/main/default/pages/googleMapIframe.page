@@ -1,0 +1,314 @@
+<apex:page showHeader="false" standardStylesheets="false" sidebar="false" applyHtmlTag="false" applyBodyTag="false" docType="html-5.0">
+    <head>
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <style>
+                .gm-style iframe+div {
+                    border: none!important;
+                }
+
+                .gm-control-active>img {
+                    height: 12px !important;
+                    width: 12px !important;
+                }
+
+                .gm-svpc img {
+                    height: 22px !important;
+                    width: 22px !important;
+                }
+
+                .gm-style-iw-d {
+                    font-weight: bold;
+                    font-family: 'Proxima Nova' !important;
+                }
+
+                .gm-style-mtc {
+                    margin-right: 4px;
+                }
+
+                .gm-style-mtc div {
+                    height: 30px !important;
+                    font-size: .85rem !important;
+                    font-family: 'Proxima Nova' !important;
+                }
+        </style>
+        <script type="text/javascript">
+             var lexOrigin = location.origin, map, mapLocation;
+             console.log("map-->", lexOrigin);
+
+            /* Geocode API used in case of single location with no waypoints */
+            function geocode(request, image, map) {
+                    geocoder
+                        .geocode(request)
+                        .then((result) => {
+                            const { results } = result;
+                            console.log(results);
+                            map.setCenter(results[0].geometry.location);
+                            setMarker(results[0].geometry.location, image, results[0].formatted_address, map);
+                            // map.setCenter(results[0].geometry.location);
+                            // marker.setPosition(results[0].geometry.location);
+                            // marker.setMap(map);
+                            // responseDiv.style.display = "block";
+                            // response.innerText = JSON.stringify(result, null, 2);
+                            return results;
+                        })
+                        .catch((e) => {
+                            console.log("Geocode was not successful for the following reason: " + e);
+                        });
+            }
+
+            /* convert datetime to specific time zone based on IANA database */
+            function convertTime(timeObj, timezone) {
+                    var setZone = "";
+                    if (timezone != undefined) {
+                        if (timezone === 'US/Eastern') {
+                            setZone = "America/New_York";
+                        } else if (timezone === 'US/Pacific') {
+                            setZone = "America/Los_Angeles";
+                        } else if (timezone === 'US/Mountain') {
+                            setZone = "America/Denver";
+                        } else if (timezone === 'US/Central' || timezone === 'America/Chicago') {
+                            setZone = "America/Chicago";
+                        } else if (timezone === 'America/El_Salvador') {
+                            setZone = "America/El_Salvador";
+                        }
+                    }
+                    if (timeObj != undefined) {
+                        let startendTime = new Date(timeObj);
+                        let convertedTime = startendTime.toLocaleTimeString("en-US", {
+                            timeZone: setZone,
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            second: "2-digit"
+                        });
+                        return convertedTime;
+                    } else {
+                        return "";
+                    }
+            }
+
+             // Custom icon on map
+             function setMarker(position, icon, title, map) {
+                    var marker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: title,
+                        //  animation: google.maps.Animation.DROP,
+                        icon: icon
+                    });
+                    var infowindow = new google.maps.InfoWindow({
+                        content: title,
+                        position: position,
+                        pixelOffset: new google.maps.Size(0, 10)
+                    });
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        infowindow.open(map, marker);
+                    });
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close();
+                    });
+            }
+
+            /* function to display custom markers with information of address and timezone for waypoints */
+            function customIcon(waypt, icon, map, infoarr, timeZone) {
+                    for (var i = 0; i < waypt.length; i++) {
+                        var customMarker = new google.maps.Marker({
+                            position: waypt[i],
+                            map: map,
+                            icon: icon
+                        });
+                        var contentInfo = convertTime(infoarr[i].time, timeZone);
+                        // var contentInfo = convertTime(infoarr[i].time,timeZone) +'  '+ '@'+'  '+ infoarr[i].speed+'mph';
+                        var infowindow2 = new google.maps.InfoWindow();
+                        google.maps.event.addListener(customMarker, 'mouseover', (function (customMarker, contentInfo, infowindow2) {
+                            return function () {
+                                infowindow2.setContent(contentInfo);
+                                infowindow2.open(map, customMarker);
+                            };
+
+                        })(customMarker, contentInfo, infowindow2));
+                        google.maps.event.addListener(customMarker, 'mouseout', (function (customMarker, infowindow2) {
+                            return function () {
+                                infowindow2.close();
+                            }
+                        })(customMarker, infowindow2));
+
+                    }
+            }
+
+            /* Function to initialize map */
+            function initMap() {
+                const urlParams = new URLSearchParams(window.location.search);
+                mapLocation = urlParams.get("locations");
+                console.log("Search params", urlParams.get("locations"));
+
+                 /* Intialize google map */
+                 map = new google.maps.Map(document.getElementById('map'), {
+                            zoom: 18,
+                            center: { lat: 41.85, lng: -87.65 },
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                            controlSize: 30
+                });
+
+                if (mapLocation) {
+                    var maplocation = JSON.parse(mapLocation);
+                    geocoder = new google.maps.Geocoder();
+                    console.log("map data", mapLocation);
+                    /* console.log("geocoder", geocoder); */
+                    var waypoint = maplocation[0].waypoints;
+                    var waypts = [];
+                    for (var i = 0; i < waypoint.length; i++) {
+                        waypts.push({
+                            location: new google.maps.LatLng(waypoint[i].latitude, waypoint[i].longitude),
+                            stopover: false
+                        });
+                    }
+
+                      /* Custom map marker */
+                    var image = {
+                        start: {
+                            url: `{!URLFOR($Resource.mapIcons, 'icons/icon_marker_start_2.png')}`,
+                            // This marker is 26 pixels wide by 40 pixels high.
+                            size: new google.maps.Size(26, 40),
+                            // The origin for this image is (0, 0).
+                            origin: new google.maps.Point(0, 0),
+                            // The anchor for this image is the base of the flagpole at (15, 40).
+                            anchor: new google.maps.Point(15, 40)
+                        },
+                        end: {
+                            url: `{!URLFOR($Resource.mapIcons, 'icons/icon_marker_stop_2.png')}`,
+                            // This marker is 20 pixels wide by 32 pixels high.
+                            size: new google.maps.Size(26, 40),
+                            // The origin for this image is (0, 0).
+                            origin: new google.maps.Point(0, 0),
+                            // The anchor for this image is the base of the flagpole at (0, 32).
+                            anchor: new google.maps.Point(13, 39)
+                        },
+                        wpt: {
+                            url: `{!URLFOR($Resource.mapIcons, 'icons/icon_marker_pin_2.png')}`,
+                            size: new google.maps.Size(8, 8),
+                            origin: new google.maps.Point(0, 0),
+                            anchor: new google.maps.Point(3.5, 5)
+                        }
+                    };
+
+                    if (
+                        maplocation[0].startLocation.Latitude != undefined &&
+                        maplocation[0].endLocation.Latitude != undefined &&
+                        maplocation[0].startLocation.Longitude != undefined &&
+                        maplocation[0].endLocation.Longitude != undefined
+                    ) {
+                        var originPlace = new google.maps.LatLng(maplocation[0].startLocation.Latitude, maplocation[0].startLocation.Longitude);
+                        var destinationPlace = new google.maps.LatLng(maplocation[0].endLocation.Latitude, maplocation[0].endLocation.Longitude);
+                        var directionsService = new google.maps.DirectionsService();
+                        var directionsDisplay = new google.maps.DirectionsRenderer({
+                            suppressMarkers: true
+                        });
+
+                        directionsDisplay.setMap(map);
+
+                        var request = {
+                            origin: originPlace,
+                            destination: destinationPlace,
+                            waypoints: waypts,
+                            optimizeWaypoints: true,
+                            travelMode: google.maps.DirectionsTravelMode.DRIVING
+                        };
+
+
+
+                        directionsService.route(request, function (response, status) {
+                            if (status == google.maps.DirectionsStatus.OK) {
+                                directionsDisplay.setDirections(response);
+                                var route = response.routes[0].legs[0];
+                                // custom icon on map
+                                setMarker(route.start_location, image.start, route.start_address, map);
+                                setMarker(route.end_location, image.end, route.end_address, map);
+                                customIcon(route.via_waypoints, image.wpt, map, waypoint, maplocation[0].timeZone);
+                            }
+                        });
+                    } else {
+                        if (maplocation[0].startLocation.Latitude != undefined && maplocation[0].startLocation.Longitude != undefined && maplocation[0].waypoints.length === 0) {
+                            geocode({ location: new google.maps.LatLng(maplocation[0].startLocation.Latitude, maplocation[0].startLocation.Longitude) }, image.start, map);
+                        } else if (maplocation[0].endLocation.Latitude != undefined && maplocation[0].endLocation.Longitude != undefined && maplocation[0].waypoints.length === 0) {
+                            geocode({ location: new google.maps.LatLng(maplocation[0].endLocation.Latitude, maplocation[0].endLocation.Longitude) }, image.end, map);
+                        } else if (maplocation[0].endLocation.Latitude === undefined && maplocation[0].endLocation.Longitude === undefined && maplocation[0].waypoints.length != 0) {
+                            var originPlace = new google.maps.LatLng(maplocation[0].startLocation.Latitude, maplocation[0].startLocation.Longitude);
+                            var wayLen = maplocation[0].waypoints.length - 1;
+                            var endLat = maplocation[0].waypoints[wayLen].latitude;
+                            var endLon = maplocation[0].waypoints[wayLen].longitude;
+                            console.log("destination latitude", endLat, endLon);
+                            var destinationPlace = new google.maps.LatLng(endLat, endLon);
+                            var directionsService = new google.maps.DirectionsService();
+                            var directionsDisplay = new google.maps.DirectionsRenderer({
+                                suppressMarkers: true
+                            });
+
+                            directionsDisplay.setMap(map);
+
+                            var request = {
+                                origin: originPlace,
+                                destination: destinationPlace,
+                                waypoints: waypts,
+                                optimizeWaypoints: true,
+                                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                            };
+
+
+
+                            directionsService.route(request, function (response, status) {
+                                if (status == google.maps.DirectionsStatus.OK) {
+                                    console.log(response);
+                                    directionsDisplay.setDirections(response);
+                                    var route = response.routes[0].legs[0];
+                                    // custom icon on map
+                                    setMarker(route.start_location, image.start, route.start_address, map);
+                                    //  setMarker(route.end_location, image.end, route.end_address, map);
+                                    customIcon(route.via_waypoints, image.wpt, map, waypoint, maplocation[0].timeZone);
+                                }
+                            });
+                        } else if (maplocation[0].startLocation.Latitude === undefined && maplocation[0].startLocation.Longitude === undefined && maplocation[0].waypoints.length != 0) {
+                            var destinationPlace = new google.maps.LatLng(maplocation[0].endLocation.Latitude, maplocation[0].endLocation.Longitude);
+                            var startLat = maplocation[0].waypoints[0].latitude;
+                            var startLon = maplocation[0].waypoints[0].longitude;
+                            // console.log("origin latitude", startLat, startLon);
+                            var originPlace = new google.maps.LatLng(startLat, startLon);
+                            var directionsService = new google.maps.DirectionsService();
+                            var directionsDisplay = new google.maps.DirectionsRenderer({
+                                suppressMarkers: true
+                            });
+
+                            directionsDisplay.setMap(map);
+
+                            var request = {
+                                origin: originPlace,
+                                destination: destinationPlace,
+                                waypoints: waypts,
+                                optimizeWaypoints: true,
+                                travelMode: google.maps.DirectionsTravelMode.DRIVING
+                            };
+
+
+
+                            directionsService.route(request, function (response, status) {
+                                if (status == google.maps.DirectionsStatus.OK) {
+                                    console.log(response);
+                                    directionsDisplay.setDirections(response);
+                                    var route = response.routes[0].legs[0];
+                                    // custom icon on map
+                                    //setMarker(route.start_location, image.start, route.start_address, map);
+                                    setMarker(route.end_location, image.end, route.end_address, map);
+                                    customIcon(route.via_waypoints, image.wpt, map, waypoint, maplocation[0].timeZone);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <div id="map" style="width: 100%; height: 230px;overflow:hidden"></div>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js" async="true" defer="true"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAvIeQL4i3GPoKZQWv0yrXLqEbp6uGgt-g&callback=initMap"></script>
+    </body>
+</apex:page>

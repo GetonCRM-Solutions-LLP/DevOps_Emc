@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- If this checkbox is true then it should be carry forward mileage to next months reimbursement and if false it should be as it is --></help>
+    <label><!-- Carry Forward Mileage --></label>
+    <name>Carry_Forward_Mileage__c</name>
+</CustomFieldTranslation>

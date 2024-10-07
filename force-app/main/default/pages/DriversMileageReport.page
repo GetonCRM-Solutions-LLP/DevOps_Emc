@@ -1,0 +1,47 @@
+<apex:page controller="DriversMileageReportClass" docType="HTML-5.0">
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/js/jquery.min.js')}" type='text/javascript' />
+    <script src="https://rawgithub.com/eligrey/FileSaver.js/master/FileSaver.js"></script>
+    <apex:form >
+        <apex:pageBlock title="Driver Details" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!getDrivers}" value="Get Drivers"/>
+            </apex:pageBlockButtons>
+            
+            Start Date: <apex:input type="date" value="{!startDate}"/>
+            End Date: <apex:input type="date" value="{!endDate}"/>
+            Minimum Mileage: <apex:inputText value="{!minMileage}"/>
+            Accounts (Separated by comma): <apex:inputText value="{!accounts}"/>
+            <br/><br/>
+            <div id="exportTbl">
+                <apex:pageBlockTable id="driverTable" value="{!drivers}" var="driver" rendered="{!drivers.size > 0}">
+                    <apex:column headerValue="Driver Name" value="{!driver.name}"/>
+                    <apex:column headerValue="Account Name" value="{!driver.accName}"/>
+                    <apex:column headerValue="Email" value="{!driver.email}"/>
+                    <apex:column headerValue="Mileage" value="{!driver.mileage}"/>
+                </apex:pageBlockTable>
+            </div>
+            <apex:outputPanel rendered="{!drivers.size > 0}">
+            <button type="button" onclick="exportData()" style="margin-left: 30.8%; margin-top: 0.5%;">
+                Export Data
+            </button>
+            </apex:outputPanel>
+        </apex:pageBlock>
+        <script>
+            function exportData() {
+                var table = $("[id$='driverTable']")[0].innerHTML;
+                var tab_text = '<html xmlns:x="urn:schemas-microsoft-com:office:excel">';
+                tab_text = tab_text + '<head><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet>';            
+                tab_text = tab_text + '<x:Name>Test Sheet</x:Name>';            
+                tab_text = tab_text + '<x:WorksheetOptions><x:Panes></x:Panes></x:WorksheetOptions></x:ExcelWorksheet>';
+                tab_text = tab_text + '</x:ExcelWorksheets></x:ExcelWorkbook></xml></head><body>';
+                tab_text = tab_text + $("[id$='exportTbl']")[0].innerHTML;
+                tab_text = tab_text + '</body></html>';                        
+                var blob = new Blob([tab_text], {
+                    type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8"
+                });
+                $("[id$='driverTable']")[0].innerHTML = table;
+                saveAs(blob, "Driver Details.xls");
+            }
+        </script>
+    </apex:form>
+</apex:page>

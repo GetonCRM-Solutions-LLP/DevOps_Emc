@@ -1,0 +1,55 @@
+<apex:page controller="TimeandSummaryReportController" contentType="txt/xml#Time and Attendance Detail Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Time and Attendance Detail Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >{!contactName}</Data></Cell>
+                </Row>
+                <Row>
+                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Date</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Day</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Mileage (mi)</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Driving Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Stay Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Time</Data></Cell>
+                </Row>
+                <apex:repeat value="{!mileageWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.tripDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.tripDay}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.mileage}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.totaldrivingTime}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.totalStayTime}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.totalTime}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+                <Row>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" ></Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="Number" >{!totalMileges}</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="Number" >{!totalDriveTime}</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="Number" >{!totalStayTimeForMonth}</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="Number" >{!totalTimeForMonth}</Data></Cell>
+                </Row> 
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

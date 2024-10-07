@@ -1,0 +1,83 @@
+<template>
+    <!-- <img src={backg}> -->
+    <!-- <img src={mBurseLogo} class=""> -->
+    <div class={mainclass}>
+        
+        <div class="sub2">
+            <img src={mBurseLogo} class="mBurseImg slds-align_absolute-center">
+            <template lwc:if={notforgetpassword}>
+                
+                <p class="welcomeText">Welcome Back!</p>
+                <p class="errorMSG">{errorMSG}</p>
+                <div class="slds-grid slds-wrap slds-gutters inputArea">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="flat-container1">
+                            <input type="text" value={email} class="flat-input date-selector " name="Work email address" placeholder="Work email address" onchange={handleEmailChange} onmousedown ={handleMouseEnter} />
+                        </div>
+                    </div>
+                    <template lwc:if={hidepassword}>
+                        <div class="slds-col slds-size_1-of-1">
+                                <div class="flat-container2">
+                                    <input class="flat-input  date-selector " value={pass}   type="password" name="Password" placeholder="Password"  onchange={handlePassChange} onmousedown ={handleMouseEnterinPass}/>
+                                    <a class="input-button" data-toggle="true">
+                                        <lightning-icon icon-name="utility:hide" size="x-small" class="advance-search_icon slds-p-right_small" onclick={handleShowPassword}>
+                                        </lightning-icon>
+                                    </a>
+                                </div>
+                        </div>
+                    </template>  
+                    <template lwc:if={showpassword}>
+                        <div class="slds-col slds-size_1-of-1">
+                                <div class="flat-container2">
+                                    <input class="flat-input  date-selector " value={pass} type="text" name="Password" placeholder="Password"  onchange={handlePassChange} onmousedown ={handleMouseEnterinPass}/>
+                                    <a class="input-button" data-toggle="true">
+                                        <lightning-icon icon-name="utility:preview" size="x-small" class="advance-search_icon slds-p-right_small" onclick={handleHidePassword}>
+                                        </lightning-icon>
+                                    </a>
+                                </div>
+                        </div>
+                    </template>    
+                </div>
+                <div class="footer_div">
+                    <!-- Brand variant: Identifies the primary action in a group of buttons -->
+                    <button type="button"
+                        class="slds-btn slds-btn-primary button1 slds-align_absolute-center" onclick={handleRegister}>
+                        Log in</button>
+                   
+                    <!-- Base variant: Makes a button look like a link -->
+                    <!-- <lightning-button variant="base" label="Forgot Password?" onclick={handleClick} class="slds-align_absolute-center button2"></lightning-button> -->
+                    <button type="button"
+                        class="slds-btn slds-btn-primary button2 slds-align_absolute-center" onclick={handleClick}>
+                        Forgot Password?</button>
+                    <div>
+                        <img src={svgURL} class="svgImg slds-align_absolute-center">
+                        <p class="svgData">is not supported browser</p>
+                    </div>
+                </div>
+            </template>
+            <template lwc:if={forgetpassword}>
+                <p class="welcomeText">Forgot Password ?</p>
+                <p class="errorMSG">{errorMSG}</p>
+                <div class="slds-grid slds-wrap slds-gutters inputArea">
+                    <div class="slds-col slds-size_1-of-1">
+                        <div class="flat-container1 ">
+                            <input type="text" value={email} class="flat-input date-selector field_label1" name="Work email address" placeholder="Work email address" onchange={handleForgotEmail} onmousedown ={handleForgotEmailMouseEnter} />
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="footer_div">
+                    <!-- Brand variant: Identifies the primary action in a group of buttons -->
+                    <!-- <lightning-button variant="brand" label="Submit" onclick={handleSubmit} class=" slds-align_absolute-center submit_button"></lightning-button> -->
+                    <button type="button"
+                        class="slds-btn slds-btn-primary button1 slds-align_absolute-center submit_button" onclick={handleSubmit}>
+                        Submit</button>
+                    <div>
+                        <img src={svgURL} class="svgImg slds-align_absolute-center">
+                        <p class="svgData">is not supported browser</p>
+                    </div>
+                </div>
+            </template>    
+        </div>
+    </div>
+</template>

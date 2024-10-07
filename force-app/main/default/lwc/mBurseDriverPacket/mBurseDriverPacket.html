@@ -1,0 +1,244 @@
+<template>
+    <c-document-spinner show-spinner={isSpinner}></c-document-spinner>
+    <template lwc:if={promiseError}>
+        <c-m-burse-error message={errorMessage}></c-m-burse-error>
+    </template>
+    <div class="transition" lwc:if={packetAlreadySent}>
+        <div>
+            <c-m-burse-header-text head-text="Step 3">
+                <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Your
+                    Driver Packet Was Sent On <lightning-formatted-date-time value={packetHeaderText} year="numeric"
+                        month="numeric" day="numeric">
+                    </lightning-formatted-date-time></div>
+            </c-m-burse-header-text>
+        </div>
+        <!-- <div class="slds-text-heading_small slds-text-align_center font-style emcFont">Don't forget to <strong>sign by <lightning-formatted-date-time value={packetSignDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time> or you risk forfeiting<br/>your car allowance until you have signed</strong>
+        </div> -->
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <div class="box__img">
+                <img class="packet__img" src={packetCss} />
+            </div>
+            <div class="slds-p-left_xx-large footer-text">
+                <div style="display: flex;">
+                    <div class="slds-p-top_x-small">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+                        <circle cx="15" cy="15" r="13.9655" stroke="#7ABB4A" stroke-width="2.06897"/>
+                        <path d="M16.7326 16.8485C16.7003 17.5744 16.1024 18.1463 15.3758 18.1463C14.6503 18.1463 14.053 17.5762 14.0192 16.8515L13.6757 9.49148C13.6306 8.52609 14.4012 7.71875 15.3676 7.71875C16.3326 7.71875 17.1026 8.52372 17.0597 9.48773L16.7326 16.8485ZM16.6981 22.8503C16.3273 23.2211 15.887 23.4065 15.3772 23.4065C14.8674 23.4065 14.4272 23.2211 14.0564 22.8503C13.7011 22.4796 13.5234 22.047 13.5234 21.5527C13.5234 21.0429 13.7011 20.6026 14.0564 20.2319C14.4272 19.8611 14.8674 19.6757 15.3772 19.6757C15.887 19.6757 16.3273 19.8611 16.6981 20.2319C17.0688 20.6026 17.2542 21.0429 17.2542 21.5527C17.2542 22.047 17.0688 22.4796 16.6981 22.8503Z" fill="#7ABB4A"/>
+                        </svg>
+                    </div>
+                    <div class="font-style slds-p-left_medium">
+                        <div style="width: 60%; font-size: 16px;">
+                            Don't forget to <strong>sign by <span style="color: #fa7800"><lightning-formatted-date-time  value={packetSignDate} year="numeric" month="numeric" day="numeric"></lightning-formatted-date-time></span> or you risk forfeiting<br/>your car allowance until you have signed</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-clearfix slds-p-top_large slds-align_absolute-center">
+            <div class="footer-button slds-float_right mright-0 mleft-0">
+                <div>
+                    <div class="back_to_previous back-position slds-float_left m-right" lwc:if={isShowUpload}>
+                        <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                            <li class="slds-item navigate">
+                                <a title="Back"
+                                name="buttonBackwards"
+                                label="Previous" 
+                                onclick={backToPage}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <template lwc:if={isPacket}>
+                    </template>
+                    <template lwc:else>
+                        <div style="float: left;display:grid">
+                            <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={signPacket}>
+                                Sign Packet
+                            </button>
+                        </div>
+                    </template>
+                    <template lwc:if={isShow}>
+                    </template>
+                    <template lwc:else>
+                        <div class="back_to_previous back-position slds-float_right m-left">
+                            <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item navigate">
+                                    <a title="Skip this step"
+                                    name="buttonBackwards"
+                                    label="Previous"  
+                                    onclick={skipToPage}  >
+                                    <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                    <!-- <div class="back_to_previous back-position slds-float_left" lwc:if={isShowUpload}>
+                        <a class="font-s" onclick={backToPage}><i class="fa-solid fa-angle-left"></i> Back</a>
+                    </div>
+                    <div class="back_to_previous  back-position slds-float_right" lwc:else={isShow}>
+                        <a class="font-s" onclick={skipToPage}>Skip<i class="fa-solid fa-angle-right"></i></a>
+                    </div> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="transition" lwc:if={packetIntial}>
+        <div>
+            <c-m-burse-header-text head-text="Step 3">
+                <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Sign Driver Packet</div>
+            </c-m-burse-header-text>
+        </div>
+        <!--<div class="slds-text-heading_small slds-text-align_center font-style emcFont">Select <strong>Send to Review
+                &amp; Sign</strong></div>-->
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <div class="box__img">
+                <img class="packet__img" src={packetCss} />
+            </div>
+            <div class="slds-p-left_xx-large footer-text">
+                <div style="display: flex;">
+                    <div class="slds-p-top_x-small">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+                        <circle cx="15" cy="15" r="13.9655" stroke="#7ABB4A" stroke-width="2.06897"/>
+                        <path d="M16.7326 16.8485C16.7003 17.5744 16.1024 18.1463 15.3758 18.1463C14.6503 18.1463 14.053 17.5762 14.0192 16.8515L13.6757 9.49148C13.6306 8.52609 14.4012 7.71875 15.3676 7.71875C16.3326 7.71875 17.1026 8.52372 17.0597 9.48773L16.7326 16.8485ZM16.6981 22.8503C16.3273 23.2211 15.887 23.4065 15.3772 23.4065C14.8674 23.4065 14.4272 23.2211 14.0564 22.8503C13.7011 22.4796 13.5234 22.047 13.5234 21.5527C13.5234 21.0429 13.7011 20.6026 14.0564 20.2319C14.4272 19.8611 14.8674 19.6757 15.3772 19.6757C15.887 19.6757 16.3273 19.8611 16.6981 20.2319C17.0688 20.6026 17.2542 21.0429 17.2542 21.5527C17.2542 22.047 17.0688 22.4796 16.6981 22.8503Z" fill="#7ABB4A"/>
+                        </svg>
+                    </div>
+                    <div class="font-style slds-p-left_medium">
+                        <div style="width: 60%; font-size: 16px;">
+                            <strong>Make sure you sign your driver packet within 30 days.</strong>
+                        </div>
+                        <div  class="slds-m-vertical_medium" style="border: 1px solid #7ABB4A; width: 180px;"></div>
+                        <div class="font-style"><div class="font-size: 16px;"><strong>Keep in Mind You: </strong></div>
+                            <ul class="slds-list_dotted slds-p-top_x-small font-style">
+                                <li>Do not have to sign now, you can skip this step for 30 days   </li>
+                                <li>Need to sign your packet, or you could forfeit your car allowance until you sign </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div>
+              
+                </div>
+                <!-- <div class="font-style"><strong>Make sure you sign your driver packet pages within 30 days.
+                        You:</strong>
+                    <ul class="slds-list_dotted slds-p-top_x-small font-style">
+                        <li>Do not have to sign now</li>
+                        <li>Can review the packet and sign it later</li>
+                        <li>Could forfeit your car allowance until you sign</li>
+                    </ul>
+                </div> -->
+            </div>
+        </div>
+        <div class="slds-clearfix slds-p-top_large slds-align_absolute-center">
+            <div class="footer-button mright-0 mleft-0">
+                <div>
+                    <div class="back_to_previous back-position slds-float_left mr-right" lwc:if={isShowUpload}>
+                        <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                            <li class="slds-item navigate">
+                                <a title="Back"
+                                name="buttonBackwards"
+                                label="Previous" 
+                                onclick={backToPage}  >
+                                <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                </a>
+                            </li>
+                        </ul>
+                        <!-- <a class="font-s" onclick={backToPage}><i class="fa-solid fa-angle-left"></i> Back</a> -->
+                    </div>
+                    <template lwc:if={isPacket}>
+                    </template>
+                    <template lwc:else>
+                        <div style="float: left;display:grid">
+                            <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={signPacket}>
+                                Sign Packet
+                            </button>
+                            <template lwc:if={days}>
+                                <button lwc:if={isShow} class="slds-btn bc-outline slds-btn-sm waves-effect bc-blue waves-light"
+                                    onclick={redirectToDashboard}>
+                                     Go to Dashboard
+                                </button>
+                            </template>
+                           
+                            <!--<button class="slds-btn bc-outline slds-btn-sm waves-effect bc-blue bc-font waves-light" onclick={signPacket}>
+                                Sign Packet
+                            </button>-->
+                        </div>
+                    </template>
+                    <template lwc:if={isShow}>
+                    </template>
+                    <template lwc:else>
+                        <div class="back_to_previous back-position slds-float_right mr-left">
+                            <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item navigate">
+                                    <a title="Skip this step"
+                                    name="buttonBackwards"
+                                    label="Previous"  
+                                    onclick={skipToPage}  >
+                                    <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- <a class="font-s" onclick={skipToPage}>Skip<i class="fa-solid fa-angle-right"></i></a> -->
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="transition" lwc:if={packetSent}>
+        <div>
+            <c-m-burse-header-text head-text="Step 3">
+                <div slot="subHeading" class="slds-text-heading_small slds-text-align_center font-style slds-p-bottom_small emc-font">Driver Packet Sent</div>
+            </c-m-burse-header-text>
+        </div>
+        <div class="slds-text-heading_small slds-text-align_center font-style emcFont">Check <strong>your email, the
+                packet was sent to {emailOfDriver}.</strong><br />
+            If the packet is not in your inbox, please check your spam folder
+        </div>
+        <div class="slds-p-top_large slds-align_absolute-center">
+            <div class="box__img__sent">
+                <img class="" src={packetCss} />
+            </div>
+        </div>
+        <div class="slds-clearfix slds-p-top_large slds-align_absolute-center"> <!--m-top m-right-->
+            <div class="footer-button slds-float_right">
+                <template lwc:if={isAppDone}>
+                    <!-- <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"
+                        onclick={goToDashboard} lwc:else={afterRegister}>
+                        {renderBtnText}
+                    </button> -->
+                    <template lwc:if={allowRedirect}>
+                        <button class="slds-btn bc-outline slds-btn-sm waves-effect bc-blue waves-light"
+                        onclick={redirectToDashboard}>
+                            Go to Dashboard
+                        </button>
+                    </template>
+                </template>
+                <template lwc:else>
+                    <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light"
+                        onclick={nextmLogPreview}>
+                        {renderText}
+                    </button>
+                </template>
+                <div class="back_to_previous  m-right slds-float_left" lwc:if={isShowUpload}>
+                    <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                        <li class="slds-item navigate">
+                            <a title="Back"
+                            name="buttonBackwards"
+                            label="Previous" 
+                            onclick={backToPacket}  >
+                            <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- <a class="font-s" onclick={backToPacket}><i class="fa-solid fa-angle-left"></i> Back</a> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</template>

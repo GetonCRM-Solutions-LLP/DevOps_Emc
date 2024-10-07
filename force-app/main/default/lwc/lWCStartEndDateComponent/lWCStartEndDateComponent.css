@@ -1,0 +1,43 @@
+.p-10 {
+    padding-left: 10px !important;
+}
+
+.p-27 {
+    position: absolute !important;
+    left: 15rem;
+}
+
+.slds-form-element__label {
+    font-size: 1rem;
+    color: #78bc42;
+    font-weight: bold;
+    font-family: 'Proxima Nova' !important;
+}
+
+.fromdateStyle {
+    position: absolute;
+    width: 23%;
+    right: 51.5rem;
+}
+
+.todateStyle {
+    width: 23%;
+    position: absolute;
+    right: 38.5rem;
+}
+
+td {
+    display: inline-block;
+}
+
+.w-px {
+    width: 154px;
+}
+
+.w-2rem {
+    width: 2rem;
+}
+
+.pl-px {
+    padding-left: 9px;
+}

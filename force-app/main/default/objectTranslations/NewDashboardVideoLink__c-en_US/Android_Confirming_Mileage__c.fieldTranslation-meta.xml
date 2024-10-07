@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Android Confirming Mileage --></label>
+    <name>Android_Confirming_Mileage__c</name>
+</CustomFieldTranslation>

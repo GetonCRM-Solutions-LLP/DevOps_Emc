@@ -1,0 +1,154 @@
+<template>
+    <div class="box-container">
+        <div class="slds-form">
+            <div class="parent_div">
+                <div class="main_class">
+                    <div class="row1">
+                        <div class="div_driver">
+                            <label class="slds-form-element__label slds_driver_label driver_label" for="select-01">My Team</label>
+                        </div>
+                        <div class="slds_driverList" >
+                            <c-select2-dropdown data-id="driver_dropdown" class="sync_dropdown driver"
+                                        title="Search All Drivers"
+                                        options={options}
+                                        value={value}
+                                        selected-value={selectedDriver}
+                                        onchange={handleDriverChange}
+                                        main-class="default-box-input slds-truncate">
+                            </c-select2-dropdown>
+                        </div>
+                    </div>  
+                    <div class="row1">  
+                        <div class="slds-checkbox"  >
+                            <input type="checkbox" class=" checkbox_input" name="options" id="checkbox-unique-id-1173"
+                                aria-labelledby="check-select-all-label column-group-header" onclick={handleActiveDriver}
+                                checked/>
+                            <label class="slds-checkbox__label checkbox" for="checkbox-unique-id-1173"
+                                id="check-select-all-label">
+                                <span class="slds-checkbox_faux click_checkbox green_checkbox"></span>
+                                <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                            </label>
+                            
+                        </div>
+                        <label class=" label_of_checkbox" >Show only active drivers</label>
+                    </div>    
+                    <div class="row1">
+                        <label class="slds-form-element__label slds_driver_label tr_from" for="select-02">From</label>
+                        <div class="slds_fromlist">
+                            <c-select2-dropdown class="sync_dropdown" data-id="fromlocation_dropdown"
+                            title="Search All Locations"
+                                    options={fromlocationoptions}
+                                    value={value}
+                                    onchange={handleFromLocationChange}
+                                    main-class="default-box-input slds-truncate">
+                            </c-select2-dropdown>
+                        </div>
+                    </div>   
+                    <div class="row1">
+                        <label class="slds-form-element__label slds_driver_label tr_to"
+                        for="select-02">To</label>
+                        <div class="slds_tolist">
+                            <c-select2-dropdown class="sync_dropdown" data-id="tolocation_dropdown"
+                            title="Search All Locations"
+                                    options={fromlocationoptions}
+                                    value={value}
+                                    onchange={handleToLocationChange}
+                                    main-class="default-box-input slds-truncate">
+                            </c-select2-dropdown>
+                    </div>
+                    </div> 
+              </div>
+              <div class="main_class">
+                <div class="row1">
+                    <label class="slds-form-element__label date_label date_label_02" for="mileageInput-01">Trip Date</label> 
+                    <!-- Use new datepicker LWC -->
+                    <c-date-picker date={fromdate} date-format={dateFormat} data-key="tripFromDate" ondateselect={handleDateChange} place-holder="From"></c-date-picker>
+                    <!-- Added by Raj -->
+                </div>
+                <div class="row1 width-small" >
+                    <!-- Use new datepicker LWC -->
+                    <c-date-picker date={todate} date-format={dateFormat} data-key="tripToDate" ondateselect={handleDateChange} place-holder="To"></c-date-picker>
+                    <!-- Added by Raj -->
+                </div>
+                <div  class="div_mileges">
+                            
+                    <label class="slds-form-element__label mileges_label" for="mileageInput-01">Mileage</label>   
+                    
+                    <input type="text" class="milege_from" data-entry name="input3" value={formatNumberStart} onchange={handleChangeStart}
+                    onkeypress={keyHandler} /> 
+                    <label class="slds-form-element__label milege_to_label" for="mileageInput-02">to</label>
+                    
+                    <input type="text" class="milege_to" data-entry name="input3" value={formatNumberend} onchange={handleChangeEnd}
+                    onkeypress={keyHandler} /> 
+                    <div class="slds-text-heading_small unitStyle">mi</div>
+                </div>
+              </div>   
+              <div class="main_class">
+                <div class="row3">
+                    <label class="slds-form-element__label slds_driver_label_left tr_status" for="select-status">Status</label>
+                    <div  class="div_status">
+                        <c-select2-dropdown class="sync_dropdown" data-id="status_dropdown"
+                                                title="Search All Status"
+                                                options={Statusoptions}
+                                                value={value}
+                                                selected-value={selectedStatus}
+                                                onchange={handleStatusChange}
+                                                main-class="default-box-input slds-truncate">
+                        </c-select2-dropdown>
+                    </div>
+                </div>
+                <div class="row3">
+                    <label class="tag_label slds-form-element__label slds_driver_label_left" for="horizontal-input-id-tags">Tags</label>
+                    <div class="div_tags">
+                        <c-select2-dropdown class="sync_dropdown" data-id="tag_dropdown"
+                                                    title="All Tags"
+                                                    options={tagoptions}
+                                                    value={value}
+                                                    onchange={handleTagChange}
+                                                    main-class="default-box-input slds-truncate">
+                        </c-select2-dropdown>
+                    </div>
+                </div>
+                <div class="row3">
+                    <label class="slds-form-element__label slds_driver_label_left tr_tracking"
+                    for="horizontal-input-id-tracking">Tracking</label>
+            
+                    <div class="div_tracking_method">
+                        
+                        <c-select2-dropdown class="sync_dropdown" data-id="track_dropdown"
+                        title="All Tracking Methods"
+                                options={Trackingoptions}
+                                value={value}
+                                onchange={handleTrackChange}
+                                main-class="default-box-input slds-truncate">
+                        </c-select2-dropdown>
+                    </div>
+                </div>
+            </div> 
+        </div>           
+        
+         
+           
+          <div class="pt-px search_buttons">
+                        <button type="button"
+                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" onclick={handleSearchEvent}>
+                        Search</button>
+                        <div class="slds-form-element slds-m-left_x-small sync_button">
+                            <button class="slds-button slds-p-left_x-small slds-resetall"
+                                            onclick={handleReset}>
+                            <lightning-icon icon-name="utility:skip_back" size="x-small" class="slds-reset_icon slds-p-right_small" ></lightning-icon>
+                            Reset
+                            </button>
+                        </div>  
+                        <div class="slds-form-element slds-m-left_x-small cancel_button">
+                            <button class="slds-button slds-p-left_x-small slds-resetall cancle_btn"
+                                            onclick={handleclosesearch}>
+                            <lightning-icon icon-name="utility:close" size="x-small" class="slds-reset_icon slds-close_icon slds-p-right_small"></lightning-icon>
+                            Cancel
+                            </button>
+                        </div>
+                        <!-- <a class="slds-button ml-15" onclick={handleCancelEvent}>Cancel</a> -->
+            </div>
+        </div>
+    </div>
+    </template>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Reason --></label>
+    <name>Reason__c</name>
+    <picklistValues>
+        <masterLabel>ADVANCE</masterLabel>
+        <translation><!-- ADVANCE --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>BASIC</masterLabel>
+        <translation><!-- BASIC --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>OTHER</masterLabel>
+        <translation><!-- OTHER --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

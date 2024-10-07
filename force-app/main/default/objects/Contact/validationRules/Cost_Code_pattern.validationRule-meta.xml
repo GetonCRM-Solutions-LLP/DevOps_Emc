@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Cost_Code_pattern</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(
+OR(
+ISBLANK(Cost_Code__c),
+IF( Account.Name = &quot;FlashCo&quot; , REGEX( Cost_Code__c , &quot;[0-9]{5}-[0-9]{2}&quot;), REGEX( Cost_Code__c , &quot;[0-9]{2}-[0-9]{4}-[0-9]{3}&quot;)) 
+)
+)</errorConditionFormula>
+    <errorDisplayField>Cost_Code__c</errorDisplayField>
+    <errorMessage>Please add Valid Value for Cost Code Field.</errorMessage>
+</ValidationRule>

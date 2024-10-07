@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help><!-- Date employee is deactivated. They will receive the fixed and last months variable. --></help>
+    <label><!-- Deactivated Date --></label>
+    <name>Deactivated_Date__c</name>
+</CustomFieldTranslation>

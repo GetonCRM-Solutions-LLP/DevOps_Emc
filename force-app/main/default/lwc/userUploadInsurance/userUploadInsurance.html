@@ -1,0 +1,11 @@
+<template>
+    <template lwc:if={information}>
+        <template lwc:if={nextDeclationUpload}>
+            <c-dashboard-insurance-upload is-upload-show={uploadVal} account-id={accountId} contact-id={contactId} attachmentid={attachmentid} contact-name={contactName}
+            contact-email={contactEmail} client={information} onnavigate={navigateToDashboard}  onback={backToInsurance}></c-dashboard-insurance-upload>
+        </template>
+        <template lwc:else>
+            <c-dashboard-insurance-view video-css={videoStyle} css={contentStyle} expired={insuranceExpired} contact-id={contactId} account-id={accountId} onnavigate={navigateToDeclaration} video-link={insuranceVideo}></c-dashboard-insurance-view>
+        </template>
+    </template>
+</template>

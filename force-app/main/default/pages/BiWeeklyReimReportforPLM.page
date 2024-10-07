@@ -1,0 +1,54 @@
+<apex:page controller="BiWeeklyReimReportforPLMController" contentType="txt/xml#Bi-Weekly Reimbursement Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Bi-Weekly Reimbursement Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row> 
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Name</Data></Cell> 
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >EmployeeId</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Email</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Pay Period</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Job Title</Data></Cell>                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Bi-Weekly Fixed Amount</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Bi-Weekly Variable Amount</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Bi-Weekly Reimbursement</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Mileage</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Imputed Income</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Division</Data></Cell>
+                </Row>
+                <apex:repeat value="{!BiweeklyWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.Name}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.EmployeeId}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.Email}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.payPeriodDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.JobTitle}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.BiWeeklyFixedAmount}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.BiWeeklyVariableAmount}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.BiWeeklyTotalReim}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.BiWeeklyMileage}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.ImputedIncome}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.Division}</Data></Cell>
+                        
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

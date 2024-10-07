@@ -1,0 +1,391 @@
+<apex:page showHeader="false" title="Welcome to mBurse" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false" controller="NewAccountDriverController">
+    <!-- Meta Tag Description -->
+    <head>
+         <!-- Meta Tag Description -->
+         <meta charset="UTF-8"/>
+         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+         <meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+ 
+         <!-- Meta Tag Description -->
+ 
+         <!-- favicon icon -->
+         <link rel="apple-touch-icon" sizes="57x57" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-57x57.png')}"/>
+         <link rel="apple-touch-icon" sizes="60x60" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-60x60.png')}"/>
+         <link rel="apple-touch-icon" sizes="72x72" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-72x72.png')}"/>
+         <link rel="apple-touch-icon" sizes="76x76" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-76x76.png')}"/>
+         <link rel="apple-touch-icon" sizes="114x114" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-114x114.png')}"/>
+         <link rel="apple-touch-icon" sizes="120x120" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-120x120.png')}"/>
+         <link rel="apple-touch-icon" sizes="144x144" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-144x144.png')}"/>
+         <link rel="apple-touch-icon" sizes="152x152" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-152x152.png')}"/>
+         <link rel="apple-touch-icon" sizes="180x180" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-180x180.png')}"/>
+         
+         <link rel="icon" type="image/png" sizes="192x192" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/android-icon-192x192.png')}"/>
+         <link rel="icon" type="image/png" sizes="32x32" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-32x32.png')}"/>	
+         <link rel="icon" type="image/png" sizes="96x96" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-96x96.png')}"/>	
+         <link rel="icon" type="image/png" sizes="16x16" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-16x16.png')}"/>	
+         <!-- favicon icon -->
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css"  />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"/>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!--Toaster -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+        <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+        <style type="text/css">
+            *{
+                user-select: none;
+            }
+            /* ::-webkit-scrollbar {
+                width: 0;  /* Remove scrollbar space 
+                background: transparent; //Optional: just make scrollbar invisible 
+            } */
+
+            ::-webkit-scrollbar-track {
+                -webkit-box-shadow: inset 0 0 6px #F6F6F6;
+                border-radius: 100px;
+                background-color: #F6F6F6;
+            }
+
+            ::-webkit-scrollbar {
+                width: 5px;
+                height: 50px;
+                background-color:#F6F6F6;
+            }
+
+            ::-webkit-scrollbar-thumb {
+                border-radius: 100px;
+                height: 50px;
+                background-color:#404B5B
+            }
+
+            
+            body{
+                font-family: 'Proxima Nova' !important;
+                max-width: 100%;
+            }
+            @keyframes rotation {
+                0% { transform: rotate(0deg) }
+                100% { transform: rotate(360deg) }
+            }
+            @keyframes rotationBack {
+                0% { transform: rotate(0deg) }
+                100% { transform: rotate(-360deg) }
+            }
+            @media screen and (min-width: 960px) {
+                html {
+                    margin-left: calc(100vw - 100%);
+                    margin-right: 0;
+                }
+            }
+
+            
+           /* .spinner-background{
+                width: 100%;
+                height: 108%;
+                background: #404b5b;
+                opacity: 1;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 1000000;
+            }
+            .mburseLoader{
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-flow: column nowrap;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000000;
+            }
+            .mbloader-text{
+                color: #ffffff;
+                font-family: 'Proxima Nova' !important;
+                font-size: 16px;
+                margin: 8px 0;
+            }
+            .mbloader {
+                width: 48px;
+                height: 48px;
+                border: 3px dotted #FFF;
+                border-style: solid solid dotted dotted;
+                border-radius: 50%;
+                display: inline-block;
+                position: relative;
+                -webkit-animation: rotation 2s linear infinite;
+                animation: rotation 2s linear infinite;
+            }
+            .mbloader:after {
+                content: "";
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                border: 3px dotted #78bc42;
+                border-style: solid solid dotted;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                -webkit-animation: rotationBack 1s linear infinite;
+                animation: rotationBack 1s linear infinite;
+                transform-origin: center center;
+            }*/
+            .opacity{
+                opacity: 0.98 !important;
+            }
+
+            .d-none{
+                display: none;
+            }
+
+            .d-block{
+                display: block;
+            }
+
+            .loader-text{
+                font-weight: 400;
+                font-size: 16px;
+                line-height: 19px;
+                padding-top: 15px;
+                color: #FFF;
+                font-family: 'Proxima Nova' !important;
+            }
+
+            .logo-m{
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+            }
+
+            .spinner-background{
+                    width: 100%;
+                    height: 100%;
+                    background: #FFF;
+                    opacity: 1;
+                    top: 0px;
+                    left: 0px;
+                    position: fixed;
+                    z-index: 1000000;
+            }
+
+            .loader{
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    height: 100%;
+                    width: 100%;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000000;
+            }
+
+            .mbloader-text{
+                font-weight: 400;
+                font-size: 22px;
+                line-height: 24px;
+                padding-top: 20px;
+                color: #1D1D1D;
+                font-family: 'Proxima Nova' !important;
+            }
+
+            .text-loading{
+                font-family: 'Proxima Nova Bold' !important;
+                font-size: 35px;
+                line-height: 39px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                color: #78BC42;
+            }
+
+            .data-text-loading{
+                font-size: 30px;
+                line-height: 39px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                color: #78BC42;
+                font-family: 'Proxima Nova Bold' !important;
+            }
+
+            .loading-text-sub{
+                font-family: 'Proxima Nova Bold' !important;
+                font-size: 32px;
+                line-height: 39px;
+                padding-top: 12px;
+                display: flex;
+                align-items: center;
+                text-align: center;
+                justify-content: center;
+                color: #404b5a;
+            }
+
+            .svg-container{
+                padding-top: 20px;
+            }
+
+            /* #toast-container>.toast-success{
+                opacity: 1 !important;
+                background-color: #7ABB4A !important
+            }
+
+            #toast-container>.toast-error{
+                opacity: 1 !important;
+                background-color: #FA7800!important
+            } */
+
+            .toast-message{
+                color: #fff;
+                font-family: 'Proxima Nova' !important;
+                padding: 0 16px 0 12px;
+            }
+
+            .toast-success,.toast-info,.toast-warning,.toast-error{
+                opacity: 1 !important;
+                width: 343px !important;
+                font-size: 13px;
+                border-radius: 12px !important;
+                color:#ffffff !important;
+                border-color:transparent !important;
+                font-family: 'Proxima Nova' !important;
+                overflow: inherit !important;
+                padding: 25px 15px 25px 42px !important;
+            }
+
+            .toast-error{
+                background-color: #FA7800 !important;
+                box-shadow: 0px 4px 15px rgba(250, 120, 0, 0.50) !important;
+            }
+
+            .toast-success{
+                background-color: #7abb4a !important;
+                box-shadow: 0px 4px 15px rgba(122, 187, 74, 0.50) !important;
+            }
+
+            .toast-info{
+                background-color: #00afe8 !important;
+                box-shadow: 0px 4px 15px rgba(0, 175, 232, 0.50) !important;
+            }
+
+            .toast-warning{
+                background-color: #ffc700 !important;
+                box-shadow: 0px 4px 15px rgba(255, 199, 0, 0.50) !important;
+            }
+
+            .toast-close-button{
+                font-size: 30px !important;
+                opacity: 1 !important;
+                font-weight: 500 !important;
+                color: #fff !important;
+                text-shadow: none !important;
+                font-family: 'Proxima Nova' !important;
+                right: 0em !important;
+                top: -0.78em !important;
+            }
+
+            #toast-container>.toast-error {
+                    background-image:  url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 30 30" fill="none"><path d="M7.60156 21.9948L21.995 7.60144" stroke="%23FFFFFF" stroke-width="2.91497" stroke-linecap="round"/><path d="M7.60156 7.61179L21.995 22.0052" stroke="%23FFFFFF" stroke-width="2.91497" stroke-linecap="round"/></svg>') !important;
+            }
+
+            .toast.toast-success {
+                background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' width='25' height='19.643' viewBox='0 0 25 19.643' fill='none'%3e%3cpath d='M9.802 14.245 20.918 0.978l0.005 -0.009a1.393 1.393 0 0 1 2.083 0 1.664 1.664 0 0 1 0.003 2.212L10.857 17.597l-0.005 0.007a1.408 1.408 0 0 1 -1.041 0.468 1.409 1.409 0 0 1 -1.041 -0.468l-6.776 -7.337a1.664 1.664 0 0 1 0 -2.214l7.808 6.189Zm0 0 -5.725 -6.192a1.393 1.393 0 0 0 -2.083 0l7.808 6.191Z' fill='%23FFFFFF' stroke='%23FFFFFF' stroke-width='0.42857142857142855'/%3e%3c/svg%3e") !important;
+            }
+
+            .toast.toast-warning{
+                background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="10.9333" stroke="%23FFFFFF" stroke-width="2.13333"/><path d="M16.388 16.4767C16.3622 17.0574 15.8839 17.5149 15.3026 17.5149V17.5149C14.7222 17.5149 14.2443 17.0588 14.2172 16.4791L13.9425 10.591C13.9064 9.81872 14.5229 9.17285 15.296 9.17285V9.17285C16.068 9.17285 16.684 9.81683 16.6497 10.588L16.388 16.4767ZM16.3604 21.2781C16.0638 21.5747 15.7115 21.723 15.3037 21.723C14.8959 21.723 14.5437 21.5747 14.2471 21.2781C13.9628 20.9815 13.8207 20.6355 13.8207 20.24C13.8207 19.8322 13.9628 19.4799 14.2471 19.1833C14.5437 18.8867 14.8959 18.7384 15.3037 18.7384C15.7115 18.7384 16.0638 18.8867 16.3604 19.1833C16.657 19.4799 16.8053 19.8322 16.8053 20.24C16.8053 20.6355 16.657 20.9815 16.3604 21.2781Z" fill="%23FFFFFF"/></svg>') !important;
+            }
+
+            .toast.toast-info{
+                background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="12" cy="12" r="10.9333" transform="matrix(1 0 0 -1 3 27)" stroke="%23FFFFFF" stroke-width="2.13333"/><path d="M15.995 11.8347C15.7283 12.112 15.3976 12.2507 15.003 12.2507C14.6083 12.2507 14.2723 12.112 13.995 11.8347C13.7283 11.5573 13.595 11.2213 13.595 10.8267C13.595 10.432 13.7283 10.1013 13.995 9.83467C14.2723 9.55734 14.6083 9.41867 15.003 9.41867C15.3976 9.41867 15.7283 9.55734 15.995 9.83467C16.2723 10.1013 16.411 10.432 16.411 10.8267C16.411 11.2213 16.2723 11.5573 15.995 11.8347ZM16.235 20.6667H13.771V12.9387H16.235V20.6667Z" fill="%23FFFFFF"/></svg>') !important;
+            }
+
+        </style>
+    </head>
+    <apex:slds />
+    <!-- <div id="mSpinner">
+        <div class="spinner-background"></div>
+        <div class="mburseLoader">
+            <div class="mbloader"></div>
+            <div class="mbloader-text">Welcome to mBurse! Your profile is loading, please wait momentarily.</div>
+        </div>
+    </div> -->
+     <div id="mSpinner" class="d-none">
+        <div class="spinner-background"></div>
+        <div class="loader">
+            <span class="text-loading" id="welcome-text"></span>
+            <div class="loading-text-sub" id="subtext-welcome"></div>
+            <div class="mbloader-text">Please wait while we load your profile</div>
+            <div class="svg-container">
+                <div style="position:relative">
+                   <img style="width: 72px;" src="{!URLFOR($Resource.mBurseCss,'mburse/assets/mBurse-Icons/mburse-loading.gif')}" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <apex:includeLightning />
+    <body oncontextmenu="return false;">
+        <div id="mBursePlan" />
+        <c:mBurseChatBot />
+    </body>
+    <script>
+        /* Toaster Option */
+        this.setOptions = function () {
+            toastr.options.positionClass = "toast-top-right";
+            toastr.options.closeButton = true;
+            toastr.options.progressBar = false;
+            toastr.options.fadeOut = 600000;
+        };
+
+        this.setOptions();
+         
+        $("#mSpinner").show();
+        var videoWrapper = {!videoCustom}, nameOfUser = '{!contactName}'
+        document.getElementById("subtext-welcome").innerText = 'Welcome to your mDash Onboarding';
+        document.getElementById("welcome-text").innerText = (nameOfUser === '') ? 'Hi!' : 'Hi ' + nameOfUser + '!'
+        console.log("video ", videoWrapper)
+       
+        $Lightning.use("c:LWCLightningApp",function(){
+            $Lightning.createComponent("c:mBursePlanInfo",{
+                //pass parameter values to lwc js controller
+                "linkList" : videoWrapper
+            },"mBursePlan", function(c){ 
+                document.querySelector('c-m-burse-plan-info').addEventListener('spinner', (e) => {
+                    $("#mSpinner").hide();
+                });
+                document.querySelector('c-m-burse-plan-info').addEventListener('sent', (e) => {
+                    if(e.detail.contactEmail != undefined && e.detail.mobilePhone != undefined){
+                        toastr.success("Please check your email and text message to get started. We sent the links to "+ e.detail.contactEmail + " and " + e.detail.mobilePhone +".") //  + " as well as a text message to " + contactPhone  Please check your email and text message to get started
+                    }else{
+                        if(e.detail.contactEmail != undefined){
+                            toastr.success("Please check your email to get started. We sent the links to "+ e.detail.contactEmail +".")
+                        }
+                    }
+                });
+
+                document.querySelector('c-m-burse-plan-info').addEventListener('senterror', (e) => {
+                    toastr.error(e.detail)
+                });
+
+                document.querySelector('c-m-burse-plan-info').addEventListener('toast', (e) => {
+                    if (e.detail.type === 'error') {
+                        toastr.error(e.detail.message)
+                    } else if (e.detail.type === 'success') {
+                        toastr.success(e.detail.message)
+                    } else if (e.detail.type === 'info') {
+                        toastr.info(e.detail.message)
+                    }
+                })
+                console.log("component created successfully")
+            })
+        })
+    </script>
+</apex:page>

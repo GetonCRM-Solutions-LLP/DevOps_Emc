@@ -1,0 +1,191 @@
+<apex:page showHeader="false" lightningStylesheets="true" standardStylesheets="false" sidebar="false" applyHtmlTag="false"
+    applyBodyTag="false" docType="html-5.0">
+     <head>
+        <style>
+            #container{
+                margin: 0 auto;
+            }
+            .chart {
+                margin: 0 auto;
+            }
+            .highcharts-title {
+                fill: #1d1d1d;
+                font-size: 2em !important;
+                font-family: 'Proxima Nova Bold'
+            }
+            .highcharts-subtitle{
+                 font-weight: 400;
+                 font-size: 14px;
+                 font-family: 'Proxima Nova'
+            }
+        </style>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/main.css')}"/>
+        <script src="{!URLFOR($Resource.HighChart, '/proj4.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/highmaps.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/accessibility.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/us-all.js')}"></script>
+        <script src="{!URLFOR($Resource.HighChart,'/ca-all.js')}"></script>
+        <script>
+             var lexOrigin = location.origin;
+             var postData, chartData, states, chart = [], chloChart, charturl, typeBasedUrl;
+            window.addEventListener("message", function (event) {
+                console.log('Origin ' + event.origin);
+                console.log('data ' + event.data);
+                console.log('data-- ' , JSON.parse(event.data));
+                if (event.origin !== lexOrigin) {
+                    return;
+                }
+                postData = JSON.parse(event.data)
+                chartData = postData.modal;
+               
+                typeBasedUrl = (postData.mapType === 'CANADA') ? 'countries/ca/ca-all' : 'countries/us/us-all' ;
+                let containerChart = document.getElementById('container');
+               //countries/us/custom/us-all-territories
+                Highcharts.mapChart(containerChart, {
+                        chart: {
+                            map: typeBasedUrl,
+                            borderColor:postData.border,
+                            backgroundColor: postData.background,
+                          //  height: postData.height, //250
+                            height: postData.vertical,
+                            //width: postData.width, // 360
+                            margin: postData.margin,
+                            // marginTop: 20,
+                            // marginBottom: 0,
+                            // marginLeft: 0,
+                            // marginRight: 0,
+                            spacingTop: postData.top,
+                            spacingBottom: postData.bottom,
+                            // spacingLeft: 0,
+                            // spacingRight: 0
+                            //styledMode: true
+                        },
+
+                        accessibility:{enabled: false},
+                        
+                        responsive:{
+                            rules:[{
+                              condition:{
+                               maxWidth: 1000
+                              }
+                             }]
+                        },
+
+                        title: {
+                            text: postData.title
+                        },
+
+                        tooltip: {
+                                pointFormatter :  function () {
+                                          // display only if larger than 1
+                                          return '<b>'+this.Name+'</b>' + '<br>' + this.address + '<br/>' + 'Fixed Amount: ' + this.amount;
+                                },
+                                headerFormat: '',
+                                style: {
+                                    color: '#1d1d1d',
+                                    fontFamily: 'Proxima Nova'
+                                },
+                                borderColor: '#7abb4a'
+                        },
+
+                        legend: {
+                            enabled: false,
+                        },
+
+                        mapNavigation: {
+                            enabled: postData.navigation,
+                            // enableDoubleClickZoomTo: true,
+                            buttonOptions: {
+                                align: 'bottom',
+                                alignTo: 'plotBox',
+                                verticalAlign: 'bottom',
+                            }
+                        },
+
+                        credits: {
+                            enabled: false
+                        },
+
+                        // exporting: {
+                        //         menuItemDefinitions: {
+                        //         // Custom definition
+                        //         label: {
+                        //             onclick: function () {
+                        //                 this.renderer.label(
+                        //                     'You just clicked a custom menu item',
+                        //                     100,
+                        //                     100
+                        //                 )
+                        //                     // .attr({
+                        //                     //     fill: '#a4edba',
+                        //                     //     r: 5,
+                        //                     //     padding: 10,
+                        //                     //     zIndex: 10
+                        //                     // })
+                        //                     .css({
+                        //                         fontFamily: 'Proxima Nova'
+                        //                     })
+                        //                     .add();
+                        //             },
+                        //             text: 'Show label'
+                        //         }
+                        //     },
+                        //     buttons: {
+                        //         contextButton: {
+                        //             menuItems: ['viewFullscreen']
+                        //         }
+                        //     }
+                        // },
+
+                        series: [{
+                            name: 'My Team location',
+                            borderColor: '#FFFFFF',
+                            nullColor: '#d9d9d9',
+                            borderWidth: 0.3,
+                            joinBy: ['hc-a2', 'MailingState'],
+                            animation: {
+                                duration: 1000
+                            },
+                            showInLegend: false
+                        },{
+                                type: 'mappoint',
+                                color: Highcharts.getOptions().colors[1],
+                                data: chartData,
+                                marker: {
+                                    symbol: `url({!URLFOR($Resource.mBurseCss, 'mburse/assets/map_point.png')})`
+                                },
+                                dataLabels: {
+                                    enabled: false
+                                }
+                        }],
+
+                        navigation: {
+                            menuItemStyle:{
+                                fontFamily: 'Proxima Nova',
+                                padding: '10px'
+                            },
+                            menuItemHoverStyle: {
+                                background: 'transparent',
+                                color: '#1D1D1D'
+                            }
+                            // },
+                            // buttonOptions: {
+                            //    width: 48
+                            // }
+                        }
+                    });
+                })
+            
+            // function reportWindowSize() {
+            //     console.log(document.getElementById('container').style)
+            // }
+
+            // window.onresize = reportWindowSize;
+        </script>
+        </head>
+        <div id="container" class="chart"></div>
+        <!-- <div style="width: 100%;" id="mapDiv">
+          
+             <button id="large">Large</button> 
+        </div> -->
+</apex:page>

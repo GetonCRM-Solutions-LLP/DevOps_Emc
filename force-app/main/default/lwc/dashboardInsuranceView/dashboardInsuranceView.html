@@ -1,0 +1,97 @@
+<template>
+    <div  class="transition">
+        <div>
+            <template lwc:if={expired}>
+                <div class="slds-text-heading_medium slds-p-top_medium slds-p-bottom_large slds-text-align_center slds-p-bottom_medium expiredError">YOUR INSURANCE HAS EXPIRED</div>
+                <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_large sub-header">Upload your Insurance to ensure you receive your reimbursement </div>
+            </template>
+            <template lwc:else>
+                <div class="slds-text-heading_medium slds-text-align_center slds-p-bottom_medium font-bold main-header">Insurance preview</div>
+            </template>
+        </div>
+        <div class="slds-grid slds-grid_align-center slds-grid_vertical-align-center" style="flex-flow: column;">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+                    <video 
+                        class="video-frame slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12"
+                        controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                        <source type="video/mp4" src={videoLink} /> 
+                    </video>
+                </div>
+                <!-- <div class="slds-col">
+                    <video id="video-source" class="video-frame slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12"   controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                        <source  type="video/mp4" src={videoLink}/> 
+                    </video>
+                </div> -->
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_5-of-12 slds-p-top_x-large font-style">
+                    <div class="" style="
+                      display: flex;
+                      flex-flow: column;
+                      align-items: center;
+                  ">
+                    <div>
+                        <div class="footer-text-content">
+                            <div class="slds-align_absolute-center margin-none"><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none">
+                                <circle cx="15" cy="15" r="13.9655" stroke="#7ABB4A" stroke-width="2.06897"/>
+                                <path d="M16.7326 16.8446C16.7003 17.5705 16.1024 18.1424 15.3758 18.1424C14.6503 18.1424 14.053 17.5723 14.0192 16.8476L13.6757 9.48757C13.6306 8.52218 14.4012 7.71484 15.3676 7.71484C16.3326 7.71484 17.1026 8.51981 17.0597 9.48382L16.7326 16.8446ZM16.6981 22.8464C16.3273 23.2172 15.887 23.4026 15.3772 23.4026C14.8674 23.4026 14.4272 23.2172 14.0564 22.8464C13.7011 22.4757 13.5234 22.0431 13.5234 21.5488C13.5234 21.039 13.7011 20.5987 14.0564 20.2279C14.4272 19.8572 14.8674 19.6718 15.3772 19.6718C15.887 19.6718 16.3273 19.8572 16.6981 20.2279C17.0688 20.5987 17.2542 21.039 17.2542 21.5488C17.2542 22.0431 17.0688 22.4757 16.6981 22.8464Z" fill="#7ABB4A"/>
+                                </svg></div>
+                            <div class="slds-p-left_medium slds-size_10-of-12" style="font-size: 16px;">
+                                <div style="font-family: 'Proxima Nova Bold' !important;
+                                font-size: 16px;
+                                line-height: 19px;
+                                text-align: left;
+                                ">Make sure your declaration pages are in PDF format and contains your:</div>
+                            </div>
+                        </div>
+                        <ul class="slds-list_dotted slds-p-left_xx-large slds-p-top_x-small" style="font-size: 14px;">
+                            <li>Name</li>
+                            <li>Level of Insurance</li>
+                            <li>Your vehicles make, model, and year</li>
+                            <li>Insurance term (coverage dates)</li>
+                        </ul>
+                    </div>
+                     
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_5-of-12">
+                    <div class="slds-p-top_medium">
+                        <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={nextDeclarationUpload}>
+                            Go to upload Insurance
+                        </button>
+                    </div>
+                </div>
+        </div>
+        <!-- <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style emcFont p_bottom">
+            Watch this video to learn why we need your insurance.</div> -->
+        <!-- <div class={videoCss}>Remove -->
+           
+        <!-- </div> -->
+        <!-- <div class="slds-clearfix slds-p-top_xx-large">
+            <div class="footer-text">
+                <div class="font-style">
+                    <div class={css}>padding: 0 65px 0 65px;
+                        <div class="slds-size_5-of-12 footer-text-content">
+                            <div class="slds-align_absolute-center margin-none"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 30 30" fill="none">
+                                <circle cx="15" cy="15" r="13.9655" stroke="#7ABB4A" stroke-width="2.06897"/>
+                                <path d="M16.7365 16.8485C16.7042 17.5744 16.1063 18.1463 15.3797 18.1463C14.6542 18.1463 14.0569 17.5762 14.0231 16.8515L13.6796 9.49148C13.6345 8.52609 14.4051 7.71875 15.3715 7.71875C16.3365 7.71875 17.1065 8.52372 17.0636 9.48773L16.7365 16.8485ZM16.702 22.8503C16.3312 23.2211 15.8909 23.4065 15.3811 23.4065C14.8713 23.4065 14.4311 23.2211 14.0603 22.8503C13.705 22.4796 13.5273 22.047 13.5273 21.5527C13.5273 21.0429 13.705 20.6026 14.0603 20.2319C14.4311 19.8611 14.8713 19.6757 15.3811 19.6757C15.8909 19.6757 16.3312 19.8611 16.702 20.2319C17.0727 20.6026 17.2581 21.0429 17.2581 21.5527C17.2581 22.047 17.0727 22.4796 16.702 22.8503Z" fill="#7ABB4A"/>
+                                </svg></div>
+                            <div class="slds-p-left_medium slds-size_10-of-12">
+                                <strong>Make sure your declaration pages are in PDF format and contains your:</strong>
+                            </div>
+                        </div>
+                        <ul class="slds-list_dotted slds-size_4-of-12 slds-p-top_x-small">
+                            <li>Name</li>
+                            <li>Level of Insurance</li>
+                            <li>Your vehicles make, model, and year</li>
+                            <li>Insurance term (coverage dates)</li>
+                        </ul>
+                        <div class="footer-button slds-size_5-of-12 slds-p-left_x-large">
+                            <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={nextDeclarationUpload}>
+                                Go To Upload Insurance
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+</template>

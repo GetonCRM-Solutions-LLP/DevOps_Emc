@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_Fuel_Price</fullName>
+    <availability>online</availability>
+    <description>For this month, update fuel Price of all reimbursement records</description>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Update Fuel Price</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/42.0/connection.js&quot;)} 
+{!REQUIRESCRIPT(&quot;/soap/ajax/42.0/apex.js&quot;)} 
+
+sforce.apex.execute(&quot;UpdateEmpReimFuelPrice&quot;,&quot;updateFuelPrice&quot;,{reimMonth:&apos;{!Employee_Reimbursement__c.Month__c}&apos;}); 
+location.reload(true);</url>
+</WebLink>

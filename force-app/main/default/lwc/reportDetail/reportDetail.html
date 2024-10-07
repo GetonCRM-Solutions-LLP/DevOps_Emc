@@ -1,0 +1,171 @@
+<template>
+
+    <!-- <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_full backdrop_style animate__animated animate__slideInLeft animate__faster">
+        <div class="slds-modal__container modal_css">-->
+        <template lwc:if={ishow}> 
+            <div class="animate__animated animate__slideInLeft animate__faster">    
+                <div class="header_section">
+                    <div class="header1">
+                    <template lwc:if={dateRange}>
+                        <div class="date_range">
+                            <label class="slds-form-element__label date_label date_label_02" for="mileageInput-01">Date</label> 
+                            <c-date-picker date={from_Date} date-format={dateFormat} is-selected-date={isSelectedDate} data-key="fromDate" ondateselect={handleDateChange} place-holder="Start date"></c-date-picker>
+
+                            <label class="slds-form-element__label date_label date_label_02" for="mileageInput-01">to</label> 
+                            <c-date-picker date={to_Date} date-format={dateFormat} is-selected-date={isSelectedDate} data-key="toDate" ondateselect={handleDateChange} place-holder="End date"></c-date-picker>
+                        </div>
+                    </template>
+                    <template lwc:if={monthlyDropdown}> 
+                        <!-- <label class="slds-form-element__label date_label date_label_02" >Month</label> -->
+                        <c-dropdown-select class="header_dropdown"
+                                data-id="month"
+                            options={monthList}
+                            selected-value={lastmonth}
+                            onchange={handlemonthchange}
+                            main-class="default-box-input slds-truncate">
+                        </c-dropdown-select>
+                    </template>    
+                    <template lwc:if={weeklyDropdown}>
+                        <c-dropdown-select class="header_dropdown01" data-id="bi_week"
+                            options={Weekoptions}
+                            title="Week Period"
+                            onchange={handleweekchange}
+                            main-class="default-box-input slds-truncate" onmousedown ={handleenter}>
+                        </c-dropdown-select>
+                    </template>  
+                     <!-- <template lwc:if={recordDisplay}> -->
+                        <!-- <h2> {DriverManager}: </h2>  -->
+                        <c-select2-dropdown data-id="driver_dropdown" class="sync_dropdown driver"
+                                                          options={picklist}
+                                                          value={value}
+                                                          title={placeholder}
+                                                          onchange={handleDriverChange}
+                                                          main-class="default-box-input slds-truncate">
+                          </c-select2-dropdown>
+                      <!-- </template> -->
+                      <!-- <template lwc:if={showbuttons}> -->
+                            <button type="button"
+                            class="slds-btn slds-btn-primary slds-btn-sm btn-trip  btn_width " onclick={handleApply}>
+                            Apply</button>
+                            <template lwc:if={concurbtn}>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01 btn_width_01" onclick={handleConcur}>
+                                Concur Sync</button>
+                                <!-- <button type="button"
+                                class="slds-btn slds-btn-primary slds-btn-sm btn-trip btn_width_01" onclick={handleConcur}>
+                                Concur Sync</button> -->
+                            </template>
+                            
+                  <!-- </template> -->
+                    </div>
+                    <template lwc:if={showbuttons}>
+                        <div style="margin-top: 6px;">
+                            <div  class="footer_section">
+                                <template lwc:if={isLockUnlockIcon}>
+                                    <template lwc:if={isLockIcon}>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="lockunlockicon" width="26" height="26">
+                                            <use xlink:href={lockIconUrl} data-id="lock" onclick={handleShowLockUnlock}></use>
+                                        </svg>
+                                    </template>
+                                    <template lwc:else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="lockunlockicon" width="26" height="26">
+                                            <use xlink:href={unLockIconUrl} data-id="unlock" onclick={handleShowLockUnlock}></use>
+                                        </svg>
+                                    </template>
+                                </template>
+                                <h1>Export as </h1>
+                                <template lwc:if={showEmailbtn}>
+                                    <button type="button"
+                                    class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleSendEmail}>
+                                    Email</button>
+                                </template>    
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCreateExcel}>
+                                Excel</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCreateCSV}>
+                                CSV</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handlePrint}>
+                                Print</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCopy}>
+                                Copy</button>
+                            </div>
+                        </div>
+                    </template>  
+                </div>
+               
+                <c-user-preview-table id="myTable" class="copy_to" view-name="User" show-footer="true"   is-footer = "true" d-flex="flow-block" divider-class="row-divider--v1"  head-th="header-title--v1" sort-th="sort-container p-top-v1"  main-class={classToTable} scrollable={isScrollable} is-paginate={paginatedModal} model-data={finaldata}
+                columns={header}  options={headerdata} is-sortable={sortable} is-default-sort={isSort} colname={columnName} coltype={columnType} sortorder={sortOrder}
+                onkeyinputpress={showupdatebtn} onsortedlist={sortList} onupdate={handleUpdateList} onsorteddata={handleUpdateList} oniconclick={handleIndividualConcur} norecord-message="There is no data available">
+                <div slot="filter" class="slds-p-left_small slds-p-bottom_small row" >
+                      <div class="report_name">{displayReportName}</div>
+                     
+                </div>
+                <div slot="header">
+                    <div class="slds-float_right">
+                        <div  class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                            <div class="search-icon-block">
+                                <img class="search-icon" src={searchIcon} />
+                            </div>
+                            <div class="close-btn" if:false={isSearchEnable} onclick={handleClearInput}>
+                                <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                            </div>
+                            <input  class="slds-input filter-input" type="text" placeholder="Search" value={searchkey} onkeyup={handleChangebysearch}/>
+                        </div>
+                    </div>
+                    
+                </div>
+                 <c-download-C-S-V-File></c-download-C-S-V-File>
+                 <div slot="footer" >
+                    <!-- <template lwc:if={showbuttons}>
+                        <div >
+                            <div  class="footer_section">
+                                <h1>Export as </h1><button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCreateExcel}>
+                                Excel</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCreateCSV}>
+                                CSV</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handlePrint}>
+                                Print</button>
+                                <button type="button"
+                                class="slds-button slds-button_outline-brand btn-trip_01" onclick={handleCopy}>
+                                Copy</button>
+                            </div>
+                        </div>
+                    </template>   -->
+                 </div>        
+                </c-user-preview-table>
+                <template lwc:if={updatebtn}>
+                    <div class="slds-align_absolute-center">
+                        <button type="button"
+                        class="slds-button slds-button_outline-brand btn-trip_01 update_btn" onclick={handleupdate}>
+                        Save</button>
+                        <button type="button"
+                        class="slds-button slds-button_outline-brand btn-trip_01 Cancel_btn" onclick={handleCancel}>
+                        Cancel</button>
+                    </div>
+                </template>
+                <div>
+                    <lightning-icon class=" back_button " icon-name="utility:back" size="xx-small" onclick={handleClose} ></lightning-icon>
+                </div>
+            <!-- </template> -->
+       <!-- </div> -->
+       
+        <!-- </section>
+        <div class="slds-backdrop slds-backdrop_open backdrop_style" role="presentation"></div>   -->
+    <!-- </template> -->
+        </div>
+    </template>
+    <template lwc:if={anual_tax}> 
+        <div class="animate__animated animate__slideInLeft animate__faster">   
+            <c-driver-tax-liability-report acc-id={_accid} cont-id={_adminid} onback={handleClose} report-type={taxLiabilityReportType}></c-driver-tax-liability-report>
+        </div>
+    </template>    
+    
+    <c-lock-unlock-popup account-id={_accid} contact-id={_adminid} onshowspin={handleShowSpiner} onhidespin={handleHideSpiner} onchangeicon={handleLockIconChange} ontoast={showToast} ondownload={handleCreateExcel}></c-lock-unlock-popup>
+    
+    </template>

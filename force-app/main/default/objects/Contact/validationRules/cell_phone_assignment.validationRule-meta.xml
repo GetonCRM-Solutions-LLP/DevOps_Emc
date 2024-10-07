@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>cell_phone_assignment</fullName>
+    <active>true</active>
+    <description>checking wheather the value of cell phone is provided by user when the associated account contain the both as an value</description>
+    <errorConditionFormula>AND(ISPICKVAL(Account.Cell_Phone__c, &quot;Both&quot;),ISBLANK(TEXT(Cell_Phone__c)),NOT(OR(ISPICKVAL(Role__c, &quot;Manager&quot;),ISPICKVAL(Role__c, &quot;Admin&quot;))))</errorConditionFormula>
+    <errorDisplayField>Cell_Phone__c</errorDisplayField>
+    <errorMessage>please provide the value for cell phone in the contact as it is not assigned from account</errorMessage>
+</ValidationRule>

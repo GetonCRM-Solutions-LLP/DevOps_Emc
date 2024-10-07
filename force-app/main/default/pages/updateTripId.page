@@ -1,0 +1,6 @@
+<apex:page standardController="Account" lightningStylesheets="true" extensions="UpdateTripIdController" action="{!tripUserUpdatebatch}">
+    <apex:form >
+        <apex:pageMessages id="showmsg"></apex:pageMessages>
+        <apex:commandButton value="Back" action="{!backMethod}" />
+    </apex:form>    
+</apex:page>

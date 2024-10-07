@@ -1,0 +1,124 @@
+<apex:page standardStylesheets="false" showHeader="false" sidebar="false" controller="triplogerrorcontroller" docType="html-5.0" >
+    <link rel='stylesheet' href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}" type='text/css' media='all'/>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"/>
+    <link href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/js/bootstrap.min.js')}" type='text/javascript'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+    <style>
+        .panel-group .panel-footer
+        {
+            float: left;
+            width: 100%;
+        }
+        .panel.panel-default
+        {
+            float: left;
+            width: 100%;
+        }
+    </style>
+    <apex:actionStatus id="spinner">
+        <apex:facet name="start">
+            <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                <div style="top: 40%;padding: 10px;left: 43%;  width: 15%;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                <span style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Please Wait...</span>
+            </div>
+        </apex:facet>
+    </apex:actionStatus>
+    <apex:form id="form1">
+        <apex:actionFunction action="{!resetfilter}" name="resetfilterjs" status="spinner" reRender="rptr_trips"></apex:actionFunction>
+        <div class="container">
+            <div class="row">
+                <div class="panel-group">                    
+                    <apex:outputPanel id="optnl_steps">
+                        <apex:outputpanel id="optpnl_step1">
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4>Show Triplog</h4>
+                                </div>
+                                <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-md-1">
+                                                    <label>
+                                                        Month
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <apex:selectList styleClass="form-control" id="selectDate" size="1" multiselect="false" onchange="resetfilterjs();" value="{!Selected_month}">
+                                                        <apex:selectOptions value="{!resettableForMonth}"></apex:selectOptions>
+                                                    </apex:selectList>  
+                                                </div>
+                                                <div class="col-md-1">
+                                                    <label>
+                                                        Status
+                                                    </label>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <apex:selectList value="{!Selected_month_failRecord}" styleClass="form-control" id="faillst_triplog_for_Month" size="1" multiselect="false" onchange="resetfilterjs();" >
+                                                        <apex:selectOptions value="{!Statuses}"/>
+                                                    </apex:selectList><p/>
+                                                </div>
+                                            </div> 
+                                        </div>
+                                    </div>
+                                   </div>
+                                    <div class="row">
+                                    <div class="col-md-12">
+                                        <apex:outputPanel id="rptr_trips">
+                                            <apex:outputPanel rendered="{!totalTrips>0}">
+                                            <div class="table-responsive">
+                                                <table class="table table-bordered table-striped">
+                                                    <tr>
+                                                       
+                                                        <td>Account</td>
+                                                        <td>Contact</td>
+                                                        <td>Reimbersment</td>
+                                                       
+                                                        <td>Endpoint</td>
+                                                        <td>Response</td>
+                                                        <td>Total Mileage</td>
+                                                        <td>Total Trip</td>
+                                                        <td>Status</td>
+                                                    </tr>
+                                                        <apex:outputText value="{!triplogWrapperList}"/>
+                                                        <apex:repeat value="{!triplogWrapperList}" var="objTrip">
+                                                        <tr>
+                                                            
+                                                            <td>{!objTrip.accName}</td>
+                                                            <td>{!objTrip.conLastName} {!objTrip.conFirstName}</td>
+                                                            <td>{!objTrip.reimName}</td>
+                                                            
+                                                            <td>{!objTrip.endpoint}</td>
+                                                            <td>{!objTrip.response}</td>
+                                                            <td>{!objTrip.totalMilage}</td>
+                                                            <td>{!objTrip.Total_Trips}</td>
+                                                            <td>{!objTrip.status}</td>
+                                                        </tr>  
+                                                    </apex:repeat> 
+                                                                            
+                                                </table>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel> 
+                                    </div>
+                                </div>
+                                </div>
+                            </div>
+                        </apex:outputpanel>
+                    </apex:outputpanel>
+                </div>
+            </div>
+        </div>
+    </apex:form>
+    <script type="text/javascript">
+        function doblankMonth() {
+            document.getElementById('selectDate').value = '';
+        }
+    </script>
+</apex:page>

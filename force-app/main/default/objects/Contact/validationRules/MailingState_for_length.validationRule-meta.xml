@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MailingState_for_length</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(
+OR(
+ISBLANK(MailingState),
+REGEX( MailingState , &quot;[a-zA-Z]{2}&quot;)
+)
+)</errorConditionFormula>
+    <errorDisplayField>MailingState</errorDisplayField>
+    <errorMessage>Please Enter Only 2 Characters and Valid Value for MailingState field</errorMessage>
+</ValidationRule>

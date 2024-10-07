@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Drive Stay Time --></label>
+    <name>Drive_Stay_Time__c</name>
+</CustomFieldTranslation>

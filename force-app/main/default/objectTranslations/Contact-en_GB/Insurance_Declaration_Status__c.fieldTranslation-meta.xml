@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Insurance Declaration Status --></label>
+    <name>Insurance_Declaration_Status__c</name>
+    <picklistValues>
+        <masterLabel>Skip</masterLabel>
+        <translation><!-- Skip --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Uploaded</masterLabel>
+        <translation><!-- Uploaded --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

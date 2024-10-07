@@ -1,0 +1,23 @@
+<template>
+    <c-user-profile-modal class="modal_position"
+        data-id='account'
+        header={headerName}
+        month='' show-btn={isFalse}
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass}>
+        <div class="">
+            <h2 class="modal_content-class" align="center">{accountLockContent}</h2>
+        </div>
+        <div class="button_class_modal slds-align_absolute-center" >
+            <button type="button"
+                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" onclick={handleMainEvent}>
+                <template lwc:if={isLock}>Unlock the Report</template>
+                <template lwc:else>Lock &#38; Download Report</template>
+            </button>
+        </div>
+    </c-user-profile-modal>
+</template>

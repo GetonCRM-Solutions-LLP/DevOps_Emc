@@ -1,0 +1,52 @@
+<template>
+    <div class="transition">
+        <div class="slds-p-top_large">
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_small font-style"> <strong>Step 1. </strong>
+                Download the template <a onclick={exportCSVFile}>here</a>
+            </div>
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_x-large font-style"> <strong>Step 2. </strong>
+                Upload the completed template below
+            </div>
+            <div class="m-left m-right">
+                <form class="box has-advanced-upload" enctype="multipart/form-data" method="post" action=""  ondragover={onDrag} ondragleave={onDragLeave}  ondrop={handleDropFile}>
+                    <div 
+                        class="box__input" id="box__input">
+                        <div class="file-upload-img">
+                            <img class="box-file-icon" src={location} />
+                        </div>
+                        <!-- <svg height="43" viewBox="0 0 566.93 566.93" width="50" class="box__icon" >
+                            <path class="b"
+                                d="M51.12,332.94c-10.67,.11-20.45,9.83-20.24,20.47v139.22c0,10.57,9.64,20.18,20.24,20.18h464.68c10.59,0,20.24-9.62,20.24-20.18v-139.22c.16-10.67-9.54-20.47-20.24-20.47s-20.39,9.8-20.24,20.47v119.03H71.36v-119.03c.24-10.78-9.43-20.58-20.24-20.47Z">
+                            </path>
+                            <path class="b"
+                                d="M283.44,38.12c-4.82,.18-10.41,2.19-13.91,5.48l-114.67,107.93c-6.56,7.32-9.27,21.34-1.69,29.51,7.48,8.06,22,7.8,29.51-.21l80.53-75.89V394.14c0,11.17,9.06,20.24,20.24,20.24s20.24-9.06,20.24-20.24V104.94l80.53,75.89c6.93,6.9,21.95,8.19,29.51,.21,7.56-7.96,5.14-22.5-1.69-29.51l-114.67-107.93c-3.93-3.69-8.54-5.48-13.91-5.48h0Z">
+                            </path>
+                        </svg> -->
+                        <div class="box__upload"  lwc:if={isVisible}>
+                            <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-blue waves-light" onclick={uploadFileInChunk}>
+                                Upload
+                            </button>
+                        </div>
+                        <div class="box__container slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" lwc:else>
+                            <span style="font-family: 'Proxima Nova Bold' !important;">Choose file to upload</span>
+                            <input accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, .csv"
+                            class="box__file" id="file" name="file" type="file" onchange={fileChanged}/>
+                        </div>
+                        <div>
+                            <label class="w-100 text-center pd-10 file-message" for="file">{fileName}
+                                <span style="color: #6C6C6C; margin-left: 14px;">{fSize}</span>
+                            </label>
+                            <label class="w-100 text-center error-text" for="file-error" lwc:if={isError}>
+                                <i class="fa-solid fa-circle-exclamation"></i>  {errorUploading}
+                            </label>
+                        </div>
+                    </div>
+                    <span class="box__dragndrop slds-align_absolute-center"> or drag and drop files here</span>
+                </form>
+            </div>
+        </div>
+        <div class="slds-m-top_x-large slds-m-left_small">
+            <lightning-icon class="back_button" icon-name="utility:back" size="xx-small" onclick={handleClose} ></lightning-icon>
+        </div>
+    </div>
+</template>

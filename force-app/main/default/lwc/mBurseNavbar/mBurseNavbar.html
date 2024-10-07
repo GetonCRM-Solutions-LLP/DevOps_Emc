@@ -1,0 +1,23 @@
+<template>
+    <header>
+        <div class="main-header sticky">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <nav class="navbar">
+                            <a class="navbar__brand" onclick={refreshPage}>
+                                    <img alt="logo" class="img-fluid"
+                                        src={companyLogoUrl}>
+                            </a>
+                            <div class="navbar__collapse col-xl-9 ml-0">
+                                <ul class="navbar-nav flex-row alignitemscenter">
+                                  <slot></slot>
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+</template>

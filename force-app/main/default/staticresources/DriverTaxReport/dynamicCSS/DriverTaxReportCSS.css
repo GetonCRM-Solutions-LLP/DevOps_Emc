@@ -1,0 +1,190 @@
+*{
+    font-family: 'Proxima Nova' !important;
+}
+.slds-card__header{
+     display: none;
+}
+.slds-page-header{
+     display: none ;
+}
+/* .slds-card{
+    margin-top: -19px;
+    margin-left: -11px;
+    margin-right: -11px;
+} */
+.report_title{
+    font-size: 20px ;
+    color: #7ABB4A;
+    /* margin-top: 0px; */
+    margin-right: 26px;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.report_header{
+    display: flex !important;
+    margin-left: 11px;
+}
+.driver_header{
+    margin-left: 20px !important;
+    width: 233px !important;
+}
+.driver_combobox , .driver_dropdown , .input_search{
+    border-radius: 10px !important;
+}
+.input_search{
+    margin-top: -10px !important;
+}
+.row-color{
+    background-color: #65B244 !important;
+}
+/* .slds-button{
+    background-color: #65B244 !important;
+    border-radius: 6px !important;
+    color: white !important;
+    height: 35px !important;
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 12px !important;
+    box-shadow: none !important;
+} */
+
+.detail_button , .summary_button{
+    width: 94px !important;
+    display: block;
+    margin-left: 57px !important;
+    margin-top: 80px;
+}
+.split_data{
+    width: 270px !important;
+    height: 220px !important;
+    margin-right: 30px !important;
+    border-radius: 19px !important;
+    margin-top: 27px !important;
+    display: grid !important;
+}
+.tax_detail{
+    /* width: 1000px !important; */
+    margin-left: 9px !important;
+    color: #1D1D1D !important;
+}
+.tax_detail_header{
+    font-size: initial !important;
+    font-family: 'Proxima Nova Bold' !important;
+    padding-bottom: 10px !important;
+}
+.mil_title , .reim_title , .irs_title {
+    border-bottom: solid 1px lightgray;
+    padding: 0.5rem 0 !important;
+    font-size: 13px;
+}
+.mileage_amount , .reimburse_amount , .max_irs_amount , .tax_liability_amount , .total_rem , .max_alowable , .tax_liability_total{
+    text-align: right !important;
+    display: inline-block !important;
+    font-family: 'Proxima Nova Bold' !important;
+    
+}
+.mileage_amount{
+    /* width: 184px !important; */
+    margin-left: 109px;
+}
+.reimburse_amount{
+    /* width: 109px !important; */
+    margin-left: 35px;
+}
+.max_irs_amount{
+    /* width: 134px !important; */
+    margin-left: 62px;
+
+}
+.tax_liability_amount{
+    position: relative;
+    bottom: 20px;
+    left: 163px;
+}
+.quarte_div{
+    width: 103px;
+}
+.tax_analysis {
+    width: 270px;
+    border-radius: 19px !important;
+    margin-left: 8px;
+    margin-top: 26px;
+}
+.header_of_anualtax{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: larger;
+    padding-bottom: 10px !important;
+}
+
+.total_rem{
+    margin-left: 70px;
+}
+.max_alowable{
+    margin-left: 70px;
+}
+.tax_liability_total{
+    margin-left: 70px;
+}
+h1{
+    margin-top: 10px !important;
+    padding-bottom: 10px !important;
+    font-size: 13px !important;
+}
+.border-totalraim , .border-max-allow{
+    border-bottom: solid 1px lightgray;
+}
+.detail_summary{
+    display: flex;
+    color: #1D1D1D !important;
+}
+.header_of_detail , .header_of_summary{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: larger;
+    position: absolute;
+    margin-top: 44px !important;
+    /* margin-left: 27px !important; */
+}
+.header_of_detail{
+    margin-left: 31px !important;
+}
+.header_of_summary{
+    margin-left: 20px !important;
+}    
+.liability_detail , .liability_summary{
+    width: 270px;
+    border-radius: 19px !important;
+    margin-left: 30px;
+    margin-top: 26px;
+}
+.back_button{
+        --sds-c-icon-color-foreground-default: #65B244;
+        margin-top: 15px !important;
+        margin-left: 8px !important;
+        border-radius: 10px !important;
+        border: 1px solid #C9C9C9 ;
+        padding: 15px;
+}        
+.error_msg{
+    font-family: 'Proxima Nova Bold' !important;
+    text-align: center;
+	margin-top: 30px !important;
+	color: #1D1D1D;
+    font-size: 27px;
+	border-top: 2px solid #d7d7d7;
+    border-bottom: 2px solid #d7d7d7;
+    padding: 25px !important;
+    margin-bottom: 25px !important;
+}
+.liability_title{
+    width: 236px;
+    padding: 10px 0px !important;
+    font-size: 13px;
+}
+
+
+
+
+
+   
+
+
+

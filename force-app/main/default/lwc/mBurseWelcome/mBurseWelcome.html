@@ -1,0 +1,37 @@
+<template>
+    <c-user-profile-modal header={resourceText} modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open animate__animated animate__slideInUp animate__fast"
+    modal-content-style={contentText}
+    header-class="slds-modal__header welcome-header slds-clearfix"
+    style-header="slds-modal__container"
+    m-dashboarding="true"
+    close-btn-class="hidden-close">
+    <div>
+        <div>
+            <video id="video-source" class="video-player" width={videoWidth} height={videoHeight}  controls="controls" autoplay muted loop playsinline controlslist="noplaybackrate nodownload" style="object-fit: cover;border-bottom-right-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-top-right-radius: 20px;
+            border-top-left-radius: 20px;">
+                <source  type="video/mp4" src={welcomeVideoUrl}/>
+            </video>
+        </div>
+        <div class="footer">
+            <div class="button-container">
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light mleft-0 mright-0" onclick={handleGetStarted}>
+                    Get Started
+                </button>
+            </div>
+           <div class="filter-container">
+                <div class="check-input slds-checkbox"> 
+                    <input type="checkbox" name="error-checkbox" id="error-check" class="checkbox-input error-check" onchange={welcomeChange}>
+                    <label class="slds-checkbox__label"  for="error-check">
+                        <span class="slds-checkbox_faux"></span>
+                    </label>
+                </div>
+                <div class="dont-message">Don't Show Video Again</div>
+           </div>
+          
+        </div>
+    </div>
+      
+</c-user-profile-modal>
+</template>

@@ -1,0 +1,78 @@
+<apex:page showHeader="false" lightningStylesheets="true" standardStylesheets="false" sidebar="false" applyHtmlTag="false"
+    applyBodyTag="false" docType="html-5.0">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/fontawesome.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" />
+      
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+          <!--Toaster -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+        <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+        <style type="text/css">
+            body {
+                font-family: 'Proxima Nova' !important;
+                max-width: 100%;
+            }
+            .toast-progress {
+                background-color: #000000 !important;
+            }
+
+            .toast-success {
+                background-color: #78bc42 !important;
+            }
+
+            .toast-error {
+                background-color: #FF0000 !important;
+            }
+        </style>
+    </head>
+    <apex:slds />
+    <apex:includeLightning />
+
+    <body>
+        <div id="chat" />
+    </body>
+    <script>
+         /* Toaster Option */
+         this.setOptions = function () {
+            toastr.options.positionClass = "toast-top-right";
+            toastr.options.closeButton = true;
+            toastr.options.progressBar = true;
+            toastr.options.fadeOut = 100000;
+        };
+
+        this.setOptions();
+        var url_string = window.location.href;
+        var url = new URL(url_string);
+        var name = url.searchParams.get("name");
+        var id = url.searchParams.get("cid");
+        var isMassSend = url.searchParams.get("isMass");
+        var list = url.searchParams.get("contactList");
+        console.log("driver name", name);
+        console.log("contact", id);
+        console.log("isMassSend", isMassSend);
+        console.log("list", list);
+        $Lightning.use("c:LWCLightningApp", function () {
+            $Lightning.createComponent("c:mBurseSMS", {
+                //pass parameter values to lwc js controller
+                "driverName": name,
+                "driverId": id,
+                "massText": isMassSend,
+                "contactList": list
+            }, "chat", function (c) {
+                document.querySelector('c-m-burse-s-m-s').addEventListener('close', (e) => {
+                    console.log('vf event data window listener => ', e.detail);
+                    window.top.postMessage(e.detail, '*')
+                });
+                document.querySelector('c-m-burse-s-m-s').addEventListener('fileerror', (e) => {
+                    toastr.error(e.detail)
+                });
+                console.log("component created successfully")
+            })
+        })
+    </script>
+</apex:page>

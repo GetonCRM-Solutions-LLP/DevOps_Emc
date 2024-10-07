@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Oct_2019</fullName>
+    <columns>NAME</columns>
+    <columns>Approved_Date__c</columns>
+    <columns>Contact_Id__c</columns>
+    <columns>Contact_Email__c</columns>
+    <columns>Status__c</columns>
+    <columns>Maintenance_and_Tires__c</columns>
+    <columns>Month__c</columns>
+    <columns>Fuel_Price__c</columns>
+    <filterScope>Everything</filterScope>
+    <filters>
+        <field>Month__c</field>
+        <operation>equals</operation>
+        <value>10-2019</value>
+    </filters>
+    <label>Oct 2019</label>
+</ListView>

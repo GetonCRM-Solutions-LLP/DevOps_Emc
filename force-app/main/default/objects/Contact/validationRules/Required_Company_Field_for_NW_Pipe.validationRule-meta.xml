@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Required_Company_Field_for_NW_Pipe</fullName>
+    <active>false</active>
+    <description>Company Field is mandatory for NW Pipe Account.</description>
+    <errorConditionFormula>IF ( Account.Id  = &apos;0013r00002ZUARc&apos;, ISBLANK(Text(Company__c)) ,NOT(ISBLANK(Text(Company__c)) ))</errorConditionFormula>
+    <errorDisplayField>Company__c</errorDisplayField>
+    <errorMessage>Please Select the value.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,829 @@
+<apex:page showHeader="false" title="My Information" sidebar="false" controller="drivermanagermydetailcontroller" action="{!getRedirected}">
+<html>
+    
+    <head>
+        <apex:include pageName="EMC_Common_Head" />
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script src="https://code.angularjs.org/1.4.7/angular.js"></script>
+        <script src="https://gitcdn.github.io/bootstrap-toggle/2.1.0/js/bootstrap-toggle.min.js"></script>
+        <script src="https://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.9.0.js"></script>
+        <script src="{!URLFOR($Resource.dirPagination)}"></script>
+    
+        <!-- for excel download directive-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/jszip.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/xlsx.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+        <!-- for complete excel download directive-->
+    
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+        <!-- <script src="{!URLFOR($Resource.accrodiandriverdashboard)}"></script> -->
+        <style type="text/css">
+            /*Media Queries*/
+    
+            @media (max-width:1024px) and (min-width:992px) {
+                .mr-12 {
+                    margin-right: 7.25rem;
+                }
+            }
+            header{
+                margin-bottom: 84px !important;
+            }
+            .Insurance-fluid{
+                padding-left: 0px !important;
+                padding-right: 0px !important;
+            }
+            .spinner-background {
+                width: 100%;
+                height: 100%;
+                background: #000;
+                opacity: 0.4;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 1000000;
+            }
+    
+            .underline {
+                text-decoration: underline;
+            }
+    
+            .greenText {
+                font-size: 14px;
+                font-weight: 600;
+                color: #78bc42;
+                position: relative;
+                top: 36px;
+                left: 88px;
+            }
+    
+            .greenText2 {
+                position: relative;
+                font-size: 14px;
+                font-weight: 600;
+                color: #78bc42;
+                top: 53px;
+                left: 28px;
+            }
+    
+            .redText {
+                position: absolute;
+                top: 78px;
+                right: 80px;
+                font-size: 9px;
+                color: #ff0000;
+                font-weight: 600;
+            }
+    
+            .mr-11 {
+                margin-right: 12px !important;
+            }
+    
+            .image-cardtext {
+                right: 30px;
+                top: 0px;
+            }
+    
+            .fileupload-title {
+                color: #000000 !important;
+                font-size: 18px !important;
+            }
+    
+            .fileupload-title-2 {
+                color: #78bc42 !important;
+            }
+    
+            .insDiv {
+                width: 157%;
+                margin-left: -80px;
+            }
+    
+            .tagquestion {
+                top: -14px;
+                position: relative;
+                color: #78bc42;
+                right: 5px;
+                font-size: 14px;
+            }
+    
+            .image-Insurancetext {
+                position: absolute;
+                top: 0px;
+            }
+    
+            .spinner-load {
+                position: fixed;
+                top: 49%;
+                left: 49%;
+                z-index: 1000000;
+            }
+    
+            .box__dragndrop:hover {
+                background-color: #6c757d !important;
+            }
+    
+            .box__dragndrop:hover .uploadtxt {
+                color: #fff;
+            }
+    
+            .uploadtxt {
+                color: #6c757d;
+                text-transform: uppercase;
+            }
+    
+            .box__dragndrop {
+                color: #dddddd !important;
+                display: inline-block !important;
+                background-image: none !important;
+                background: none !important;
+                border-radius: 0px !important;
+                border: 3px solid !important;
+                float: right;
+                margin-right: 120px !important;
+                padding: .375rem .75rem !important;
+                transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out !important;
+            }
+    
+            .modal-backdrop.fade {
+                opacity: 0.4 !important;
+            }
+    
+            .fade:not(.show) {
+                opacity: 1;
+            }
+    
+            .modal-dialog {
+                z-index: 1057;
+            }
+    
+            table#driver-dashbord-month-model th {
+                position: relative;
+            }
+    
+            table#driver-dashbord-month-model span.sort-icon {
+                position: absolute;
+                top: 18px;
+                right: 0px;
+                font-size: 12px;
+            }
+    
+            .w-100 {
+                cursor: pointer;
+            }
+    
+            .successMsg {
+                top: 124px !important;
+                left: 230px !important;
+                position: absolute !important;
+                font-weight: bold;
+                font-size: 14px !important;
+                color: #78bc42 !important;
+            }
+    
+            .pagination {
+                display: inline-block;
+                padding-left: 0;
+                margin: 20px 0;
+                border-radius: 4px;
+            }
+    
+            .pagination>li {
+                display: inline;
+            }
+    
+            .pagination>li>a,
+            .pagination>li>span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #78bc42;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+    
+            .pagination>li:first-child>a,
+            .pagination>li:first-child>span {
+                margin-left: 0;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+    
+            .pagination>.disabled>a,
+            .pagination>.disabled>a:focus,
+            .pagination>.disabled>a:hover,
+            .pagination>.disabled>span,
+            .pagination>.disabled>span:focus,
+            .pagination>.disabled>span:hover {
+                color: #777;
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+            }
+    
+            .pagination>.disabled>a,
+            .pagination>.disabled>a:focus,
+            .pagination>.disabled>a:hover,
+            .pagination>.disabled>span,
+            .pagination>.disabled>span:focus,
+            .pagination>.disabled>span:hover {
+                color: #78bc42;
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+            }
+    
+            .pagination>.active>a,
+            .pagination>.active>a:focus,
+            .pagination>.active>a:hover,
+            .pagination>.active>span,
+            .pagination>.active>span:focus,
+            .pagination>.active>span:hover {
+                z-index: 3;
+                color: #fff;
+                cursor: default;
+                background-color: #78bc42;
+                border-color: #78bc42;
+            }
+    
+            .disable-pagination {
+                cursor: not-allowed !important;
+                pointer-events: none;
+            }
+    
+            .disable-pagination>a {
+                color: #212529 !important;
+            }
+    
+            .paginationformodal {
+                margin: 0px 0 !important;
+            }
+    
+            .piginationpages {
+                color: #78bc42 !important;
+            }
+    
+            .paginationformodal>a {
+                color: #78bc42 !important;
+            }
+    
+            .paginationformodaldownloadbutton {
+                margin-top: 0px;
+            }
+    
+            .spinner-background {
+                width: 100%;
+                height: 100%;
+                background: #000;
+                opacity: 0.4;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 1000000;
+            }
+    
+            .spinner-load {
+                position: fixed;
+                top: 49%;
+                left: 49%;
+                z-index: 1000000;
+            }
+    
+            .rowforplan {
+                margin-right: -15px;
+                margin-left: -15px;
+            }
+    
+            .alignitemscenter {
+                align-items: center;
+            }
+    
+            .displayblock {
+                display: block !important;
+            }
+    
+            .displaynone {
+                display: none !important;
+            }
+    
+            .table-nodata {
+                text-align: center;
+            }
+    
+            table.dataTable tbody th,
+            table.dataTable tbody td {
+                padding: 5px 8px !important;
+            }
+    
+            table.dataTable tfoot th,
+            table.dataTable tfoot td {
+                padding: 10px 18px 6px 6px;
+            }
+    
+            .form-control:focus {
+                outline: 0 !important;
+                border-color: initial;
+                box-shadow: none;
+            }
+    
+            #example_filter {
+                position: absolute;
+                right: 0px;
+                top: 0px;
+            }
+    
+            #filtericon {
+                padding: 10px;
+                right: 0;
+                position: absolute;
+                display: block;
+                z-index: 4;
+                cursor: pointer;
+            }
+    
+            .w-85 {
+                width: 89% !important;
+            }
+    
+            .mr-98 {
+                margin-right: 98px !important;
+            }
+    
+            .mr-12 {
+                margin-right: 12rem !important;
+            }
+            #toast-container>div{
+                top: 35rem !important;
+            }
+        </style>
+        <script>
+            var app = angular.module('driverDashboardModule',['ui.bootstrap','angularUtils.directives.dirPagination']);
+            app.controller('drivermanagermydetail', ['$scope','$filter','$timeout',
+                    function($scope,$filter,$timeout) {
+                        var url_string = $(location).attr("href");
+                        console.log(url_string);
+                        var url = new URL(url_string);
+                        $scope.id = url.searchParams.get("id");
+                        $scope.accid = url.searchParams.get("accid");
+                        $scope.showteam = url.searchParams.get("showteam");
+                        $scope.insurance_parameters = [];
+                        $scope.insurance_parameters = JSON.parse('{!accInsuranceList}');
+                        console.log("insurance->",$scope.insurance_parameters);
+                        
+                        var url_locate = "/app/driveradminmanagermydetail?accid="+$scope.accid+"&id="+$scope.id+"&showteam="+$scope.showteam;
+                        console.log(url_locate);
+                        $scope.logodocumentid ='{!logoDocument_id}';
+                        //$scope.insurancecount = {!insuranceSize};
+                        var choosenfileType = '';
+                        var chooseFileName = '';
+                        $('#spinner').hide();
+                        
+                        $scope.empContact = JSON.parse('{!DriverDetails}');
+                
+                $scope.contactname ='{!contactDataAsString}';
+               
+                if($scope.empContact != null && $scope.empContact != '') {
+                    $scope.adminname =  $scope.contactname;
+                } else {
+                    $scope.adminname = '';
+                }
+                if($scope.empContact[0].Insurance_Attachment_Id__c != '' && $scope.empContact[0].Insurance_Attachment_Id__c != null && $scope.empContact[0].Insurance_Attachment_Id__c != undefined) {
+                    $scope.attachmentid = $scope.empContact[0].Insurance_Attachment_Id__c ;
+                }
+                else
+                {
+                    $scope.attachmentid = "";
+                }
+                //$scope.adminname =  $scope.contactname;
+                $scope.empReimList = JSON.parse('{!ReimbursementsList}');
+                $scope.mileageList = '';
+                $scope.gaspricedata = {!gaspriceforpreviosmonth};
+                /*$scope.fuelprice = JSON.stringify($scope.gaspricedata[0].Fuel_Price__c);*/
+                if($scope.gaspricedata != null && $scope.gaspricedata != '') {
+                    console.log('fuel price:--'+$scope.gaspricedata[0].Fuel_Price__c);
+                    if($scope.gaspricedata[0].Fuel_Price__c != '' && $scope.gaspricedata[0].Fuel_Price__c != null)
+                    {
+                        $scope.fuelprice = JSON.stringify($scope.gaspricedata[0].Fuel_Price__c);    
+                    } else {
+                        $scope.fuelprice = '';
+                    }
+                } else {
+                    $scope.fuelprice = '';
+                }
+                $scope.showunapprove = false;
+
+                $scope.displymodal = function() {
+                    angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).removeClass("displaynone");
+                    angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).addClass("displayblock");
+                }
+
+               
+                /* For File Upload*/
+                $scope.filedata = '';
+                $scope.uploadVisible = true;
+                $scope.IsVisiblebtn = false;
+                var choosefile;
+              
+                $scope.loadDropfile = function(files) {
+                    chooseFileName = '';
+                    attachment = '';
+                    choosefile = '';
+                    choosefile = files;
+                    var file = files[0]
+                    choosenfileType = files[0].type;
+                    chooseFileName = files[0].name;
+                    choosefile = files;
+                    if(files[0].size > 0  &&  files[0].size < 4350000){
+                        document.getElementById("uploadBtn").style.visibility = "hidden";
+                        $scope.uploadVisible = false;
+                        $scope.IsVisiblebtn = true;
+                        choosefile = files;
+                    }
+                    else{
+                        $scope.IsVisiblebtn = false;
+                        toastr.error('Base 64 Encoded file is too large.  Maximum size is 4 MB .'); 
+                    }
+                    var reader = new FileReader();
+                    reader.onload = function(e) {                                
+                        $scope.filedata = reader.result;  
+                    };
+                    reader.readAsDataURL(file);
+                    $scope.$apply(); 
+                }
+                
+                $scope.file_changed = function(element) {
+                    chooseFileName = '';
+                    attachment = '';
+                    choosefile = '';
+                    $scope.filedata = '';
+                    choosefile = element;
+                    //console.log('file size :- '+choosefile.files[0].size);
+                    if(choosefile.files[0].size > 0  &&  choosefile.files[0].size < 4350000){
+                        document.getElementById("uploadBtn").style.visibility = "hidden";
+                        $scope.uploadVisible = false;
+                        $scope.IsVisiblebtn = true;
+                        choosefile = element;
+                    }
+                    else{
+                        $scope.IsVisiblebtn = false;
+                        toastr.error('Base 64 Encoded file is too large.  Maximum size is 4 MB .'); 
+                    }
+                    var fl = choosefile.files[0].size;
+                
+                    
+                    $scope.$apply(function(scope) {
+                        var photofile = element.files[0];
+                        choosenfileType = photofile.type;
+                        chooseFileName = photofile.name;
+                        var reader = new FileReader();
+                        $scope.fsize = element.files[0].size;
+                        reader.onload = function(e) {
+                            $scope.filedata = reader.result;    
+                        };
+                        reader.readAsDataURL(photofile);
+                    });
+                };
+
+                var maxStringSize = 6000000;    //Maximum String size is 6,000,000 characters
+                var maxFileSize = 4350000;      //After Base64 Encoding, this is the max file size
+                var chunkSize = 950000;         //Maximum Javascript Remoting message size is 1,000,000 
+                var attachment;
+                var attachmentName;
+                var fileSize;
+                var positionIndex;
+                var doneUploading;
+
+                
+                $scope.uploadFileInChunk = function(element) {
+                    var file = choosefile.files[0];     
+                                           
+                    if(file != undefined) {
+                        if(file.size <= maxFileSize) {
+                            
+                            attachmentName = chooseFileName;
+                            var fileReader = new FileReader();
+                            fileReader.onloadend = function(e) {
+                                e.preventDefault();
+                                attachment = window.btoa(this.result);  
+                                positionIndex=0;
+                                fileSize = attachment.length;
+                                doneUploading = false;
+                                
+                                if(fileSize < maxStringSize) {
+                                    uploadAttachment(null);
+                                 
+                                } else {
+                                    toastr.error('Base 64 Encoded file is too large.  Maximum size is " + maxStringSize + " your file is " + fileSize + "."'); 
+                                }
+                            }
+                          
+                            fileReader.onerror = function(e) {
+                                toastr.error('There was an error reading the file.  Please try again.'); 
+                            }
+                            fileReader.onabort = function(e) {
+                                toastr.error('There was an error reading the file.  Please try again.');
+                            }
+                         
+                            fileReader.readAsBinaryString(file);
+                            angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).removeClass("displayblock");
+                            angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).addClass("displaynone");
+                            $('#adminrosterImportProcess').modal('show');
+                           
+                        } 
+                        else 
+                        {
+                            toastr.error('File must be under 4.3 MB in size.  Your file is too large.  Please try again.');  
+                        }
+                    } 
+                    else 
+                    {
+                        $scope.IsVisiblebtn = false;    
+                        toastr.error('You must choose a file before trying to upload it');
+                        $('#adminrosterImportProcess').modal('hide');
+                    }
+                }
+                $scope.uploadedInsurance = function(){
+                    angular.element(document.querySelector("#uploadedInsurance")).addClass("displayblock");
+                    angular.element(document.querySelector("#notuploadedInsurance")).addClass("displaynone");
+                }
+                $scope.dismismodal = function() {
+                    angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).removeClass("displayblock");
+                    angular.element(document.querySelector("#driver-dashboard-upload-insurancebtn")).addClass("displaynone");
+                    $('.modal-backdrop').remove();
+                }
+               
+                function uploadAttachment(fileId) {
+                    $scope.showUpload = false;
+                    var attachmentBody = "";
+                    
+                    if(fileSize <= positionIndex + chunkSize) {
+                       
+                        attachmentBody = attachment.substring(positionIndex);
+                        doneUploading = true;
+                    } else {
+                        attachmentBody = attachment.substring(positionIndex, positionIndex + chunkSize);
+                    }
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.drivermanagermydetailcontroller.readFromFileInchunk}',attachmentBody, attachmentName, fileId,$scope.id,$scope.accid,$scope.attachmentid,
+                        function(result, event) {
+                            if(event.status) {
+                                if(event.type === 'exception') {
+                                    console.log("exception");
+                                    console.log(event);
+                                }
+                                else if(event.status) {
+                                    if(doneUploading == true) { 
+                                        document.getElementById('file').value = '';
+                                        let _name = $scope.empContact[0].Name;
+                                        let _email = $scope.empContact[0].Email;
+                                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.drivermanagermydetailcontroller.sendInsuranceEmail}', $scope.id, _name, _email,
+                                                    function (result, event) {
+                                                        if (event.status) {
+                                                        }
+                                                        $scope.$apply();
+                                                    },
+                                                    { escape: false }
+                                        )
+                                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.drivermanagermydetailcontroller.getDriverDetailsClone}',$scope.id,
+                                            function(result, event) {
+                                               
+                                                if(event.status){
+                                                  //  $scope.empContact = JSON.parse('{!DriverDetails}');
+                                                    if($scope.empContact[0].Insurance_Attachment_Id__c != '' && $scope.empContact[0].Insurance_Attachment_Id__c != null && $scope.empContact[0].Insurance_Attachment_Id__c != undefined) {
+                                                        $scope.attachmentid = $scope.empContact[0].Insurance_Attachment_Id__c ;
+                                                    }
+                                                    else
+                                                    {
+                                                        $scope.attachmentid = null;
+                                                    }    
+                                                    
+                                                }
+                                                $scope.$apply();
+                                               
+                                            },
+                                        
+                                            {escape: false}
+                                        );
+                                        toastr.success("We review and assess compliance status once a month.Your interim compliance status will not affect your reimbursement amount.");
+                                        $scope.loadDriverInsurance();
+                                        $scope.IsVisiblebtn = false;
+                                        setTimeout(function(){
+                                             $('.modal-backdrop').remove();
+                                             $('#adminrosterImportProcess').modal('hide');
+                                            // location.reload();   
+                                             location.assign(url_locate);    
+                                        }, 4000);   
+                                       
+                                    } 
+                                    else 
+                                    {
+                                        positionIndex += chunkSize;
+                                        uploadAttachment(result);
+                                    }
+                                } else {
+                                    console.log(event.message);
+                                } 
+                            }
+                            else
+                            {
+                                $('#adminrosterImportProcess').modal('show');
+                                toastr.error('Some error has occur');
+                            }
+                           
+                        },
+                          {buffer: true, escape: true, timeout: 120000}
+                    ); }
+               
+                $scope.showToast = function(message, error) {
+                    if(error)
+                        toastr.error(message);
+                    else
+                        toastr.success(message);
+                }
+                
+                $scope.loadDriverInsurance = function() {
+                          Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.drivermanagermydetailcontroller.getdriverInsurance}',$scope.id,$scope.attachmentid,
+                              function(result, event) {
+                                  if(event.status) {
+                                     $scope.driverInsurance = JSON.parse(result);
+                                     $scope.$apply();
+                                  }
+                              },
+                              {escape: false}
+                          );
+                      }
+                      $scope.loadDriverInsurance();
+
+                    }]);
+        </script>
+    </head>
+    
+    <body ng-app="driverDashboardModule" ng-controller="drivermanagermydetail" ng-cloak="true" id="theBody">
+        <header>
+            <div class="main-header sticky" id="myHeader">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <nav class="navbar navbar-expand-md my-0 my-md-1 px-0">
+                                <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}">
+                                    <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)"
+                                        alt="logo" />
+    
+                                </a>
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                    <span class="navbar-toggler-icon">
+                                        <i class="fa fa-bars"></i>
+                                    </span>
+                                </button>
+    
+                                <div class="collapse navbar-collapse flex-column col-12 col-sm-6 col-md-9 col-lg-9 col-xl-9 ml-3 ml-sm-0 ml-lg-0 align-items-end"
+                                    id="collapsibleNavbar">
+                                    <ul class="navbar-nav flex-row alignitemscenter">
+                                        <!-- </ul>
+                                                <ul class="navbar-nav"> -->
+                                        <li class="nav-item active">
+                                            <a class="nav-link text-white" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">Dashboard</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <!-- <button class="btn btn-secondary float-right">Upload Insurance</button> -->
+                                            <a data-toggle="modal" data-target="#driver-dashboard-upload-insurancebtn" class="btn btn-secondary float-right" ng-click="displymodal()">
+                                                <!-- ng-click="displymodal()" -->Upload Insurance
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="/app/secur/logout.jsp">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+    
+        <div id="spinner">
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <!-- Upload Insurance button Model -->
+        <div class="modal fade driver-dashboard-upload-insurancebtn" tabindex="-1" role="dialog"
+            aria-labelledby="driver-dashboard-upload-insurancebtn" id="driver-dashboard-upload-insurancebtn">
+            <div class="modal-dialog modal-xl modal-dialog-centered">
+                <div class="modal-content rounded-0">
+                    <button type="button" class="close popup-close-btn"  data-dismiss="modal" ng-click ="dismismodal()" aria-label="Close"><!-- ng-click ="dismismodal()" -->
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <div class="modal-body">
+                        <div class="container">
+                            <div class="row">
+                                <div
+                                    class="offset-md-3 offset-lg-3 offset-xl-3 col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6 px-0">
+                                    <div class="text-center my-3 my-sm-3 my-md-3 my-lg-3">
+                                        <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/adminroster-importfile.png')}" class="img-fluid" alt="Admin roster import file"/>
+                                        <div class="image-Insurancetext"><span class="greenText">Insurance</span><span class="greenText2">Dec Page</span></div>
+                                        <div class="image-cardtext"><span class="redText">Insurance Card</span></div>
+                                        <div class=" my-3 my-sm-3 my-md-3 my-lg-3 insDiv">
+                                            <p class="fileupload-title">
+                                                <span class="font-weight-bold">
+                                                    Upload your insurance declaration page <span class="underline">NOT</span> your insurance card <a class="tagquestion" href="https://www.thebalance.com/what-is-an-insurance-declaration-page-2645728" title="What is an insurance dec page?<br/>(https://hubs.ly/H0mmxzz0)" data-toggle="tooltip"  data-html="true" data-placement="top" target="_blank"><i class="fa fa-question"></i></a>
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <form method="post" id="boxform1" action="" enctype="multipart/form-data" class="box">
+                                        <div class="box__input" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" id="box__input">
+                                            <svg class="box__icon" xmlns="" width="50" height="43" viewBox="0 0 50 43">
+                                                <path
+                                                    d="M48.4 26.5c-.9 0-1.7.7-1.7 1.7v11.6h-43.3v-11.6c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v13.2c0 .9.7 1.7 1.7 1.7h46.7c.9 0 1.7-.7 1.7-1.7v-13.2c0-1-.7-1.7-1.7-1.7zm-24.5 6.1c.3.3.8.5 1.2.5.4 0 .9-.2 1.2-.5l10-11.6c.7-.7.7-1.7 0-2.4s-1.7-.7-2.4 0l-7.1 8.3v-25.3c0-.9-.7-1.7-1.7-1.7s-1.7.7-1.7 1.7v25.3l-7.1-8.3c-.7-.7-1.7-.7-2.4 0s-.7 1.7 0 2.4l10 11.6z" />
+                                            </svg>
+                                            
+                                            <input type="file" name="file" id="file" class="box__file" multiple="false" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" onchange="angular.element(this).scope().file_changed(this)"/>
+                                            <label class="w-100 text-center">
+                                                <strong>Drop your files here or</strong>
+                                            </label>
+                                            <button class="btn btn-outline-secondary box__dragndrop" id="uploadBtn" type="button"><span class="uploadtxt" ng-show="uploadVisible">Upload</span></button>
+                                                <!--<span
+                                                    class="box__dragndrop"> or drag it here</span>.-->
+                                            <!-- <button type="submit"
+                                                class="btn btn-primary justify-content-center box__button" ng-click="uploadFileInChunk($event)" ng-hide = "true" >Upload file</button> -->
+                                            <button 
+                                                class="btn btn-outline-secondary justify-content-center box__dragndrop" ng-click="uploadFileInChunk($event)" ng-show="IsVisiblebtn" ><span class="uploadtxt">Upload</span></button>
+                                        </div>
+                                        <div class="box__error w-100 text-center">Error! <span></span>. Try again!</div> 
+                                        <div class="box__uploading w-100 text-center" id="box__uploading"><img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/adminroster-importfile-loader.svg')}
+                                        "/></div>
+                                        <div class="box__success w-100 text-center">Done! </div>
+                                        <div class="box__error w-100 text-center">Error! <span></span>. Try again!</div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <section class="Insurance-fluid">
+            <c:InsuranceDeclarationComponent />
+        </section>
+          <!-- The Import file Modal -->
+          <div class="modal fade adminrosterImportProcess" tabindex="-1" role="dialog"
+          aria-labelledby="adminrosterImportProcess" id="adminrosterImportProcess">
+          <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content rounded-0">
+                  <!-- <button type="button" class="close popup-close-btn" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button> -->
+                 
+                  <div class="modal-body text-center">
+                      <h4 class="fileupload-title-2">We review and assess compliance status monthly. Your compliance status will not potentially affect your reimbursement amount until the end of the year.</h4>
+                      <div class="w-100">
+                          <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/adminroster-importfile-loader.svg')}" width="15%" class="img-fluid" alt="Admin roster import file loader"/>
+                      </div>
+                      <p class="fileupload-title-2 font-weight-bold">New to the program and have not received your driver packet? We will email it within two business days.</p>
+                  </div>
+              </div>
+          </div>
+      </div>
+        <apex:include pageName="EMC_Common_footer"/>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.box__input').bind('drop', function(evt){
+                    evt.stopPropagation();
+                    evt.preventDefault();
+                    //let fileType = 'application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+                    let fileType = 'application/pdf';
+                    if(evt.originalEvent.dataTransfer.files.length > 1) {
+                        angular.element('#theBody').scope().showToast('Please select only one file.', true);
+                        return;
+                    }
+                    var files = evt.originalEvent.dataTransfer.files;
+                    if(fileType.indexOf(files[0].type) == -1) {
+                        angular.element('#theBody').scope().showToast('Please select valid file.',true);
+                        return;
+                    }
+                    //angular.element('#theBody').scope().loadDropfile(files);
+                    ($('#file'))[0].files = evt.originalEvent.dataTransfer.files;
+                    //alert($('#file').files.size);
+                    $('#file').siblings()[1].innerHTML = files[0].name;
+                    $('#file').trigger('change');
+                })
+            });
+
+            $('#uploadBtn').click(function(){
+                $('#file').trigger('click');
+            });
+        </script>
+    </body>
+    
+</html>
+</apex:page>

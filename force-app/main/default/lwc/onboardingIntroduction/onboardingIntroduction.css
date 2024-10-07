@@ -1,0 +1,86 @@
+:host {
+    --grey-color: #D7D7D7;
+    --green-color: #7ABB4A;
+    --link-color: #1D1D1D;
+    --text-color: #6C6C6C;
+    --even-row-color: #FFFFFF;
+    --odd-row-color: #F7F7F7;
+    --scroll-color: #F6F6F6;
+    --active-color: #404B5B;
+    --step-bg: #F1F8EC;
+    --step-error-bg: #FA7800;
+}
+
+.slds-btn-primary {
+    color: #fff;
+    background-color: #78bc42;
+    border-color: #78bc42;
+}
+
+.slds-btn-sm {
+    padding: 12px 45px;
+    font-size: 16px;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.slds-btn {
+    margin: .375rem;
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+}
+
+.slds-checkbox .slds-checkbox_faux {
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    border-color: var(--grey-color) !important;
+}
+
+.slds-checkbox_faux:focus-visible {
+    outline: none !important;
+}
+
+.slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox_faux {
+    background-color: var(--green-color) !important;
+    border-color: var(--green-color) !important;
+    box-shadow: none !important;
+}
+
+.slds-checkbox [type=checkbox]:checked+.slds-checkbox__label .slds-checkbox_faux:after {
+    border-bottom: 2px solid var(--even-row-color) !important;
+    border-left: 2px solid var(--even-row-color) !important;
+}
+
+.button-container{
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+
+.footer{
+    display: flex;
+    flex-direction: column;
+    margin: 40px 0 0 0;
+}
+
+.filter-container{
+    display: flex;
+    margin: 25px 0 0 85px
+}
+
+.dont-message{
+    color: var(--even-row-color);
+    text-align: center;
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+    font-style: normal;
+    line-height: normal;
+    margin: 0 15px;
+}

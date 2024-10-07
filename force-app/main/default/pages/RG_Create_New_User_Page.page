@@ -1,0 +1,1001 @@
+<apex:page Controller="RG_CreateNewUserPageClass" standardStyleSheets="true" showHeader="false" docType="html-5.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' id='rcap-style-css'  href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}" type='text/css' media='all' />
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/md_responsive.css')}"/>    
+    <!--Sementic Tab UI Script -->
+    <link rel="stylesheet" href="https://rawgit.com/Semantic-Org/Semantic-UI/next/dist/semantic.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/JSXTransformer.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/0.13.1/react-with-addons.js"></script>
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://rawgit.com/Semantic-Org/Semantic-UI/next/dist/semantic.js"></script>
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css"/>
+    <script src="//cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{!$Resource.Table2Excel}">
+    </script>
+    <script>
+        shdetails=function(obj,vis){
+            if(vis == 0){
+                jQuery('.summary_'+obj).css('display','table-row');
+                jQuery('.details_'+obj).css('display','none');
+            } else {
+                jQuery('.summary_'+obj).css('display','none');
+                jQuery('.details_'+obj).css('display','table-row');
+            }
+        }
+        jQuery(".tdefault:odd").css( "background-color", "#f2f2f2" );
+    </script>
+    <script>
+        function isNumberKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if((charCode >= 48 && charCode <= 57)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function isTextKey(evt) {
+            var charCode = (evt.which) ? evt.which : event.keyCode
+            if(charCode == 32 || (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        function goBack() {
+          window.history.back()
+        }
+        // click link and redirect manger or driver MonthlyReim page
+        $(document).ready(function() {
+           $("[id$=successMsg]").css('display','none');
+           $('.menu .item').tab();
+           $('#DownloadExcel').click(function() {
+               $(".ExcelTemplate").table2excel( {
+                name: "User Report",
+                filename: "User_Report" 
+               }); 
+               return false;
+
+           } );
+           IfRoleIsDriver();
+        } );
+    </script>
+    <style>
+        .popupBackgroundsp {
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 998;
+            position: fixed;
+            cursor:wait;
+        }
+ 
+        /* This is for the message DIV */
+        .PopupPanelsp {
+            border: solid 2px grey;
+            background-color: white;
+            left: 50%;
+            width: 150px;
+            margin-left: -100px;
+            top: 50%;
+            height: 50px;
+            margin-top: -25px;
+            z-index: 999;
+            position: fixed;
+            cursor:pointer;
+        }
+        .pbBody {
+            overflow-x: scroll;
+        }
+        table.DataTable tbody tr {
+            background-color: #ffffff;
+        }
+        .tdefault{display: table-row;}
+        .DataTable td, .DataTable tr,table.DataTable tbody th, table.DataTable tbody td{
+            padding:7px !important;
+        }
+        .DataTable input{
+            width:150px;
+        }
+        .DataTable input.smallInput{
+            width:70px;
+        }
+        .ExcelTemplate{
+            display: none;
+        }
+        #DownloadExcel{
+            padding:5px 5px;
+        }
+        .custPopup {
+            background-color: white;
+            left: 50%;
+            padding: 10px;
+            position: fixed;
+            width: 500px;
+            margin-left: -250px;
+            top: 100px;
+            z-index: 1000;
+            border-radius: 16px;
+            border: 1px solid #000;
+            }
+        .popupBackground {
+            background-color:black;
+            opacity: 0.20;
+            filter: alpha(opacity = 20);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .requiredBlock {
+            background-color: #c00;
+            position: absolute;
+            left: 9px;
+            width: 3px;
+            top: 10px;
+            bottom: 1px;
+        }
+        .requiredBlockDriver{
+            background-color: #c00;
+            position: absolute;
+            left: 9px;
+            width: 3px;
+            top: 10px;
+            bottom: 1px;
+        }
+        #DownloadExcel{
+            padding: 10px 18px;
+            color: white;
+            background: #00a5f9;
+            border: none;
+        }
+        #DownloadExcel:hover {
+            padding: 10px 18px;
+            background:#76bd1d;
+            color: #333;
+            border: none;
+        }   
+        #calendarh:hover {
+            cursor:pointer;
+        }
+        #mapImage:hover {
+            cursor:pointer;
+        }
+        .lookupIcon {
+            margin-left: 1%;
+            cursor:pointer;            
+        }
+        .lookupIconOn{
+            margin-left: 0.2%;
+            cursor:pointer;  
+        }    
+        table.DataTable thead th,table.DataTable thead td {
+            padding: 10px 18px;
+            border-bottom: 1px solid #111;
+        }
+        table, th, td {
+            border: 1px solid #eaeaea;
+        }
+        table.DataTable {
+            width: 100%;
+            margin: 0 auto;
+            clear: both;
+            border-collapse: separate;
+            border-spacing: 0;
+        } 
+        .col-md-5.noleftpadding.driving-states td {
+            border: inherit;
+        }
+        .sorting_1 a {
+            color: #76bd1d;
+            text-decoration: underline !important;
+        }
+        .sorting_1 a:hover {
+            color: #4183c4;
+        }
+        .pbHeader table {
+            margin: 0px;
+        }
+        .apexp table {
+            margin: 0px;
+        }
+        .popup-datetime tr th,.popup-datetime tr td,{
+            padding: 12px !important;
+        }
+        .popupsave { 
+            margin-top:1px;
+            padding: 5px 8px;
+            font-size : 13px;
+            background: #00a5f9;
+            color: #fff;
+            padding: 9px 25px;
+        }
+        .popupcancel:hover,.popupsave:hover {       
+            margin-bottom:10px;     
+            padding: 5px 8px;       
+            font-size : 13px;       
+            background: #76bd1d;        
+            color: #333;        
+            padding: 9px 25px;      
+            border: none;       
+            }
+        .popupcancel {
+            margin-bottom:10px;
+            padding: 5px 8px;
+            font-size : 13px;
+            background: #00a5f9;
+            color: white;
+            padding: 9px 25px;
+        }
+        .col-md-5.noleftpadding.driving-states {
+            width: 66%;
+            margin-top: -20px;
+            float: right;
+            margin-right: -26px;
+        }
+        td.multiSelectPicklistCell {
+           float: left;
+            width: 50px;
+            padding-top: 14px;
+        }
+        .inlineEditWriteOn:hover:after {
+            content: url({!$Resource.Pencil_Edit});
+            /*width: 100%;
+            float: left;
+            padding: 0;*/
+        }
+        .message .messageText {
+            font-size : 15px;
+            font-size: 19px;
+            color:green;
+        }
+    </style>
+    <apex:form style="overflow:auto;">
+     <!--*********** Set Deactivation Date Popup *************-->
+        <apex:actionFunction action="{!saveMethod}" name="methodone" rerender="datatable" status="statusSaveTrip" oncomplete="deActivateJs();">  
+            <apex:param name="contactId" value=""/> 
+        </apex:actionFunction>
+        <apex:actionFunction action="{!deActiveMessage}" name="deactivation" reRender="deactivateMessage"/> 
+         <apex:actionFunction name="saveContactApex" action="{!updateContactSingle}" reRender="userNameLink" status="statusSaveTrip" oncomplete="location.reload();">
+            <apex:param name="contactId" value=""/>
+            <apex:param name="contactFirstName" value=""/>
+            <apex:param name="contactLastName" value=""/>
+        </apex:actionFunction>
+         <apex:actionFunction action="{!save}" name="insertUser" >          
+        </apex:actionFunction>
+    
+    <apex:actionStatus id="statusSaveTrip" startText="Please wait..." stopText="">
+        <apex:facet name="start">
+            <div>
+                <div class="popupBackgroundsp"/>
+                <div class="PopupPanelsp">
+                    <table border="0" width="100%" height="100%">
+                        <tr>
+                            <td  align="center"><img src="/img/loading32.gif" width="20" height="20" /> &thinsp;Please wait</td>  
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </apex:facet> 
+    </apex:actionStatus>
+  
+        
+    <!--Sementic Tab UI Script End-->
+    <apex:outputPanel id="deactivateMessage">
+        <apex:outputPanel rendered="{!showMessageDeactivate}">
+            <apex:pageMessages />
+        </apex:outputPanel>
+    </apex:outputPanel>
+    
+    <table class="ExcelTemplate" >
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Set Deactivation Date</th>
+                <th>Role</th>
+                <th>Standard Vehicle</th>
+                <th>Manager</th>
+                <th>Home Zip Code</th>
+                <th>Employee ID</th>
+                <th>Email</th>
+                <th style="{!IF(AND(currentuser.Contact.Account.Name = 'Delta', currentuser.Contact.Role__c = 'Admin'), '', 'display: none;')}">File Number</th>                
+            </tr>
+        </thead>
+        <tbody>
+            <apex:repeat value="{!ulist}" var="u">
+                <tr>
+                    <td><apex:outputField value="{!u.Name}" /></td>
+                    <td><apex:outputfield value="{!u.Contact.Deactivated_Date__c}" /></td>
+                    <td><apex:outputfield value="{!u.Contact.Role__c}" /></td>
+                    <td><apex:outputfield value="{!u.Contact.Vehicle_Type__c}" /></td>
+                    <td><apex:outputfield value="{!u.Contact.Manager__c}" /></td>
+                    <td><apex:outputfield value="{!u.Contact.MailingPostalCode}" styleClass="smallInput"/></td>
+                    <td><apex:outputfield value="{!u.Contact.Employee_ID__c}" styleClass="smallInput" /></td>
+                    <td><apex:outputfield value="{!u.Contact.Email}" /></td>
+                    <td style="{!IF(AND(currentuser.Contact.Account.Name = 'Delta', currentuser.Contact.Role__c = 'Admin'), '', 'display: none;')}"><apex:outputfield value="{!u.Contact.File_Number__c}" /></td>
+                    
+                </tr>
+            </apex:repeat>
+        </tbody>
+    </table>
+    
+   
+    <div class="slds">
+      <!--  <div id="spinner" class="demo-only popupBackgroundsp">
+             <div role="status" class="slds-spinner slds-spinner_brand slds-spinner_medium slds-is-relative">
+                <span class="slds-assistive-text">Loading</span>
+                <div class="slds-spinner__dot-a"></div>
+                <div class="slds-spinner__dot-b"></div>
+            </div>
+        </div> -->
+    </div>    
+        <!-- <apex:actionFunction name="rerenderTopPanel" reRender="showInputField" />
+        <apex:actionFunction action="{!setDrivingState}" name="setDrivingState" reRender="showInputField">
+            <apex:param name="states" value=""/>
+        </apex:actionFunction>
+        <apex:inputHidden value="{!contactSelectId}" id="hiddenMultiValue"/>
+        <apex:inputHidden value="{!selectedMultiValue}" id="selectedValues"/>
+        <apex:outputPanel id="showMultiPicklist" style="display: none;" >
+            <apex:outputPanel styleClass="popupBackgroundsp" layout="block"/>
+            <apex:outputPanel styleClass="custPopup" id="showInputField" layout="block">
+                <apex:inputField value="{!singleContact.Driving_States__c}" id="singleDriverState" styleClass="singlePickList" onchange="document.getElementById('{!$Component.selectedValues}').value = getSelectValues(this);"/><br/>
+
+                <center>
+                        <apex:commandButton styleClass="popupsave" value="Save" onclick="putPicklistValue(); return false;" reRender="showingStates"/>
+                        <apex:commandButton styleClass="popupcancel" value="Close" onclick="closeMultipick(); return false;"/>
+                </center>
+            </apex:outputPanel>
+        </apex:outputPanel> -->
+
+       
+        <apex:inputHidden value="{!contactSelectId}" id="hiddenMultiValue"/>
+        <apex:outputPanel id="showUserName" style="display: none;">
+            <apex:outputPanel styleClass="popupBackgroundsp" layout="block"/>
+            <apex:outputPanel styleClass="custPopup" id="showInputFieldPopUp" layout="block">
+                <apex:panelGrid columns="2">
+                    <apex:outputText value="FirstName" style="float: left;"/>
+                    <apex:outputText value="LastName" style="float: right;"/>
+                    <apex:inputField value="{!singleContact.FirstName}" id="singleContactFirst" style="float: left;" required="false"/>
+                    <apex:inputField value="{!singleContact.LastName}" id="singleContactLast" style="float: right;" required="false"/>
+                </apex:panelGrid>
+                <center>
+                <apex:commandButton value="Save" styleClass="popupsave" onclick="saveUserName();return false;"/>
+                <apex:commandButton value="Close" styleClass="popupcancel" onclick="closeUserName();return false;"/>
+                </center>
+            </apex:outputPanel>
+        </apex:outputPanel>
+        
+        
+        
+        <apex:outputPanel id="changeDatePopup" style="display:none;">
+            <apex:outputPanel styleClass="popupBackgroundsp" layout="block"/>            
+            <apex:outputPanel styleClass="custPopup" layout="block">
+                <apex:inputHidden value="{!hiddenContactIdValue}" id="hiddenContactIdValue"/>
+                <table style="margin-left:0%;border: none;" class="popup-datetime">
+                    <thead>                       
+                        <tr>
+                            <th style="border: none;">Set Deactivation Date</th>
+                            <th style="border: none;">Last Pay Date</th>
+                        </tr>                      
+                    </thead>
+                    <tbody>                         
+                        <tr>
+                            <td style="border: none;"><apex:input value="{!deactivationDate}" type="date"/></td>
+                            <td style="padding-left: 1%;border: none;">
+                                <input value="{!dueDate}" type="date"/>
+                            </td>                            
+                        </tr>                        
+                    </tbody>
+                </table>    
+                <center>
+                    <apex:commandButton value="Save" styleClass="popupsave" onclick="saveDeactivationDate();return false;" />
+                    <Button onClick="closeDatePopup(); return false;" value="Close" class="popupcancel">Close</Button>
+                </center>           
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <apex:outputpanel id="btnrender">
+            <apex:outputPanel rendered="{!firstTabFlag}" >
+                
+                <apex:commandButton value="Add New Employees" action="{!TabTwo}" rerender="btnrender,tabrender,abbb" status="statusSaveTrip" oncomplete="IfRoleIsDriver()"/>
+                &nbsp;&nbsp;
+                <apex:commandButton value="Home" action="{!goHome}" style="text-align:left;" status="statusSaveTrip"/> 
+            </apex:outputPanel>
+            <div style="">
+            
+            </div>
+        </apex:outputpanel>
+        <br/>
+        <apex:outputPanel id="thepanel">
+            <apex:pageMessages rendered="{!showMessage}" />
+        </apex:outputPanel>
+        
+        <apex:inputHidden value="{!userConId}" id="theconId" />
+
+        <apex:outputPanel id="tabrender"  >
+            <!-- tabone -->
+            <apex:outputPanel rendered="{!firstTabFlag}">
+                <apex:pageBlock id="tableId">
+                    <apex:pageBlockButtons >
+                        <center>
+                            <apex:commandbutton value="Update" action="{!updatecontact}" rerender="tabrender" status="statusSaveTrip" oncomplete="styleNone()"/>
+                            <button  id="DownloadExcel" >Export as Excel</button> 
+                        </center>
+                    </apex:pageBlockButtons>
+                    
+                    <apex:outputPanel id="datatable">
+                    <table class="DataTable" id="tblEmployee">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Deactivation Date</th>
+                                <th>Role</th>
+                                <th>Standard Vehicle</th>
+                                <th>Manager</th>
+                                <th>Home Zip Code</th>
+                                <th>Employee ID</th>
+                                <th>Email</th>
+                                <th>Driving States</th>  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <apex:repeat value="{!ulist}" var="u" id="rptr_data">
+                                <tr>
+                                    <td>
+                                        <!--<apex:outputPanel rendered="{!if((u.contact.Account.Name!='Weiser Security Services'),true,false)}">
+                                        <a target="_blank" href="{!currentuserurl+u.contactId}">{!u.Name}</a>
+                                        </apex:outputPanel>
+                                        <apex:outputPanel rendered="{!if((u.contact.Account.Name=='Weiser Security Services'),true,false)}">
+                                        {!u.Name}
+                                        </apex:outputPanel>-->
+                                        {!u.Name}
+                                       <!-- <apex:commandLink value="{!u.Name}"   action="{!MonthlyReim}">
+                                            <apex:param name="man" value="{!manaId}" assignTo="{!man}"/>
+                                            <apex:param name="con" value="{!u.contactId}" assignTo="{!con}"/>
+                                            <apex:param name="redirect" value="{!back}" assignTo="{!redirect}"/>
+                                            <apex:param name="rol" value="{!u.Contact.Role__c}" assignTo="{!rol}"/>
+                                            <apex:param name="retURL" value="{!retURL}" assignTo="{!retURL}"/>
+                                        </apex:commandLink>
+                                        <img id="pencilImage" src="{!URLFOR($Resource.Pencil_Edit
+                                        )}" onclick="showUserNamePopUp('{!u.Contact.FirstName}','{!u.Contact.LastName}','{!u.contactId}','{!$Component.hiddenMultiValue}');return false;" style="cursor: pointer;padding-left: 2px;" /> -->
+                                        
+                                    </td>
+                                    <td>
+                                        <c:NoDatelink >
+                                            <apex:outputText value="{0,date,MM-dd-yyyy}">
+                                                <apex:param value="{!u.Contact.Deactivated_Date__c}" />
+                                            </apex:outputText>
+                                        </c:NoDatelink>
+                                        <img id="calendarh" src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/images/calendar.png')}" onclick="showDatePopup('{!u.contactId}','{!$Component.hiddenContactIdValue}'); return false;" />
+                                    </td>
+                                    
+                                    <td><apex:Inputfield value="{!u.Contact.Role__c}" id="contactRole"/></td>
+                                    <td><apex:Inputfield value="{!u.Contact.Vehicle_Type__c}" /></td>
+                                    <td><apex:Inputfield value="{!u.Contact.Manager__c}" /></td>
+                                    <td><apex:Inputfield value="{!u.Contact.MailingPostalCode}" styleClass="smallInput"/></td>
+                                    <td><apex:Inputfield value="{!u.Contact.Employee_ID__c}" styleClass="smallInput" /></td>
+                                    <td><apex:Inputfield value="{!u.Contact.Email}" /></td>
+                                    <td>
+                                        <apex:outputField value="{!u.Contact.Driving_States__c}" id="showingStates" styleClass="state_{!u.contactId}" label="State" title="onSingleClick">
+                                            <apex:inlineEditSupport event="onclick"/>
+                                        </apex:outputField>
+                                    </td> 
+                                </tr>
+                            </apex:repeat>
+                        </tbody>
+                    </table>
+                    </apex:outputPanel>  
+                </apex:pageBlock>
+                <script> 
+                setTimeout(function(){ document.getElementById('spinner').className += ' slds-hide' }, 3000);
+                 /* Create an array with the values of all the select options in a column */ 
+                    $.fn.dataTable.ext.order['dom-select'] = function  ( settings, col )
+                    {
+                        return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                            return $('select', td).val();
+                        } );
+                    }
+                    /* Create an array with the values of all the input boxes in a column */ 
+                    $.fn.dataTable.ext.order['dom-text'] = function  ( settings, col )
+                    {
+                        return this.api().column( col, {order:'index'} ).nodes().map( function ( td, i ) {
+                            return $('input', td).val();
+                        } );
+                    }
+                   function initdatatable()
+                   {
+                        $('.DataTable').DataTable({
+                        "pageLength" : 15,
+                        dom: 'Bfrtip',
+                        buttons: [
+                           'excel'
+                        ],
+                        "columns": [
+                            null,                    
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-select" },
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-text", type: 'string' },
+                            { "orderDataType": "dom-text", type: 'string' }
+                        ]
+                    });
+                   }
+                    function showDatePopup(clicked,hiddeninputID) {
+                        
+                        var clicked_id = clicked; 
+                        $("[id$='changeDatePopup']").css("display","");
+                        $("[id$='hiddeninputID']").css("display", "");
+                        document.getElementById(hiddeninputID).value = clicked_id;
+                    }
+
+                    function showUserNamePopUp(firstName,lastName,contactId,hiddenContactValue) {
+                        var contactFirst = document.getElementById('{!$Component.singleContactFirst}');
+                        contactFirst.value = firstName;
+                        var contactLast = document.getElementById('{!$Component.singleContactLast}');
+                        contactLast.value = lastName;
+                        document.getElementById(hiddenContactValue).value = contactId;
+                        $("[id$='showUserName']").css("display","");
+
+                    }
+
+                    function saveUserName(){
+                        var hiddenContactId = document.getElementById('{!$Component.hiddenMultiValue}').value;
+                       /* var outPutText = document.getElementsByClassName('userName_'+hiddenContactId);*/ 
+                        var contactFirstName = document.getElementById('{!$Component.singleContactFirst}').value;
+                        var contactLastName = document.getElementById('{!$Component.singleContactLast}').value;
+                        saveContactApex(hiddenContactId,contactFirstName,contactLastName);
+                        $("[id$='showUserName']").css("display","none");
+                    }
+                
+                    function saveDeactivationDate() {
+                        var hiddenContactId = $("[id$='hiddenContactIdValue']").val();
+                                             
+                        methodone(hiddenContactId);
+                        $("[id$='changeDatePopup']").css("display","none");   
+                        
+                       
+                        
+                    }
+                    function deActivateJs() {
+                       
+                        deactivation();
+                        initdatatable();
+                    }
+
+                    function closeUserName() {
+                        $("[id$='showUserName']").css("display","none");
+                    }
+
+                    function showMultipick(contactId,hiddenMultiValue,userAlreadySelected) {
+                        /*var singleDriver = document.getElementById('{!$Component.singleDriverState}');
+                        singleDriver.value = "";
+                        rerenderTopPanel();*/ 
+                        document.getElementById(hiddenMultiValue).value = contactId;
+                        var outPutValue = document.getElementById(userAlreadySelected).innerHTML;
+                       //setDrivingState(outPutValue);
+                        $("[id$='showMultiPicklist']").css("display","");
+                       //$("[id$='hiddenMultiValue']").css("display", "");
+                        //document.getElementById(elId).value = 'AK';
+                        /*var singleDriver = document.getElementById('{!$Component.singleDriverState}');
+                        console.log(singleDriver);*/
+                        /*var selectedState = userAlreadySelected.split(';');
+                        console.log(selectedState);
+                        for(var j=0;j<selectedState.length;j++) {
+                            console.log(selectedState[j]);
+                            for(var i=0;i<singleDriver.options.length;i++) {
+                                //console.log(singleDriver[i].value);
+                                if(singleDriver[i].value == selectedState[j]) {
+                                    //console.log(singleDriver[i].value);
+                                    singleDriver[i].innerHTML = '';
+                                }
+                            }
+                        }*/                      
+                    }
+
+                    /*function putPicklistValue() {
+                        var selectedMultiValue = document.getElementById('{!$Component.selectedValues}').value;
+                        var hiddenContactId = document.getElementById('{!$Component.hiddenMultiValue}').value;
+                        var putValueinto = document.getElementsByClassName("multi_"+hiddenContactId);
+                        var sepration = selectedMultiValue.replace(/,/g,';');
+                        putValueinto[0].firstChild.value = sepration;
+                        var showingStates = document.getElementsByClassName("state_"+hiddenContactId);
+                        showingStates[0].innerHTML = sepration;
+                        $("[id$='showMultiPicklist']").css("display","none");
+                        var singleDriver = document.getElementById('{!$Component.singleDriverState}');
+                        singleDriver.value = "";
+                        rerenderTopPanel();
+                    }*/
+
+                   /* function closeMultipick() {
+                        $("[id$='showMultiPicklist']").css("display","none");
+                    }*/
+                     
+                    function closeDatePopup() {
+                        $("[id$='changeDatePopup']").css("display", "none");                             
+                    }
+
+                    function getSelectValues(select) {
+                        var result = [];
+                        var options = select && select.options;
+                        var opt;
+                        for (var i=0, iLen=options.length; i<iLen; i++) {
+                            opt = options[i];
+                            if (opt.selected) {
+                                result.push(opt.value || opt.text);
+                            }
+                        }
+                        return result;
+                    }  
+                </script>
+            </apex:outputPanel> 
+            
+            <!--tab two-->
+            <apex:outputPanel rendered="{!SecondTabFlag}" >
+                <apex:commandButton value="Roster" action="{!TabOne}" rerender="btnrender,tabrender,abbb,thepanel" oncomplete="styleNone()" status="statusSaveTrip"/>
+                
+                <apex:commandButton value="Home" action="{!goHome}" style="text-align:left;" status="statusSaveTrip"/> 
+            </apex:outputPanel>
+            <span style="float:right">
+                <apex:commandButton value="Import New Users" action="{!redirect}"/>
+            </span>
+            <apex:outputPanel id="addNewPanel" rendered="{!SecondTabFlag}">
+                <apex:variable value="{!0}" var="index"  />
+                <div class="panel panel-default" var="index">  
+                    <apex:repeat value="{!contlist}" var="c">
+                        <apex:variable value="{!index+1}" var="index"/>
+                        <div class="panel-heading"></div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                    <div class="col-md-12">
+                                        <div class="row" id="rst">
+                                            <div class="col-md-4 norightpadding"> 
+                                                <div class="col-md-5 norightpadding" style="padding-top: 10px;"><b>Employee ID:</b></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <apex:inputText id="empId" value="{!c.Employee_ID__c}" />
+                                                </div>
+                                                <div class="col-md-5 norightpadding" style="padding-top: 10px;"><b>First Name:</b></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;">
+                                                    <div class="requiredBlock" ></div>
+                                                    <apex:inputText id="fnId" value="{!c.Firstname}"  onchange="FnValidation({!index})"/>
+                                                    <apex:outputText styleClass="ifRoleDriverThenRequire" id="FNerror" value="Please enter firstname"  style="    white-space: nowrap; display: none; color: #c00" />
+                                                </div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> <b>Last Name:</b></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px; ">        
+                                                    <div class="requiredBlock" ></div>
+                                                    <apex:inputText id="lnId" value="{!c.Lastname}" onchange="FieldValidation({!index})"/>
+
+                                                    <apex:outputText id="LNerror" value="Please enter lastname" style="white-space: nowrap; display: none; color: #c00"  />
+                                                </div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> <b>Email:</b></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <div class="requiredBlock"></div>
+                                                    <apex:inputText id="emailId" Value="{!c.External_Email__c}" onchange="validate({!index})"/>
+                                                    <apex:outputText id="Emailerror" value="Please enter valid email"  style="    white-space: nowrap; display: none; color: #c00" />
+
+                                                </div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> <b>Vehicle Type:</b ></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <apex:selectList size="1" id="vehicleId" Value="{!c.Vehicle_Type__c}">
+                                                    <apex:selectOptions value="{!vehiclelist}" />
+                                                    </apex:selectlist>
+                                                </div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <b>Activation Date:</b>
+                                                </div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <c:NoDatelink >
+                                                        <div class="requiredBlockDriver" id="RbId" style="display: none;" ></div>
+                                                        <apex:inputField id="actDateId" style="width: 114%;" Value="{!c.Activation_Date__c}" onchange="ActDateValidation({!index})"/>
+                                                        <apex:outputText styleClass="ifRoleDriverThenRequire" id="ACTDATEerror" value="Please enter Activation Date"  style="    white-space: nowrap; display: none; color: #c00"  />
+                                                    </c:NoDatelink>
+                                                </div>
+                                                <div class="col-md-5 norightpadding" style="padding-top: 10px;"><b>Mobile:</b></div>
+                                                <div class="col-md-5 noleftpadding" style="padding-top: 10px;"> 
+                                                    <apex:inputText id="mobileId" value="{!c.MobilePhone}" />
+                                                </div>
+                                            
+                                            </div>                                       
+
+                                        <div class="col-md-4 norightpadding">
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"> <b>Role:</b></div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"> 
+                                                <apex:outputPanel rendered="{!admin}">
+
+                                                    <apex:selectList value="{!c.Role__c}" id="roleId" size="1"  onchange="IfRoleIsDriver()">
+                                                        <apex:selectOption ItemValue="Driver"  itemLabel="Driver"/>
+                                                        <apex:selectOption ItemValue="Manager"  itemLabel="Manager"/>
+                                                        <apex:selectOption ItemValue="Driver/Manager"  itemLabel="Driver/Manager"/>
+                                                        
+                                                    </apex:selectList>
+                                                </apex:outputPanel>
+                                                <apex:outputPanel rendered="{!!admin}">
+                                                    <apex:selectList value="{!c.Role__c}" size="1">
+                                                        <apex:selectOption ItemValue="Driver"  itemLabel="Driver"/>
+                                                    </apex:selectList> 
+                                                </apex:outputPanel>
+                                            </div>
+                                            <apex:outputPanel rendered="{!if(contains(c.accountid,$Label.Delta_Account),true,false)}">
+                                                <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"><b>File Number:</b></div>
+                                                <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                    <apex:inputText id="fileNumId" value="{!c.File_Number__c}" /></div>
+                                                <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"><b>Co Code:</b></div>
+                                                <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                    <apex:inputText id="coCodeId" value="{!c.Co_Code__c}" /></div>
+                                            </apex:outputPanel>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"><b>Managers Name:</b></div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                <div class="requiredBlockDriver"  id="RbId" style="display: none;" ></div>
+                                                <apex:inputField id="manId"  value="{!c.Manager__c}" onchange="ManValidation({!index})" />
+                                                <apex:outputText styleClass="ifRoleDriverThenRequire" id="MANerror" value="Please enter manager name"  style="    white-space: nowrap; display: none; color: #c00" />
+                                            </div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"><b>Address:</b></div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                <apex:inputField id="cityId" type="text" onkeypress="return isTextKey(event)" html-placeHolder="City" value="{!c.MailingCity}"/>
+                                            </div>   
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"></div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                <apex:inputField id="stateId" type="text" onkeypress="return isTextKey(event)" html-placeholder="State" html-maxlength="2" value="{!c.MailingState}" />
+                                            </div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                            </div>
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;">
+                                                <div class="requiredBlock" ></div>
+                                                <apex:inputField id="postalCodeId" type="text" onkeypress="return isNumberKey(event)" html-placeHolder="Postal Code" value="{!c.MailingPostalCode}"/>
+                                                <apex:outputText styleClass="ifRoleDriverThenRequire" id="ZIPerror" value="Please enter zip code"  style="white-space: nowrap; display: none; color: #c00" />
+                                            </div>   
+                                            <div class="col-md-5 noleftpadding" style=" padding-top: 10px;"><b>Driving States:</b></div>
+                                            <div class="col-md-5 noleftpadding driving-states">
+                                                <apex:inputField id="drivingstatusId" type="text" value="{!c.Driving_States__c}"/>
+                                                
+                                            </div>
+
+                                        </div>
+                                       
+                                    </div>
+                                    <div class="row"> 
+                                        <div class="col-md-12 noleftpadding" style=" padding-top: 10px;">
+                                            <center>
+                                                <apex:commandButton value="Reset" onclick="ResetFunction({!index});return false;" reRender="addNewPanel"/ >
+                                                <apex:commandButton value="Save" onclick="isNotNullForAll()" rerender="thepanel"  status="statusSaveTrip" /><br/>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </div>                                                
+                               
+                            </div>                             
+                        </div>
+                        
+                    </apex:repeat>
+
+                </div>
+                             
+            </apex:outputPanel>
+        </apex:outputPanel>
+        <script> 
+        function ResetFunction(idx) {
+            $("[id$='empId']")[idx-1].value = '';
+            $("[id$='fnId']")[idx-1].value = '';
+            document.getElementById($("*[id$=FNerror]")[idx-1].id).style.display = "none";
+            $("[id$='lnId']")[idx-1].value = '';
+            document.getElementById($("*[id$=LNerror]")[idx-1].id).style.display = "none";
+            $("[id$='emailId']")[idx-1].value = '';
+            document.getElementById($("*[id$=Emailerror]")[idx-1].id).style.display = "none";
+            $("[id$='vehicleId']")[idx-1].value = '';
+            $("[id$='actDateId']")[idx-1].value = '';
+            document.getElementById($("*[id$=ACTDATEerror]")[idx-1].id).style.display = "none";
+            $("[id$='drivingstatusId']")[idx-1].value = '';
+            $("[id$='roleId']")[idx-1].value = 'Driver';
+            if($("[id$='fileNumId']")[idx-1]) {
+                $("[id$='fileNumId']")[idx-1].value = '';
+            }
+            if($("[id$='coCodeId']")[idx-1]) {
+                $("[id$='coCodeId']")[idx-1].value = '';
+            }
+            $("[id$='manId']")[idx-1].value = '';
+            document.getElementById($("*[id$=MANerror]")[idx-1].id).style.display = "none";
+            $("[id$='cityId']")[idx-1].value = '';
+            $("[id$='stateId']")[idx-1].value = '';
+            $("[id$='postalCodeId']")[idx-1].value = '';
+            $("[id$='mobileId']")[idx-1].value = '';
+            $("[id$='drivingstatusId']")[idx-1].value = '';
+            IfRoleIsDriver();
+           }
+        </script>
+        <script>    
+            function styleNone() {        
+                /*var tablId = document.getElementById($("*[id$=tableId]")[0].id).getElementsByClassName("pbTitle");
+                for(var i = 0; i < tablId.length; i++) {
+                    tablId[i].style.display = "none";
+                }*/
+            }
+            //window.onload = styleNone();
+        
+            var isError = false; 
+            function validateEmail(email) {
+                var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                return re.test(email);
+            }
+            function validate(idx) {
+                var indexNo = $("[id$='lnId']").length;
+                
+                    if((idx - 1) >= 0) {
+                        var inpEmail = $("[id$='emailId']")[idx-1].value.trimRight();
+                        if (validateEmail(inpEmail)) {
+                            document.getElementById($("*[id$=Emailerror]")[idx-1].id).style.display = "none";
+                        } else {
+                            document.getElementById($("*[id$=Emailerror]")[idx-1].id).style.display = "Block";
+                            isError = true;
+                        } 
+                    } else {
+                        var indexNo = $("[id$='lnId']").length;
+                        for(var i = 0; i < indexNo; i++) {
+                            var inpEmail = $("[id$='emailId']")[i].value.trimRight();
+                            if (validateEmail(inpEmail)) {
+                                document.getElementById($("*[id$=Emailerror]")[i].id).style.display = "none";
+                            } else {
+                                document.getElementById($("*[id$=Emailerror]")[i].id).style.display = "Block";
+                                isError = true;
+                            }
+                    }                  
+                }
+                return false;
+            }
+            function FieldValidation(idx) {
+                if((idx - 1) >= 0) {
+                    var inpLastName = $("[id$='lnId']")[idx-1].value.trimRight();
+                    var lnErrorId = $("*[id$=LNerror]")[idx-1].id;
+                    if (inpLastName == "") {
+                        document.getElementById($("*[id$=LNerror]")[idx-1].id).style.display = "block";
+                        isError = true;
+                    }else {
+                        document.getElementById($("*[id$=LNerror]")[idx-1].id).style.display = "None";
+                    }
+                } else {
+                    var indexNo = $("[id$='lnId']").length;
+                    for(var i = 0; i < indexNo; i++) {
+                        var inpLastName = $("[id$='lnId']")[i].value.trimRight();
+                        var RoleValue = $("[id$='roleId']")[i].value;
+                        var lnErrorId = $("*[id$=LNerror]")[i].id;
+                        if (inpLastName == "") {                            
+                            document.getElementById($("*[id$=LNerror]")[i].id).style.display = "block";
+                            isError = true;
+                        }else {
+                            document.getElementById($("*[id$=LNerror]")[i].id).style.display = "None";
+                        }
+                    }
+                }  
+            } 
+            
+            function IfRoleIsDriver() {
+                var indexNo = $("[id$='lnId']").length;
+                for(var i = 0; i < indexNo; i++) {                    
+                    var RoleValue = $("[id$='roleId']")[i].value;
+                    if (RoleValue == "Driver") {
+                        document.getElementsByClassName("requiredBlockDriver")[i+(i*2)].setAttribute("style","display: Block");
+                        document.getElementsByClassName("requiredBlockDriver")[i+(i*2)+1].style.display = "Block";
+                    }else {
+                        document.getElementsByClassName("requiredBlockDriver")[i+(i*2)].style.display = "none";
+                        document.getElementsByClassName("requiredBlockDriver")[i+(i*2)+1].style.display = "none";
+                        document.getElementById($("*[id$=FNerror]")[i].id).style.display = "none";
+                        document.getElementById($("*[id$=ACTDATEerror]")[i].id).style.display = "none";
+                        document.getElementById($("*[id$=MANerror]")[i].id).style.display = "none";
+                    }                    
+                }                
+            }
+            function errorHideShow(inpFirstName, RoleValue, idx, fnErrorId) {
+                if (inpFirstName == "" && RoleValue == "Driver") {
+                    document.getElementById(fnErrorId).style.display = "Block";
+                    isError = true;
+                }else {
+                    document.getElementById(fnErrorId).style.display = "none";                        
+                }
+            }
+            function FnValidation(idx) {
+                if((idx - 1) >= 0) {
+                    var inpLastName = $("[id$='fnId']")[idx-1].value.trimRight();
+                    var lnErrorId = $("*[id$=FNerror]")[idx-1].id;
+                    if (inpLastName == "") {
+                        document.getElementById($("*[id$=FNerror]")[idx-1].id).style.display = "block";
+                        isError = true;
+                    }else {
+                        document.getElementById($("*[id$=FNerror]")[idx-1].id).style.display = "None";
+                    }
+                } else {
+                    var indexNo = $("[id$='fnId']").length;
+                    for(var i = 0; i < indexNo; i++) {
+                        var inpLastName = $("[id$='fnId']")[i].value.trimRight();
+                        var RoleValue = $("[id$='roleId']")[i].value;
+                        var lnErrorId = $("*[id$=FNerror]")[i].id;
+                        if (inpLastName == "") {
+                            document.getElementById($("*[id$=FNerror]")[i].id).style.display = "block";
+                            isError = true;
+                        }else {
+                            document.getElementById($("*[id$=FNerror]")[i].id).style.display = "None";
+                        }
+                    }
+                }  
+            }
+            function ManValidation(idx) {
+                if((idx - 1) >= 0) {
+                    var inpManName = $("[id$='manId']")[idx-1].value.trimRight();
+                    var RoleValue = $("[id$='roleId']")[idx-1].value;
+                    var mnErrorId = $("*[id$=MANerror]")[idx-1].id;
+                    errorHideShow(inpManName, RoleValue, idx, mnErrorId);
+                } else {
+                    var indexNo = $("[id$='lnId']").length;
+                    for(var i = 0; i < indexNo; i++) {
+                        var inpManName = $("[id$='manId']")[i].value.trimRight();
+                        var RoleValue = $("[id$='roleId']")[i].value;
+                        var mnErrorId = $("*[id$=MANerror]")[i].id;
+                        errorHideShow(inpManName, RoleValue, idx, mnErrorId);
+                    }
+                }                
+            }
+            function zipValidation(idx) {
+                if((idx - 1) >= 0) {
+                    var zipName = $("[id$='postalCodeId']")[idx-1].value.trimRight();
+                    var RoleValue = $("[id$='roleId']")[idx-1].value;
+                    var zipErrorId = $("*[id$=ZIPerror]")[idx-1].id;
+                    errorHideShow(zipName, RoleValue, idx, zipErrorId);
+                } else {
+                    var indexNo = $("[id$='lnId']").length;
+                    for(var i = 0; i < indexNo; i++) {
+                        var zipName = $("[id$='postalCodeId']")[i].value.trimRight();
+                        var RoleValue = $("[id$='roleId']")[i].value;
+                        var zipErrorId = $("*[id$=ZIPerror]")[i].id;
+                        errorHideShow(zipName, RoleValue, idx, zipErrorId);
+                    }
+                }                
+            }
+            function ActDateValidation(idx) {
+                if((idx - 1) >= 0) {
+                    var inpActDateName = $("[id$='actDateId']")[idx-1].value.trimRight();
+                    var RoleValue = $("[id$='roleId']")[idx-1].value;
+                    var actDateErrorId = $("*[id$=ACTDATEerror]")[idx-1].id;
+                    errorHideShow(inpActDateName, RoleValue, idx, actDateErrorId);
+                } else {
+                    var indexNo = $("[id$='lnId']").length;
+                    for(var i = 0; i < indexNo; i++) {
+                        var inpActDateName = $("[id$='actDateId']")[i].value.trimRight();
+                        var RoleValue = $("[id$='roleId']")[i].value;
+                        var actDateErrorId = $("*[id$=ACTDATEerror]")[i].id;
+                        errorHideShow(inpActDateName, RoleValue, idx, actDateErrorId);
+                    }
+                }                
+            }
+            function isNotNullForAll() {
+                isError = false;
+                FieldValidation(-1);
+                ActDateValidation(-1);
+                ManValidation(-1);
+                FnValidation(-1);
+                validate(-1);
+                zipValidation(-1);
+                if (isError == false) {
+                    insertUser();
+                } else {
+                    return false;
+                }
+
+            }
+            $(document).ready(function(){
+            initdatatable();
+                setTimeout(function() {
+                    $('#successMessage').fadeOut('fast');
+                }, 15000);
+            });
+        </script>
+               
+    </apex:form>
+</apex:page>

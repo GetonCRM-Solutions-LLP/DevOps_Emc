@@ -1,0 +1,88 @@
+<template>
+    <!-- <lightning-card class="card_header"> -->
+    <template if:true={isopenmodel}>
+        <div class="map_component">
+            <div class="card_header">
+                <!-- <lightning-card> -->
+                    <div class="slds-var-m-around_medium input_div"> 
+                        <div>
+                            <div class="show_flex">
+                                <div class="driver-label">Driver:</div>
+                                <input class="Driver_name slds-input border_of_input" type="text" disabled value={drivername}></input>
+                            </div>
+                            <div class="show_flex">
+                                <span class="date-label">Date time:</span>
+                                <input class="datetime slds-input border_of_input" type="text" disabled value={date}></input>
+                                <input class="fromtime slds-input border_of_input" type="text" disabled value={StartTime}></input>
+                                <span class="fromtolabel">to</span>
+                                <input class="totime slds-input border_of_input" type="text" disabled value={EndTime}></input>
+                            </div> 
+                            <div class="show_flex">
+                                <span class="from-label">From:</span>
+                                <input class="from_input slds-input border_of_input" type="text" disabled value={from}></input>
+                            </div>  
+                            <div class="show_flex">
+                                <span class="to-label">To:</span>
+                                <input class="to_input slds-input border_of_input" type="text" disabled value={to}></input>
+                            </div>   
+                        </div>
+                        <div class="div_2">
+                            <div class="show_flex">
+                                <span class="mileges-label">Mileage:</span>
+                                <input class="mileges slds-input border_of_input" type="text" disabled value={mileges}></input>
+                            </div> 
+                            <div class="show_flex">
+                                <span class="drivetime-label">Drive time:</span> 
+                                <input class="slds-input drivetime_input slds-m-left_x-small border_of_input" type="text" disabled data-id={RecordId} value={DriveTime}></input>
+                                <!-- <lightning-input class ="drivetime_input slds-m-left_x-small border_of_input"  disabled data-id={RecordId} value={DriveTime} onkeypress={keyHandler}  onchange={handleDriveTimeChange}></lightning-input> -->
+                            </div> 
+                            <div class="show_flex">
+                                <span class="staytime-label">Stay time:</span>
+                                <div>
+                                    <input class="slds-input stay_input slds-m-left_x-small border_of_input" data-id={RecordId} value={StayTime} onkeypress={keyHandler} onchange={handleStayTimeChange}></input>
+                                </div>
+                                <!-- <lightning-input class ="stay_input slds-m-left_x-small border_of_input" data-id={RecordId} value={StayTime} onkeypress={keyHandler} onchange={handleStayTimeChange}></lightning-input> -->
+                            </div>
+                            <div class="show_flex">
+                                <span class="tags-label">Tags:</span>
+                                <div>
+                                    <input class="slds-input tag_input slds-m-left_x-small border_of_input" data-id={RecordId} value={tags}  onchange={handleTagChange}></input>
+                                </div>
+                                <!-- <lightning-input class ="tag_input slds-m-left_x-small border_of_input" data-id={RecordId} value={tags}  onchange={handleTagChange}></lightning-input> -->
+                            </div>
+                            <div class="show_flex">
+                                <span class="notes-label">Notes:</span>
+                                <div class="notes_input slds_input">
+                                    <textarea data-id={RecordId} class="slds-textarea text_area border_of_input"
+                                    oninput={handleTextAreaInput} placeholder="Optional, free text"
+                                    value={notes}>{notes}</textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <template lwc:if={showmap} >
+                        <div class="map_div">
+                            <c-map-creation-component class="" data-id={RecordId}
+                                                                start-location-lt={fromlatitude}
+                                                                start-location-lg={fromlongitude}
+                                                                end-location-lt={tolatitude}
+                                                                end-location-lg={tolongitude}
+                                                                trip-id={tripid}
+                                                                trip-log-api={triplogapi}
+                                                                time-zone={timezone} 
+                                                                way-pt={waypoint}>
+                            </c-map-creation-component>  
+                        </div>
+                    </template>
+            </div>
+            <div class="button_class">
+                <button type="button"
+                    class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" data-id={RecordId} onclick={handleSave}>
+                    Save</button>
+                <button type="button"
+                    class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip" data-id={RecordId} onclick={closeModal}>
+                    Close</button>
+            </div>
+        </div>    
+    </template>
+</template>

@@ -1,0 +1,32 @@
+<template>
+    <header>
+		<div class="header-inner">
+			<div class="company-logo" onclick={refreshPage}>
+				<img class="logo-img" src={companyLogoUrl} />
+			</div>
+			<div class="navigation-link">
+                <div class="logout-container" onclick={handleLogout}>
+					<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+						<path d="M16.7275 0.911835H9.55404C9.02437 0.911835 8.5957 1.34098 8.5957 1.87017C8.5957 2.39936 9.02437 2.8285 9.55404 2.8285H16.7275C17.5352 2.8285 18.1922 3.48362 18.1922 4.28891V16.7219C18.1922 17.5272 17.5352 18.1823 16.7275 18.1823H9.55404C9.02437 18.1823 8.5957 18.6115 8.5957 19.1407C8.5957 19.6699 9.02437 20.099 9.55404 20.099H16.7275C18.5918 20.099 20.1088 18.5838 20.1088 16.7219V4.28891C20.1088 2.42696 18.5918 0.911835 16.7275 0.911835Z" fill="#7ABB4A"/>
+						<path d="M4.07024 11.4697H13.3542C13.8839 11.4697 14.3125 11.0405 14.3125 10.5113C14.3125 9.98216 13.8839 9.55302 13.3542 9.55302H4.09047L7.02488 6.41879C7.38704 6.03229 7.36739 5.42586 6.98089 5.06409C6.5944 4.70193 5.98701 4.72206 5.62667 5.10855L1.21911 9.8156C1.11436 9.91354 1.03348 10.0326 0.980961 10.1688C0.956236 10.231 0.953074 10.297 0.941957 10.3621C0.933715 10.4127 0.911865 10.4584 0.911865 10.5113C0.911865 10.5133 0.913015 10.515 0.913015 10.517C0.911769 10.7541 0.997157 10.9914 1.17109 11.1771L5.62677 15.9355C5.81489 16.1368 6.07038 16.2387 6.32587 16.2387C6.56076 16.2387 6.79565 16.1531 6.98099 15.98C7.36749 15.6183 7.38713 15.0118 7.02498 14.6253L4.07024 11.4697Z" fill="#7ABB4A"/>
+						</svg>
+				</div>
+				<!-- <div class="logout-container">
+					<button
+						class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green logout-btn waves-light mleft-0"
+						onclick={handleLogout}>Logout</button>
+				</div> -->
+			</div>
+
+		</div>
+	</header>
+    <template lwc:if={information}>
+        <template lwc:if={nextDeclationUpload}>
+            <c-dashboard-insurance-upload  is-upload-show={uploadVal} account-id={accountId} contact-id={contactId} attachmentid={attachmentid} contact-name={contactName}
+            contact-email={contactEmail} client={information} onnavigate={navigateToDashboard}  onback={backToInsurance}></c-dashboard-insurance-upload>
+        </template>
+        <template lwc:else>
+            <c-dashboard-insurance-view onnavigate={navigateToDeclaration} expired={insuranceExpired}  account-id={accountId} contact-id={contactId} video-link={insuranceVideo} css="slds-align_absolute-center content-padding content-flex" video-css="slds-align_absolute-center video-container padding-container"></c-dashboard-insurance-view>
+        </template> 
+    </template>
+</template>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>56.0</apiVersion>
+    <decisions>
+        <name>Check_Total_Mileage_Value</name>
+        <label>Check Total Mileage Value</label>
+        <locationX>614</locationX>
+        <locationY>386</locationY>
+        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
+        <rules>
+            <name>Mileage_Value</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>$Record.Total_Mileage__c</leftValueReference>
+                <operator>LessThanOrEqualTo</operator>
+                <rightValue>
+                    <elementReference>$Record.Compliance_Mileage__c</elementReference>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>Update_Compliance_Status</targetReference>
+            </connector>
+            <label>Mileage Value</label>
+        </rules>
+    </decisions>
+    <environments>Default</environments>
+    <interviewLabel>Update Compliance Status bases on Compliance Mileage {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Update Compliance Status bases on Compliance Mileage</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>FREE_FORM_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordUpdates>
+        <name>Update_Compliance_Status</name>
+        <label>Update Compliance Status</label>
+        <locationX>629</locationX>
+        <locationY>566</locationY>
+        <inputAssignments>
+            <field>compliancestatus__c</field>
+            <value>
+                <stringValue>No - Mileage</stringValue>
+            </value>
+        </inputAssignments>
+        <inputReference>$Record</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>490</locationX>
+        <locationY>48</locationY>
+        <connector>
+            <targetReference>Check_Total_Mileage_Value</targetReference>
+        </connector>
+        <filterLogic>or</filterLogic>
+        <filters>
+            <field>Role__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Driver</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Role__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Driver/Admin</stringValue>
+            </value>
+        </filters>
+        <filters>
+            <field>Role__c</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Driver/Manager</stringValue>
+            </value>
+        </filters>
+        <object>Contact</object>
+        <recordTriggerType>Update</recordTriggerType>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+    <status>Obsolete</status>
+</Flow>

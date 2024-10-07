@@ -1,0 +1,1073 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true" controller="CustomReportConfigurationController">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+        <head>
+            <!-- Required meta tags -->
+            <meta charset="utf-8"/>
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+            <!-- Title of the page -->
+            <title>Configure Custom Report</title>
+            <apex:slds />
+            <style>
+                .criteriatxtcls {
+                    width: 60% !important;
+                }
+
+                .width70Perc { 
+                    width: 70% !important;
+                }
+                .width90Perc { 
+                    width: 90% !important;
+                }
+
+                .slds-scope .slds-button_brand[disabled], .slds-scope .slds-button_brand:disabled, .slds-scope .slds-button--brand[disabled], .slds-scope .slds-button--brand:disabled
+                {
+                    background: #c9c7c5 !important;
+                    border-color: #c9c7c5;
+                    color: #fff;
+                }
+
+                .custom_error_btn{
+                    color: #cc5200;
+                    font-weight: bold;
+                }
+
+                .a-clear, .a-hide {
+                    vertical-align: middle;
+                    margin-top: 4%;
+                    margin-left: 4%;
+                }
+                option:disabled {
+                    color: rgb(0, 0, 0);
+                    font-weight: bold;
+                    font-size: 14px;
+                    font-style: oblique;    
+                    background-color: rgb(243, 242, 242);
+                }
+                .width40Perc {
+                    width: 40% !important;
+                }
+                .width25Perc {
+                    width: 25% !important
+                }
+                .contactTable {
+                    width: 400px !important;
+                }
+                .slds-scope fieldset {
+                    width: fit-content;
+                }
+                .btn {
+                    background: none !important;
+                }
+                .slds-button_brand {
+                    background-color: rgba(27, 82, 151, 1) !important
+                }
+                .slds-button_neutral {
+                    color: #0070d2 !important;
+                    background: transparent !important;
+                }
+                .slds-scope input[type=radio] {
+                    margin-left: 30px;
+                }
+                label {
+                    font-weight: bold;
+                }
+                .widthauto {
+                    width: auto !important;
+                    min-width: 30%;
+                }
+                
+            </style>
+
+            <!-- Font-awsome -->
+            <script src="https://kit.fontawesome.com/a2f714f289.js" crossorigin="anonymous"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        </head>
+
+        <body class="slds-scope">
+            <div class="slds-container slds-m-around_large">
+                <apex:outputPanel id="mainPanel" >
+                    <!-- Step 1 Start-->
+                    <apex:outputPanel id="step1" rendered="{!IF(Step == 1, true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step 1 of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form id="the1Form">
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_1-of-5">
+                                            <label class="slds-float_right">Report Name:<span class="slds-required">*</span></label>
+                                        </div>
+                                    
+                                        <div class="slds-col slds-size_4-of-5">
+                                            <apex:inputText id="reportname" styleClass="slds-input width40Perc" value="{!reportName}" required="false" onchange="validateForm();" html-placeholder="Enter report name"/>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="slds-float_right">Account:<span class="slds-required">*</span> </label>
+                                        </div>
+                                    
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <apex:selectList id="accountname" value="{!selectedAccountId}" multiselect="false" size="1" styleClass="slds-input width40Perc">
+                                                <apex:selectOptions value="{!AccountOptions}" />
+                                                <apex:actionSupport event="onchange" status="status" action="{!LoadContacts}" rerender="contactpanel" onsubmit="validateForm();"/> 
+                                            </apex:selectList>
+                                            
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            &nbsp;
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <apex:outputPanel id="contactpanel">
+                                                <c:MultiselectPicklist leftLabel="Available Contacts"
+                                                    leftOption="{!allContacts}"
+                                                    rightLabel="Selected Contacts"
+                                                    rightOption="{!selectedContacts}"
+                                                    size="10"
+                                                    width="150px"/>
+                                            </apex:outputPanel>
+                                            
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="slds-float_right">Select Report Category:<span class="slds-required">*</span> </label>
+                                        </div>
+                                    
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <apex:selectList id="categoryname" value="{!selectedRecordCategory}" multiselect="false" size="1" styleClass="slds-input width40Perc" onchange="validateForm();">
+                                                <apex:selectOptions value="{!ReportCategories}" />
+                                            </apex:selectList>
+                                            
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="slds-float_right">Select Report Type:<span class="slds-required">*</span> </label>
+                                        </div>
+                                    
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <apex:selectList id="typename" value="{!selectedRecordType}" multiselect="false" size="1" styleClass="slds-input width40Perc" onchange="validateForm();">
+                                                <apex:selectOptions value="{!ReportTypes}" />
+                                            </apex:selectList>
+                                            
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="slds-float_right">Display Filter:<span class="slds-required">*</span> </label>
+                                        </div>
+                                    
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <apex:selectRadio value="{!selectedFilter}">
+                                                <apex:selectOption itemLabel="Drivers" itemValue="driver" />
+                                                <apex:selectOption itemLabel="Managers" itemValue="manager" />
+                                            </apex:selectRadio>
+                                            
+                                        </div>
+                                        <!-- <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="slds-float_right">Summarize Report:<span class="slds-required">*</span> </label>
+                                        </div>
+
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large slds-p-left_large">  
+                                            <apex:inputCheckbox value="{!summarize}"/>
+                                        </div> -->
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            &nbsp;
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton id="nextbutton" value="Next" action="{!NextStep}" status="status" reRender="mainPanel" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Step 1 End-->
+
+                    <!-- Summarize Step 2 Start-->
+                    <apex:outputPanel id="step2sum" rendered="{!IF(Step == 2 && summarize, true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step 2 of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form >
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <label class="slds-float_left selectTitle">Select fields:<span class="slds-required">*</span></label>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <table class="slds-table slds-table_cell-buffer slds-border_left slds-border_right slds-table_col-bordered slds-table_bordered slds-table_striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>
+                                                            Field Name
+                                                        </th>
+                                                        <th>
+                                                            Sum
+                                                        </th>
+                                                        <th>
+                                                            Average
+                                                        </th> 
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <apex:repeat value="{!aggregatefields}" var="sField">
+                                                        <tr>
+                                                            <td>
+                                                                {!sField.FLabel}
+                                                            </td>
+                                                            <td>
+                                                                <apex:inputCheckbox value="{!sField.doSum}" styleClass="agg-checkbox"/>
+                                                            </td>
+                                                            <td>
+                                                                <apex:inputCheckbox value="{!sField.doAvG}" styleClass="agg-checkbox"/>
+                                                            </td> 
+                                                        </tr>
+                                                    </apex:repeat>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Previous" action="{!PreviousStep}" status="status" reRender="mainPanel" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Next" onclick="validateAggregatecheckbox();return false;" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                    <apex:actionFunction action="{!NextStep}" name="NextStep" status="status" reRender="mainPanel"/>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Summarize Step 2 End -->
+
+                    <!-- Summarize Step 3 Start-->
+                    <apex:outputPanel id="step3Summ" rendered="{!IF(Step == 3 && summarize, true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step 3 of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form >
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <label class="slds-float_left selectTitle">Select Group By fields:<span class="slds-required">*</span></label>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <apex:outputPanel id="fieldsPanel">
+                                                <apex:selectList value="{!selectedField}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields}" />
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!0}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_1}" rendered="{!hireachylevel >= 1}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_1}" />
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!1}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_2}" rendered="{!hireachylevel >= 2}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_2}"/>
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!2}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_3}" rendered="{!hireachylevel >= 3}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_3}"/>
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!3}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                            
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="selectTitle">Click to remove field from query:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">
+                                            <apex:outputPanel id="selectedfieldsPanel">
+                                                <apex:selectList value="{!fieldtoRemove}" multiselect="false" size="10" styleClass="slds-input widthauto">
+                                                    <apex:selectOptions value="{!selectedFields}"/>
+                                                    <apex:actionSupport event="onchange" action="{!RemoveSelectField}" status="status" reRender="selectedfieldsPanel,queryPanel"/>
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <label class="selectTitle">Built Query:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <apex:outputPanel id="queryPanel">
+                                                <div class="slds-form-element__control slds-m-around_large">
+                                                    <div class="slds-form-element__static slds-p-around_large slds-box ">
+                                                        <p><apex:outputText value="{!buildQueryString}" escape="false" /></p>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Previous" action="{!PreviousStep}" status="status" reRender="mainPanel" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Next" action="{!NextStep}" status="status" reRender="mainPanel" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Summarize Step 3 End -->
+
+                    <!-- Step 2 Start-->
+                    <apex:outputPanel id="step2" rendered="{!IF(Step == 2 && !summarize, true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step 2 of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form >
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <label class="slds-float_left selectTitle">Select fields:<span class="slds-required">*</span></label>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <apex:outputPanel id="fieldsPanel">
+                                                <apex:selectList value="{!selectedField}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields}" />
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!0}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_1}" rendered="{!hireachylevel >= 1}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_1}" />
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!1}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_2}" rendered="{!hireachylevel >= 2}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_2}"/>
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" status="status" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!2}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                                <apex:selectList value="{!selectedField_3}" rendered="{!hireachylevel >= 3}" multiselect="false" size="10" styleClass="slds-input width25Perc">
+                                                    <apex:selectOptions value="{!ObjectFields_3}"/>
+                                                    <apex:actionSupport event="onchange" action="{!OnChangeField}" reRender="fieldsPanel,selectedfieldsPanel,queryPanel">
+                                                        <apex:param value="{!3}" assignTo="{!hireachylevel}" name="selectedField"/>
+                                                    </apex:actionSupport>
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                            
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">
+                                            <label class="selectTitle">Click to remove field from query:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">
+                                            <apex:outputPanel id="selectedfieldsPanel">
+                                                <apex:selectList value="{!fieldtoRemove}" multiselect="false" size="10" styleClass="slds-input widthauto">
+                                                    <apex:selectOptions value="{!selectedFields}"/>
+                                                    <apex:actionSupport event="onchange" action="{!RemoveSelectField}" status="status" reRender="selectedfieldsPanel,queryPanel"/>
+                                                </apex:selectList>
+                                            </apex:outputPanel>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <label class="selectTitle">Built Query:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <apex:outputPanel id="queryPanel">
+                                                <div class="slds-form-element__control slds-m-around_large">
+                                                    <div class="slds-form-element__static slds-p-around_large slds-box ">
+                                                        <p><apex:outputText value="{!buildQueryString}" escape="false" /></p>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Previous" action="{!PreviousStep}" status="status" reRender="mainPanel" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Next" action="{!NextStep}" status="status" reRender="mainPanel" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Step 2 End -->
+
+                    <!-- Step 3 Start-->
+                    <apex:outputPanel id="step3" rendered="{!IF(( Step == 3 && !summarize) || (step == 4 && summarize), true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step {!step} of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form id="the3Form">
+                                    <apex:actionFunction action="{!findFieldType}" name="findFieldType" status="status" reRender="searchCriteriatbl,filterpanal,JsPanel">
+                                        <apex:param name="fieldName" id="advfieldName" value=""/>
+                                        <apex:param name="idx" id="advidx" value=""/>
+                                    </apex:actionFunction>
+                                    <apex:actionFunction action="{!removeAdvCriteriaRow}" name="removeAdvCriteriaRow" status="status" reRender="searchCriteriatbl,filterpanal,JsPanel">
+                                        <apex:param name="rowNum" id="advirownum" value=""/>
+                                    </apex:actionFunction>
+                                    <apex:actionFunction action="{!addAdvCriteriaRow}" name="addAdvCriteriaRow" status="status" reRender="searchCriteriatbl,filterpanal,JsPanel"/>
+                                    <apex:actionFunction action="{!BuildQuery}" name="BuildQuery" status="status" reRender="finalqueryPanel"/>
+
+                                    <apex:actionFunction action="{!NextStep}" name="NextStep" status="status" reRender="mainPanel"/>
+                                    
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_5-of-5">                                            
+                                            <table id="tableData1" class="" style="width:100% !important;">
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="text-align: center;padding: 10px;">
+                                                            <apex:outputPanel id="searchCriteriatbl">
+                                                                <table class="" id="criteria-tbl" style="width:100% !important;border-spacing: 2px;border-collapse: separate;">
+                                                                    <thead>    
+                                                                        <tr class="w3-red">
+                                                                            <th>#</th>
+                                                                            <th>Field</th> 
+                                                                            <th>Operator</th> 
+                                                                            <th>Value</th>
+                                                                            <th></th> 
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <apex:repeat id="insiderepeat" value="{!advcriteriaRows}" var="arow">
+                                                                        <tr id="arow-{!arow.idx}" style="text-align: start;">
+                                                                            <td style="width:20px;">{!arow.idx}</td>
+                                                                            <td style="width:160px;">
+                                                                                <apex:selectList style="width: 60%;" styleClass="selectorcls form-control dropdown slds-input" id="fieldSelectorId" size="1" multiselect="false" value="{!arow.name}" onchange="findFieldType(this.value, '{!arow.idx}');" >
+                                                                                    <apex:selectOptions value="{!availableFields}"></apex:selectOptions>
+                                                                                </apex:selectList>
+                                                                            </td>
+                                                                            <!-- For Available Operator -->
+                                                                            <td style="width:100px;">
+                                                                                <apex:selectList style="width: 60%;" styleClass="opselectorcls form-control dropdown slds-input" id="operatorSelectorId" size="1" multiselect="false" value="{!arow.operator}">
+                                                                                    <apex:selectOptions value="{!availableOperators[arow.dataType]}"></apex:selectOptions>
+                                                                                </apex:selectList>
+                                                                            </td>
+                                                                            <!-- For picklist and lookup -->
+                                                                            <td style="display:{!IF(arow.fieldType !='Boolean' && arow.fieldType !='Date' && arow.fieldType !='DateTime','','none')};width:160px; ">
+                                                                                <apex:inputText id="criteriaValId" value="{!arow.valueLabel}" style="width: 60%;" StyleClass="form-control dropdown input-float-left slds-input" rendered="{!arow.fieldType == 'Reference'}"/>
+                                                                                <apex:inputText id="criteriaVal2Id" value="{!arow.value}" style="width: 60%;" StyleClass="criteriaVal-{!arow.idx} form-control dropdown input-float-left slds-input" rendered="{!arow.fieldType != 'Reference'}"/>
+                                                                                <apex:inputHidden id="criteriaValLabelId" value="{!arow.value}"  rendered="{!arow.fieldType == 'Reference'}"/>
+                                                                                <a  href="#" onclick="open_pop_up('{!$Component.criteriaValId}', '{!arow.name}','{!sObjectNameApi}','{!arow.dataType}');" style="display:{!IF(arow.fieldType =='Picklist' || arow.fieldType =='MultiPicklist' || arow.fieldType =='Reference','','none')}" class="">
+                                                                                    <i class="fa fa-search" aria-hidden="true"></i>
+                                                                                </a>
+                                                                            </td>
+
+                                                                            <!-- For Boolean Operator -->
+                                                                            
+                                                                            <td style="width:100px;display:{!IF(arow.fieldType =='Boolean', '', 'none')}">
+                                                                                <apex:selectList rendered="{!arow.fieldType == 'Boolean'}" style="width: 60%;" styleClass="opselectorcls form-control dropdown slds-input" size="1" multiselect="false" value="{!arow.value}">
+                                                                                    <apex:selectOption itemValue="True" itemLabel="True"/>
+                                                                                    <apex:selectOption itemValue="False" itemLabel="False"/>
+                                                                                </apex:selectList>
+                                                                            </td>
+                    
+                                                                            <!-- for Date Picker -->
+                                                                            <td style="display:{!IF(arow.fieldType =='Date' || arow.fieldType =='DateTime','','none')};width:160px; ">
+                                                                                <input class="datepicker form-control slds-input" type="date" value="{!arow.value}" style="width: 60%;display:{!IF(arow.fieldType =='Date' || arow.fieldType =='DateTime','','none')}" onchange="document.getElementsByClassName('criteriaVal-{!arow.idx}')[0].value = this.value" />
+                                                                            </td>
+                    
+                                                                            <!--For REmove row  -->
+                                                                            <td style="width:10px;">
+                                                                                <div id="removeIcon">
+                                                                                    <a href="#" class="action" id="advrm-{!arow.idx}" onclick="removeAdvCriteriaRow('{!arow.idx}');">
+                                                                                        <i class="fa fa-times" aria-hidden="true"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </apex:repeat>
+                                                                </table>
+                                                            </apex:outputPanel>
+                                                        </td>
+                                                    </tr>
+                                                    <tr class="filterrow">
+                                                        <td>
+                                                            <apex:outputPanel id="filterpanal">
+                                                                <!--For Add Row -->
+                                                                <a href="#" class="btn slds-button slds-button_brand" onclick="addAdvCriteriaRow();">
+                                                                     Add Row
+                                                                </a>
+                                                                <!--For Add Filter Criteria -->
+                                                                <a href="#" onclick="addFilterCriteria('{!advcriteriaRows.size}')" class="btn slds-button_brand slds-button">Add Filter Criteria</a> 
+                                                                <div id="filterInput" class="filterinputcls" style="display:none;font-size: 12px !important;">
+                                                                    <apex:inputText value="{!filterCriteria}" id="searchTerm" styleclass="criteriatxtcls form-control dropdown slds-input" onblur="filterCriteriaValidate(this.value);" HTML-placeholder="e.g. 1 AND (2 OR 3)"/> 
+                                                                    <a href="#" onclick="clearCriteria();" class="a-clear text-danger">Clear </a> &nbsp;
+                                                                    <a href="#" onclick="hideCriteriaDiv();" class="a-hide"> Hide </a>
+                                                                    <div id="filerCriteriaError" class="custom_error_btn"/>
+                                                                    
+                                                                </div>
+                                                            </apex:outputPanel>
+                                                            
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div class="slds-col slds-size_5-of-5 slds-m-top_large">
+                                            <label class="selectTitle">Built Query:<span class="slds-required">*</span></label>
+                                            <apex:commandButton onclick="checkCriteriaBeforeSubmit('query');return false;" value="Generate Final query" reRender="finalqueryPanel" status="status" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large"/>
+                                            
+                                        </div>
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <apex:outputPanel id="finalqueryPanel">
+                                                <div class="slds-form-element__control slds-m-around_large">
+                                                    <div class="slds-form-element__static slds-p-around_large slds-box ">
+                                                        <p><apex:outputText value="{!finalQuery}" escape="false" /></p>
+                                                    </div>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Previous" action="{!PreviousStep}" status="status" reRender="mainPanel" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton rendered="{!Step == 3}" value="Next" onclick="checkCriteriaBeforeSubmit('next');return false;" status="status" reRender="mainPanel" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                            <apex:commandButton rendered="{!Step == 4}" value="Save" onclick="checkCriteriaBeforeSubmit('aggregate');return false;" status="status" reRender="mainPanel" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                    <apex:actionFunction action="{!SaveCustomReport}" name="SaveCustomReport" status="status" reRender="mainPanel"/>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Step 3 End-->
+
+                    <!-- Step 4 Start-->
+                    <apex:outputPanel id="step4" rendered="{!IF(Step == 4 && !summarize, true, false)}">
+                        <div class="slds-section slds-is-open">
+                            <h3 class="slds-section__title slds-theme_shade">
+                                <span class="slds-truncate slds-p-horizontal_small" title="Section Title">Step 4 of 4</span>
+                            </h3>
+                            <div aria-hidden="false" class="slds-section__content">
+                                <apex:form id="the4Form">
+                                    
+                                    <div class="slds-grid slds-wrap">
+                                        <div class="slds-col slds-size_5-of-5">
+                                            <div class="slds-form-element__control slds-m-around_large">
+                                                <div class="slds-form-element__static slds-p-around_large slds-box ">
+                                                    <p><apex:outputText value="{!finalQuery}" escape="false" /></p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5">  
+                                            <label class="selectTitle slds-float_right slds-p-right_medium">Report Header:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5">  
+                                            <apex:inputText value="{!reportHeader}" html-placeholder="Enter report column headers" styleClass="slds-input width70Perc headercls" id="reporthederid"/>
+                                            <div id="headerError" class="custom_error_btn"/>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">  
+                                            <label class="selectTitle slds-float_right slds-p-right_medium">DateTime Fields:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large"> 
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size_1-of-1">  
+                                                    <apex:commandButton value="Select DateTime Fields" action="{!LoadFieldSelection}" status="status" reRender="selectionForm" styleClass="slds-float_left slds-button_neutral slds-m-right_xx-large" oncomplete="showModal();">
+                                                        <apex:param value="DateTime" name="selectType" assignTo="{!selectType}"/>
+                                                    </apex:commandButton>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1 slds-m-top_large">  
+                                                    <apex:outputPanel id="datetimepanel">
+                                                        <apex:inputText value="{!selectedDateTimefields}" rendered="{!selectedDateTimefields != ''}" html-placeholder="Enter report column headers" disabled="true" styleClass="slds-input width40Perc"/>
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">  
+                                            <label class="selectTitle slds-float_right slds-p-right_medium">Date Fields:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large">  
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size_1-of-1">  
+                                                    <apex:commandButton value="Select Date Fields" action="{!LoadFieldSelection}" status="status" reRender="selectionForm" styleClass="slds-float_left slds-button_neutral slds-m-right_xx-large" oncomplete="showModal();">
+                                                        <apex:param value="Date" name="selectType" assignTo="{!selectType}"/>
+                                                    </apex:commandButton>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1 slds-m-top_large">  
+                                                    <apex:outputPanel id="datepanel">
+                                                        <apex:inputText value="{!selectedDatefields}" rendered="{!selectedDatefields != ''}" html-placeholder="Enter report column headers" disabled="true" styleClass="slds-input width40Perc"/>
+                                                    </apex:outputPanel>
+
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_large">  
+                                            <label class="selectTitle slds-float_right slds-p-right_medium">Time Fields:<span class="slds-required">*</span></label>
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_large"> 
+
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size_1-of-1">  
+                                                    <apex:commandButton value="Select Time Fields" action="{!LoadFieldSelection}" status="status" reRender="selectionForm" styleClass="slds-float_left slds-button_neutral slds-m-right_xx-large" oncomplete="showModal();">
+                                                        <apex:param value="Time" name="selectType" assignTo="{!selectType}"/>
+                                                    </apex:commandButton>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-1 slds-m-top_large">  
+                                                    <apex:outputPanel id="timepanel">
+                                                        <apex:inputText value="{!selectedTimefields}" disabled="true" rendered="{!selectedTimefields != ''}" html-placeholder="Enter report column headers" styleClass="slds-input width40Perc"/>
+                                                    </apex:outputPanel>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="slds-col slds-size_1-of-5 slds-m-top_xx-large slds-m-botton_xx-large slds-border_top slds-border_top">
+                                            <apex:commandButton value="Previous" action="{!PreviousStep}" status="status" reRender="mainPanel" styleClass="slds-float_right slds-button_neutral slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+                                        <div class="slds-col slds-size_4-of-5 slds-m-top_xx-large slds-p-right_xx-large slds-border_top">
+                                            <apex:commandButton value="Save" onclick="checkHeaderBeforeSubmit();return false;" styleClass="slds-button_brand slds-float_right slds-m-right_xx-large slds-m-top_large" />
+                                        </div>
+            
+                                    </div>
+                                    <apex:actionFunction action="{!SaveCustomReport}" name="SaveCustomReport" status="status" reRender="mainPanel"/>
+                                </apex:form>
+                                
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <!-- Step 4 End-->
+
+                    <!-- Spinner Start-->
+                    <apex:actionStatus id="status" >
+                        <apex:facet name="start" >
+                            <div class="slds-spinner_container">
+                                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>            
+                        </apex:facet>
+                    </apex:actionStatus> 
+                    <!-- Spinner End-->
+
+                </apex:outputPanel>
+
+                <!-- modal Start -->
+                <section role="dialog" tabindex="-1" class="slds-modal slds-modal_medium" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" id="secmodal">
+                    <div class="slds-modal__container">
+                        <header class="slds-modal__header">
+                            <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close" onclick="hideModal();return false;">
+                                <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                                </svg>
+                                <span class="slds-assistive-text">Close</span>
+                            </button>
+                            <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">Select Fields</h2>
+                        </header>
+                        <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                            <apex:form id="selectionForm">
+                                <div class="slds-grid slds-wrap">
+                                    <apex:repeat value="{!fieldsWrapperList}" var="f">
+                                        <div class="slds-col slds-size_1-of-4">
+                                            <apex:inputCheckbox value="{!f.selected}" style="vertical-align: middle;"/> 
+                                            <span class="slds-form-element__label width90Perc">{!f.fieldName}</span> 
+                                        </div>
+                                    </apex:repeat>
+
+                                    <div class="slds-col slds-size_4-of-4">
+                                        <apex:outputPanel rendered="{!fieldsWrapperList.size == 0}">
+                                            <label class="selectTitle slds-align_absolute-center">No fields are available.</label>
+                                        </apex:outputPanel>
+                                    </div>
+                                    
+                                </div>
+                                <apex:actionFunction action="{!SaveFieldSelection}" name="SaveFieldSelection" status="status" reRender="datetimepanel,datepanel,timepanel" oncomplete="hideModal();"/>
+                            </apex:form>
+                        </div>
+                        <footer class="slds-modal__footer">
+                            <button class="slds-button slds-button_neutral" onclick="hideModal();return false;">Cancel</button>
+                            <button class="slds-button slds-button_brand" onclick="SaveFieldSelection();return false;">Add Selected</button>
+                        </footer>
+                    </div>
+                </section>
+                <div id="backdropdiv" class="slds-backdrop"></div>
+                
+            </div>
+            
+            <apex:outputPanel id="JsPanel">
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        overridePageMessages();
+                        validateForm();
+                    });
+                    
+                    function overridePageMessages(){    
+                        var textureEffect = '';
+
+                        $('.warningM3').addClass('slds-notify slds-notify--toast slds-theme--warning customMessage '+textureEffect);          
+                        $('.confirmM3').addClass('slds-notify slds-notify--alert slds-theme--success  customMessage '+textureEffect);    
+                        $('.errorM3').addClass('slds-notify slds-notify--alert slds-theme--error customMessage '+textureEffect);                  
+                        $('.infoM3').addClass('slds-notify slds-notify--toast customMessage '+textureEffect);    
+                                        
+                        $('.errorM3').removeClass('errorM3'); 
+                        $('.confirmM3').removeClass('confirmM3'); 
+                        $('.infoM3').removeClass('infoM3');   
+                        $('.warningM3').removeClass('warningM3');  
+                    }
+
+                    var isCriteriaValidated = true;
+                    function open_pop_up(idx, field, sObj, ftype) {
+                        var child = window.open('/apex/LookupFinder?fType=' + ftype + '&idx='+idx+'&field='+field+'&sObj='+sObj+'', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400')
+                    }
+                    
+                    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+                    var eventer = window[eventMethod];
+                    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+                
+                    //Listen to message from child window
+                    eventer(messageEvent,function(e) {
+                        if(e != null && typeof e.data != 'object'){
+                            console.log('parent received message!: ',e.data, typeof e.data);
+                            var elmtId = e.data.substring(0, e.data.lastIndexOf(':'));
+                            var dt = e.data.split('criteriaValId:')[1];
+                        
+                            if(dt && elmtId) {
+                                if(dt.indexOf('=>') > -1) {
+                                    document.getElementById(elmtId).value = dt.split('=>')[1];
+                                    document.getElementById(elmtId.replace('criteriaValId', 'criteriaValLabelId')).value = dt.split('=>')[0];
+                                } else {
+                                    document.getElementById(elmtId.replace('criteriaValId', 'criteriaVal2Id')).value = dt;
+                                }
+                                
+                            }
+                        }
+                    },false);         
+                    
+                    function addFilterCriteria(sizeofrows) {
+                        var i = parseInt(sizeofrows);
+                        if(i > 1){
+                            document.getElementById('filterInput').style.display = 'inline-table';
+                        }
+                    }   
+                    
+                    function endProcessone() {
+                        $('#filter').hide();
+                        chackFilter();
+                    }
+
+                    function chackFilter() {
+                        var filterdata = '{!filterCriteria}';
+                        if(filterdata != ''){
+                            document.getElementById('filterInput').style.display='inline-block';
+                        }else{
+                            document.getElementById('filterInput').style.display='none';
+                        }
+                    }
+
+                    function checkCriteriaBeforeSubmit(calledFrom){
+                        if(isCriteriaValidated){
+                            $('.criteriatxtcls').css("border", "1px solid #adadad");
+                            if(calledFrom == 'next')
+                                NextStep();
+                            else if(calledFrom == 'aggregate')
+                                SaveCustomReport();
+                            else
+                                BuildQuery();
+                        }else{
+                            $('.criteriatxtcls').css("border", "1px solid red");
+                            document.getElementById("filerCriteriaError").innerHTML = 'Please refine your search criteria and try again!';
+                        }
+                    }
+                    
+                    function validparenthesis(str){
+                        
+                        if(str.includes('OR') && str.includes('AND')) {
+                            var regex = /AND\s*(.*?)\s*OR/g;
+                            var regex1 = /OR\s*(.*?)\s*AND/g;
+
+                            var matches = [];
+                            while (m = regex.exec(str)) {
+                            matches.push(m[1]);
+                            }
+                            while (m = regex1.exec(str)) {
+                            matches.push(m[1]);
+                            }
+                            var error = [];
+                            for(var i =0; i < matches.length; i++){
+                                var chackstr = matches[i];
+                                if(chackstr.includes('(') || chackstr.includes(')')){
+                                
+                                }else{
+                                    error.push('err')
+                                }
+                            }
+                            
+                            if(error.includes("err")){
+                                return 'Check the spelling in your filter Criteria.'
+                            }
+                        }
+                        return null;
+
+                    }
+                    
+                    function filterCriteriaValidate(str){
+                        if(str === ''){
+                            isCriteriaValidated = true;
+                            $('.criteriatxtcls').css("border", "1px solid #adadad");
+                            document.getElementById('filerCriteriaError').innerHTML = '';
+                            return true;
+                        }
+
+                        valiadteMessage = validateLogic(str);
+                        var errormsg = validparenthesis(str);
+                        if(valiadteMessage === null && errormsg === null){
+                            isCriteriaValidated = true;
+                            document.getElementById('filerCriteriaError').innerHTML = '';
+                            $('.criteriatxtcls').css("border", "1px solid #adadad");
+                        } else {
+                            isCriteriaValidated = false;
+                            $('.criteriatxtcls').css("border", "1px solid red");
+                            if(errormsg != null){
+                                document.getElementById('filerCriteriaError').innerHTML = errormsg; 
+                            }
+                            if(valiadteMessage !=null){
+                                if(valiadteMessage.includes('logic')){valiadteMessage = valiadteMessage.replace('logic','Criteria');}
+                                document.getElementById('filerCriteriaError').innerHTML = 'Error: ' + valiadteMessage; 
+                            }
+                        }
+                    }
+                    
+                    var advcriteriaRowsSize = parseInt('{!advcriteriaRows.size}');
+                    function validateLogic(a){
+                        
+                        a = new filterValidate.Parser(a);
+                        for (var b = [], c = 0; c < advcriteriaRowsSize; c++) b.push(c + 1);
+                        try {
+                            return a.getFiltersInUseMessage(b)
+                        } catch (e) {
+                            return e.message ? e.message : LC.getLabel("ReportBooleanFilter", "error_generic")
+                        }
+                    }
+                    
+                    filterValidate = {
+                        LPAREN_ID: 0,
+                        RPAREN_ID: 1,
+                        AND_ID: 2,
+                        OR_ID: 3,
+                        NOT_ID: 4,
+                        INTEGER_ID: 5,
+                        LPAREN: function() {
+                            this.id = filterValidate.LPAREN_ID
+                        },
+                        RPAREN: function() {
+                            this.id = filterValidate.RPAREN_ID
+                        },
+                        AND: function() {
+                            this.id = filterValidate.AND_ID;
+                            this.operation = "AND"
+                        },
+                        OR: function() {
+                            this.id = filterValidate.OR_ID;
+                            this.operation = "OR"
+                        },
+                        NOT: function() {
+                            this.id = filterValidate.NOT_ID;
+                            this.operation = "NOT"
+                        },
+                        INTEGER: function(a) {
+                            this.id = filterValidate.INTEGER_ID;
+                            this.value = parseInt(a, 10)
+                        },
+                        TokenParsingException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        ParenMismatchException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        TooManyValuesException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        UnexpectedTokenException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        EmptyInputException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "requiredFieldError")
+                        },
+                        MissingOperandException: function(a) {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        EndOfTokensException: function() {
+                            this.message = LC.getLabel("ReportBooleanFilter", "error_typo")
+                        },
+                        Parser: function(a) {
+                            this.input = a
+                        },
+                        Node: function(a, b, c) {
+                            this.left = a;
+                            this.op = b;
+                            this.right = c
+                        }
+                    };
+                    filterValidate.Parser.prototype = {
+                        getTokens: function() {
+                            var a = [],
+                                b = /\d+/g,
+                                c = this.input.match(/\s+|\w+|\d+|\(|\)|\W+/g);
+                            if (!c) throw new filterValidate.MissingOperandException;
+                            for (var e = 0; e < c.length; e++) {
+                                var d = c[e].trim(),
+                                    f = d.match(b);
+                                if ("(" === d) a.push(new filterValidate.LPAREN);
+                                else if (")" === d) a.push(new filterValidate.RPAREN);
+                                else if ("AND" === d.toUpperCase()) a.push(new filterValidate.AND);
+                                else if ("OR" === d.toUpperCase()) a.push(new filterValidate.OR);
+                                else if ("NOT" === d.toUpperCase()) a.push(new filterValidate.NOT);
+                                else if (f && 1 == f.length && f[0] === d) a.push(new filterValidate.INTEGER(d));
+                                else if (!(d.match(/\s+/i) || "" === d)) throw new filterValidate.TokenParsingException;
+                            }
+                            return a
+                        },
+                        getTree: function() {
+                            if (!this.input) throw new filterValidate.EmptyInputException;
+                            var a = this.getTokens(),
+                                b = [];
+                            this.index = 0;
+                            a = this._exp(a, b);
+                            if (0 < b.length) throw new filterValidate.TooManyValuesException;
+                            return a
+                        },
+                        getFilterNumbers: function() {
+                            for (var a = this.getTree(), b = {}; a instanceof filterValidate.Node;) null !== a.left && (b[a.left] = 0), a = a.right;
+                            !(a instanceof filterValidate.Node) && null !== a && (b[a] = 0);
+                            return b
+                        },
+                        getFiltersInUseMessage: function(a) {
+                            for (var b = this.getFilterNumbers(), c = [], e = [], d = 0; d < a.length; d++) "undefined" ===
+                                typeof b[a[d]] ? c.push(a[d]) : b[a[d]]++;
+                            for (var f in b) b[f] || e.push(f);
+                            return 0 < c.length ? LC.getLabel("ReportBooleanFilter", "error_unused_filters1", c.join(",")) : 0 < e.length ? LC.getLabel("ReportBooleanFilter", "error_bad_number", e.join(",")) : null
+                        },
+                        _exp: function(a, b) {
+                            if (this.index >= a.length) throw new filterValidate.EndOfTokensException;
+                            for (; this.index < a.length;) {
+                                var c = a[this.index];
+                                this.index++;
+                                switch (c.id) {
+                                    case filterValidate.INTEGER_ID:
+                                        b.push(c.value);
+                                        break;
+                                    case filterValidate.LPAREN_ID:
+                                        b.push("(");
+                                        break;
+                                    case filterValidate.RPAREN_ID:
+                                        if (2 > b.length) throw new filterValidate.ParenMismatchException;
+                                        c = b.pop();
+                                        if ("(" !== b.pop()) throw new filterValidate.ParenMismatchException;
+                                        b.push(c);
+                                        break;
+                                    case filterValidate.NOT_ID:
+                                        b.push(new filterValidate.Node(null, c.operation, this._exp(a, b)));
+                                        break;
+                                    case filterValidate.AND_ID:
+                                    case filterValidate.OR_ID:
+                                        if (0 === b.length) throw new filterValidate.MissingOperandException(c.operation);
+                                        var e = b.pop();
+                                        if ("number" !== typeof e) throw new filterValidate.MissingOperandException(c.operation);
+                                        b.push(new filterValidate.Node(e, c.operation, this._exp(a, b)));
+                                        break;
+                                    default:
+                                        throw new filterValidate.UnexpectedTokenException;
+                                }
+                            }
+                            c = b.pop();
+                            if ("(" === c) throw new filterValidate.ParenMismatchException(this.index);
+                            return c
+                        }
+                    };
+                    
+                    function hideCriteriaDiv(){
+                        clearCriteria();
+                        document.getElementById('filterInput').style.display='none';
+                    }
+                    
+                    function clearCriteria(){
+                        document.getElementById("{!$Component.the3Form.searchTerm}").value='';
+                        document.getElementById('filerCriteriaError').innerHTML = '';
+                        $('.criteriatxtcls').css('border', '1px solid #adadad');
+                        isCriteriaValidated = true;
+                    }
+
+                    function testNumericEmptyBottom(a, b, high) {
+                        var reg = /[+-]?((\d+(\.\d*)?)|\.\d+)([eE][+-]?[0-9]+)?/;    
+                        a = $(a).text().match(reg);
+                        a = a !== null && parseInt(a[0])!==0 ? parseInt(a[0]) : high;
+                        b = $(b).text().match(reg);
+                        b = b !== null && parseInt(b[0])!==0 ? parseInt(b[0]) : high;
+                        return ((a < b) ? -1 : ((a > b) ? 1 : 0));    
+                    }
+
+                    function validateForm() {
+                        var rname = document.getElementById("{!$Component.the1Form.reportname}").value;
+                        var accoutname = document.getElementById("{!$Component.the1Form.accountname}").value;
+                        var reportCat = document.getElementById("{!$Component.the1Form.categoryname}").value;
+                        var reporttype = document.getElementById("{!$Component.the1Form.typename}").value;
+
+                        document.getElementById("{!$Component.the1Form.nextbutton}").disabled = true;  
+                        if( rname && accoutname && reportCat && reporttype 
+                            && rname != 'none' && accoutname != 'none' && reportCat != 'none' && reporttype != 'none') {
+                            document.getElementById("{!$Component.the1Form.nextbutton}").disabled = false;    
+                        }
+                    }
+
+                    function showModal() {
+                        document.getElementById("secmodal").classList.add("slds-fade-in-open");
+                        document.getElementById("backdropdiv").classList.add("slds-backdrop_open");
+                    }
+                    function hideModal() {
+                        document.getElementById("secmodal").classList.remove("slds-fade-in-open");
+                        document.getElementById("backdropdiv").classList.remove("slds-backdrop_open");
+                    }
+
+                    function checkHeaderBeforeSubmit() {
+                        var rheader = document.getElementById("{!$Component.the4Form.reporthederid}").value;
+                        document.getElementById('headerError').innerHTML = '';
+                        $('.headercls').css("border", "1px solid #adadad");
+                        if(!rheader || rheader === '') {
+                            $('.headercls').css("border", "1px solid red");
+                            document.getElementById('headerError').innerHTML = 'Please enter report header.';
+                        } else {
+                            SaveCustomReport();
+                        }
+                        
+                    }
+
+                    function validateAggregatecheckbox() {
+                        if($('.agg-checkbox:checkbox:checked').length > 0)
+                            NextStep();
+                        return false;
+                    }
+
+                </script>
+            </apex:outputPanel>
+            
+        </body>
+    </html>
+</apex:page>

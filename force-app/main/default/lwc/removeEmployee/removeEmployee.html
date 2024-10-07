@@ -1,0 +1,48 @@
+<template>
+    <template lwc:if={isDataLoaded}>
+        <c-user-data-table  main-class="slds-table--header-fixed_container modal-height" is-default-sort={paginatedModal} scrollable={isScrollable} is-paginate={paginatedModal}  model-data={employeeList} 
+        columns={column} options={empKeyFields} is-sortable={isSortable}  colname={colname} coltype={coltype} is-all-download={download} onedit={handleModal}  filter={filter} sortorder={sortorder}>
+            <div class="flex-row">
+                <button style="border-color:  var(--green-color) !important;" 
+                class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0 enabled  btn-toggle is-active" data-id="enabled" onclick={handleTab}>
+                    Active
+                </button>
+                <button style="border-color:  var(--green-color) !important;" 
+                class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0 disabled  add-employee btn-toggle" data-id="disabled" onclick={handleTab}>
+                    Disabled
+                </button>
+                <template lwc:if={displaySave}>
+                    <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light" onclick={updateRecord}>
+                        Save
+                    </button>
+                </template>
+            </div>
+        </c-user-data-table>
+    </template>
+    <div class="remove-user-date">
+    <c-user-profile-modal header="" modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open"
+    header-class="slds-modal__header resource-header slds-clearfix"
+    style-header="slds-modal__container slds-m-top_medium deavtivate-modal-width"
+    close-btn-class="close-btn-employee" onclosedialog={handleCloseModal} is-disabled-b-g={isDisabledBG} >
+        <div class="modal-content">
+            <div class="modal-inside-modal">
+                <div class="slds-grid slds-wrap slds-p-top_large">
+                    <div class="slds-col slds-size_2-of-4 slds-p-top_x-small modal-input">Deactivation Date:</div>
+                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_medium">
+                        <c-date-picker date={deavtivationDate} min-date={minDate} max-date={maxDate} date-format={dateFormat} ondateselect={handledate}></c-date-picker>
+                    </div>
+                </div>
+                <div class="date-modal-btn slds-p-top_medium">
+                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={updateDeactivationDate}>
+                        Select
+                    </button>
+                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={handleCloseModal}>
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </c-user-profile-modal>
+</div>
+    <!-- <c-user-data-table></c-user-data-table> -->
+</template>

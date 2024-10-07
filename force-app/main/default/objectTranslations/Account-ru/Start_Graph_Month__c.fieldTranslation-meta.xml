@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Start Graph Month --></label>
+    <name>Start_Graph_Month__c</name>
+    <picklistValues>
+        <masterLabel>Dec</masterLabel>
+        <translation><!-- Dec --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Jan</masterLabel>
+        <translation><!-- Jan --></translation>
+    </picklistValues>
+</CustomFieldTranslation>
