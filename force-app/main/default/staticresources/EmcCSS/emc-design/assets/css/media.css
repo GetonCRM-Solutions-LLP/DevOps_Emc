@@ -1,0 +1,45 @@
+@media (min-width: 768px) and (max-width: 991px) {
+  .main-header {
+    padding: 0px 0px; }
+
+  #example_filter input {
+    width: 150px; } }
+@media (min-width: 481px) and (max-width: 767px) {
+  .main-header {
+    padding: 0px 0px; }
+
+  #example_filter {
+    position: relative; }
+
+  #collapsibleNavbar {
+    margin-left: 0px !important;
+    padding: 0px;
+    padding-top: 10px;
+    margin-top: 7px; } }
+@media (min-width: 320px) and (max-width: 480px) {
+  .container-fluid {
+    padding-right: 15px !important;
+    padding-left: 15px !important; }
+
+  .main-header {
+    padding: 0px 15px; }
+
+  #collapsibleNavbar {
+    margin-left: 0px !important;
+    padding: 0px;
+    padding-top: 10px;
+    margin-top: 7px;
+    border-top: 1px solid #68b12e; }
+
+  #example_filter {
+    position: relative; }
+
+  #adminroster-pills-tab .nav-item {
+    margin-bottom: 10px; } }
+@media (min-width: 1200px) {
+  .modal-xl {
+    max-width: 100% !important;
+    padding-right: 40px !important;
+    padding-left: 40px !important; } }
+
+/*# sourceMappingURL=media.css.map */

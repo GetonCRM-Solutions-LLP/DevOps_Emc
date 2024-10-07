@@ -1,0 +1,16 @@
+.slds-scope .slds-datepicker td>.slds-day {
+    width: 2rem !important;
+    min-width: 2rem !important;
+    height: 0.75rem !important;
+    display: block;
+    position: relative;
+    line-height: 0.75rem !important;
+    margin: auto !important;
+}
+.slds-scope .slds-datepicker td {
+    padding: 0.24rem !important;
+    font-size: 0.65rem !important;
+}
+.slds-scope .slds-button_neutral:hover .slds-icon_container .slds-icon-text-default {
+    fill: rgb(255, 255, 255) !important;
+}

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Update_Bodily_Injury</fullName>
+        <field>Bodily_Injury__c</field>
+        <formula>Uninsured_Motorist__c</formula>
+        <name>Update Bodily Injury</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>Update Bodily Injury</fullName>
+        <actions>
+            <name>Update_Bodily_Injury</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.Uninsured_Motorist__c</field>
+            <operation>notEqual</operation>
+            <value>null</value>
+        </criteriaItems>
+        <description>Value of Bodily Injury  is same as the Value of Uninsured Motorist</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

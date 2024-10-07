@@ -1,0 +1,93 @@
+.back-btn{
+    font-size: 18px;
+  }
+.back-btn a{
+    color:$secondary-color;
+}
+.back-btn a:hover{
+    text-decoration: none;
+    color:$secondary-color;
+}
+.report-link h3{
+  font-family: 'Proxima Nova Bold';
+    font-size: 26px;
+    color: $primary-color;
+    @media screen and (min-width:320px) and (max-width: 767px) {
+        font-size: 24px;
+    }
+}
+.report-link a{
+    font-size: 18px;
+    color:$secondary-color;
+    text-decoration: underline;
+}
+
+.text-secondary{
+  color: $secondary-color;
+}
+#admin-report-select{
+  height: 105px;
+}
+.dataTables_length{
+  display: none;
+}
+.dataTables_filter input{
+  border: none;
+  background: $maro-color;
+  padding: 7px 16px;
+  color: $secondary-color;
+}
+.navbar-expand-md .navbar-nav .dropdown-menu{
+  right: 0px;
+  left: unset;
+  border-radius: 0px;
+  background: $secondary-color;
+  color: $white-color;
+  padding:0px;
+  border: none;
+}
+.dropdown-item{
+  color: $white-color;
+  border-radius: 0px;
+}
+.dropdown-item:first-child,.dropdown-item:last-child{
+  border-radius: 0px;
+}
+.dropdown-item:focus, .dropdown-item:hover{
+  background-color: #7d8591;
+  color: $white-color;
+}
+.selected td input,.selected td select{
+  font-weight: bold;
+}
+.popup-close-btn{
+  text-align: right;
+  line-height: normal;
+  opacity: 1!important;
+  position: relative;
+}
+.popup-close-btn span {
+  background: $primary-color;
+  color: $white-color;
+  position: absolute;
+  top: -20px;
+  right: -10px;
+  border-radius: 50%;
+  opacity: 1;
+  height: 35px;
+  width: 35PX;
+  text-align: center;
+  line-height: 34px;
+}
+.tagclose{
+  cursor: pointer;
+}
+#driver-dashboard-monthrecord #example_filter {
+  right: 29px;
+  top: 8px;
+
+  @media screen and (min-width: 320px) and (max-width: 767px) {
+      right: 0px;
+      top: 0px;
+  }
+}

@@ -1,0 +1,58 @@
+.checkbocImportProcess  .checkhead {
+    float: left;
+    width: 100%;
+    background: $primary-color;
+    color: $white;
+    padding: 5px 0px;
+}
+.checkbocImportProcess  .checkhead h4 {
+    font-size: 18px;
+}
+.checkbocImportProcess .modal-body {
+    padding: 0px !important;
+    position: unset !important;
+}
+
+.checkbocImportProcess button.close.popup-close-btn {
+    margin: 0px !important;
+}
+
+.checkbocImportProcess .modal-content {
+    border-color: transparent !important; 
+}
+
+.checkbocImportProcess .modal-dialog.modal-lg.modal-dialog-centered {
+    justify-content: center;
+}
+
+.checkbocImportProcess .modal-content.rounded-0 {
+    width: 456px;
+}
+
+.checkbocImportProcess .check-in-info {
+    float: left;
+    padding: 0px 30px;
+}
+
+.checkbocImportProcess .check-in-info p {
+    line-height: 24px;
+}
+
+.checkbocImportProcess .check-submit {
+    float: left;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.manage-back-btn {
+    margin-top: 70px;
+    float: left;
+    width: 100%;
+}
+
+@media only screen and (min-width:320px) and (max-width:767px) {
+    .manage-back-btn {
+        margin-top: 20px;
+    }
+
+}

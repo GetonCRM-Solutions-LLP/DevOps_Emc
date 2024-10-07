@@ -1,0 +1,640 @@
+  /*Media Queries Section*/
+        /* Mobile View */
+        @media screen and (max-width: 767px) and (min-width: 320px) {
+            #example_filter {
+                position: relative !important;
+                right: 0px !important;
+                top: 0px !important;
+            }
+            .w-85{
+                width: 100%;
+            }
+            .report-link h3 {
+                font-size: 18px !important;
+            }
+            .btn-secondary{
+                font-size: 15px !important;
+            }
+            .nav .nav-item{
+                font-size: 14px !important;
+            }
+            .w-105{
+                width: 100% !important;
+            }
+            .w-68 {
+                width: 99% !important;
+            }
+    }
+    /* iPad view */
+    @media screen and (max-width: 991px) and (min-width: 768px) {
+        #example_filter {
+            position: absolute !important;
+            right: 107px !important;
+            top: 0px !important;
+            }
+        .w-105{
+            width: 144% !important;
+        }
+        .w-68 {
+                width: 99% !important;
+            }
+            .w-85{
+                width: 144% !important;
+            }
+  }
+  @media only screen and (min-width: 992px) {
+    #example_filter {
+        position: absolute;
+        right: 24px;
+        top: 0px;
+    }
+    #driver-dashboard-monthrecord #example_filter .w-85 {
+        width: 98% !important;
+    }
+    /* .w-68 {
+    height: 59px !important;
+    width: 72% !important;
+    } */
+}
+  /* iPad-Pro view */
+  @media screen and (max-width: 1024px) and (min-width: 992px) {
+    .w-68 {
+                width: 96% !important;
+    }
+  }
+
+  @media only screen and (min-width: 1200px) {
+            .w-68 {
+                height: 59px !important;
+                width: 76% !important;
+            }
+        }
+
+        @media only screen and (min-width: 1824px) {
+            .w-68 {
+                height: 59px !important;
+                width: 50% !important;
+            }
+            #driver-dashboard-monthrecord #example_filter {
+                right: 29px !important;
+                top: 8px !important;
+            }
+        }
+   /*Media Queries Section Ends*/
+
+    /*Search Bar Css */
+    #driver-dashboard-monthrecord #example_filter {
+        right: 29px !important;
+        top: 8px !important;
+    }
+    #driver-dashboard-monthrecord  #filtericon{
+        padding: 10px;
+        right: 0;
+        position: absolute;
+        display: block;
+        z-index: 4;
+        cursor: pointer;
+    }
+    #example_filter{
+            position: absolute;
+            right: 52px;
+            top: 162px;
+        }
+        #filtericon {
+            padding: 10px;
+            right: 0;
+            position: absolute;
+            display: block;
+            z-index: 4;
+            cursor: pointer;
+        }
+        .w-85{
+            width: 57%;
+        }
+        .w-105{
+            width: 106%;
+        }
+     /*Search Bar Css Ends */
+
+     /* Upload Insurance Css Starts */
+     .greenText{
+        font-size: 14px;
+        font-weight: 600;
+        color: #78bc42;
+        position: absolute;
+        top: 36px;
+        left: 88px;
+    }
+    .redText{
+        position: absolute;
+        top: 76px;
+        right: 74px;
+        font-size: 11px;
+        color: #ff0000;
+        font-weight: 600;
+    }
+    .image-cardtext{
+        right: 30px;
+        top: 0px;
+    }
+    .fileupload-title {
+        color: #000000 !important;
+        font-size: 18px !important;
+    }
+    .fileupload-title-2 {
+        color:#78bc42 !important;
+    }
+    .insDiv{
+        width: 157%;
+        margin-left: -80px;
+    }
+    .image-Insurancetext{
+        position: absolute;
+        top: 0px;
+    }
+    .box__dragndrop:hover {
+        background-color: #6c757d !important;
+    }
+    .box__dragndrop:hover .uploadtxt{
+        color: #fff;
+    }
+    .uploadtxt{
+        color: #6c757d;
+        text-transform: uppercase;
+    }
+    .ml-45{
+        position: absolute;
+        top: 4px;
+        margin-left: 30rem;
+    }
+    .numberSelect{
+        display: inline-block !important;
+        width: 13% !important;
+    }
+    .box__dragndrop{
+        color: #dddddd !important;
+        display: inline-block !important;
+        background-image: none !important;
+        background: none !important;
+        border-radius: 0px !important;
+        border: 3px solid !important;
+        margin-right: 120px !important;
+        padding: .375rem .75rem !important;
+        transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out !important;
+    }
+    .successMsg{
+        top: 124px !important;
+        left: 230px !important;
+        position: absolute !important;
+        font-weight: bold;
+        font-size: 14px !important;
+        color: #78bc42 !important;
+    }
+    .greenText{
+        font-size: 14px;
+        font-weight: 600;
+        color: #78bc42;
+        position: relative;
+        top: 36px;
+        left: 88px;
+    }
+    .greenText2{
+        position: relative;
+        font-size: 14px;
+        font-weight: 600;
+        color: #78bc42;
+        top: 53px;
+        left: 28px;
+    }
+    .tagquestion{
+        top: -14px;
+        position: relative;
+        color: #78bc42;
+        right : 5px;
+        font-size: 14px;
+    }
+    .displayblock
+    {
+        display: block !important;
+    }
+    .displaynone
+    {
+        display: none !important;   
+    }
+    /* Upload Insurance Css Ends */
+    /*Modal Css */
+        #modalofconfirmation {
+            opacity: 1 !important;
+        }
+        #modalbackdrop{
+            opacity: 0.7 !important;
+            z-index: 1050 !important;
+        }
+        .modal-backdrop.fade {
+            opacity: 0.7 !important;
+        }
+
+        .fade:not(.show) {
+            opacity: 1;
+        }
+
+        .modal-dialog {
+            z-index: 1057;
+        }
+        .modal-body {
+            padding: 1rem !important;
+            position: relative !important;
+        }
+        .modal.fade .modal-dialog{
+            transform: none !important;
+        }
+        .modal-divider {
+            border-top: 2px solid #d8d8d8;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        #exampleDialog #example_filter {
+            position: absolute;
+            right: 50px !important;
+            top: 16px !important;
+            }
+
+            .pull-right1{
+                float: right !important;
+            }
+        /* Modal Css Ends */
+
+        /*Chart.css */
+
+        .chart-header {
+        font-family: 'Proxima Nova SemiBold';
+        font-size: 26px;
+        color: #78bc42;
+        }
+        .chart .chart-bar{
+        display: block;
+        width: 1249px;
+        height: 437px;
+        }
+
+        /*Chart css Ends*/
+
+
+        /* Table Responsive Css */
+        table.dataTable thead th, table.dataTable thead td
+        {
+            padding: 10px 7px!important;
+           
+        }
+        table.dataTable thead th,
+        table.dataTable thead td {
+            padding: 10px 7px!important;
+        }
+
+        .table-nodata {
+            text-align: center;
+        }
+        table.dataTable tbody th,
+        table.dataTable tbody td {
+            padding: 5px 8px !important;
+        }
+        table.dataTable thead .approvedDateth {
+            width: 2vw !important;
+            padding: 10px 0px!important;
+        }
+        table.dataTable thead .approveth {
+            padding: 10px 0px!important;
+        }
+
+        .mr-4{
+            margin-right: 4px !important;
+        }
+        /* Table Responsive Css Ends */
+
+        /*Pagination Css*/
+
+        .pagination {
+            display: inline-block;
+            padding-left: 0;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+        .pagination>li {
+            display: inline;
+        }
+        .pagination>li>a, .pagination>li>span {
+            position: relative;
+            float: left;
+            padding: 6px 12px;
+            margin-left: -1px;
+            line-height: 1.42857143;
+            color: #78bc42;
+            text-decoration: none;
+            background-color: #fff;
+            border: 1px solid #ddd;
+        }
+        .pagination>li:first-child>a, .pagination>li:first-child>span {
+            margin-left: 0;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+        }
+        .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+                color: #777;
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+        }
+        .pagination>.disabled>a, .pagination>.disabled>a:focus, .pagination>.disabled>a:hover, .pagination>.disabled>span, .pagination>.disabled>span:focus, .pagination>.disabled>span:hover {
+                color: #78bc42;
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+        }
+        .pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover {
+            z-index: 3;
+            color: #fff;
+            cursor: default;
+            background-color: #78bc42;
+            border-color: #78bc42;
+        }
+        .disable-pagination {
+            pointer-events: none;
+        }
+
+        .paginationformodal {
+            margin: 2px 0px !important;
+        }
+
+        .paginationformodal1 {
+            margin: 0px 0 !important;
+        }
+
+        .paginationformodaldownloadbutton {
+            /*margin-top: 17px;*/
+            margin-top: 0px;
+        }
+
+        .piginationpages {
+            color: #78bc42 !important;
+        }
+
+        .paginationformodal>a {
+            color: #78bc42 !important;
+        }
+
+        table.dataTable tbody th, table.dataTable tbody td
+        {
+            padding: 5px 8px !important;
+            
+        }
+        /*Pagination Css Ends*/
+
+        /*Email Reminder Css */
+
+        .emailspan {
+            margin-right: 34px !important;
+        }
+        .emailchk{
+            margin-right: -13px !important;
+        }
+        table.dataTable thead .emailth {
+            padding: 10px 0px!important;
+            width: 10vw !important;
+        }
+        table.dataTable{
+            border-collapse: collapse;
+        }
+        /* Email Reminder CSS End */
+
+        /*Common Css*/
+        .align-all-center{
+            align-items: center;
+        }
+        .font-s{
+            font-size: 18px;
+        }
+        .mb-30{
+            margin-bottom: 30px !important;
+        }
+        .pull-left{
+            float: left;
+        }
+        .w-105{
+            width:105%;
+        }
+      
+        .vw-4 {
+            width: 4vw !important;
+        }
+        .w-rem{
+            width: 1rem;
+        }
+        .mr-15{
+            margin-right: 27px;
+        }
+        .mr-23{
+            margin-right: 23px;
+        }
+        .mr-13{
+            margin-right: 13px;
+        }
+        .mr-11 {
+            margin-right: 11px !important;
+        }
+        .mr-1{
+            margin-right: 1px;
+        }
+        .appspan {
+            margin-right: 7px !important;
+        }
+        .syncMileageBtn{
+            font-size: 12px !important;
+            padding: 2px 8px !important;
+        }
+        .btn-primary-approve {
+            color: #fff !important;
+            background: #78bc42 !important;
+            border-color: #78bc42 !important;
+            font-size: 18px !important;
+            font-family: 'Proxima Nova Bold' !important;
+            border-radius: 0px !important;
+            float: right !important;
+        }
+        .approvechk {
+            margin-right: -6px !important;
+        }
+        .pull-right1{
+            float: right !important;
+        }
+        .upapprovechk
+            {
+                float:right !important;
+                margin-right: 4px;
+            }
+            .upapprovecheck{
+                float:right !important;
+            }
+            .mr-6{
+                margin-right: -6px
+            }
+        .statusapprove {
+            float: right !important;
+        }
+        .myteamcheck {
+            float: right !important;
+        }
+
+        .toast-progress {
+            background-color: #000000 !important;
+        }
+
+        .toast-success {
+            background-color: #78bc42 !important;
+        }
+
+        .toast-error {
+            background-color: #FF0000 !important;
+        }
+
+        #toast-container>div {
+            opacity: 5.8 !important;
+            border-radius: 3px 3px 3px 3px !important;
+            width: 100% !important;
+        }
+        table.dataTable tfoot th, table.dataTable tfoot td
+            {
+                padding: 10px 18px 6px 6px;
+            }
+        .spinner-background {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            opacity: 0.4;
+            top: 0px;
+            left: 0px;
+            position: fixed;
+            z-index: 1000000;
+        }
+
+        .spinner-load {
+            position: fixed;
+            top: 49%;
+            left: 49%;
+            z-index: 1000000;
+        }
+        .form-control:focus {
+            outline: 0 !important;
+            border-color: initial;
+            box-shadow: none;
+        }
+        .plt-0 {
+            padding-top: 0px !important;
+            padding-left: 1px !important;
+        }
+        .w-10rem{	
+            width: 7rem;	
+        }
+        /*admindriverdashboardfromadminmanager page css*/
+
+        .admin-driver-dashboard-address h5 {
+            font-size: 16px;
+            color: #78bc42;
+            font-family: 'Proxima Nova Bold';
+            }
+        .fuel-icon-detail h5 {
+            font-size: 16px;
+            color: #78bc42;
+            font-family: 'Proxima Nova Bold';
+            }
+        .form-divider{
+            border-top: 2px solid #d8d8d8;
+            margin-top: 40px;
+            margin-bottom: 30px;
+        }
+        .admin-driver-dashboard-milagedetail {
+            background: rgba(120, 188, 66, 0.08);
+            height: auto;
+            display: inline-block;
+        }
+        .admin-driver-dashboard-card{
+            background: #EBECED !important;
+            text-align: center !important;
+            color: #404b5b !important;
+        }
+        .admin-driver-dashboard-address p{
+            font-size: 22px;
+            color: #404b5b;
+            line-height: 27px;
+        }
+        .fuel-icon {
+            padding: 20px;
+        }
+        .fuel-icon-detail {
+            padding-top: 13px;
+            padding-left: 15px;
+        }
+        .fuel-icon p {
+            font-size: 16px;
+            color: #78bc42;
+        }
+        .driver-dashboard-card {
+            background: #EBECED !important;
+            text-align: center !important;
+            color: #404b5b !important;
+        }
+        .admin-roster-tab-section {
+            position: relative !important;
+        }
+        /* .index_value{
+            position: relative;
+            z-index: 4;
+        } */
+        .card.insurance-declaration-card {
+            margin-bottom: 10px;
+        }
+        .card.insurance-declaration-card .card-header {
+            background: #404b5b;
+        }
+        .insurance-declaration-card .card-header a {
+            color: #78bc42;
+            font-family: 'Proxima Nova SemiBold' !important;
+        }
+        .timeline .nav .nav-item {
+            background: transparent !important;
+            border: 1px solid #78bc42;
+        }
+        .tab-pills-width {
+            width: 840px !important;
+            float: left;
+        }
+        .plan-info-timeline {
+            margin-right: 135px !important;
+            padding: 0 25px;
+        }
+        .flex-parent {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+        }
+        .input-flex-container-driver {
+            display: flex !important;
+            width: 100% !important;
+            max-width: 1000px !important;
+            position: relative !important;
+            z-index: 0 !important;
+            justify-content: space-evenly !important;
+            margin-right: 270px !important;
+            height: 200px !important;
+        }
+        .font-s a{
+            color: #000000 !important;
+        }
+        .font-s a:hover{
+            text-decoration: none;
+        }
+        .alignitemscenter {
+            align-items: center;
+        }

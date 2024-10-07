@@ -1,0 +1,172 @@
+.flatpickr-calendar{
+    border-radius: 0 !important;
+    /* font-size: 13px !important; */
+}
+
+.flatpickr-months .flatpickr-month {
+    border-radius: 10px 10px 0 0 !important;
+    background: #404b5a !important;
+    height: 42px !important;
+}
+
+.flatpickr-innerContainer {
+    border-bottom : 0 !important
+}
+
+.flatpickr-current-month 
+.flatpickr-monthDropdown-months{
+    background: #404b5b !important;
+}
+
+.flatpickr-current-month 
+.flatpickr-monthDropdown-months :hover{
+    background: #404b5b !important;
+}
+
+span.flatpickr-weekday {
+    background: #ffffff !important;
+    color: #7abb4a !important;
+}
+
+.flatpickr-weekdays {
+    background: #ffffff !important;
+}
+
+.flatpickr-days {
+    border-radius: 0 0 10px 10px !important;
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+
+.flatpickr-day{
+    font-weight: 500 !important;
+}
+
+.flatpickr-months .flatpickr-next-month:hover svg{
+    fill: #7abb4a !important;
+}
+
+.flatpickr-calendar.arrowTop:after {
+    border-bottom-color: #404b5a !important
+}
+
+.flatpickr-current-month {
+    padding: 0.5em 0 0 0 !important;
+    color: #ffffff !important;
+    font-weight: 700!important;
+}
+
+.flatpickr-months .flatpickr-next-month, .flatpickr-months .flatpickr-prev-month {
+    height: 12px !important; /*34*/
+    padding: 14px !important; /*16*/
+    color: #7abb4a !important;
+    fill: #7abb4a !important;
+}
+
+.flatpickr-months .flatpickr-next-month svg path{
+    stroke: #7abb4a !important;
+    stroke-width: 2px;
+}
+
+.flatpickr-months .flatpickr-prev-month svg path{
+    stroke: #7abb4a !important;
+    stroke-width: 2px;
+}
+
+.flatpickr-calendar.showTimeInput.hasTime .flatpickr-time{
+    border: 0 !important;
+    background: #efefef !important;
+}
+
+.flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
+    background-color: #ffffff !important;
+    outline: 0;
+    padding: 0;
+    color: #1d1d1d !important;
+}
+
+.flatpickr-current-month .numInputWrapper span.arrowUp:after {
+    border-bottom-color: rgb(255 255 255 / 90%) !important;
+}
+
+.flatpickr-current-month .numInputWrapper span.arrowDown:after {
+    border-top-color: rgb(255 255 255 / 90%) !important;
+}
+
+.flatpickr-time .flatpickr-am-pm{
+    width: 26% !important;
+}
+
+.flatpickr-calendar.hasTime.noCalendar{
+    width: 155.875px !important;
+    border-radius: 0px !important;
+}
+
+.flatpickr-time .numInputWrapper {
+    width: 40% !important;
+    height: 40px !important;
+}
+
+.flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time input:focus, .flatpickr-time .flatpickr-am-pm:focus {
+    background: #fff !important;
+}
+
+.numInput.flatpickr-hour::selection{
+    background-color: transparent !important;
+}
+
+.numInput.flatpickr-minute::selection{
+    background-color: transparent !important;
+}
+
+.numInputWrapper span:hover{
+    background: transparent !important;
+}
+.flatpickr-calendar.hasTime .flatpickr-time{
+    border-top: 0 !important;
+}
+ .numInputWrapper span.arrowUp:after {
+    top: 70% !important;
+}
+.numInputWrapper span.arrowDown:after {
+    top: 15% !important;
+}
+.numInputWrapper span {
+    opacity: 1 !important;
+    border: 0 !important;
+}
+/* .flatpickr-time input {
+    background: #6c6c6c !important;
+    color: #ffffff !important;
+}
+
+.numInputWrapper span{
+    border: 1px solid rgb(255 255 255) !important;
+}
+
+.flatpickr-time .flatpickr-time-separator, .flatpickr-time .flatpickr-am-pm {
+    background: #6c6c6c !important;
+    color: #ffffff !important;
+}
+
+.flatpickr-time .numInputWrapper span.arrowUp:after {
+    border-bottom-color: #7abb4a !important;
+}
+
+.flatpickr-time .numInputWrapper span.arrowDown:after {
+    border-bottom-color: #7abb4a !important;
+}
+
+.flatpickr-time input:hover, .flatpickr-time .flatpickr-am-pm:hover, .flatpickr-time input:focus, .flatpickr-time .flatpickr-am-pm:focus{
+    background: #6c6c6c !important;
+    color: #ffffff !important;
+} */
+
+/*  */
+/* .dayContainer > .flatpickr-day:nth-child(7n-6){
+    color: #FA7800 !important;
+}
+
+.dayContainer > .flatpickr-day:nth-child(7n) {
+    color: #37c1ee !important;
+} */
