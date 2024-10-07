@@ -1,0 +1,48 @@
+<apex:page controller="TimeSheetReportController" contentType="txt/xml#Timesheet Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Time and Attendance Summary Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >EmployeeId</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >EntryDate</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Week 1</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Week 2</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Total Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >CompanyCode</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >GrossToNetCode</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >TypeCode</Data></Cell>
+                </Row>
+                <apex:repeat value="{!timeWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.EmployeeId}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.EntryDate}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.firstweekAmount}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.secondweekamount}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.HoursOrAmount}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.CompanyCode}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.GrossToNetCode}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.TypeCode}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

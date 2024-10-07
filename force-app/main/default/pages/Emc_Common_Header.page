@@ -1,0 +1,39 @@
+<apex:page showHeader="false" sidebar="false">
+	<header>
+	     <div class="main-header sticky" id="myHeader">
+	        <div class="container-fluid">
+	            <div class="row">
+	                <div class="col-md-12 p-0">
+	                    <nav class="navbar navbar-expand-md my-0 my-md-1 px-0">
+	                        <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" href="#">
+	                            <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)" alt="logo"/>
+	                        </a>
+	                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+	                            <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+	                        </button>
+	                    
+	                        <div class="collapse navbar-collapse flex-column col-12 col-sm-6 col-md-9 col-lg-9 col-xl-9 ml-3 ml-sm-0 ml-lg-0 align-items-end" id="collapsibleNavbar">
+	                            <ul class="navbar-nav flex-row">
+	                                <li class="nav-item">
+	                                    <a class="nav-link py-1 pr-1 text-white" href="#">Logout/Change User</a>
+	                                </li>
+	                            </ul>
+	                            <ul class="navbar-nav">
+	                                <li class="nav-item active">
+	                                    <a class="nav-link text-white" href="#">Dashbord</a>
+	                                </li>
+	                                <li class="nav-item">
+	                                    <a class="nav-link text-white" href="#">Drivers</a>
+	                                </li>
+	                                <li class="nav-item">
+	                                    <a class="nav-link text-white" href="#">Reports</a>
+	                                </li>
+	                            </ul>
+	                        </div>
+	                    </nav>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</header>
+</apex:page>

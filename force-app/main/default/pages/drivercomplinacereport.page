@@ -1,0 +1,82 @@
+<apex:page showHeader="false" sidebar="false" controller="driverComplianceReport">
+    <link rel='stylesheet' href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}" type='text/css' media='all'/>
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="{!$Resource.Table2Excel}"> </script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script> -->
+    <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script> -->
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <!-- <apex:includeScript value="{!URLFOR($Resource.tabletoscv,'/tabletocsv/table2csv.js')}" ></apex:includeScript> -->
+    
+    <apex:stylesheet value="{!URLFOR($Resource.imgspinner)}"/>
+    <style>
+        .panel-group .panel-footer
+        {
+            float: left;
+            width: 100%;
+        }
+        .panel.panel-default
+        {
+            float: left;
+            width: 100%;
+        }
+        .widthundred
+        {
+            width: 100%;
+        }
+        .displaynone
+        {
+            display:none !important;
+        }
+        .nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {   
+            background-color: #5bc0de !important;    
+        }
+    </style>
+    <apex:form id="frm">
+    <div class="container">
+        <div class="row">
+            <table class="table">
+                <tr>
+                    <td>
+                        <b>Annual Tax Liability Summary Report </b>
+                    </td>
+                    <td>
+                         <button type="Button" class="btn" id="DownloadExcel2">
+                            Download 
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="row displaynone">
+            <div class="col-md-12">
+                <table class="table" id="table2">
+                    <tr>
+                        <th>Employee Name</th>
+                        <th>Employee ID</th>
+                        <th>Employee Email</th>
+                        <th>Imputed Income</th>
+                    </tr>
+                    <apex:repeat value="{!obj_wrapperTaxReport}" var="Taxreport">
+                        <tr>
+                            <td>{!Taxreport.drivername}</td>
+                            <td>{!Taxreport.employeeid}</td>
+                            <td>{!Taxreport.emailid}</td>
+                            <td>{!Taxreport.imputedincome}</td>
+                        </tr>
+                    </apex:repeat>
+                </table>
+            </div>
+        </div>
+     </div>
+     <script>         
+         $('#DownloadExcel2').click(function() {
+               $("#table2").table2excel( {
+                name: "Annual Tax Liability Report",
+                filename: "Annual_Tax_Liability_Report.xls" 
+               }); 
+               return false;
+
+           });
+        </script>
+        </apex:form>
+</apex:page>

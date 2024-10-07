@@ -1,0 +1,992 @@
+<template>
+    <div lwc:if={spinner}>
+        <div class="spinner-background opacity"></div>
+        <div class="loader">
+            <div class="svg-container">
+                <div style="position:relative">
+                    <img style="width: 180px;" src={loaderIcon}  />
+                 </div>
+            </div>
+            <div class="mloader-text">{loaderPlaceholder}</div>
+        </div>
+    </div>
+    <div class="slds-p-left_medium slds-p-right_large">
+        <div class="flex-container-view"><!--max-height: 268px;-->
+            <div class="slds-p-around_x-small slds-m-right_medium flex-view-1">
+                <div class="slds-p-vertical_small" style="display: flex;
+                        flex-direction: row;">
+                    <div class="slds-col slds-size_8-of-12 slds-p-left_small slds-p-right_small slds-p-bottom_small">
+                        <template lwc:if={isNotIRS}>
+                            <div style="position: relative;
+                            font-family: 'Proxima Nova Bold' !important;
+                            font-size: 16px;
+                            line-height: 16px;
+                            color: #1D1D1D;">Reimbursement Vehicle:</div>
+                            <span data-customtooltip="Vehicle used to generate your reimbursement rates">
+                                    <svg class="vehicle-info-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" fill="none">
+                                        <circle cx="12" cy="12" r="10.9333" transform="matrix(1 0 0 -1 3 27)" stroke="#4DBFFF" stroke-width="2.13333"/>
+                                        <path d="M15.995 11.8347C15.7283 12.112 15.3976 12.2507 15.003 12.2507C14.6083 12.2507 14.2723 12.112 13.995 11.8347C13.7283 11.5573 13.595 11.2213 13.595 10.8267C13.595 10.432 13.7283 10.1013 13.995 9.83467C14.2723 9.55734 14.6083 9.41867 15.003 9.41867C15.3976 9.41867 15.7283 9.55734 15.995 9.83467C16.2723 10.1013 16.411 10.432 16.411 10.8267C16.411 11.2213 16.2723 11.5573 15.995 11.8347ZM16.235 20.6667H13.771V12.9387H16.235V20.6667Z" fill="#4DBFFF"/>
+                                    </svg>
+                            </span>
+                            <div class="slds-p-top_x-small" style="
+                                    font-weight: 400;
+                                    font-family: 'Proxima Nova';
+                                    font-size: 14px;
+                                    line-height: 14px;color: #6C6C6C;">{vehicleType}</div>
+                        </template>
+                        <template lwc:else>
+                            <div style="position: relative;
+                            font-family: 'Proxima Nova Bold' !important;
+                            font-size: 16px;
+                            line-height: 16px;
+                            color: #1D1D1D;">{vehicleType}:</div>
+                        </template>
+                    </div>
+
+                    <div lwc:if={isNotIRS} class="slds-col slds-size_4-of-12 slds-p-right_x-small slds-p-bottom_medium">
+                        <div style="
+                                font-family: 'Proxima Nova Bold' !important;
+                                font-size: 16px;
+                                line-height: 16px;
+                                color: #1D1D1D;">Home:</div>
+                        <div class="slds-p-top_x-small" style="font-family: 'Proxima Nova';
+                                font-style: normal;
+                                font-weight: 400;
+                                font-size: 14px;
+                                line-height: 14px;color: #6C6C6C;">{address}</div>
+                    </div>
+                </div>
+
+                <div
+                    class="carProfile slds-p-bottom_large slds-p-horizontal_medium slds-align_absolute-center" style="width: 358.511px;
+                    height: 217px;">
+                    <!--height:170px;width: 265px;-->
+                    <template lwc:if={isNotIRS}>
+                        <img src={vehicleImage} loading="eager" />
+                    </template>
+                    <template lwc:else>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="276" height="109.279" viewBox="0 0 276 109.279" fill="none"><path d="M116.267 16.994c4.279 0.182 7.214 1.038 8.436 2.078 1.223 1.04 1.896 3.79 1.896 7.703v48.23c0 4.097 -0.672 6.663 -1.896 7.703 -1.222 1.04 -4.095 1.712 -8.436 1.896v2.078h31.542v-2.078c-4.279 -0.184 -7.03 -0.856 -8.436 -1.896 -1.223 -1.04 -1.896 -3.606 -1.896 -7.703V26.775c0 -3.973 0.672 -6.663 1.896 -7.703 1.345 -1.04 4.095 -1.894 8.436 -2.078v-1.896H116.267z" fill="#010202"/><path d="M214.257 83.075c-1.223 -0.856 -2.75 -1.896 -4.095 -3.606L188.4 52.02c5.991 -1.04 10.453 -2.935 14.059 -5.807 3.424 -2.935 5.135 -6.847 5.135 -12.349 0 -7.885 -3.973 -13.57 -11.493 -16.444 -4.095 -1.712 -9.292 -2.2 -15.464 -2.2h-29.893v1.894c3.975 0.367 6.358 1.04 7.397 2.2 1.223 1.223 1.896 3.608 1.896 7.519v46.643c0 4.646 -0.672 7.518 -1.712 8.741 -1.04 1.04 -3.424 1.896 -7.519 2.2v2.079h29.709v-2.078c-4.095 -0.184 -6.54 -1.04 -7.885 -2.079 -1.223 -1.038 -1.896 -3.606 -1.896 -7.518V53.55l5.991 -0.184 25.368 33.254h15.282l-0.366 -2.385c-0.856 -0.184 -1.896 -0.49 -2.752 -1.163m-43.402 -33.498V22.802c0 -1.712 0.367 -2.568 1.04 -2.935 0.672 -0.672 2.385 -0.855 5.502 -0.855 4.462 0 8.068 0.672 10.82 1.894 5.135 2.2 7.519 6.663 7.519 12.838 0 6.663 -2.935 11.124 -8.437 13.387 -3.239 1.283 -8.924 2.139 -16.444 2.445" fill="#010202"/><path d="M259.004 57.156c-2.385 -3.117 -6.541 -6.541 -12.349 -10.269l-9.413 -5.685c-3.424 -2.2 -5.991 -4.462 -7.703 -6.541 -1.712 -1.894 -2.385 -4.095 -2.385 -7.212 0 -2.935 1.04 -5.502 3.119 -7.214 2.2 -1.894 4.829 -2.75 7.518 -2.75 3.791 0 7.703 1.527 11.309 4.095 3.973 2.752 6.847 7.519 8.437 14.426h2.383l-2.201 -22.984h-2.2c-0.184 1.222 -0.672 2.078 -1.04 2.75 -0.672 0.672 -1.345 1.04 -2.934 1.04 -0.367 0 -2.201 -0.672 -5.807 -1.896 -3.424 -1.222 -6.358 -1.894 -8.742 -1.894 -5.991 0 -10.82 1.894 -14.243 5.5 -3.79 3.791 -5.318 8.252 -5.318 13.572 0 4.095 1.345 7.885 4.462 11.309 1.345 1.894 3.79 3.606 6.358 5.502l9.108 5.684c5.318 3.424 8.924 5.807 10.269 7.519 2.752 2.568 3.973 5.685 3.973 9.292 0 3.973 -1.222 6.847 -3.973 9.292 -2.201 2.079 -5.318 3.117 -8.741 3.117 -6.358 0 -11.493 -2.567 -15.955 -7.518a42.731 42.731 0 0 1 -6.174 -11.493h-2.385l2.568 19.377c0.672 0.184 1.345 0.367 2.201 0.367v2.078h-1.896l0.184 1.223h2.385c0 -1.04 0.366 -1.894 0.855 -2.567 0.367 -0.856 1.223 -1.223 2.385 -1.223 0.367 0 2.385 0.672 6.174 1.896 3.423 1.222 7.03 1.894 10.269 1.894 6.541 0 11.981 -1.894 16.138 -5.685 4.279 -3.79 6.358 -8.557 6.358 -14.243 0.427 -4.095 -0.734 -7.703 -2.995 -10.76" fill="#010202"/><path d="M219.392 84.603c-0.856 0 -1.529 -0.184 -2.201 -0.367l0.367 2.385h1.896c-0.062 0.06 -0.062 -2.017 -0.062 -2.017" fill="#010202"/><path d="M99.458 21.273c-1.04 -1.712 -11.494 -6.663 -26.776 -9.78 -6.173 6.847 -6.173 9.597 -6.356 10.637s2.078 3.973 4.279 6.847c4.095 5.5 5.318 6.54 5.991 8.252 1.223 2.934 -0.856 10.148 -2.2 16.444 0 -0.184 -3.791 -13.877 -5.32 -22.618 -0.182 -0.855 0 -1.223 0 -1.223 -9.292 -0.855 -15.588 -1.222 -16.627 3.608 -4.279 0 -6.358 1.222 -6.845 2.078 -1.04 1.896 0.182 5.685 1.038 7.519 0.672 -1.527 4.279 -1.223 5.502 -1.223 0.672 0.184 0.672 0.367 0.855 0.856v18.339h-11.124l-9.415 25.919c4.28 2.078 9.109 3.79 11.983 3.79 2.934 0 10.146 -3.79 11.124 -3.79 0.856 0 8.07 3.79 11.004 3.79s7.519 -1.527 11.981 -3.79l-9.415 -25.919h-11.124v-17.667c-0.184 -1.04 -0.672 -1.527 -1.04 -1.527l5.502 -0.185c-0.856 -3.117 -1.896 -5.502 -3.423 -5.684 0.366 -0.672 0.855 -1.04 1.345 -1.529h-4.28c0.367 -2.2 5.991 -1.529 8.436 -1.223 2.385 12.349 7.214 29.159 7.397 29.343 0.182 0.182 4.095 1.711 4.462 1.894 2.2 -4.951 5.807 -19.745 5.991 -23.351 2.934 1.038 1.894 4.829 1.223 8.742 -3.241 20.049 -5.991 26.223 -6.543 30.013 2.935 -0.672 4.464 -1.222 4.953 -1.527 0.367 -0.672 1.712 -3.975 2.934 -7.703 1.712 -5.502 4.28 -19.194 4.28 -24.696 0 -1.223 -1.223 -2.752 -3.119 -3.608 0 0 1.04 -1.711 1.345 -2.934 0.672 -1.223 1.223 -3.79 1.223 -3.79 1.223 0.367 2.078 0.855 2.2 2.078 0.672 5.318 0.368 5.685 -0.366 15.467 0 2.932 -1.223 9.29 -2.2 15.77 -2.079 11.676 -4.097 16.812 -4.097 18.706 3.117 -1.04 5.502 -1.896 5.807 -2.201 0.182 -0.367 2.385 -5.991 4.095 -14.732 0.672 -3.791 1.04 -7.397 1.712 -11.125 0.855 -4.953 1.04 -10.269 1.04 -14.428 0 -6.356 0.855 -6.356 -3.973 -8.741 1.894 -4.951 1.345 -8.436 1.038 -9.415 -0.855 -1.711 -1.711 -1.711 -5.807 -1.527 1.345 1.527 1.04 4.095 0.672 5.807 -0.855 -0.672 -0.366 -1.896 -4.829 -1.712 -0.672 -7.212 -2.078 -7.885 -2.078 -8.252 -0.672 -0.855 -4.279 -0.367 -5.318 0 0.855 0.672 2.385 5.991 1.712 8.436 -0.367 -0.672 -6.541 -7.701 -6.174 -9.108 0.367 -0.855 0.855 -1.712 2.934 -4.095 7.214 1.527 19.377 5.991 20.233 7.397 0.672 1.709 1.345 3.605 1.896 6.356 0.672 4.095 1.896 13.876 1.223 28.669 -0.672 15.467 -2.752 24.025 -2.385 23.658 2.2 -0.672 5.807 -4.097 6.174 -4.951 1.038 -2.568 1.345 -11.493 1.711 -19.745 -0.182 -8.07 -1.038 -18.339 -1.345 -22.313 -1.222 -9.659 -1.894 -12.227 -3.117 -14.304m-55.2 64.186c-2.201 0 -5.502 -0.367 -5.502 -0.367l5.502 -16.322 5.135 16.322c0 -0.184 -3.119 0.367 -5.135 0.367m27.569 -0.551s-3.241 0.367 -5.502 0.367c-1.896 0 -5.135 -0.367 -5.135 -0.367l5.135 -16.322zM57.582 72.438v-6.358h4.829L55.2 86.314l-7.214 -20.049h4.829v4.461s0 0.367 0.182 0.367c0.672 0.367 0.857 0.367 0.857 0.367zm0.551 -33.133h-8.252c-0.672 -2.078 0 -2.567 1.894 -2.75 3.241 -0.184 6.174 -0.184 6.358 2.75m23.474 -8.924c2.934 -0.367 1.711 4.951 0.855 7.214 -1.222 -2.568 -2.078 -4.097 -3.973 -6.541 1.101 -0.489 1.957 -0.489 3.119 -0.672" fill="#010202"/><path d="M27.936 75.677c1.345 -1.711 6.54 -6.845 7.397 -9.779 0.855 -3.424 1.711 -11.676 1.711 -13.572 0 0 -5.135 3.606 -7.703 6.358 -1.222 1.222 -2.75 3.423 -2.75 3.423 -0.672 -2.934 0.182 -6.358 1.345 -8.252 1.711 -2.935 7.885 -8.252 8.742 -10.453 1.345 -3.608 1.222 -6.663 2.2 -10.453 -4.095 1.527 -9.292 4.646 -11.86 7.397 -0.182 -4.097 1.04 -7.215 3.791 -9.293 3.973 -3.117 9.292 -4.829 12.531 -5.807 2.934 -0.855 7.703 -1.712 9.964 -2.934 4.279 -2.079 8.436 -8.252 9.415 -11.309 -1.345 0 -6.543 -0.184 -11.493 1.711 -1.896 0.856 -2.752 2.568 -3.424 3.975 -0.855 1.222 -1.711 2.567 -2.383 3.606 -2.079 3.117 -4.464 4.646 -7.519 5.502 0 -0.184 2.078 -1.529 3.423 -4.646 1.223 -2.752 2.752 -7.886 2.752 -8.437 -2.752 0.367 -4.28 1.223 -7.214 2.201 -2.934 1.223 -3.973 2.568 -4.462 3.79 -2.078 3.119 -1.345 11.981 -5.502 15.282 0.184 -4.646 1.223 -9.597 -0.367 -15.282 -8.252 3.424 -9.964 6.358 -9.292 9.78 0.856 4.829 5.991 6.847 8.252 11.004 0.856 1.223 1.04 2.935 1.04 2.935 0.184 0 -1.711 2.2 -1.038 6.845 0 0 -1.712 -3.423 -3.241 -5.502 -2.385 -3.117 -7.212 -8.252 -7.212 -8.252 -1.04 12.838 0.672 15.467 1.222 16.444 1.712 2.752 7.519 6.847 8.924 9.597 0.672 1.223 0.856 1.712 0.856 1.712 0.184 0.367 -1.222 2.079 -1.038 4.462 0.182 0.856 0.366 1.712 0.672 2.935 0 0 -1.896 -2.752 -4.28 -5.502 -2.078 -2.568 -6.358 -5.685 -6.54 -5.685 -0.184 1.527 0.672 8.557 0.855 9.78 0.367 3.606 0.672 6.847 3.791 10.148 2.383 2.568 10.82 5.991 12.531 6.663 0 0 -0.367 -1.712 -1.222 -3.973 -1.529 -2.508 -2.873 -6.419 -2.873 -6.419" fill="#010202"/></svg>
+                    </template>
+                </div>
+
+            </div>
+
+            <div class="slds-m-right_medium slds-p-around_small flex-view-2">
+                <div class="slds-size_12-of-12 slds-p-left_small" style="display: flex;flex-direction:column">
+                    <template lwc:if={isDrivingSt}>
+                        <div style="font-size: 16px;font-family: 'Proxima Nova Bold' !important;color: #1D1D1D">Add Driving
+                            States
+                                <svg lwc:if={isSelectedState} xmlns="http://www.w3.org/2000/svg" width="19" height="19.904" onclick={addState} viewBox="0 0 26.238 19.904" fill="none" style="margin: 0px 0px 4px 12px;cursor: pointer"><path d="M9.824 19.678a1.52 1.52 0 0 1 -1.082 -0.458L0.447 10.801a1.586 1.586 0 0 1 0 -2.211 1.508 1.508 0 0 1 2.163 0l7.212 7.313L23.627 0.458a1.508 1.508 0 0 1 2.162 0c0.598 0.611 0.598 1.6 0 2.211L10.905 19.22a1.51 1.51 0 0 1 -1.08 0.458" fill="#7ABB4A"></path>
+                                </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" onclick={removeState} fill="none" style="margin: 0 0 4px 8px;cursor: pointer">
+                                    <path d="M5.29944 15.906L15.906 5.29943" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                    <path d="M5.29944 5.3071L15.906 15.9137" stroke="#FA7800" stroke-width="1.78286" stroke-linecap="round"/>
+                                </svg>
+                        </div>
+                        <div class="slds-p-top_x-small" style=" font-family: 'Proxima Nova' !important;font-weight: 400;
+                            font-size: 14px;
+                            line-height: 14px;
+                            color: #6C6C6C;">{drivingTitle}</div>
+                    </template>
+                    <template lwc:else>
+                        <div style="font-size: 16px;font-family: 'Proxima Nova Bold' !important;color: #1D1D1D">Driving
+                            States
+                            <span data-statetooltip="Add Driving State">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin: 0 0 4px 8px;width: 12px;height: 12px;cursor:pointer" onclick={addDrivingState}>
+                                    <path d="M7 13L7 1" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                    <path d="M1 7L13 7" stroke="#7ABB4A" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+                            </span>
+                        </div>
+                        <div class="slds-p-top_x-small" style=" font-family: 'Proxima Nova' !important;font-weight: 400;
+                            font-size: 14px;
+                            line-height: 14px;
+                            color: #6C6C6C;">{subTitle}</div>
+                    </template>
+                </div>
+                <div
+                    class="slds-align_absolute-center slds-p-top_x-small slds-p-bottom_medium" style="width: 276px;
+                    height: 230px;">
+                    <c-choropleth-map contact-id={contactId} background="#FFFFFF" border-color="#FFFFFF"
+                         type={typeMap} canada={canadaStatesList} onstateclick={getSelectedStates}></c-choropleth-map>
+                </div>
+                <div class="view-map slds-p-around_xx-small" lwc:if={multipleMap}>
+                    <div dir="ltr">
+                        <div class="slds-form-element">
+                          <label class="slds-checkbox_toggle slds-grid">
+                            <input type="checkbox" name="checkbox-toggle-16" value="checkbox-toggle-16" aria-describedby="checkbox-toggle-16" onchange={handleMap} checked={checkAll}/>
+                            <span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+                              <span class="slds-checkbox_faux toogle-input"></span>
+                              <span class="slds-checkbox_on"></span>
+                              <span class="slds-checkbox_off"></span>
+                            </span>
+                            <!-- <span class="slds-form-element__label slds-m-bottom_none slds-m-left_small input-label"><span class="map-label map--us">USA</span> <span class="map-label map--canada">/ Canada</span></span> -->
+                          </label>
+                        </div>
+                      </div>
+                </div>
+            </div>
+
+            <div class="slds-p-around_medium flex-view-3">
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12">
+                    <div class="slds-p-left_medium" style="
+                            font-family: 'Proxima Nova Bold' !important;
+                            font-size: 16px;
+                            line-height: 16px;
+                            color: #1D1D1D;">Notifications</div>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                    <template lwc:if={notifyMessage}>
+                        <div class="notify-container overflow">
+                                <template lwc:if={isNotify}>
+                                    <div class="slds-grid slds-wrap slds-align_absolute-center slds-m-vertical_small" style="margin-left: 16px;
+                                    margin-right: 16px;">
+                                        <!-- <div>{notifyList.length}</div> -->
+                                        <template for:each={notifyMessageList} for:item="notify" for:index="index">
+                                            <div data-id={notify.id} key={notify.id}
+                                                class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text"
+                                                style="
+                                                width: 100%;
+                                                height: auto;
+                                                border-radius: 10px;
+                                                background: #fa780014;
+                                                display: flex;
+                                                flex-direction: row;">
+                                                <div class="slds-p-top_xx-small
+                                                        slds-p-left_xx-small slds-p-right_x-small">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9"
+                                                        viewBox="0 0 9 9" fill="none">
+                                                        <circle cx="4.5" cy="4.5" r="4.5" fill="#FA7800" />
+                                                    </svg>
+                                                    <!-- <img style="width: 12px;" src={circle} /> -->
+                                                </div>
+                                                <div class="slds-p-right_small" style="font-family: 'Proxima Nova Bold' !important;font-size: 14px;width:100%;
+                                                        line-height: 17px;
+                                                        letter-spacing: 0em;
+                                                        text-align: left;
+                                                        ">{notify.notificationMessage}
+                                                    <div style="font-family: 'Proxima Nova Semibold' !important;
+                                                        font-size: 12px;
+                                                        line-height: 12px;
+                                                        color: #FA7800;
+                                                        " class="slds-p-top_x-small"> <lightning-formatted-date-time
+                                                            value={notify.modifiedDate} year="numeric" day="2-digit"
+                                                            month="long" hour="2-digit" minute="2-digit"
+                                                            time-zone="America/Panama">
+                                                        </lightning-formatted-date-time></div>
+                                                </div>
+                                                <div class="slds-p-right_xx-small close-notify" data-id={notify.id}
+                                                    onclick={handleClose}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
+                                                        viewBox="0 0 19 19" fill="none">
+                                                        <path d="M4.53906 13.6328L13.6303 4.54161" stroke="#FA7800"
+                                                            stroke-width="1.7" stroke-linecap="round" />
+                                                        <path d="M4.53906 4.55469L13.6303 13.6459" stroke="#FA7800"
+                                                            stroke-width="1.7" stroke-linecap="round" />
+                                                    </svg>
+                                                    <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18"
+                                                        viewBox="0 0 20 18" fill="none" data-id={notify.id}
+                                                        onclick={handleClose}>
+                                                        <path d="M5.57812 13.4141L14.7504 4.58439" stroke="#1D1D1D"
+                                                            stroke-linecap="round" />
+                                                        <path d="M5.57812 4.58594L14.7504 13.4156" stroke="#1D1D1D"
+                                                            stroke-linecap="round" />
+                                                    </svg> -->
+                                                </div>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
+                                <template lwc:else>
+                                    <div class="slds-grid slds-wrap slds-p-left_medium slds-m-vertical_small">
+                                        <div  class="slds-grid_vertical slds-wrap slds-align_absolute-center" style="margin: 50px auto">
+                                            <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 30 30" fill="none">
+                                                <g clip-path="url(#a)">
+                                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                                        d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                                        fill="#1d1d1d66" />
+                                                    <path
+                                                        d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                                        stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                                    <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)" stroke="#1d1d1d66"
+                                                        stroke-width="1.128" />
+                                                    <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028" transform="rotate(49.135 23.336 23.688)"
+                                                        stroke="#1d1d1d66" stroke-width="1.128" />
+                                                    <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                                                </g>
+                                                <defs>
+                                                    <clipPath>
+                                                        <path fill="#fff" d="M0 0h30v30H0z" />
+                                                    </clipPath>
+                                                </defs>
+                                            </svg>
+                                            <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                                                No Data
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                        </div>
+                        <div class="notify-toggle slds-p-around_medium" lwc:if={isNotify}>
+                            <button class="slds-button a-link" onclick={showAll}>View all</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+
+        <div class="slds-m-top_medium slds-m-bottom_medium middle-block">
+            <div class="slds-p-left_medium slds-p-top_medium slds-p-bottom_small middle-1">
+                <div class="slds-p-vertical_small icon-holder" style="float: left;">
+                    <!-- <img class="middle-icon" src={milesIcon} loading="eager" /> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" fill="none">
+                        <path
+                            d="M35.254 4.6c3.355 0 6.146 2.469 6.146 5.748 0 .8-.19 1.84-.48 2.57-1.644 3.312-3.304 6.633-4.959 9.947a.791.791 0 0 1-.695.416h-9.967c-1.924 0-3.45 1.429-3.45 3.232 0 1.805 1.526 3.234 3.45 3.234h4.983c3.172 0 5.75 2.415 5.75 5.388 0 2.975-2.578 5.39-5.75 5.39H11.5a.79.79 0 0 1-.695-.416c-1.866-3.732-3.818-7.437-5.666-11.17a8.223 8.223 0 0 1-.539-2.785c0-3.649 3.125-6.466 6.912-6.466s6.888 2.821 6.888 6.466c0 .888-.227 2.001-.538 2.785-1.708 3.381-3.435 6.765-5.152 10.149h17.573c2.351 0 4.217-1.751 4.217-3.953s-1.866-3.951-4.217-3.951H25.3c-2.746 0-4.983-2.095-4.983-4.671 0-2.574 2.237-4.669 4.983-4.669h8.758c-1.478-2.978-2.995-5.943-4.447-8.924a7.791 7.791 0 0 1-.478-2.573c0-3.278 2.766-5.747 6.121-5.747Zm0 1.437c-2.573 0-4.587 1.774-4.587 4.31 0 .532.209 1.616.383 2.067 1.397 2.815 2.811 5.627 4.217 8.441 1.374-2.826 2.795-5.56 4.217-8.441.175-.449.383-1.533.383-2.067 0-2.535-2.039-4.309-4.612-4.309Zm.013 1.795c1.472 0 2.683 1.135 2.683 2.515 0 1.38-1.211 2.515-2.683 2.515s-2.683-1.135-2.683-2.515c0-1.38 1.211-2.515 2.683-2.515Zm0 1.438c-.644 0-1.15.474-1.15 1.076 0 .604.506 1.078 1.15 1.078s1.15-.474 1.15-1.078c0-.603-.506-1.076-1.15-1.076ZM11.512 21.125c-2.99 0-5.379 2.136-5.379 5.029 0 .613.23 1.728.443 2.268 1.633 3.235 3.281 6.468 4.924 9.7 1.61-3.248 3.327-6.52 4.924-9.7.215-.541.445-1.656.445-2.269 0-2.893-2.367-5.028-5.356-5.028Zm-.012 1.797c1.897 0 3.45 1.457 3.45 3.232 0 1.779-1.553 3.234-3.45 3.234s-3.45-1.457-3.45-3.234 1.553-3.231 3.45-3.231Zm0 1.437c-1.067 0-1.917.794-1.917 1.796s.849 1.797 1.917 1.797 1.917-.797 1.917-1.797c0-1-.849-1.796-1.917-1.796Z"
+                            fill="#1D1D1D" />
+                    </svg>
+                </div>
+                <div class="slds-p-vertical_small slds-p-left_small" style="float: left;">
+                    <div class="content-text"
+                        style="font-family: 'Proxima Nova Bold' !important; font-size: 32px; line-height: 32px; color: rgb(29, 29, 29);"
+                       >
+                        <template lwc:if={lastMilesZero}>
+                            {lastMilesZero}
+                        </template>
+                        <template lwc:else>
+                            <lightning-formatted-number value={lastMonthMiles} maximum-fraction-digits="2"></lightning-formatted-number>
+                        </template>
+                        <!-- <i class="fa-solid fa-arrow-right-from-bracket slds-p-left_x-small"
+                                    style="font-size: 16px; line-height: 20px; cursor:pointer" onclick={getLastMonthMileage}></i> -->
+                    </div>
+                    <div class="slds-p-top_xx-small"
+                        style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;" onclick={getLastMonthMileage}>
+                        {lastmonthAbbr} Mileage
+                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none"  >
+                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                        </svg> -->
+                    </div>
+                </div>
+                <div class="slds-m-vertical_x-small slds-p-right_small slds-p-left_small" style="float: left;">
+                    <div style="height: 58px; border: 1px solid #d7d7d7;"></div>
+                </div>
+                <div class="slds-p-vertical_small" style="float: left;">
+                    <div style="display: flex;">
+                            <div class="content-text"
+                            style="font-family: 'Proxima Nova Bold' !important;display:flex;font-size: 32px;line-height: 32px;color: rgb(29, 29, 29);"
+                            >
+                                <template lwc:if={thisMilesZero}>
+                                    {thisMilesZero}
+                                </template>
+                                <template lwc:else>
+                                    <lightning-formatted-number value={thisMonthMiles} maximum-fraction-digits="2"></lightning-formatted-number>
+                                </template>
+                            </div>
+                            <svg class="synIcon" xmlns="http://www.w3.org/2000/svg" onclick={syncProcess} width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect width="24" height="24" rx="9" fill="#404B5A"/>
+                                <path d="M15.9769 7.88575C15.9135 7.82241 15.8502 7.75908 15.7869 7.69575C15.3435 7.31575 14.7735 6.99908 14.2035 6.80908C13.8235 6.68241 13.4435 6.61908 13.0635 6.61908C12.8102 6.61908 12.5569 6.61908 12.3035 6.61908C11.8602 6.68241 11.4169 6.80908 11.0369 6.99908C9.96021 7.50575 9.20021 8.26575 8.75688 9.27908C8.50354 9.72241 8.37687 10.2291 8.31354 10.7357C8.31354 10.9257 8.31354 11.1157 8.25021 11.3057C8.25021 11.5591 7.99687 11.7491 7.80687 11.8124C7.55354 11.8757 7.30021 11.8124 7.17354 11.5591C7.11021 11.4324 7.04688 11.3057 7.04688 11.1791C7.04688 10.2924 7.23688 9.53241 7.61688 8.70908C8.18687 7.56908 9.01021 6.68241 10.1502 6.04908C10.7202 5.73241 11.3535 5.54241 12.0502 5.41575C12.4935 5.35241 12.9369 5.35241 13.3802 5.35241C14.5835 5.47908 15.6602 5.92241 16.6102 6.74575L16.6735 6.80908V6.74575C16.6735 6.49241 16.6735 6.23908 16.6735 5.92241C16.6735 5.79575 16.6735 5.66908 16.7369 5.60575C16.8635 5.41575 17.1802 5.28908 17.4335 5.35241C17.6869 5.41575 17.8135 5.60575 17.8135 5.85908C17.8135 6.04908 17.8135 6.23908 17.8135 6.42908C17.8135 6.99908 17.8135 7.63241 17.8135 8.20241C17.8135 8.32908 17.8135 8.39241 17.8135 8.51908C17.7502 8.77241 17.5602 8.96241 17.3069 8.96241C17.0535 8.96241 16.8002 8.96241 16.5469 8.96241C15.9769 8.96241 15.4069 8.96241 14.8369 8.96241C14.5835 8.96241 14.3935 8.89908 14.2669 8.64575C14.0769 8.32908 14.2035 7.94908 14.5202 7.75908C14.5835 7.69575 14.6469 7.69575 14.7735 7.69575C14.9617 7.69575 15.2207 7.75908 15.9769 7.88575C15.9769 7.94908 15.9769 7.94908 15.9769 7.88575Z" fill="white"/>
+                                <path d="M8.32052 16.0543C8.32052 16.371 8.32052 16.6243 8.32052 16.941C8.32052 17.0043 8.32052 17.131 8.25719 17.1943C8.19385 17.4477 7.81385 17.6377 7.49719 17.511C7.24385 17.3843 7.18052 17.2577 7.11719 17.0043C7.11719 16.8143 7.11719 16.6243 7.11719 16.4343C7.11719 15.8643 7.11719 15.231 7.11719 14.661C7.11719 14.5343 7.11719 14.471 7.11719 14.3443C7.18052 14.091 7.37052 13.901 7.62385 13.901C7.87719 13.901 8.13052 13.901 8.38385 13.901C8.95385 13.901 9.52385 13.901 10.0939 13.901C10.2839 13.901 10.4739 13.9643 10.6005 14.091C10.7905 14.281 10.8539 14.7877 10.4739 14.9777C10.3472 15.041 10.2839 15.1043 10.1572 15.1043C9.77719 15.1043 9.46052 15.1043 9.08052 15.1043H9.01719L9.08052 15.1677C9.33385 15.421 9.58719 15.611 9.84052 15.7377C10.2839 15.991 10.7272 16.181 11.1705 16.2443C11.6772 16.371 12.2472 16.371 12.7539 16.3077C13.7039 16.181 14.5905 15.801 15.2872 15.1043C16.0472 14.4077 16.4905 13.521 16.6805 12.571C16.7439 12.3177 16.7439 12.0643 16.7439 11.811C16.7439 11.621 16.8072 11.4943 16.9339 11.3677C17.1239 11.1777 17.3139 11.1777 17.5672 11.241C17.8205 11.3043 17.8839 11.4943 17.9472 11.7477C17.9472 11.9377 17.9472 12.1277 17.9472 12.3177C17.8839 12.761 17.8205 13.2043 17.6939 13.6477C17.4405 14.4077 17.0605 15.1043 16.4905 15.6743C15.9839 16.2443 15.3505 16.6877 14.6539 17.0677C14.1472 17.321 13.6405 17.4477 13.0705 17.5743C12.5639 17.6377 12.0572 17.6377 11.5505 17.6377C10.4105 17.511 9.46052 17.131 8.57385 16.371C8.44719 16.181 8.38385 16.1177 8.32052 16.0543Z" fill="white"/>
+                            </svg>    
+                    </div>
+                    <div class="slds-p-top_xx-small"
+                        style="font-family: Proxima Nova;font-style: normal;font-weight: 400;font-size: 14px;line-height: 18px;color: #00AFE8;cursor: pointer;" onclick={getThisMonthMileage}>
+                        {thismonthAbbr} Mileage 
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                        </svg>  -->
+                    </div>
+                </div>
+            </div>
+            <div lwc:if={isNotIRS} class="slds-p-left_medium slds-p-top_medium slds-p-bottom_small middle-2">
+                <div class="slds-p-vertical_x-small icon-holder" style="float: left;">
+                    <!-- <img class="middle-icon" src={moneyIcon} loading="eager" /> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" fill="none">
+                        <path
+                            d="M5.603 12.583H39.422M36.039 9.2H8.985M3.91 15.964h37.2c0.468 0 0.846 0.379 0.846 0.846v18.599a0.845 0.845 0 0 1 -0.846 0.845H3.913A0.845 0.845 0 0 1 3.067 35.409v-18.599c0 -0.468 0.379 -0.846 0.845 -0.846Zm33.819 13.527v-6.762c0 -0.468 -0.386 -0.831 -0.836 -0.957a2.213 2.213 0 0 1 -1.595 -1.59c-0.123 -0.449 -0.485 -0.836 -0.951 -0.836H10.674c-0.466 0 -0.828 0.386 -0.951 0.836 -0.235 0.843 -0.831 1.374 -1.595 1.59 -0.449 0.126 -0.836 0.489 -0.836 0.955v6.764c0 0.468 0.389 0.833 0.83 0.984 0.736 0.253 1.316 0.834 1.569 1.567 0.153 0.442 0.517 0.831 0.983 0.831h23.675c0.466 0 0.831 -0.389 0.981 -0.831a2.536 2.536 0 0 1 1.569 -1.567c0.442 -0.153 0.831 -0.517 0.831 -0.984Zm-11.837 -3.389a3.383 3.383 0 1 1 -6.762 0 3.383 3.383 0 0 1 6.762 0Z"
+                            stroke="#1D1D1D" stroke-width="1.6909140000000003" stroke-miterlimit="10"
+                            stroke-linecap="round" />
+                    </svg>
+                </div>
+                <template lwc:if={biweekly}>
+                    <div class="slds-p-vertical_small slds-p-left_small" style="float: left;">
+                        <div class="content-text"
+                            style="font-family: 'Proxima Nova Bold' !important; font-size: 32px; line-height: 32px; color: rgb(29, 29, 29);"
+                           >
+                            <template lwc:if={halfFixedZero}>
+                                {halfFixedZero}
+                            </template>
+                            <template lwc:else>
+                                <lightning-formatted-number value={halfFixedAmount} format-style="currency"
+                                    currency-code="USD"></lightning-formatted-number>
+                            </template>
+                        </div>
+                        <div class="slds-p-top_xx-small"
+                            style="font-family: Proxima Nova; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; color: #00AFE8;" onclick={getBiweekReimbursement}>
+                           Biweek 
+                           <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none"  >
+                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                           </svg> -->
+                        </div>
+                    </div>
+                    <!-- <div class="slds-p-vertical_medium slds-p-left_x-small" style="float: left;"><i
+                                    class="fa-solid fa-arrow-right-from-bracket"
+                                    style="font-size: 16px; line-height: 20px;cursor:pointer" onclick={getBiweekReimbursement}></i></div> -->
+                </template>
+                <template lwc:else>
+                    <div class="slds-p-vertical_small slds-p-left_small" style="float: left;">
+                        <div class="content-text"
+                            style="font-family: 'Proxima Nova Bold' !important; font-size: 32px; line-height: 32px; color: rgb(29, 29, 29);"
+                           >
+                            <template lwc:if={fixedAmountZero}>
+                                {fixedAmountZero}
+                            </template>
+                            <template lwc:else>
+                                <lightning-formatted-number value={fixedAmount} format-style="currency"
+                                    currency-code="USD"></lightning-formatted-number>
+                            </template>
+                        </div>
+                        <div class="slds-p-top_xx-small"
+                            style="font-family: Proxima Nova; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; color: #00AFE8;"  onclick={getMonthReimbursement}>
+                            Month 
+                            <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                                <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                            </svg> -->
+                        </div>
+                    </div>
+                    <!-- <div class="slds-p-vertical_medium slds-p-left_x-small" style="float: left;"><i
+                                    class="fa-solid fa-arrow-right-from-bracket"
+                                    style="font-size: 16px; line-height: 20px;cursor:pointer" onclick={getMonthReimbursement}></i></div>  -->
+                </template>
+            </div>
+            <div class="slds-p-left_medium slds-p-top_medium slds-p-bottom_small middle-3">
+                <div class="slds-p-vertical_x-small icon-holder" style="float: left;">
+                    <!-- <img class="middle-icon" src={variableRateIcon} loading="eager"> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" fill="none">
+                        <path
+                            d="M11.474 23.715c1.547 0 2.803-1.182 2.846-2.651 1.651-.725 2.932-2.045 3.547-3.698.564-1.472 1.095-3.611 2.625-4.45 1.079 1.742 4.002 1.612 4.911-.215 1.113.54 1.805 1.599 2.3 2.654a6.676 6.676 0 0 0 3.772 3.192c.386 3.166 5.126 3.243 5.633.101.871-.215 3.818-2.062 2.578-2.999a.736.736 0 0 0-.989.189 4.062 4.062 0 0 1-1.757 1.408c-.877-2.214-4.304-2.263-5.252-.078-1.475-.55-2.493-1.806-3.108-3.177a6.001 6.001 0 0 0-2.855-2.668c-.273-3.593-5.758-3.356-5.679.239a5.867 5.867 0 0 0-2.674 3.076l-.849 2.271a5.152 5.152 0 0 1-2.545 2.8c-1.365-2.473-5.347-1.547-5.354 1.28 0 1.503 1.279 2.726 2.852 2.726Zm22.822-6.817c1.881.048 1.881 2.68 0 2.728-1.88-.046-1.88-2.68 0-2.728Zm-11.411-6.817c1.881.048 1.881 2.68 0 2.728-1.88-.046-1.88-2.68 0-2.728Zm-11.411 9.546c1.881.046 1.881 2.68 0 2.726-1.88-.046-1.88-2.68 0-2.726Z"
+                            fill="#1D1D1D" />
+                        <path d="M3.067 7.667V37.8h39.44" stroke="#1D1D1D" stroke-width="1.435"
+                            stroke-linecap="round" />
+                        <path
+                            d="M8.294 25.604h6.231c.396 0 .718.322.718.718v11.479H7.576V26.322c0-.397.322-.718.718-.718Zm11.377-4.306h6.231c.396 0 .718.322.718.718V37.8h-7.667V22.016c0-.396.322-.718.718-.718Zm11.376 2.87h6.233c.396 0 .718.322.718.718V37.8h-7.667V24.886c0-.397.32-.718.716-.718Z"
+                            stroke="#1D1D1D" stroke-width="1.435" />
+                    </svg>
+                </div>
+                <div class="slds-p-vertical_small slds-p-left_small" style="float: left;">
+                    <div class="content-text"
+                        style="font-family: 'Proxima Nova Bold' !important; font-size: 32px; line-height: 32px; color: rgb(29, 29, 29);"
+                       >
+                       <template lwc:if={messageForNextBatch}>
+                            <span style="font-family: 'Proxima Nova Bold' !important;font-size: 16px;
+                            line-height: 35px;color: rgb(29, 29, 29);">{messageForNextBatch}</span>
+                        </template>
+                        <template lwc:else>
+                            <template lwc:if={mileageRateZero}>
+                                {mileageRateZero}
+                            </template>
+                            <template lwc:else>
+                                <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={lastMonthMileageRate} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="slds-p-top_xx-small"
+                        style="font-family: Proxima Nova; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; color: #00AFE8;" onclick={getGasPrice}>
+                        Mile
+                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none"  >
+                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                        </svg> -->
+                    </div>
+                </div>
+                <!-- <div class="slds-p-vertical_medium slds-p-left_x-small" style="float: left;"><i
+                                class="fa-solid fa-arrow-right-from-bracket"
+                                style="font-size: 16px; line-height: 20px;cursor:pointer" onclick={getGasPrice}></i></div> -->
+            </div>
+            <div lwc:if={isNotIRS} class="slds-p-left_medium slds-p-top_medium slds-p-bottom_small middle-4">
+                <div class="slds-p-vertical_x-small icon-holder" style="float: left;">
+                    <!-- <img class="middle-icon" src={fuelIcon} loading="eager" /> -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" viewBox="0 0 46 46" fill="none">
+                        <path d="M9.2 36.8V8.893a0.46 0.46 0 0 1 0.46 -0.46h17.48a0.46 0.46 0 0 1 0.46 0.46V36.8"
+                            stroke="#1D1D1D" stroke-width="1.686666666666667" stroke-linecap="round" />
+                        <path d="M27.6 32.2c2.3 0.511 6.9 0.46 6.9 -3.833V10.733l4.6 -2.3" stroke="#1D1D1D"
+                            stroke-width="1.686666666666667" stroke-linecap="round" />
+                        <path d="M6.9 37.567h23" stroke="#1D1D1D" stroke-width="1.686666666666667"
+                            stroke-linecap="round" />
+                        <path x="8" y="8" width="8" height="4" rx="0.3" stroke="#1D1D1D"
+                            stroke-width="1.686666666666667" stroke-linecap="round"
+                            d="M12.727 12.267H24.073A0.46 0.46 0 0 1 24.533 12.727V17.94A0.46 0.46 0 0 1 24.073 18.4H12.727A0.46 0.46 0 0 1 12.267 17.94V12.727A0.46 0.46 0 0 1 12.727 12.267z" />
+                        <path d="M12.267 22.233h12.267" stroke="#1D1D1D" stroke-width="1.686666666666667"
+                            stroke-linecap="round" />
+                        <path d="M34.5 13.8h2.607a0.46 0.46 0 0 1 0.46 0.46v4.447a0.46 0.46 0 0 1 -0.46 0.46h-2.607"
+                            stroke="#1D1D1D" stroke-width="1.686666666666667" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <div class="slds-p-vertical_small slds-p-left_small" style="float: left;">
+                    <div class="content-text"
+                        style="font-family: 'Proxima Nova Bold' !important;font-size: 32px; line-height: 32px; color: rgb(29, 29, 29);"
+                        >
+                        <template lwc:if={messageForNextBatch}>
+                            <span style="font-family: 'Proxima Nova Bold' !important;font-size: 16px;
+                             line-height: 35px;color: rgb(29, 29, 29);">{messageForNextBatch}</span>
+                        </template>
+                        <template lwc:else>
+                            <template lwc:if={fuelPriceZero}>
+                                {fuelPriceZero}
+                            </template>
+                            <template lwc:else>
+                                <lightning-formatted-number style="font-family: 'Proxima Nova Bold' !important;" value={monthfuelPrice} format-style="currency" currency-code="USD"></lightning-formatted-number>
+                            </template>
+                        </template>
+                    </div>
+                    <div class="slds-p-top_xx-small"
+                        style="font-family: Proxima Nova; font-style: normal; font-weight: 400; font-size: 14px; line-height: 17px; color: #00AFE8;" onclick={getGasPrice}>
+                        Gallon  
+                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="7" height="10" class="arrow-svg"  viewBox="0 0 7 10" fill="none" >
+                            <path d="M1 1L6.00087 4.78742C6.14176 4.89412 6.14176 5.10588 6.00087 5.21258L1 9" stroke="#7ABB4A" stroke-width="1.77778" stroke-linecap="round"/>
+                        </svg> -->
+                    </div>
+                </div>
+                <!-- <div class="slds-p-vertical_medium slds-p-left_x-small" style="float: left;"><i
+                                class="fa-solid fa-arrow-right-from-bracket"
+                                style="font-size: 16px; line-height: 20px;cursor:pointer" onclick={getGasPrice}></i>
+                        </div> -->
+            </div>
+            <div class="slds-p-left_medium slds-p-top_medium slds-p-bottom_small middle-5">
+                <div class="slds-p-vertical_small" style="float: left;">
+                    <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0"
+                        style="font-family: 'Proxima Nova Bold' !important;
+                            border-radius: 11px;
+                            display: flex;
+                            flex-direction: row;
+                            justify-content: flex-end;
+                            align-items: center;
+                            padding: 12px 20px 12px 20px;
+                            font-size: 16px;
+                            gap: 8px;" onclick={redirectToResources}><svg xmlns="http://www.w3.org/2000/svg" width="21"
+                            height="28" viewBox="0 0 21 28" fill="none">
+                            <path
+                                d="M19.2765 6.2999L19.2059 6.37069L19.2765 6.29989L14.5915 1.62664C14.5915 1.62664 14.5915 1.62664 14.5915 1.62663C14.1593 1.19534 13.4468 0.9 12.8376 0.9H3.16256C1.9145 0.9 0.900176 1.91844 0.900176 3.17412L0.9 23.2965C0.9 24.5525 1.9127 25.5706 3.16204 25.5706H17.7472C18.9959 25.5706 20.0091 24.5523 20.0091 23.2965V8.06741C20.0091 7.45306 19.7112 6.73358 19.2765 6.2999ZM2.18058 3.1743C2.18058 2.62912 2.62227 2.18766 3.16239 2.18766L12.5147 2.18783V6.44195C12.5147 7.39664 13.2831 8.17068 14.2328 8.17068H18.7287V23.2966C18.7287 23.8419 18.288 24.2833 17.7472 24.2833H3.16204C2.62031 24.2833 2.18058 23.842 2.18058 23.2966V3.1743ZM18.1646 6.88271H14.2325C13.9911 6.88271 13.7949 6.68628 13.7949 6.44164V2.54682L18.1646 6.88271Z"
+                                fill="white" stroke="white" stroke-width="0.2" />
+                            <circle cx="10.1376" cy="13.6598" r="3.15919" transform="rotate(-16.7946 10.1376 13.6598)"
+                                stroke="white" stroke-width="1.5" />
+                            <g filter="url(#filter0_d_12_2046)">
+                                <path
+                                    d="M13.4225 15.6323L12.8439 15.1551L11.8895 16.3123L12.4681 16.7895L13.4225 15.6323ZM14.2803 18.2842C14.5999 18.5478 15.0726 18.5024 15.3362 18.1829C15.5997 17.8633 15.5543 17.3906 15.2348 17.1271L14.2803 18.2842ZM12.4681 16.7895L14.2803 18.2842L15.2348 17.1271L13.4225 15.6323L12.4681 16.7895Z"
+                                    fill="white" />
+                            </g>
+                            <defs>
+                                <filter id="filter0_d_12_2046" x="7.44143" y="15.1562" width="12.5156" height="12.1953"
+                                    filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                    <feColorMatrix in="SourceAlpha" type="matrix"
+                                        values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                    <feOffset dy="4.4492" />
+                                    <feGaussianBlur stdDeviation="2.2246" />
+                                    <feComposite in2="hardAlpha" operator="out" />
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                                    <feBlend mode="normal" in2="BackgroundImageFix"
+                                        result="effect1_dropShadow_12_2046" />
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_12_2046"
+                                        result="shape" />
+                                </filter>
+                            </defs>
+                        </svg> Resources</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="last-section" style="display: flex">
+            <!-- height : 352px -->
+            <div class="slds-m-right_medium slds-m-top_small mileage-view">
+                <div class="slds-col slds-p-left_large slds-p-top_small slds-p-bottom_medium">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Mileage</h2>
+                </div>
+                <div class="grid-block slds-p-left_large slds-p-top_xx-small slds-p-bottom_x-small">
+                    <div class="">
+                        <div class="bold-sub-text">YTD Mileage:</div>
+                    </div>
+                    <div class="">
+                        <div class="bold-text"> <lightning-formatted-number value={annualMileage}
+                                maximum-fraction-digits="2"></lightning-formatted-number></div>
+                    </div>
+                    <div class="center-align">
+                        <div class="slds-progress-bar slds-progress-bar_circular" aria-valuemin={startNumber} aria-valuemax={endNumber} aria-valuenow={progress} role="progressbar">
+                                <span class="slds-progress-bar__value" style={progressStyle}>
+                                  <span class="slds-assistive-text">Progress: {progressNumber}</span>
+                                </span>
+                        </div>
+                    </div>
+                    <div class="">
+                        <div class="bold-text"><lightning-formatted-number value={complianceMileage}
+                                maximum-fraction-digits="2"></lightning-formatted-number></div>
+                    </div>
+                    <div class="slds-p-right_large">
+                        <div class="">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="16" viewBox="0 0 14 16"
+                                fill="none">
+                                <path
+                                    d="M0.437502 1.45411e-06C0.195877 6.5103e-07 0 0.195876 0 0.437501V12.8397C0 13.0813 0.195875 13.2772 0.4375 13.2772H0.612412C0.854037 13.2772 1.04991 13.0813 1.04991 12.8397V9.30192C1.04991 9.06029 1.24579 8.86442 1.48741 8.86442H13.097C13.4626 8.86442 13.667 8.44267 13.4404 8.15578L10.7141 4.70337C10.5885 4.54441 10.5885 4.32006 10.7141 4.16109L13.4404 0.708682C13.667 0.42179 13.4626 4.47454e-05 13.0971 4.35304e-05L0.437502 1.45411e-06Z"
+                                    fill="#7ABB4A" />
+                                <path d="M0.875 0.875L0.875001 14.875" stroke="#7ABB4A" stroke-width="1.75"
+                                    stroke-linecap="round" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-p-top_xx-small slds-p-bottom_medium slds-p-horizontal_medium">
+                    <c-canvas-chart chart-data={chartList.Mileagechart} default-month={chartList.monthName}
+                        chart-component="Mileage">
+                    </c-canvas-chart>
+                </div>
+                <div class="notify-toggle slds-p-around_medium">
+                    <button class="slds-button a-link" onclick={redirectToReimbursement}>View all</button>
+                </div>
+            </div>
+
+            <div class="slds-m-right_medium slds-m-top_small reimbursement-view">
+                <div class="slds-col slds-p-left_large slds-p-top_small slds-p-bottom_medium">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Reimbursement</h2>
+                </div>
+                <div class="slds-grid slds-wrap slds-p-left_large slds-p-top_xx-small slds-p-bottom_x-small">
+                    <div class="slds-p-right_medium">
+                        <div class="bold-sub-text">YTD Reimbursement:
+                        </div>
+                    </div>
+                    <div class="slds-col">
+                        <div class="bold-text"> <lightning-formatted-number value={annualReimbursement}
+                                format-style="currency" currency-code="USD"
+                                maximum-fraction-digits="2"></lightning-formatted-number></div>
+                    </div>
+                </div>
+                <div class="slds-p-top_xx-small slds-p-bottom_medium slds-p-horizontal_medium">
+                    <c-canvas-chart chart-data={chartList.Reimbursementchart} default-month={chartList.monthName}
+                        chart-component="Reimbursement">
+                    </c-canvas-chart>
+                </div>
+                <div class="notify-toggle slds-p-around_medium">
+                    <button class="slds-button a-link" onclick={redirectToReimbursement}>View all</button>
+                </div>
+            </div>
+
+            <div class="parameters-view slds-m-top_small" style="
+                        border: 1px solid #D7D7D7;
+                        flex: 30%;
+                        height: auto;
+                        border-radius: 20px;">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Guidelines</h2>
+                </div>
+                <div
+                    class="slds-grid slds-wrap slds-align_absolute-center slds-p-top_large slds-p-bottom_xx-large slds-p-horizontal_large guidelines">
+                    <template lwc:if={planInsurance}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={umbrellaIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    {insurancePlan}
+                                </div>
+                                <div class="slds-p-vertical_small slds-p-right_small text-view">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14"
+                                        fill="none">
+                                        <path
+                                            d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                            fill="#7ABB4A" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ballon minimums">
+                                <div class="wrapper-content">
+                                    <p><span class="insurance-minimum">Insurance minimum</span>
+                                        ${bodilyInjury} Bodily Injury <br/>
+                                        <lightning-formatted-number value={propertyDamage}
+                                        format-style="currency" currency-code="USD"
+                                        minimum-fraction-digits="0">
+                                        </lightning-formatted-number> Property Damage
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small not-in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={umbrellaIcon} alt="icon" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    {insurancePlan}
+                                </div>
+                                <!-- <div class="slds-col slds-size_2-of-12 slds-p-vertical_xx-small text-view">
+                                    <img src={crossMark}  loading="eager" alt="icon" />
+                                </div> -->
+                            </div>
+                            <div class="ballon minimums">
+                                <div class="wrapper-content">
+                                    <p><span class="insurance-minimum">Insurance minimum</span>
+                                        ${bodilyInjury} Bodily Injury <br/>
+                                        <lightning-formatted-number value={propertyDamage}
+                                        format-style="currency" currency-code="USD"
+                                        minimum-fraction-digits="0">
+                                        </lightning-formatted-number> Property Damage
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={planMileage}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <!-- <img class="icon-size" src={milesPlanIcon} alt="icon" loading="eager" /> -->
+                                    <svg xmlns="http://www.w3.org/2000/svg" 
+                                        version="1.1" fill="#7ABB4A" x="0px" y="0px" viewBox="0 0 30 30"
+                                        style="enable-background:new 0 0 30 30;" xml:space="preserve" width="30"
+                                        height="30">
+                                        <g>
+                                            <path class="st0"
+                                                d="M22.4 22.8c1.3 -1.6 2 -3.4 2.1 -5.4H22.8c-0.5 0 -0.8 -0.3 -0.8 -0.7 0 -0.4 0.3 -0.7 0.8 -0.8h1.7c-0.2 -2.1 -0.9 -4 -2.3 -5.6L21 11.5c-0.2 0.2 -0.5 0.3 -0.8 0.2 -0.3 -0.1 -0.5 -0.3 -0.5 -0.6s0.1 -0.5 0.2 -0.7l1.2 -1.2c-1.6 -1.4 -3.5 -2.1 -5.6 -2.3v1.7c0 0.4 -0.2 0.7 -0.6 0.8 -0.5 0.1 -0.9 -0.2 -0.9 -0.7V6.9c-2.1 0.2 -4 0.9 -5.6 2.3l1.2 1.2c0.2 0.2 0.3 0.5 0.2 0.8 -0.2 0.5 -0.8 0.7 -1.3 0.3l-1 -1 -0.2 -0.2c-1.4 1.6 -2.1 3.5 -2.3 5.6h1.8c0.3 0 0.6 0.2 0.7 0.5 0.1 0.3 0.1 0.6 -0.1 0.8l-0.6 0.3H5.1c0.2 2 0.9 3.8 2.2 5.4 0.3 -0.3 0.6 -0.7 0.9 -1 0.4 -0.4 0.8 -0.4 1.2 -0.1 0.3 0.3 0.3 0.8 -0.1 1.1l-1.5 1.5c-0.4 0.4 -0.8 0.4 -1.2 0 -1.7 -1.8 -2.7 -3.9 -2.9 -6.4 -0.4 -3.7 0.8 -6.8 3.4 -9.4 5.4 -5.2 14.4 -3.7 17.8 3.1 2.1 4.3 1.4 9.2 -1.8 12.7 -0.4 0.4 -0.8 0.4 -1.2 0l-1.5 -1.5c-0.4 -0.4 -0.4 -0.8 0 -1.1 0.3 -0.3 0.8 -0.3 1.1 0.1 0.3 0.2 0.6 0.5 0.9 0.9z" />
+                                            <path class="st0"
+                                                d="M14.8 14.7h0.4c0.3 0.2 0.5 0 0.8 -0.2l2.1 -2.1c0.4 -0.4 0.8 -0.4 1.1 -0.1 0.3 0.3 0.3 0.8 -0.1 1.1l-2.3 2.3c-0.1 0.1 -0.2 0.2 -0.1 0.4 0.3 1.1 -0.3 2.1 -1.4 2.4 -1 0.3 -2.1 -0.4 -2.4 -1.5 -0.2 -1.1 0.4 -2.1 1.5 -2.4 0.2 0.1 0.3 0.1 0.4 0.1zm0.1 2.4c0.3 0 0.5 -0.2 0.4 -0.5 0 -0.2 -0.2 -0.4 -0.5 -0.4s-0.4 0.2 -0.4 0.5c0 0.2 0.2 0.4 0.5 0.4z" />
+                                        </g>
+                                    </svg>
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <lightning-formatted-number value={complianceMileage}
+                                        maximum-fraction-digits="2"></lightning-formatted-number> /417 mi/mo
+                                </div>
+                                <div class="slds-p-vertical_small slds-p-right_small text-view">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14"
+                                        fill="none">
+                                        <path
+                                            d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                            fill="#7ABB4A" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Annual mi <br/> Avg mo mi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small not-in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={milesPlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <lightning-formatted-number value={complianceMileage}
+                                        maximum-fraction-digits="2"></lightning-formatted-number> /416.66 miles
+                                </div>
+                                <!-- <div class="slds-col slds-size_2-of-12 slds-p-vertical_xx-small text-view">
+                                    <img src={crossMark}  loading="eager" alt="icon" />
+                                </div> -->
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Annual mi <br/> Avg mo mi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={planVehicleAge}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={calendarPlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <svg style="margin: 0 0 2px 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M11.7917 10.5L4.29175 6.75L11.7917 3" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M4.29175 13L12.2084 13" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> {planYear} years
+                                </div>
+                                <div class="slds-p-vertical_small slds-p-right_small text-view">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14"
+                                        fill="none">
+                                        <path
+                                            d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                            fill="#7ABB4A" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Your vehicle age</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small not-in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={calendarPlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <svg style="margin: 0 0 2px 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M11.7917 10.5L4.29175 6.75L11.7917 3" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M4.29175 13L12.2084 13" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> {planYear} years
+                                </div>
+                                <!-- <div class="slds-col slds-size_2-of-12 slds-p-vertical_xx-small text-view">
+                                    <img src={crossMark}  loading="eager" alt="icon" />
+                                </div> -->
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Your vehicle age</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={planVehicleValue}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={carPlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <svg style="margin: 0 3px 2px 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M4.20825 10.5L11.7083 6.75L4.20825 3" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M11.7083 13L3.79158 13" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> <lightning-formatted-number value={vehicleValue} format-style="currency"
+                                        currency-code="USD" maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                                <div class="slds-p-vertical_small slds-p-right_small text-view">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14"
+                                        fill="none">
+                                        <path
+                                            d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                            fill="#7ABB4A" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Your vehicle MSRP</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small not-in-complete"
+                            style="
+                                        border: 1px solid #E4E4E4;
+                                        height: 40px;
+                                        border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={carPlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    <svg style="margin: 0 3px 2px 0" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M4.20825 10.5L11.7083 6.75L4.20825 3" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                        <path d="M11.7083 13L3.79158 13" stroke="black" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg> <lightning-formatted-number value={vehicleValue} format-style="currency"
+                                        currency-code="USD" maximum-fraction-digits="0"></lightning-formatted-number>
+                                </div>
+                                <!-- <div class="slds-col slds-size_2-of-12 slds-p-vertical_xx-small text-view">
+                                    <img src={crossMark}  loading="eager" alt="icon" />
+                                </div> -->
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Your vehicle MSRP</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:if={planCompliance}>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small in-complete"
+                            style="
+                                    border: 1px solid #E4E4E4;
+                                    height: 40px;
+                                    border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={insurancePlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    {complianceStatus}
+                                </div>
+                                <div class="slds-p-vertical_small slds-p-right_small text-view">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14"
+                                        fill="none">
+                                        <path
+                                            d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                            fill="#7ABB4A" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Compliance status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-around_xx-small not-in-complete"
+                            style="
+                                    border: 1px solid #E4E4E4;
+                                    height: 40px;
+                                    border-radius: 10px;">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-p-horizontal_small slds-p-vertical_xx-small">
+                                    <img class="icon-size" src={insurancePlanIcon} alt="icon" loading="eager" />
+                                </div>
+                                <div class="slds-col slds-p-vertical_small icon-value">
+                                    {complianceStatus}
+                                </div>
+                                <!-- <div class="slds-col slds-size_2-of-12 slds-p-vertical_xx-small text-view">
+                                    <img src={crossMark}  loading="eager" alt="icon" />
+                                </div> -->
+                            </div>
+                            <div class="ballon">
+                                <div class="wrapper-content">
+                                    <p>Compliance status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </div>
+    <template lwc:if={paginatedModal}>
+        <c-user-profile-modal header={headerText} month={monthText} show-footer={isFalse} show-btn={isTrue}
+            modal-class="slds-modal slds-modal_large slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster"
+            header-class="slds-modal__header header-preview padding-preview slds-p-horizontal_large slds-p-top_xx-large slds-p-bottom_xxx-small slds-clearfix"
+            modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_medium slds-p-top_small"
+            subheader-class="slds-text-heading_medium slds-hyphenate slds-float_left"
+            style-header="slds-modal__container slds-m-top_medium" close-btn-class="close-paginated">
+            <div slot="header">
+                <template lwc:if={modalLength}>
+                    <div class="slds-float_right slds-p-right_small">
+                        <div class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                            <img class="search-icon" src={searchIcon} loading="eager" />
+                            <template lwc:if={isSearchEnable}>
+                            </template>
+                            <template lwc:else>
+                                <div class="close-btn" onclick={handleClearInput}>
+                                    <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                </div>
+                            </template>
+                            <input class="slds-input filter-input" value={_value} type="text" placeholder="Search"
+                                onkeyup={handleChange} />
+                        </div>
+                    </div>
+                </template>
+            </div>
+            <div>
+                <template lwc:if={lastModelList}>
+                    <c-user-data-table main-class="slds-table--header-fixed_container modal-height"
+                        is-default-sort={paginatedModal} scrollable={isScrollable} is-paginate={paginatedModal}
+                        model-data={lastModelList} colname={colname} coltype={coltype} sortorder={sortorder}
+                        search-key={_value} columns={modalListColumn} options={modalKeyFields} is-sortable={isSortable}
+                        is-all-download={download} onview={downloadUserTrips}
+                        is-variable={variable}></c-user-data-table>
+                </template>
+            </div>
+
+        </c-user-profile-modal>
+    </template>
+    <template lwc:else>
+        <template lwc:if={isSync}>
+            <c-user-profile-modal header={headerText} show-footer={isFalse} show-btn={isTrue}
+                modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft animate__faster"
+                header-class="slds-modal__header header-preview slds-p-horizontal_large slds-p-top_xx-large slds-p-bottom_xxx-small slds-clearfix"
+                modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_medium slds-p-top_small"
+                subheader-class="slds-text-heading_medium slds-hyphenate"
+                style-header="slds-modal__container modal-width-sync slds-m-top_medium" close-btn-class="close-paginated" onclosedialogesc={closeModalPopup} onclosedialog={closeModalPopup}>
+                <div class="slds-text-heading_medium tagline-text" slot="tagline">
+                    Confirm your business mileage <a href={videoPlanUrl} target="_blank" class="watch-link">HERE</a> before syncing
+                </div>
+                <div class="sync-action">
+                    <table class="slds-table slds-table_cell-buffer slds-table_striped fixed-table" id="tableSel">
+                        <tr>
+                            <td class="model-content-td">This Month’s Mileage</td>
+                            <td>
+                                <div class="slds-checkbox">
+                                    <input type="checkbox" name="options" id="checkbox-unique-id-81" value="checkbox-unique-id-81"
+                                        checked={isChecked} onchange={checkboxThisMonthHandler} />
+                                    <label class="slds-checkbox__label" for="checkbox-unique-id-81">
+                                        <span class="slds-checkbox_faux"></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="model-content-td">Last Month’s Mileage</td>
+                            <td>
+                                <div class="slds-checkbox">
+                                    <input type="checkbox" name="options" id="checkbox-unique-id-82" value="checkbox-unique-id-82"
+                                        checked={isLastChecked} onchange={checkboxLastMonthHandler} />
+                                    <label class="slds-checkbox__label" for="checkbox-unique-id-82">
+                                        <span class="slds-checkbox_faux"></span>
+                                    </label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="padding-top: 7px; padding-bottom: 15px;"><button
+                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light sync-btn mleft-0"
+                        disabled={isActiveSync} onclick={syncMileage}> Sync Now</button></div>
+            </c-user-profile-modal>
+        </template>
+      
+        <template lwc:else>
+            <c-user-profile-modal header={headerText} month={monthText} show-footer={isFalse} show-btn={isTrue}
+            modal-class={modalStyle} header-class=""
+            modal-content-style="slds-modal__content slds-p-left_large slds-p-right_large slds-p-bottom_x-large slds-p-top_large slds-modal__content_headless modal_header"
+            subheader-class="" style-header="slds-modal__container slds-m-top_medium" close-btn-class="close-aligned">
+            <div>
+                <template lwc:if={lastModelList}>
+                    <c-user-data-table main-class="modal-height" scrollable={isScrollable} is-sortable={isSortable}
+                        colname={colname} coltype={coltype} sortorder={sortorder} is-paginate={paginatedModal}
+                        model-data={lastModelList} columns={modalListColumn} options={modalKeyFields}
+                        onrecord={downloadAllRecord} footer-list={reimbursementYtd} is-ytd-biweek={biweekYtd}
+                        is-ytd={ytd}></c-user-data-table>
+                </template>
+            </div>
+        </c-user-profile-modal>
+        </template>
+    </template>
+    <c-export-excel></c-export-excel>
+</template>

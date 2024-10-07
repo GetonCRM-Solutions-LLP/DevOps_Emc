@@ -1,0 +1,468 @@
+<template>
+    <!-- <div if:true={isLoading}  data-id="spinnerblock"> 
+        <div class="spinner-background"></div>
+        <div class="spinner-load">
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div> -->
+    <div class="animate__animated animate__slideInLeft animate__faster main_div">
+        <div class="advance_search" lwc:if={advancesearch}>
+            <div>
+                <c-advance-search-component acc-id={_accid}  admin-id={_adminid} selected-driver={selectedDriver} selected-status={selectedStatus} onfilterevent={handlefilterdata} oncloseevent={handleclosesearch} ontoastevent={handleToastMessage}></c-advance-search-component>
+                <!-- selected-driver={idOfDriver} selected-status={tripStatus}  -->
+            </div>
+        </div>
+    
+        <div class="header-of-search">
+            <div class="button_class" align="left"> 
+                <div class="slds-float_right">
+                    <div  class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                        <div class="search-icon-block">
+                            <img class="search-icon" src={searchIcon} />
+                        </div>
+                        <input  class="slds-input filter-input" type="text" placeholder="Search" value={searchKey} onkeydown={handleKeyCode} onkeyup={handleKeyPress}/>
+                    </div>
+                </div> 
+                
+                <div class="slds-form-element slds-m-left_x-small margin_button">
+                    <button class="slds-button slds-button_outline-brand slds-p-left_small advSearch "
+                            onclick={handleButtonClick}>
+                            <svg class="advsearch_icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" fill="none">
+                                <path d="M8.60938 8.98684H22" stroke="#7ABB4A" stroke-width="2.62466" stroke-linecap="round"/>
+                                <path d="M8.60938 14.625H22" stroke="#7ABB4A" stroke-width="2.62466" stroke-linecap="round"/>
+                                <path d="M8.60938 20.2632H22" stroke="#7ABB4A" stroke-width="2.62466" stroke-linecap="round"/>
+                            </svg>Advanced Search
+                            <!-- <lightning-icon icon-name="utility:justify_text" size="x-small" class="advance-search_icon slds-p-right_small">
+                            </lightning-icon>Advanced Search -->
+                    </button>
+                </div>
+                <div class="slds-dropdown-trigger slds-m-left_x-small margin_button">
+                    <button class="slds-button slds-button_outline-brand slds-p-left_x-small slds-m-right_xx-small  slds-share_export"
+                            aria-haspopup="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="#7ABB4A" viewBox="5 2 25 25"  width="20" height="20"><path class="st0" d="M14.7 16.8c-0.1 0 -0.2 0 -0.3 0.1 -1.1 0.3 -2.2 0.7 -3.1 1.4 -1.2 0.9 -2.1 2.1 -2.5 3.5 0 0.1 -0.1 0.2 -0.1 0.3 -0.3 0.5 -0.7 0.9 -1.2 0.8 -0.5 -0.1 -0.9 -0.5 -0.9 -1 0 -0.9 0 -1.7 0.1 -2.6 0.2 -1.3 0.4 -2.7 0.9 -3.9 0.4 -1 0.9 -1.9 1.6 -2.8 1.1 -1.4 2.6 -2.3 4.3 -2.7 0.4 -0.1 0.7 -0.1 1.1 -0.2V7.6c0 -0.5 0.3 -1 0.9 -1 0.3 -0.1 0.6 0 0.8 0.2 0.6 0.5 1.2 1 1.8 1.4l4.5 3.6c0.2 0.2 0.4 0.4 0.7 0.5 0.5 0.4 0.5 1.2 0 1.6 -1.9 1.5 -3.8 3.1 -5.7 4.6 -0.4 0.3 -0.8 0.7 -1.3 1 -0.5 0.4 -1.3 0.2 -1.6 -0.4 -0.1 -0.1 -0.1 -0.3 -0.1 -0.4v-1.8c0.1 0 0.1 0 0.1 -0.1zm-5.6 0.6c0.1 0 0.1 -0.1 0.2 -0.1 1.1 -1.1 2.5 -1.8 4 -2.3 0.8 -0.2 1.5 -0.4 2.3 -0.4 0.7 0 1.2 0.4 1.2 1.1v0.9c1.4 -1.2 2.9 -2.3 4.3 -3.5 -1.4 -1.2 -2.9 -2.3 -4.3 -3.5v1c0 0.5 -0.5 1 -1 1 -0.4 0 -0.8 0 -1.1 0.1 -0.7 0.1 -1.3 0.3 -1.9 0.6 -1 0.5 -1.8 1.2 -2.4 2.2 -0.4 0.7 -0.8 1.4 -1 2.2 -0.2 0.2 -0.2 0.5 -0.3 0.7z"/></svg>Share/Export
+                            <!-- <lightning-icon icon-name="utility:internal_share" size="x-small" class="slds-share_icon slds-p-right_small"></lightning-icon>Share/Export -->
+                    </button>
+                    <div class="slds-dropdown slds-dropdown--left slds-dropdown--menu zIndex">
+                        <ul class="slds-dropdown__list ul_list" role="menu">
+                            <li id="menu-0-0" class="slds-dropdown__item list1">
+                               <a onclick={exportTripsByDate} role="menuitem" class="under_list">
+                                    <p class="slds-truncate list_text">Trips by Date Range</p>
+                               </a>
+                            </li>
+                            <li id="menu-1-1" class="slds-dropdown__item list1">
+                                <a onclick={exportSelectedTrips} role="menuitem" class="under_list">
+                                    <p class="slds-truncate list_text">Selected Trips</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="slds-form-element slds-m-left_x-small sync_button margin_button">
+                    <button class="slds-button slds-button_outline-brand slds-p-left_x-small slds-syncall"
+                                    onclick={handleSyncAll}>
+                   
+                    <svg class="flag_icon" xmlns="http://www.w3.org/2000/svg"   x="0px" y="0px" fill="#7ABB4A" viewBox="5 0 30 30"  width="20" height="20"><g><path class="st0" d="m20.5 9.3 -0.3 -0.3c-0.7 -0.6 -1.6 -1.1 -2.5 -1.4 -0.6 -0.2 -1.2 -0.3 -1.8 -0.3h-1.2c-0.7 0.1 -1.4 0.3 -2 0.6 -1.7 0.8 -2.9 2 -3.6 3.6 -0.4 0.7 -0.6 1.5 -0.7 2.3 0 0.3 0 0.6 -0.1 0.9 0 0.4 -0.4 0.7 -0.7 0.8 -0.4 0.1 -0.8 0 -1 -0.4 -0.1 -0.2 -0.2 -0.4 -0.2 -0.6 0 -1.4 0.3 -2.6 0.9 -3.9 0.9 -1.8 2.2 -3.2 4 -4.2 0.9 -0.5 1.9 -0.8 3 -1 0.7 -0.1 1.4 -0.1 2.1 -0.1 1.9 0.2 3.6 0.9 5.1 2.2l0.1 0.1V6.2c0 -0.2 0 -0.4 0.1 -0.5 0.2 -0.3 0.7 -0.5 1.1 -0.4 0.4 0.1 0.6 0.4 0.6 0.8v4.2c-0.1 0.4 -0.4 0.7 -0.8 0.7h-3.9c-0.4 0 -0.7 -0.1 -0.9 -0.5 -0.3 -0.5 -0.1 -1.1 0.4 -1.4 0.1 -0.1 0.2 -0.1 0.4 -0.1 0.7 0.4 1.3 0.4 1.9 0.3 0 0.1 0 0.1 0 0z"/><path class="st0" d="M8.4 22.2s0 0.1 0 0v1.4c0 0.1 0 0.3 -0.1 0.4 -0.1 0.4 -0.7 0.7 -1.2 0.5 -0.4 -0.2 -0.5 -0.4 -0.6 -0.8v-4.2c0.1 -0.4 0.4 -0.7 0.8 -0.7h3.9c0.3 0 0.6 0.1 0.8 0.3 0.3 0.3 0.4 1.1 -0.2 1.4 -0.2 0.1 -0.3 0.2 -0.5 0.2H9.5l0.1 0.1c0.4 0.4 0.8 0.7 1.2 0.9 0.7 0.4 1.4 0.7 2.1 0.8 0.8 0.2 1.7 0.2 2.5 0.1 1.5 -0.2 2.9 -0.8 4 -1.9 1.2 -1.1 1.9 -2.5 2.2 -4 0.1 -0.4 0.1 -0.8 0.1 -1.2 0 -0.3 0.1 -0.5 0.3 -0.7 0.3 -0.3 0.6 -0.3 1 -0.2 0.4 0.1 0.5 0.4 0.6 0.8v0.9c-0.1 0.7 -0.2 1.4 -0.4 2.1 -0.4 1.2 -1 2.3 -1.9 3.2 -0.8 0.9 -1.8 1.6 -2.9 2.2 -0.8 0.4 -1.6 0.6 -2.5 0.8 -0.8 0.1 -1.6 0.1 -2.4 0.1 -1.8 -0.2 -3.3 -0.8 -4.7 -2 -0.2 -0.3 -0.3 -0.4 -0.4 -0.5z"/></g></svg>
+                    <template lwc:if={showSyncIndividual}>
+                        Sync
+                    </template>
+                    <template lwc:else>
+                        Sync All
+                    </template>
+                    </button>
+                </div>  
+            </div> 
+                           
+            <div class="box_button trip_box " >
+                <div class="slds-form-element slds-m-right_small margin_button">
+                    <button class="slds-button  slds-button_outline-brand slds-p-left_x-small slds-unapprovebtn"
+                            onclick={handleUnapproveClick} >
+                        <!-- <lightning-icon icon-name="utility:undo" size="xx-small"  class="undo_icon slds-p-right_x-small"> -->
+                        <!-- </lightning-icon>Undo -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="6 4 25 25" fill="#7ABB4A"  width="20" height="20"><path class="st0" d="M10.4 12.6c.1.1.2.1.2.2l1.6 1.6c.3.3.4.8.2 1.2-.2.4-.6.6-1.1.6-.2 0-.5-.1-.6-.3l-3.6-3.6c-.4-.4-.4-1.1 0-1.5l3.6-3.6c.3-.3.7-.4 1.1-.3.4.1.6.4.7.8.1.4-.1.7-.3.9-.6.6-1.2 1.1-1.7 1.7l-.1.1h6.3c1.6 0 3.1.6 4.3 1.7 1.1 1 1.8 2.2 2 3.6.2 1.4.1 2.7-.6 4-.6 1.2-1.5 2.1-2.7 2.8-1 .5-2 .8-3.1.8H7.9c-.4 0-.7-.2-.9-.5-.2-.3-.2-.7 0-1 .2-.4.5-.5.9-.6h8.8c1.2 0 2.2-.4 3.1-1.3.7-.7 1.1-1.5 1.2-2.5.2-1.5-.3-2.7-1.3-3.8-.7-.6-1.5-1-2.4-1.1h-6.7c-.1.1-.1.1-.2.1z"/></svg>Undo
+
+                        
+                    </button>
+                </div>
+                <div class="slds-form-element slds-m-right_small margin_button">
+                    <button class="slds-button  slds-p-left_x-small slds-flagbtn "
+                            onclick={handleRejectClick}>
+                            <svg class="flag_icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" fill="none">
+                                <path d="M21.9965 16.0087L21.9964 16.0086L20.0977 12.2113L21.9966 8.41396L21.9966 8.41393C22.1155 8.17588 22.1025 7.89354 21.9629 7.66715L21.9629 7.66711C21.8231 7.44057 21.5758 7.30281 21.3098 7.30281H9.45777V6.69016C9.45777 6.26641 9.11391 5.92251 8.69014 5.92251C8.26638 5.92251 7.92251 6.26638 7.92251 6.69014V22.9577C7.92251 23.3815 8.26638 23.7254 8.69014 23.7254C9.1139 23.7254 9.45777 23.3815 9.45777 22.9577V17.1197H21.3098C21.5758 17.1197 21.823 16.982 21.9627 16.7555C22.1024 16.5294 22.115 16.2466 21.9965 16.0087ZM18.5525 12.5543L20.0676 15.5845H9.45777V8.83805H20.0676L18.5525 11.8677L18.5525 11.8678C18.4448 12.0838 18.4447 12.3382 18.5525 12.5542L18.5525 12.5543Z" fill="white" stroke="white" stroke-width="0.154978"/>
+                                </svg>Flag
+                    </button>
+                </div>
+                <div class="slds-form-element slds-m-right_small margin_button">
+                    <button class="slds-button  slds-p-left_x-small slds-approvebtn"
+                            onclick={handleApproveClick}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 25 12"
+                                                                fill="none">
+                                                                <path
+                                                                    d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z"
+                                                                    fill="white" />
+                                                            </svg>Approve
+                        <!-- <lightning-icon icon-name="utility:check" size="x-small"  variant="inverse" > -->
+                        <!-- </lightning-icon>Approve -->
+                    </button>
+                </div>
+                <div class="slds-form-element slds-m-right_small margin_button">
+                    <button class="slds-button  slds-p-left_x-small font-color slds-deletebtn"
+                                    onclick={handleDeleteTrips}>
+                                        <svg class="flag_icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 30 30" fill="none">
+                                            <path d="M20.5917 9.62437L20.0946 21.5558C20.0849 21.7891 19.8773 21.9877 19.6424 21.9877H10.9671C10.7322 21.9877 10.5246 21.7886 10.515 21.5558L10.0178 9.62437C10.0021 9.25051 9.68628 8.95983 9.31244 8.97556C8.93838 8.99107 8.6479 9.30688 8.66344 9.68092L9.16062 21.6123C9.20052 22.5713 10.0057 23.3434 10.9671 23.3434H19.6424C20.6033 23.3434 21.409 22.5726 21.4489 21.6123L21.9461 9.68092C21.9616 9.30686 21.6711 8.99106 21.2971 8.97556C20.9232 8.95987 20.6074 9.25053 20.5917 9.62437Z" fill="white"/>
+                                            <path d="M13.2453 8.76168L13.5275 7.774C13.588 7.56239 13.8622 7.35551 14.0825 7.35551H16.5269C16.7472 7.35551 17.0214 7.5622 17.0819 7.774L17.3641 8.76168L18.6674 8.38933L18.3853 7.40146C18.1583 6.60775 17.3524 6 16.5269 6H14.0825C13.2571 6 12.4509 6.608 12.2242 7.40146L11.942 8.38933L13.2453 8.76168Z" fill="white"/>
+                                            <path d="M8 9.14067H22.487" stroke="white" stroke-width="1.56126" stroke-linecap="round"/>
+                                            <path d="M12.9541 13.2617L13.1356 20.0151" stroke="white" stroke-width="1.56126" stroke-linecap="round"/>
+                                            <path d="M17.5669 13.2617L17.3854 20.0151" stroke="white" stroke-width="1.56126" stroke-linecap="round"/>
+                                            </svg>  Delete Trips 
+                    </button>
+                </div>  
+
+                <c-excel-sheet filename={filename}></c-excel-sheet>
+            </div>
+        </div>
+        
+        <div class="preview">
+            <div class="preview-container"></div>
+            <div class="pagignate-content">
+                <div class="header-content">
+                    <div class="main_class">
+                        <template lwc:if={celenderdropdown}>
+                            <c-dropdown-select class="header_dropdown" data-id="month"
+                                options={monthoptions}
+                                selected-value={selectedmonthlist}
+                                onchange={handlemonthchange}
+                                main-class="default-box-input-small slds-truncate"></c-dropdown-select>
+                            <c-dropdown-select class="header_dropdown" data-id="Types"
+                                options={typeList}
+                                title="All Types"
+                                selected-value={typeValue}
+                                onchange={handleTypechange}
+                                main-class="default-box-input-small slds-truncate"></c-dropdown-select>
+                            <c-dropdown-select class="header_dropdown" data-id="Status"
+                                options={statusList1}
+                                title="Status"
+                                selected-value={Status}
+                                onchange={handlestatuschange}
+                                main-class="default-box-input-small slds-truncate"></c-dropdown-select>
+                            <c-dropdown-select class="header_dropdown_user" data-id="Drivers"
+                                options={driveroption}
+                                title="Drivers"
+                                selected-value={selectDriver}
+                                onchange={handledriverchange}
+                                main-class="default-box-input-small slds-truncate"></c-dropdown-select>
+                        </template>        
+                    </div>
+                    <template lwc:if={pagination}>
+                        <c-new-paginator records={limitSize} page-size={pageSize}  onpagechange={handleoffset} class="header-pagination"></c-new-paginator>
+                        <div class="totalRecord">
+                            <b class="totalmileges">{totalmileage} mi</b>
+                            <c-dropdown-select class="recordPerPage" data-id="per_page"
+                                options={pageSizeOptions}
+                                onchange={handleRecordsPerPage}
+                               selected-value={pageSize}
+                                main-class="default-box-input-small slds-truncate"></c-dropdown-select>
+                            <span class="total_row">/ {totalrows}</span>
+                        </div>
+                    </template>
+                    
+                </div>
+            </div>
+            <div class="">
+                <div class={mainClass}>
+                    <div class={className} >
+                        <table class={datatable}>
+                            <thead class="">
+                                <tr class="slds-line-height_reset">
+                                    <th class="checkbox_header" scope="col" >
+                                            <div class="checkbox_bg slds-cell-fixed preview-cell slds-th__action slds-th__action_form">
+                                                <div class="slds-checkbox">
+                                                    <template lwc:if={headershow}>   
+                                                        <input type="checkbox" class="CheckUncheckAll" name="options" id="checkbox-unique-id-1173"
+                                                            value="checkbox-unique-id-1173" tabindex="0"
+                                                            aria-labelledby="check-select-all-label column-group-header"
+                                                            onclick={IsAllCheckForApprove} />
+                                                        <label class="slds-checkbox__label" for="checkbox-unique-id-1173"
+                                                            id="check-select-all-label">
+                                                            <span class="slds-checkbox_faux click_checkbox green_checkbox"></span>
+                                                            <span class="slds-form-element__label slds-assistive-text">Select All</span>
+                                                        </label>
+                                                    </template>
+                                                </div>
+                                            </div>
+                                    </th>
+                                    <th class="header-title_01" scope="col"  >
+                                        <div class="slds-cell-fixed preview-cell slds-cell-wrap"  title="Date & Time" >
+                                            <a data-name="Date & Time"
+                                                class="head-sort" onclick={handleicon}>
+                                                Date & Time
+                                                    <div class="sort-container" data-name="Date & Time" >
+                                                        <template lwc:if={searchDataLength}>
+                                                            <i class="fa-solid fa-sort-up green_icon sorting_asc"
+                                                            data-name="Date & Time"></i>
+                                                            <i class="fa-solid fa-sort-down green_icon sorting_dsc"
+                                                            data-name="Date & Time"></i>
+                                                        </template>    
+                                                    </div>
+                                            </a>
+                                        </div>
+                                </th>
+                                    <!-- <template lwc:if={TypeOptions}> -->
+                                        <template for:each={TypeOptions} for:item="head">
+                                            <th class="header-title" scope="col" key={head.fieldlabel} >
+                                                    <div class="slds-cell-fixed preview-cell slds-cell-wrap"  title={head.fieldlabel} >
+                                                        <a data-name={head.fieldlabel} 
+                                                            class="head-sort" onclick={handleicon}>
+                                                            {head.fieldlabel}
+                                                                <div class="sort-container" data-name={head.fieldlabel} >
+                                                                    <template lwc:if={searchDataLength}>
+                                                                        <i class="fa-solid fa-sort-up green_icon sorting_asc"
+                                                                        data-name={head.fieldlabel}></i>
+                                                                        <i class="fa-solid fa-sort-down green_icon sorting_dsc"
+                                                                        data-name={head.fieldlabel}></i>
+                                                                    </template>    
+                                                                </div>
+                                                        </a>
+                                                    </div>
+                                            </th>
+                                        </template>
+                                    <!-- </template> -->
+                                </tr>
+                            </thead>
+                            <tbody class="content-body">
+                                <template lwc:if={searchDataLength}>
+                                    <template for:each={MilegesData} for:item="acc">
+                                        <tr class={acc.rowSelected}  key={acc.Id}  data-id={acc.Id} onclick={previewTrip} >
+                                            <td class="td_checkbox ">
+                                                <div class="checkbox_checkin">
+                                                    <div class="slds-checkbox">
+                                                        <input type="checkbox" class="checkboxCheckUncheckSearch" data-element-type="checkbox" name="options" id={acc.Id} data-id={acc.Id}
+                                                            value={acc.IsSelected} tabindex="0"
+                                                            aria-labelledby="check-select-all-label column-group-header"
+                                                            onclick={handleCheckbox} />
+                                                        <label class="slds-checkbox__label" for={acc.Id}
+                                                            id={acc.Id}>
+                                                            <span class="slds-checkbox_faux green_checkbox" data-element-type="checkbox"></span>
+                                                            <!-- <span class="slds-form-element__label slds-assistive-text">Select All</span> -->
+                                                        </label>
+                                                    </div>
+                                                    <div class="hover-text location">
+                                                        <template lwc:if={acc.checkinicon}>
+                                                            <template lwc:if={acc.approvecheckin}>
+                                                                <img class={acc.iconcolor} src={mapIcon} />
+                                                                <span  class="tooltip-text-location" ><template lwc:if={acc.TrackingTolltip}>{acc.TrackingStyle}<br></template>Trip Has Driving Route</span>
+                                                            </template>
+                                                            <template lwc:elseif={acc.rejectcheckin}>
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="20" viewBox="0 0 8 10" fill="none">
+                                                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.6322 0C5.63813 0 7.26415 1.67363 7.26415 3.73815C7.26415 4.37125 7.11078 4.98218 6.82253 5.526C6.81749 5.53834 6.81161 5.55068 6.80496 5.56279L3.92287 10.8251C3.79524 11.0582 3.4691 11.0583 3.34132 10.8252L0.455901 5.56294C0.445285 5.54361 0.43673 5.52388 0.430086 5.50399C0.149326 4.96576 0 4.36276 0 3.73815C0 1.67368 1.62623 0 3.6322 0ZM3.66927 5.12246C4.44876 5.12246 5.08066 4.4568 5.08066 3.63568C5.08066 2.81456 4.44876 2.14891 3.66927 2.14891C2.88979 2.14891 2.25789 2.81456 2.25789 3.63568C2.25789 4.4568 2.88979 5.12246 3.66927 5.12246Z" fill="#FA7800"/>
+                                                                  </svg>
+                                                                  <span  class="tooltip-text-location" ><template lwc:if={acc.TrackingTolltip}>{acc.TrackingStyle}<br></template>Trip Has Driving Route</span>
+                                                            </template>
+                                                        </template>
+                                                        <template lwc:elseif={acc.checkinicon}>
+                                                            <img class={acc.iconcolor}  />
+                                                            <span  class="tooltip-text-location" >{acc.TrackingStyle}</br>Trip Has Driving Route</span>
+                                                        </template>
+                                                        <template lwc:else>&nbsp;&nbsp;&nbsp;</template>
+                                                    </div>
+                                                    <div class="approve-reject_icon">
+                                                        <template lwc:if={acc.approverejecticon}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 18 14" fill="none">
+                                                                <path d="M6.7392 13.5C6.47057 13.5 6.20193 13.3953 5.99719 13.1859L0.307481 7.41059C-0.102494 6.99162 -0.102494 6.31281 0.307481 5.89387C0.716794 5.4754 1.3818 5.4754 1.79145 5.89387L6.73949 10.911L16.2086 0.313853C16.6179 -0.104618 17.2829 -0.104618 17.6925 0.313853C18.1025 0.73283 18.1025 1.41163 17.6925 1.83058L7.48069 13.186C7.27628 13.3952 7.00766 13.5 6.7392 13.5Z" fill="#7ABB4A" />
+                                                            </svg>
+                                                            <span class="statusValue">
+                                                                <div class="statusIcon" lwc:if={acc.sIcon}>
+                                                                    <img src={acc.statusIcon} />
+                                                                </div>
+                                                                {acc.statusText}
+                                                            </span>
+                                                        </template>
+                                                        <template lwc:elseif={acc.approverejecticon1}>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 12 10" fill="none">
+                                                                <path d="M9.99762 7.23715L9.99759 7.23709L8.77766 4.87152L9.99769 2.50595L9.9977 2.50593C10.0746 2.35665 10.0661 2.17949 9.97594 2.03766L9.97593 2.03764C9.88568 1.89588 9.72665 1.81035 9.55633 1.81035H1.93732V1.43018C1.93732 1.16367 1.71472 0.95 1.44366 0.95C1.17261 0.95 0.95 1.16365 0.95 1.43017V11.5698C0.95 11.8363 1.17261 12.05 1.44366 12.05C1.71472 12.05 1.93732 11.8363 1.93732 11.5698V7.93268H9.55633C9.72662 7.93268 9.88565 7.84717 9.97581 7.70542C10.0661 7.56379 10.0743 7.38632 9.99762 7.23715ZM7.78389 5.08665L8.75632 6.97235H1.93732V2.77067H8.75631L7.78389 4.65607L7.78387 4.65612C7.7142 4.79155 7.71419 4.95119 7.78387 5.08661L7.78389 5.08665Z" fill="#FA7800" stroke="#FA7800" stroke-width="0.1"/>
+                                                            </svg>
+                                                            <span class="statusValue">
+                                                                <div class="statusIcon" lwc:if={acc.sIcon}>
+                                                                    <img src={acc.statusIcon} />
+                                                                </div>
+                                                                {acc.statusText}
+                                                            </span>
+                                                        </template>
+                                                        <template lwc:else></template>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="" data-id={acc.Id}><div class="date_style"><div>{acc.Date}&nbsp;</div><div><span class={acc.timeColor}>{acc.weekday}&nbsp;{acc.StartTime}{acc.dated}{acc.EndTime}&nbsp;{acc.timezone}</span></div></div> </td>
+                                            <td class="td_style" data-id={acc.Id}>{acc.DriverName}</td>
+                                            <td class="td_style " data-id={acc.Id}>{acc.Mileges}</td>
+                                            <td class="td_style "  data-id={acc.Id}>
+                                                <div  class="hover-text truncate_text">{acc.From}
+                                                    <span  class="tooltip-text" >{acc.Triporigion}</span>
+                                                </div>
+                                            </td>
+                                            <td class="td_style "  data-id={acc.Id}>
+                                                <div  class="hover-text truncate_text">{acc.To}
+                                                    <span  class="tooltip-text" >{acc.Toorigion}</span>
+                                                </div>
+                                            </td>
+                                            <td class="td_style "  data-id={acc.Id}>
+                                                <div  class="hover-text truncate_text">{acc.Tags}
+                                                    <span  class="tooltip-text" >{acc.Tags}</span>
+                                                </div>
+                                            </td>
+                                            <td class="td_style "  data-id={acc.Id}>
+                                                <div  class="hover-text truncate_text">{acc.Notes}
+                                                    <span  class="tooltip-text" >{acc.Notes}</span>
+                                                </div>
+                                            </td>
+                                        </tr> 
+                                        
+                                        <tr key={acc.Id} data-id={acc.Id} class="row content_view" >
+                                            <td colspan="8" class="opened" style="padding-left: 0!important;padding-right: 0 !important">
+                                                <form class="trip_row_form">
+                                                    <table class="form">
+                                                            <tbody>
+                                                                <tr >
+                                                                    <td class="view-text" >
+                                                                        <c-editable-datatable data-id={acc.Id} class="" onupdateevent={handleRefresh} onmycustomevent={closeTrip}></c-editable-datatable>
+                                                                    </td> 
+                                                                </tr>
+                                                            </tbody>
+                                                    </table>
+                                                    <hr class="row_splitter"/>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        </template>
+                                        
+                                    </template>
+                                <!-- </template> -->
+                                <template lwc:else>
+                                    <tr class="norecord">
+                                        <td  ></td>
+                                        <td  >----</td>
+                                        <template for:each={TypeOptions} for:item="head">
+                                            <td  key={head.fieldlabel}>----</td>
+                                        </template>
+                                    </tr>
+                                    <tr class="norecord">
+                                        <td colspan="100%">
+                                            <div class="slds-align_absolute-center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                                    viewBox="0 0 30 30" fill="none">
+                                                    <g clip-path="url(#clip0_1230_6278)">
+                                                        <path fill-rule="evenodd" clip-rule="evenodd"
+                                                            d="M5.00298 2C4.38433 2 3.88281 2.50151 3.88281 3.12016V3.77839H4.09168H4.50943H4.7183V3.12016C4.7183 2.96294 4.84575 2.83549 5.00298 2.83549H5.67615V2.62662V2.20887V2H5.00298ZM8.36882 2H7.02249V2.20887V2.62662V2.83549H8.36882V2.62662V2.20887V2ZM11.0615 2H9.71516V2.20887V2.62662V2.83549H11.0615V2.62662V2.20887V2ZM13.7542 2H12.4078V2.20887V2.62662V2.83549H13.7542V2.62662V2.20887V2ZM16.4469 2H15.1005V2.20887V2.62662V2.83549H16.4469V2.62662V2.20887V2ZM18.4664 2H17.7932V2.20887V2.62662V2.83549H18.4664V2.62662V2.20887V2ZM3.88281 5.09483V6.41127H4.09168H4.50943H4.7183V5.09483H4.50943H4.09168H3.88281ZM3.88281 7.72772V9.04416H4.09168H4.50943H4.7183V7.72772H4.50943H4.09168H3.88281ZM25.5942 9.51994V8.87934H25.3854H24.9676H24.7587V9.51994H24.9676H25.3854H25.5942ZM3.88281 10.3606V11.677H4.09168H4.50943H4.7183V10.3606H4.50943H4.09168H3.88281ZM25.5942 12.0823V10.8011H25.3854H24.9676H24.7587V12.0823H24.9676H25.3854H25.5942ZM3.88281 12.9935V14.3099H4.09168H4.50943H4.7183V12.9935H4.50943H4.09168H3.88281ZM25.5942 14.6447V13.3635H25.3854H24.9676H24.7587V14.6447H24.9676H25.3854H25.5942ZM3.88281 15.6264V16.9428H4.09168H4.50943H4.7183V15.6264H4.50943H4.09168H3.88281ZM25.5942 17.2071V15.9259H25.3854H24.9676H24.7587V17.2071H24.9676H25.3854H25.5942ZM3.88281 18.2593V19.5757H4.09168H4.50943H4.7183V18.2593H4.50943H4.09168H3.88281ZM25.5942 19.7695V18.4883H25.3854H24.9676H24.7587V19.7695H24.9676H25.3854H25.5942ZM3.88281 20.8922V22.2086H4.09168H4.50943H4.7183V20.8922H4.50943H4.09168H3.88281ZM25.5942 22.3319V21.0507H25.3854H24.9676H24.7587V22.3319H24.9676H25.3854H25.5942ZM3.88281 23.525V24.8415H4.09168H4.50943H4.7183V23.525H4.50943H4.09168H3.88281ZM25.5942 24.8943V23.6131H25.3854H24.9676H24.7587V24.8943H24.9676H25.3854H25.5942ZM3.88281 26.1579V26.8161C3.88281 27.4348 4.38433 27.9363 5.00298 27.9363H5.61145V27.7274V27.3097V27.1008H5.00298C4.84575 27.1008 4.7183 26.9734 4.7183 26.8161V26.1579H4.50943H4.09168H3.88281ZM25.5942 26.298V26.1755H25.4883L25.5942 26.298ZM24.2917 27.9363L23.8656 27.4438V27.7274V27.9363H24.2917ZM6.82839 27.9363H8.04534V27.7274V27.3097V27.1008H6.82839V27.3097V27.7274V27.9363ZM9.26228 27.9363H10.4792V27.7274V27.3097V27.1008H9.26228V27.3097V27.7274V27.9363ZM11.6962 27.9363H12.9131V27.7274V27.3097V27.1008H11.6962V27.3097V27.7274V27.9363ZM14.1301 27.9363H15.347V27.7274V27.3097V27.1008H14.1301V27.3097V27.7274V27.9363ZM16.5639 27.9363H17.7809V27.7274V27.3097V27.1008H16.5639V27.3097V27.7274V27.9363ZM18.9978 27.9363H20.2148V27.7274V27.3097V27.1008H18.9978V27.3097V27.7274V27.9363ZM21.4317 27.9363H22.6487V27.7274V27.3097V27.1008H21.4317V27.3097V27.7274V27.9363Z"
+                                                            fill="#7ABB4A" />
+                                                        <path
+                                                            d="M18.0823 3.75447H18.5V5.09605H18.0823V6.43762H18.5V7.7792H18.0823V8.44998C18.0823 8.91141 18.4563 9.28547 18.9177 9.28547H19.635V8.86773H21.0695V9.28547H22.504V8.86773H23.9385V9.28547H24.6557C25.2238 9.28547 25.4987 8.59023 25.0843 8.20171L24.5887 7.73712L24.303 8.04188L23.3119 7.11268L23.5976 6.80792L22.6064 5.87873L22.3207 6.18349L21.3296 5.25429L21.6153 4.94953L20.6242 4.02034L20.3384 4.3251L19.3473 3.39591L19.633 3.09115L19.1374 2.62655C18.7372 2.25136 18.0823 2.53512 18.0823 3.08369V3.75447Z"
+                                                            stroke="#7ABB4A" stroke-width="0.835488"
+                                                            stroke-dasharray="1.3 1.3" />
+                                                        <circle cx="18.3181" cy="19.3394" r="4.84877"
+                                                            transform="rotate(49.1347 18.3181 19.3394)" stroke="#7ABB4A"
+                                                            stroke-width="1.12791" />
+                                                        <rect x="23.3359" y="23.6875" width="5.68178" height="2.05694"
+                                                            rx="1.02847" transform="rotate(49.1347 23.3359 23.6875)"
+                                                            stroke="#7ABB4A" stroke-width="1.12791" />
+                                                        <path d="M21.1172 22.625L22.807 24.5781" stroke="#7ABB4A"
+                                                            stroke-width="0.960812" />
+                                                    </g>
+                                                    <defs>
+                                                        <clipPath id="clip0_1230_6278">
+                                                            <rect width="30" height="30" fill="white" />
+                                                        </clipPath>
+                                                    </defs>
+                                                </svg>
+                                            </div>
+                                            <div
+                                                class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">
+                                                {norecordMessagenew}</div>
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="slds-m-top_x-large slds-m-left_small">
+            <lightning-icon class="back_button" icon-name="utility:back" size="xx-small" onclick={handleBack} ></lightning-icon>
+        </div>
+    </div>
+    <c-user-profile-modal data-id='syncall' header='Sync Month' month=''  show-btn={isFalse}
+                        modal-class={modalclass}
+                        header-class={headerclass}
+                        modal-content-style={modalcontentstyle}
+                        style-header={styleheader}
+                        subheader-class={subheaderClass}
+                        close-btn-class={closebtnclass} onclosedialog={handleCloseModal} onkeypress={handleEscKey}>
+                        <div class="sync_month" >
+                            <!-- <h2 class="sync_dropdown-title">Sync Month :</h2>  -->
+                            <c-dropdown-select class="sync_dropdown"
+                            options={options}
+                            title="Choose Sync Month"
+                            onchange={handlevaluechange}
+                            main-class="default-box-input slds-truncate"></c-dropdown-select>
+                        </div>
+                        <div class="button_class_modal slds-align_absolute-center" >
+                               
+                            <button type="button"
+                             class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" onclick={handlemodalselect}>
+                             Select</button>
+                             <button type="button"
+                             class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip" onclick={handlesynccloseModal}>
+                             Cancel</button>
+                        </div>
+                </c-user-profile-modal>
+    <c-user-profile-modal data-id='mileges' header={title} month=''  show-btn={isFalse}
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass} onclosedialog={handleCloseModal} onkeypress={handleEscKey}>
+        <div class="modal_header"><h2 class="modal_content-class">{modalcontentmessage}</h2>  </div>
+        <div class="button_class_modal slds-align_absolute-center" >
+            
+                <button type="button"
+                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" onclick={handlemodalYes}>
+                Continue</button>
+                <button type="button"
+                class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip" onclick={closeModal}>
+                {btnlabel}</button>
+        </div>
+    </c-user-profile-modal>
+    <c-user-profile-modal data-id='export_trip' header='Download Trips Between Two Date Ranges' month=''  show-btn={isFalse}
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass} onclosedialog={handleCloseModal} onkeypress={handleEscKey}>
+        
+        <div class="sync_month" align="center">
+        <h2 class="sync_dropdown-title">Select the starting and ending dates</h2> 
+        <div class="date_picker">
+            <!-- Use new datepicker LWC -->
+            <c-date-picker cmp-class="flat-container width-small" date={fromDate} date-format={dateFormat} data-key="tripFromDate" ondateselect={handleDateChange}></c-date-picker>
+            <!-- Added by Raj -->
+            <span class="to_span">to</span>
+            <!-- Use new datepicker LWC -->
+            <c-date-picker cmp-class="flat-container width-small" date={toDate} date-format={dateFormat} data-key="tripToDate" ondateselect={handleDateChange}></c-date-picker>
+            <!-- Added by Raj -->
+        </div>    
+    </div>
+    <div class="button_class_modal slds-align_absolute-center" >
+       
+         <button type="button"
+         class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip" onclick={handleexportcloseModal}>
+         Cancel</button>
+         <button type="button"
+         class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip" onclick={handledownloadCSV}>
+         <svg  class="download-svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="3 0 12 14" fill="none"><path  d="M3.42685 5.66718L3.42684 5.66717C3.1633 5.40363 3.1633 4.97864 3.42685 4.71511C3.69039 4.45156 4.11538 4.45156 4.37891 4.71511L6.28511 6.62131V0.816062C6.28511 0.444945 6.5864 0.143652 6.95752 0.143652C7.32864 0.143652 7.62993 0.444945 7.62993 0.816062V6.62131L9.53613 4.71511C9.79967 4.45156 10.2247 4.45156 10.4882 4.71511C10.7517 4.97865 10.7517 5.40364 10.4882 5.66717L7.43365 8.72173C7.40101 8.75436 7.36607 8.78115 7.33186 8.80475L7.33131 8.80512C7.32183 8.8114 7.31252 8.81605 7.3052 8.81971L7.30461 8.82001C7.29674 8.82394 7.29103 8.82684 7.28549 8.83051L7.28471 8.83103L7.28471 8.83102L7.28383 8.83156C7.26428 8.84381 7.241 8.85839 7.21403 8.86748C7.21383 8.86755 7.21362 8.86762 7.21342 8.86769L7.20202 8.8335C7.18994 8.83802 7.17792 8.84167 7.16537 8.84547C7.15671 8.8481 7.1478 8.8508 7.13845 8.85392L3.42685 5.66718ZM3.42685 5.66718L6.48211 8.72173L6.48219 8.72181C6.51154 8.75097 6.54645 8.78071 6.58467 8.80527M3.42685 5.66718L6.58467 8.80527M6.58467 8.80527C6.58459 8.80522 6.58452 8.80517 6.58445 8.80512L6.60436 8.77508M6.58467 8.80527C6.58474 8.80531 6.58482 8.80536 6.58489 8.80541L6.60436 8.77508M6.60436 8.77508C6.56867 8.75218 6.53564 8.72412 6.50759 8.69625L6.69829 8.86607C6.69799 8.86592 6.69769 8.86577 6.69739 8.86562L6.71373 8.8335C6.69974 8.82732 6.68667 8.82014 6.67401 8.81318C6.66594 8.80875 6.65804 8.80441 6.65017 8.80047C6.63489 8.79283 6.61962 8.7852 6.60436 8.77508ZM7.28849 8.78778C7.29612 8.78396 7.30376 8.78014 7.31139 8.77508L7.28849 8.78778ZM7.28849 8.78778C7.28085 8.7916 7.27322 8.79541 7.26559 8.80047L7.28849 8.78778ZM12.9508 11.1841V11.184C12.9506 10.8128 12.6497 10.5117 12.2784 10.5117H1.63637C1.26526 10.5117 0.963965 10.8129 0.963965 11.1841C0.963965 11.5552 1.26526 11.8565 1.63637 11.8565H12.2784C12.6495 11.8565 12.9508 11.5552 12.9508 11.1841Z" fill="white" stroke="white" stroke-width="0.0720703"></path>
+         </svg>Download CSV</button>
+    </div>
+</c-user-profile-modal>             
+</template>

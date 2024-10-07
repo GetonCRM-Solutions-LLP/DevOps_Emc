@@ -1,0 +1,171 @@
+<template>
+    <div class="slds-grid slds-wrap add-employee-container">
+        
+        <div class="slds-col slds-size_6-of-12" >
+            <div class="slds-col slds-size_6-of-12 form-headers">
+                <h1>Personal details</h1>
+            </div>
+            <template for:each={employeeFields} for:item="field">
+                <template lwc:if={field.isPlanField}></template>
+                <template lwc:else>
+                    <div key={field.fieldName}  class="slds-col slds-size_6-of-6 slds-m-bottom_large" >
+                        <div  class="slds-grid slds-wrap info-section">
+                            <div class="slds-col slds-size_1-of-6">
+                                <label>{field.label}:</label>
+                            </div>
+                            <div class="slds-col slds-size_4-of-6 slds-p-left_small input-border">
+                                <div >
+                                    <template lwc:if={field.isDateField}>
+                                        <div>
+                                            <c-date-picker is-disable={field.isDisable} date-format={dateFormat} is-selected-date={isSelectedDate} min-date='' max-date='' cmp-class={field.cmpClass} data-fieldname={field.fieldName} data-input-type={field.type} date={field.displayValue}  data-key={field.fieldName} ondateselect={handleInputChange}></c-date-picker>
+                                            <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                        </div>
+                                    </template>
+                                    <template lwc:else>
+                                        <template lwc:if={field.isDropDown}>
+                                                <template lwc:if={field.isDependentDropDown}>
+                                                    <div>
+                                                        <c-dropdown-select data-id={field.fieldName}  main-class={field.cmpClass} data-fieldname={field.fieldName} data-name={field.fieldName}  options={field.dropDownList} 
+                                                        onchange={handleInputChange} data-input-type={field.type} selected-value={field.value}  ></c-dropdown-select>
+                                                        <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                                    </div>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div>
+                                                        <c-dropdown-select data-id={field.fieldName} main-class={field.cmpClass}  data-fieldname={field.fieldName} data-name={field.fieldName}  options={field.dropDownList} 
+                                                        onchange={handleInputChange} data-input-type={field.type}  ></c-dropdown-select>
+                                                        <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                                    </div>
+                                                </template>
+                                        </template>
+                                        <template lwc:else>
+                                            <template lwc:if={field.isDrivingState}>
+                                                <div class={field.errorClass}>
+                                                    <c-tag-state-list class="state-list tag-input" modal-class="tag-input-container-add-employee" tags={field.value} onremove={handleRemoveTag} >
+                                                        <input type="text" placeholder="Enter Driving state" value={newTag} onkeydown={handleTagInput}  />
+                                                    </c-tag-state-list>
+                                                    <span class="valid-state" onmouseenter={showTooltip} onmouseleave={hideTooltip} >?</span>
+                                                    <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left state-popover" role="tooltip" id="help">
+                                                        <div class="slds-popover__body">
+                                                            <b>Use State Abbreviations:</b><br/>
+                                                            <div class="state-content">{validStateList}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                            <template lwc:else>
+                                                <!-- <template lwc:if="" ></template> -->
+                                                <input  class={field.errorClass} value={field.value} disabled={field.isDisable} data-input-type={field.type} data-fieldname={field.fieldName}  oninput={handleInputChange}  /> 
+                                                <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                                <p class="error-text">{field.errorMsg}</p>
+                                            </template>
+                                            <!-- <input class={field.errorClass} disabled={field.isDisable} data-input-type={field.type} data-fieldname={field.fieldName} onchange={handleInputChange} oninput={handleInputChange} /> -->
+                                            <!-- <template lwc:if={field.isDisable}>
+                                                <input class="content-input disabled-input" disabled={field.isDisable} />
+                                                <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                            </template>
+                                            <template if:false={field.isDisable}>
+                                                <input class="content-input" data-input-type={field.type} data-fieldname={field.fieldName} oninput={handleInputChange} />
+                                                <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                            </template> -->
+            
+                                        </template>
+                                    </template>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-6">
+                
+                            </div>
+                        </div>
+                    </div>  
+                </template>
+               
+            </template>
+        </div>
+        
+        <div class="slds-col slds-size_6-of-12">
+            <div class="slds-col slds-size_6-of-12 form-headers">
+                <h1>Plan details</h1>
+            </div>
+            <template for:each={employeeFields} for:item="field">
+                <div key={field.fieldName} lwc:if={field.isPlanField} class="slds-col slds-size_6-of-6 slds-m-bottom_large" >
+                    <div  class="slds-grid slds-wrap info-section">
+                        <div class="slds-col slds-size_1-of-6">
+                            <label>{field.label}:</label>
+                        </div>
+                        <div class="slds-col slds-size_4-of-6 slds-p-left_small input-border">
+                            <div >
+                                <template lwc:if={field.isDateField}>
+                                    <div>
+                                        <c-date-picker is-disable={field.isDisable} is-selected-date={isSelectedDate} date-format={dateFormat} min-date='' max-date='' cmp-class={field.cmpClass} data-fieldname={field.fieldName} data-input-type={field.type} date={field.displayValue}  data-key={field.fieldName} ondateselect={handleInputChange}></c-date-picker>
+                                        <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                    </div>
+                                </template>
+                                <template lwc:else>
+                                    <template lwc:if={field.isDropDown}>
+                                            <template lwc:if={field.isDependentDropDown}>
+                                                <div>
+                                                    <c-dropdown-select data-id={field.fieldName}  main-class={field.cmpClass} data-fieldname={field.fieldName} data-name={field.fieldName}  options={field.dropDownList} 
+                                                    onchange={handleInputChange} data-input-type={field.type} selected-value={field.value}  ></c-dropdown-select>
+                                                    <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                                </div>
+                                            </template>
+                                            <template lwc:else>
+                                                <div>
+                                                    <c-dropdown-select data-id={field.fieldName} main-class={field.cmpClass}  data-fieldname={field.fieldName} data-name={field.fieldName}  options={field.dropDownList} 
+                                                    onchange={handleInputChange} data-input-type={field.type}  ></c-dropdown-select>
+                                                    <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                                </div>
+                                            </template>
+                                    </template>
+                                    <template lwc:else>
+                                        <template lwc:if={field.isDrivingState}>
+                                            <div class={field.errorClass}>
+                                                <c-tag-state-list class="state-list tag-input" modal-class="tag-input-container-add-employee" tags={field.value} onremove={handleRemoveTag} >
+                                                    <input type="text" placeholder="Enter Driving state"  value={newTag} onkeydown={handleTagInput} onfocusout={handleTagInput}  />
+                                                </c-tag-state-list>
+                                                <span class="valid-state" onmouseenter={showTooltip} onmouseleave={hideTooltip} >?</span>
+                                                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left state-popover" role="tooltip" >
+                                                    <div class="slds-popover__body">
+                                                        <b>Use State Abbreviations:</b><br/>
+                                                        <div class="state-content">{validStateList}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <!-- <template lwc:if="" ></template> -->
+                                            <input  class={field.errorClass} value={field.value} disabled={field.isDisable} data-input-type={field.type} data-fieldname={field.fieldName} onfocusout={handleFocusOut}  oninput={handleInputChange}  /> 
+                                            <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                            <p class="error-text">{field.errorMsg}</p>
+                                        </template>
+                                        <!-- <input class={field.errorClass} disabled={field.isDisable} data-input-type={field.type} data-fieldname={field.fieldName} onchange={handleInputChange} oninput={handleInputChange} /> -->
+                                        <!-- <template lwc:if={field.isDisable}>
+                                            <input class="content-input disabled-input" disabled={field.isDisable} />
+                                            <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                        </template>
+                                        <template if:false={field.isDisable}>
+                                            <input class="content-input" data-input-type={field.type} data-fieldname={field.fieldName} oninput={handleInputChange} />
+                                            <span lwc:if={field.isRequired} class="asterisk">*</span>
+                                        </template> -->
+        
+                                    </template>
+                                </template>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_1-of-6">
+            
+                        </div>
+                    </div>
+                </div>  
+            </template>
+        </div>
+    </div>
+    <div>
+        <button  onclick={AddEmployee} class="slds-btn slds-btn-primary slds-btn-sm btn-submit waves-effect bc-green waves-light mleft-0 add-employee">Submit</button>
+        <template lwc:if={isUpdateMode}>
+            <a class="linked"  onclick={handleMBurse} > Resend mLog App Link</a>
+            <a class="linked" onclick={handleMLog} > Resend mDash App Link</a>
+        </template>
+    </div>
+</template>

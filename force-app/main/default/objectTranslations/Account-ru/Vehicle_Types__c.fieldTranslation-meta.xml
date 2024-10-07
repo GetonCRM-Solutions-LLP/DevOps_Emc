@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Vehicle Types --></label>
+    <name>Vehicle_Types__c</name>
+    <picklistValues>
+        <masterLabel>2020 AWD Ford Escape</masterLabel>
+        <translation><!-- 2020 AWD Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Chevrolet Impala</masterLabel>
+        <translation><!-- 2020 Chevrolet Impala --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Chevrolet Malibu</masterLabel>
+        <translation><!-- 2020 Chevrolet Malibu --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Dodge Charger</masterLabel>
+        <translation><!-- 2020 Dodge Charger --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Dodge Durango</masterLabel>
+        <translation><!-- 2020 Dodge Durango --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Dodge Journey</masterLabel>
+        <translation><!-- 2020 Dodge Journey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Dodge Ram 2500</masterLabel>
+        <translation><!-- 2020 Dodge Ram 2500 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford Escape</masterLabel>
+        <translation><!-- 2020 Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford Explorer</masterLabel>
+        <translation><!-- 2020 Ford Explorer --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford F-150</masterLabel>
+        <translation><!-- 2020 Ford F-150 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford F-250</masterLabel>
+        <translation><!-- 2020 Ford F-250 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford Fusion</masterLabel>
+        <translation><!-- 2020 Ford Fusion --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Ford Taurus</masterLabel>
+        <translation><!-- 2020 Ford Taurus --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Full Size Sedan 2</masterLabel>
+        <translation><!-- 2020 Full Size Sedan 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Full Size Sedan 3</masterLabel>
+        <translation><!-- 2020 Full Size Sedan 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Full-Size Sedan</masterLabel>
+        <translation><!-- 2020 Full-Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Honda Civic</masterLabel>
+        <translation><!-- 2020 Honda Civic --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Mid Size Sedan 4</masterLabel>
+        <translation><!-- 2020 Mid Size Sedan 4 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 SUV 1</masterLabel>
+        <translation><!-- 2020 SUV 1 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2020 Toyota Camry</masterLabel>
+        <translation><!-- 2020 Toyota Camry --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 4x4 Pickup Truck</masterLabel>
+        <translation><!-- 2021 4x4 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 4x4 Pickup Truck No FCA</masterLabel>
+        <translation><!-- 2021 4x4 Pickup Truck No FCA --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 4x4 V6 Pickup Truck</masterLabel>
+        <translation><!-- 2021 4x4 V6 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 4x4 V8 Pickup Truck</masterLabel>
+        <translation><!-- 2021 4x4 V8 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 AWD Ford Escape</masterLabel>
+        <translation><!-- 2021 AWD Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Chevrolet Malibu</masterLabel>
+        <translation><!-- 2021 Chevrolet Malibu --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Chrysler 300</masterLabel>
+        <translation><!-- 2021 Chrysler 300 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Clare Rose Reimbursement Rate</masterLabel>
+        <translation><!-- 2021 Clare Rose Reimbursement Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Compact SUV</masterLabel>
+        <translation><!-- 2021 Compact SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Compact Sedan</masterLabel>
+        <translation><!-- 2021 Compact Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Dodge Charger</masterLabel>
+        <translation><!-- 2021 Dodge Charger --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Dodge Durango</masterLabel>
+        <translation><!-- 2021 Dodge Durango --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Dodge Journey</masterLabel>
+        <translation><!-- 2021 Dodge Journey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Ford Escape</masterLabel>
+        <translation><!-- 2021 Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Ford F-150</masterLabel>
+        <translation><!-- 2021 Ford F-150 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Ford F-250</masterLabel>
+        <translation><!-- 2021 Ford F-250 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Ford Fusion</masterLabel>
+        <translation><!-- 2021 Ford Fusion --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Ford Taurus</masterLabel>
+        <translation><!-- 2021 Ford Taurus --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size Pick Up Truck</masterLabel>
+        <translation><!-- 2021 Full Size Pick Up Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size SUV</masterLabel>
+        <translation><!-- 2021 Full Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size SUV 2</masterLabel>
+        <translation><!-- 2021 Full Size SUV 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size Sedan</masterLabel>
+        <translation><!-- 2021 Full Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size Sedan 2</masterLabel>
+        <translation><!-- 2021 Full Size Sedan 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Full Size Sedan 3</masterLabel>
+        <translation><!-- 2021 Full Size Sedan 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 IRS Mileage Rate</masterLabel>
+        <translation><!-- 2021 IRS Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Mid Size SUV</masterLabel>
+        <translation><!-- 2021 Mid Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Mid Size Sedan 4</masterLabel>
+        <translation><!-- 2021 Mid Size Sedan 4 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Midsize Sedan</masterLabel>
+        <translation><!-- 2021 Midsize Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Mileage Rate</masterLabel>
+        <translation><!-- 2021 Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Pickup Truck</masterLabel>
+        <translation><!-- 2021 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Pickup Truck 1</masterLabel>
+        <translation><!-- 2021 Pickup Truck 1 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Pickup Truck 2</masterLabel>
+        <translation><!-- 2021 Pickup Truck 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Pickup Truck 3</masterLabel>
+        <translation><!-- 2021 Pickup Truck 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 SUV 1</masterLabel>
+        <translation><!-- 2021 SUV 1 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2021 Subaru Outback</masterLabel>
+        <translation><!-- 2021 Subaru Outback --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 4x4 V6 Pickup Truck</masterLabel>
+        <translation><!-- 2022 4x4 V6 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 4x4 V8 Pickup Truck</masterLabel>
+        <translation><!-- 2022 4x4 V8 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 AWD Ford Escape</masterLabel>
+        <translation><!-- 2022 AWD Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 CRA Rate</masterLabel>
+        <translation><!-- 2022 CRA Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Chevrolet Impala</masterLabel>
+        <translation><!-- 2022 Chevrolet Impala --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Chevrolet Malibu</masterLabel>
+        <translation><!-- 2022 Chevrolet Malibu --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Compact SUV</masterLabel>
+        <translation><!-- 2022 Compact SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Compact Sedan</masterLabel>
+        <translation><!-- 2022 Compact Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Dodge Journey</masterLabel>
+        <translation><!-- 2022 Dodge Journey --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Ford 250</masterLabel>
+        <translation><!-- 2022 Ford 250 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Ford Edge</masterLabel>
+        <translation><!-- 2022 Ford Edge --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Ford Escape</masterLabel>
+        <translation><!-- 2022 Ford Escape --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Ford Explorer</masterLabel>
+        <translation><!-- 2022 Ford Explorer --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Ford F-150</masterLabel>
+        <translation><!-- 2022 Ford F-150 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Full Size SUV</masterLabel>
+        <translation><!-- 2022 Full Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Full Size SUV 2</masterLabel>
+        <translation><!-- 2022 Full Size SUV 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Full Size Sedan</masterLabel>
+        <translation><!-- 2022 Full Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Full-Size SUV</masterLabel>
+        <translation><!-- 2022 Full-Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 IRS Mileage Rate</masterLabel>
+        <translation><!-- 2022 IRS Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Mid Size SUV</masterLabel>
+        <translation><!-- 2022 Mid Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Mid Size Sedan</masterLabel>
+        <translation><!-- 2022 Mid Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Midsize SUV 1</masterLabel>
+        <translation><!-- 2022 Midsize SUV 1 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Midsize SUV 2</masterLabel>
+        <translation><!-- 2022 Midsize SUV 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Mileage Rate</masterLabel>
+        <translation><!-- 2022 Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 P/U Truck</masterLabel>
+        <translation><!-- 2022 P/U Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Pick Up Truck</masterLabel>
+        <translation><!-- 2022 Pick Up Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 SUV</masterLabel>
+        <translation><!-- 2022 SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Volkswagen Atlas</masterLabel>
+        <translation><!-- 2022 Volkswagen Atlas --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2022 Voltswagon Atlas</masterLabel>
+        <translation><!-- 2022 Voltswagon Atlas --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 4x4 Pickup Truck</masterLabel>
+        <translation><!-- 2023 4x4 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 4x4 V8 Pickup Truck</masterLabel>
+        <translation><!-- 2023 4x4 V8 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Compact SUV</masterLabel>
+        <translation><!-- 2023 Compact SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Compact Sedan</masterLabel>
+        <translation><!-- 2023 Compact Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Dodge Charger</masterLabel>
+        <translation><!-- 2023 Dodge Charger --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Full-Size SUV</masterLabel>
+        <translation><!-- 2023 Full-Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Full-Size SUV 2</masterLabel>
+        <translation><!-- 2023 Full-Size SUV 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Full-Size Sedan</masterLabel>
+        <translation><!-- 2023 Full-Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 IRS Mileage Rate</masterLabel>
+        <translation><!-- 2023 IRS Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Large SUV</masterLabel>
+        <translation><!-- 2023 Large SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Mid-Size SUV</masterLabel>
+        <translation><!-- 2023 Mid-Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Mid-Size Sedan</masterLabel>
+        <translation><!-- 2023 Mid-Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Midsize SUV</masterLabel>
+        <translation><!-- 2023 Midsize SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Mileage Rate</masterLabel>
+        <translation><!-- 2023 Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 P/U Truck</masterLabel>
+        <translation><!-- 2023 P/U Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Pickup Truck</masterLabel>
+        <translation><!-- 2023 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Pickup Truck 1</masterLabel>
+        <translation><!-- 2023 Pickup Truck 1 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Pickup Truck 2</masterLabel>
+        <translation><!-- 2023 Pickup Truck 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Pickup Truck 3</masterLabel>
+        <translation><!-- 2023 Pickup Truck 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 Pickup Truck 4</masterLabel>
+        <translation><!-- 2023 Pickup Truck 4 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 SUV</masterLabel>
+        <translation><!-- 2023 SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2023 XL SUV</masterLabel>
+        <translation><!-- 2023 XL SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 4x4 Pickup Truck</masterLabel>
+        <translation><!-- 2024 4x4 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 4x4 V6 Pickup Truck</masterLabel>
+        <translation><!-- 2024 4x4 V6 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 4x4 V8 Pickup Truck</masterLabel>
+        <translation><!-- 2024 4x4 V8 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Compact SUV</masterLabel>
+        <translation><!-- 2024 Compact SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full Size 4x4 V8 Pickup Truck</masterLabel>
+        <translation><!-- 2024 Full Size 4x4 V8 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full Size SUV</masterLabel>
+        <translation><!-- 2024 Full Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size SUV</masterLabel>
+        <translation><!-- 2024 Full-Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size SUV 2</masterLabel>
+        <translation><!-- 2024 Full-Size SUV 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size SUV 3</masterLabel>
+        <translation><!-- 2024 Full-Size SUV 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size SUV 4</masterLabel>
+        <translation><!-- 2024 Full-Size SUV 4 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size Sedan</masterLabel>
+        <translation><!-- 2024 Full-Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size Sedan 2</masterLabel>
+        <translation><!-- 2024 Full-Size Sedan 2 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size Sedan 3</masterLabel>
+        <translation><!-- 2024 Full-Size Sedan 3 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size Sedan 4</masterLabel>
+        <translation><!-- 2024 Full-Size Sedan 4 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Full-Size Sedan 5</masterLabel>
+        <translation><!-- 2024 Full-Size Sedan 5 --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 IRS Mileage Rate</masterLabel>
+        <translation><!-- 2024 IRS Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Large SUV</masterLabel>
+        <translation><!-- 2024 Large SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Mid-Size SUV</masterLabel>
+        <translation><!-- 2024 Mid-Size SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Mid-Size Sedan</masterLabel>
+        <translation><!-- 2024 Mid-Size Sedan --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Mileage Rate</masterLabel>
+        <translation><!-- 2024 Mileage Rate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Pickup Truck</masterLabel>
+        <translation><!-- 2024 Pickup Truck --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 Premium SUV</masterLabel>
+        <translation><!-- 2024 Premium SUV --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>2024 XL SUV</masterLabel>
+        <translation><!-- 2024 XL SUV --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

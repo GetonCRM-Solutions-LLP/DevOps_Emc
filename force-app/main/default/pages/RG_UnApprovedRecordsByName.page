@@ -1,0 +1,632 @@
+<apex:page standardStylesheets="false" controller="RG_UnApprovedRecordsByNameClass" showHeader="false" docType="html-5.0">
+    <apex:includescript value="https://code.jquery.com/jquery-1.11.1.min.js" />
+    <apex:includescript value="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js" />
+    <apex:stylesheet value="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous"/> -->
+    <html lang="en-US" class="no-js">
+        <head>
+            <apex:variable value="{!860}" var="key" />
+            <apex:variable value="{!0}" var="i" />
+            <title>About &#8211; mBurse</title>
+
+            <apex:variable value="{!0}" var="j"/>
+            <link rel='stylesheet'
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}"
+                type='text/css' media='all' />
+            <link rel='stylesheet' id='rcap-style-css'
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}"
+                type='text/css' media='all' />
+
+            <link rel="stylesheet"
+                href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}" />
+                
+            <style type="text/css">
+                #profile #cardetails {
+                    height: 199px;
+                    background-image: url({!if(wraplist.size>0&&wraplist[0].remb.Contact_Id__r.Car_Image__c!=null,wraplist[0].remb.Contact_Id__r.Car_Image__c,"https://www.dropbox.com/s/trc3pfwadw2w2wf/mburse-dashboard5_06.jpg?raw=1")});
+                    background-size: 79%;
+                    background-repeat: no-repeat;
+                    background-position: left bottom;
+                }
+                .popupBackground {
+                    background-color:black;
+                    opacity: 0.25;
+                    position: fixed !important;
+                    filter: alpha(opacity = 20);
+                    position: absolute;
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    z-index: 1000;
+                }
+        
+                .queryTitle {
+                    height: 30px;
+                    background-color: black;
+                    color: white;
+                    padding: 5px 10px 0px 10px;
+                    font-size: 18px;
+                }
+                .custPopup {
+                    background-color: white;
+                    left: 55%;
+                    position: fixed;
+                    width: 400px;
+                    margin-left: -250px;
+                    top: 70px;
+                    z-index: 1000;
+                    border-radius: 5px;
+                    border: 1px solid #000;
+                }
+                        
+                .queryInfo {
+                    padding: 10px 0px 15px 10px;
+                    font-size: 14px;
+                }
+            </style>
+
+        </head>
+
+        <body>
+            <apex:form >
+                <div id="wrapper">
+                    <div id="header">
+                        <img
+                            src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/images/mBurse.png')}" alt="mBurse" />
+                        <apex:outputLink style="float: right;" value="/secur/logout.jsp"  >Log Out</apex:outputLink><br/>
+                        <apex:outputLink style="float: right;" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/>
+                        <apex:outputPanel rendered="{!EnableReports}" >
+                            <apex:outputLink style="float:right;" value="/apex/RG_Report_List_Page" >Reports</apex:outputLink>
+                        </apex:outputPanel>
+                        <div id="mtitle">
+                            mBursement Summary <span>for {!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Name,"")}</span>
+                        </div>
+
+                    </div>
+                    <div>
+                    <div id="profile">
+                        <div>
+                            <div id="uprofile">
+                                <div id="uname">{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Name,"")}</div>
+                                <div id="address">
+                                    <apex:outputText value="{!wraplist[0].remb.Contact_Id__r.MailingStreet} "
+                                        rendered="{!if(wraplist.size>0,if(wraplist[0].remb.Contact_Id__r.MailingStreet!=null,true,false),false)}" />
+                                    <apex:outputText value="{!wraplist[0].remb.Contact_Id__r.MailingCity} "
+                                        rendered="{!if(wraplist.size>0,if(wraplist[0].remb.Contact_Id__r.MailingCity!=null,true,false),false)}" />
+                                    <apex:outputText value="{!wraplist[0].remb.Contact_Id__r.MailingState} "
+                                        rendered="{!if(wraplist.size>0,if(wraplist[0].remb.Contact_Id__r.MailingState!=null,true,false),false)}" />
+                                    <apex:outputText value="{!wraplist[0].remb.Contact_Id__r.MailingPostalCode} "
+                                        rendered="{!if(wraplist.size>0,if(wraplist[0].remb.Contact_Id__r.MailingPostalCode!=null,true,false),false)}" />
+                                    <apex:outputText value="{!wraplist[0].remb.Contact_Id__r.MailingCountry} "
+                                        rendered="{!if(wraplist.size>0,if(wraplist[0].remb.Contact_Id__r.MailingCountry!=null,true,false),false)}" />
+                                </div>
+
+                            </div>
+                            <div id="cardetails">
+                                <div id="compliance">
+                                    <div id="carname">{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Vehicle_Type__c,"None")}</div>
+                                    <div id="odo">
+                                        <div id="odotitle">Starting Odometer Reading</div>
+                                        <div id="thecars">
+                                            <div>
+                                                Vehicle 1<br />{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Vehicle1Odometer__c,"")}
+                                            </div>
+                                            <div>
+                                                Vehicle 2<br />{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Vehicle2Odometer__c,"")}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="monthlyrates">
+                                    <div>
+                                        Monthly Fixed Rate: <br />
+                                        <span> $ {!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Fixed_Amount__c,"")}</span>
+                                    </div>
+                                    <div>
+                                        <apex:outputPanel rendered="{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.account.Show_Hide_Historical_Allowance__c,'')}">
+                                            <b>Historical monthly auto allowance:</b> <br />
+                                            <span>$ {!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.Pre_Auto_Allowance_Amount__c,"")}</span>
+                                        </apex:outputPanel>
+                                    </div>
+                                    <div>
+                                        Compliance: <span>{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.compliancestatus__c,"")}</span>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                        <div class="image" style="width: 25% !important; height: 18%; background-color: white;">
+                            <!-- <img  src="{!URLFOR($Resource.image,'/image/mburse-dashboard5_04.png')}" alt="" /> -->
+                            <img  src="{!if(wraplist.size>0,wraplist[0].remb.Contact_Id__r.account.Logo_Document_Id__c,'')}" alt=""
+                        style="width: 72%; margin: 3% 14%; height: 84%;"/>
+                    
+                        </div>
+                    </div>
+                    <div id="chart" >
+                        
+                        <div id="mtitle">
+                            Unapproved Mileage
+                        </div>
+                        <apex:include pageName="RG_Charting_MyRecords" />
+                    </div>
+                    <style>
+                        .tdefault {
+                            display: table-row;
+                        }
+
+                        .selmonth {
+                            float: left;
+                            width: 123px;
+                            text-align: center;
+                            text-transform: none;
+                            font-size: 12px !important;
+                            font-weight: 100;
+                        }
+                    </style>
+ 
+                    <div id="data">
+                        <div id="dtitle">Monthly Reimbursement Summary</div>
+                            <apex:outputPanel rendered="{!isSuperManager}">
+                                <ul class="nav nav-pills nav-justified" >
+                                    <li>
+                                        <apex:outputlink value="/apex/RG_DashboardAdmin1"> My Team Records</apex:outputlink>
+                                    </li>
+                                    <li class="active"> 
+                                        <apex:outputLink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                            <apex:param name="un" value="ap"/>
+                                        </apex:outputLink>
+                                    </li>
+                                    <li>
+                                        <apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">Login As
+                                            <apex:param name="l" value="xyz"/>
+                                        </apex:outputLink>
+                                    </li>
+                                </ul>
+                            </apex:outputPanel>       
+                            <apex:outputPanel rendered="{!isSuperManagerDriver}">
+                                <ul class="nav nav-pills nav-justified" >
+                                    <li>
+                                        <apex:outputlink value="/apex/RG_DashboardAdmin1"> My Team Records</apex:outputlink>
+                                    </li>
+                                    <li >
+                                        <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                            <apex:param name="id" value="{!conid}"/>
+                                        </apex:outputlink>
+                                    </li>
+                                    <li class="active"> 
+                                        <apex:outputLink value="/apex/RG_UnApprovedRecords">Unapproved Records
+                                            <apex:param name="un" value="ap"/>
+                                        </apex:outputLink>
+                                    </li>
+                                    <li>
+                                        <apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">Login As
+                                            <apex:param name="l" value="xyz"/>
+                                        </apex:outputLink>
+                                    </li>
+                                </ul>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="unApprovedRecord">
+                                <div id="table">
+                                    <table id="d2">
+                                        <tr id="theader">
+                                            <th class="approval">Approve </th>
+                                            <th class="month">Month</th>
+                                            <th class="variablerate">variable rate</th>
+                                            <th class="fuelprice">Fuel</th>
+                                            <th class="mileage">Mileage</th>
+                                            <th class="variablefixedreimb">
+                                                Variable<span>+</span>Fixed<br/>
+                                                Reimbursement
+                                            </th>
+                                            <th class="totalreimb">Total Reimbursement</th>
+
+                                        </tr>
+                                        <apex:repeat value="{!wraplist}" var="rm">
+                                            <apex:variable value="{!key+1}" var="key" />
+                                            <apex:variable value="{!0}" var="i" />
+
+                                            <tr class="summary_{!key} tdefault">
+                                                <td class="milCount_{!rm.mlist.size}"><apex:inputCheckBox value="{!rm.isSelected}" styleClass="allReimbursement_{!key}"/></td>
+
+
+                                                <td class="month"><a href="javascript:void(0)"
+                                                    onclick="shdetails({!key},{!i+1})">{!rm.month}</a></td>
+                                                <td class="variablerate">${!rm.Variable}</td>
+                                                <td id="fuel" class="fuelprice">${!rm.remb.Fuel_Price__c}</td>
+                                                <td class="mileage">{!rm.submil}</td>
+                                                <td class="variablefixedreimb">${!rm.VariableReimbursement}<span>+</span>${!rm.remb.Fixed_Amount__c}
+                                                </td>
+                                                <td class="totalreimb">${!rm.TotalReimbursement}</td>
+                                            </tr>
+                                            <tr class="details_{!key}" style="display: none;">
+                                                <td colspan="7">
+                                                    <div class="detailtitle">
+                                                    {!rm.Month} reimbursement details <span class="selmonth"><a
+                                                        href="javascript:void(0)" onclick="shdetails({!key},{!i})">{!rm.Month}</a></span>
+                                                    </div>
+                                                    <table class="dheader">
+                                                        <tr id="detailheader">
+                                                    
+                                                            <th class="approval">Flagged<br/>
+                                                                <!-- <input type="checkbox" name="allCheckBox" id="allCheckBox" onclick="checkAll(this)"/> -->
+                                                                <apex:inputCheckbox styleClass="allCheckBox_{!key}" id="allCheckBox"
+                                                                onclick="checkAll(this,{!key});uncheckParent({!key});"/>                                                            
+                                                            </th>
+                                                            <th class="approval">Approval<br/>
+                                                                <apex:inputCheckbox styleClass="allApproveBox_{!key}" id="allApproveBox"
+                                                                onclick="checkApprove(this,{!key});uncheckParent({!key});"/>
+                                                                <!-- <input type="checkbox" name="allApproveBox" id="allApproveBox" onclick="checkApprove(this)"/> -->
+                                                            </th>
+                                                            <th class="ddate">date</th>
+                                                           
+                                                            <th class="dorigin">origin</th>
+                                                            <th class="ddestination">destination</th>
+                                                            
+                                                            <th class="dsubmitted">submitted</th>
+                                                            <th class="dapproved">approved</th>
+                                                            <th class="dmaintires">maint/<br />tires
+                                                            </th>
+                                                            <th class="dfuel">fuel Rate</th>
+                                                            <th class="dvariable">variable</th>
+                                                            <th class="dmileage">mileage</th>
+                                                            <th class="dvariable_reimb">variable<br />reimbursement
+                                                            </th>
+                                                            <th>Flagged</th>
+                                                            <th>Reason For Rejection</th>
+                                                        </tr>
+                                                        <apex:repeat value="{!rm.mlist}" var="mil">
+                                                            <tr class="mileange_{!key}_{!mil.mil.id}">
+                                                        
+                                                                <td class="flagged">
+                                                                    <apex:inputCheckbox styleClass="selectId_{!key}" id="selectId" value="{!mil.isRejected}" onclick="reverseSelect(this,{!key})"/> 
+                                                                    <!--<input type="checkbox" name="selectId" value="{!mil.isRejected}" onclick="reverseSelect(this,'{!mil.isRejected}')" />-->
+                                                                    <!-- <apex:inputCheckbox id="selectId"
+                                                                onclick="checkAllFlagged();"/>     -->
+                                                                </td>
+                                                                <td class="approval">
+                                                                    <apex:inputCheckbox styleClass="approvedId_{!key}" id="approvedId" value="{!mil.isApproved}" onclick="reverseApprove(this,{!key})"/>
+                                                                    <!-- <input type="checkbox" name="approvedId" value="{!mil.accept}" onclick="reverseApprove(this)" /> -->
+                                                                </td>
+                                                            
+                                                                <td class="ddate">
+                                                                    <apex:outputText value="{0, date, MM/dd/yy}">
+                                                                        <apex:param value="{!mil.mil.Trip_Date__c}" />  
+                                                                    </apex:outputText>
+                                                                </td>
+                                                        
+                                                                <td class="dorigin">{!mil.mil.Trip_Origin__c}</td>
+                                                                <td class="ddestination">{!mil.mil.Trip_Destination__c}</td>
+                                                       
+                                                                <td class="dsubmitted">
+                                                                    <apex:outputText value="{0, date, MM/dd/yy}">
+                                                                        <apex:param value="{!mil.mil.CreatedDate}" />
+                                                                    </apex:outputText>
+                                                                </td>
+                                                                <td class="dapproved">
+                                                                    <apex:outputText value="{0, date, MM/dd/yy}" styleClass="approvalDate_{!key}">
+                                                                        <apex:param value="{!mil.mil.Approved_Date__c}"/>
+                                                                    </apex:outputText>
+                                                                    <!-- <apex:outputText value="{!mil.mil.Approved_Date__c}" styleClass="approvalDate"/> -->
+                                                                </td>
+                                                                <td class="dmaintires">${!mil.mainttire}</td>
+                                                                <td class="dfuel">${!mil.fuelrate}</td>
+                                                                <td class="dvariable">${!mil.variable}</td>
+                                                                <td class="dmileage">{!mil.mil.Mileage__c}</td>
+                                                                <td class="dvariable_reimb">${!mil.VariableReimbursement2}</td>
+                                                                <td><apex:outputtext value="{!if(mil.mil.Rejected__c==true,'YES','NO')}" id="flagId" /></td>
+                                                                <td><apex:inputText value="{!mil.mil.Reason_for_Rejection__c}" /></td>
+                                                            </tr>
+                                                        </apex:repeat> 
+                                                    </table>
+
+                                                </td>
+
+                                            </tr>
+
+                                        </apex:repeat>
+                                    </table>
+                                </div>
+                            </apex:outputPanel>
+                            <apex:commandButton Value="Submit" onclick="beforesubmit();return false;" style="align:Center;padding: 0px;width: 104px;height: 30px;" /> 
+                            <apex:actionFunction action="{!updateByMonth}" name="submit" status="status" onComplete="myPopup();aftersubmit();" reRender="message"/>
+
+                        </div>
+                        <div id="unlockErrorBox" style="display: none;">
+                            <div class="popupBackground"/>
+                            <div class="custPopup" style="width:300px;">
+                                <div class="queryTitle">
+                                    Message
+                                </div>
+                                <div class="queryInfo">
+                                    <apex:outputPanel id="message">
+                                    {!message}
+                                    </apex:outputPanel>
+                                </div>
+                                <center>
+                                    <Button type="reset" onclick="moveToRecordPage();" value="OK" class="popupButton" >OK</button>
+                                </center>           
+                            </div>
+                        </div>
+
+                        <apex:actionStatus id="status">
+                            <apex:facet name="start">
+                                <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                                <div style="top: 40%;padding: 10px;left: 43%;  width: 200px;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                                    <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                                    <span class="content" style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Please wait...</span>
+                                </div>
+                            </apex:facet>
+                        </apex:actionStatus>
+            
+                    </div>
+                    <script>
+
+                        function myPopup () {
+                            document.getElementById('unlockErrorBox').style.display = 'flex';
+                        }
+                        function moveToRecordPage() {
+                            document.getElementById('unlockErrorBox').style.display = 'none';
+                        }
+
+                        shdetails = function(obj,vis){
+                            if(vis == 0){
+                                jQuery('.summary_'+obj).css('display','table-row');
+                                jQuery('.details_'+obj).css('display','none');
+                            } else {
+                                jQuery('.summary_'+obj).css('display','none');
+                                jQuery('.details_'+obj).css('display','table-row');
+                            }
+                        }
+
+
+                        jQuery(".tdefault:odd").css( "background-color", "#f2f2f2" );
+                    </script>
+
+                    <script>
+                        j$ = jQuery.noConflict();
+                        var mileagetoremove = [];
+                        var reimtoremove = [];
+                        j$(document).ready( function () {
+                            var contactTable = j$('[id$="contacttable"]').DataTable({
+                                
+                            });
+                        });
+                        //allCheckBox
+                        var today = new Date();
+
+                        function fixTime(time){
+                            if(time < 10) {time = "0" + time};
+                            return time;
+                        }
+
+                        function fixDate(date) {
+                          var Month = fixTime(date.getMonth() + 1);
+                          var Day = fixTime(date.getDate());
+                          var UTC = date.toUTCString();
+                          var Time = UTC.substring(UTC.indexOf(':')-2, UTC.indexOf(':')+6);
+                          var Minutes = fixTime(date.getMinutes());
+                          var Seconds = fixTime(date.getSeconds());
+                          return Month + "/" + Day + "/" + date.getFullYear().toString().substr(-2);
+                        }
+
+                        function checkAll(ele,key) {
+                            var tableCheckApprove = document.getElementsByClassName("allApproveBox_"+key);
+                            var tableCheckReject = document.getElementsByClassName("allCheckBox_"+key);
+                                for(var i=0, n=tableCheckReject.length;i<n;i++) {
+                                    if(tableCheckReject[i].checked == true){
+                                        tableCheckApprove[i].checked = false;
+                                    } /*else {
+                                        tableCheckApprove[i].checked = true;
+                                    }*/
+                                    
+                                }
+                            var checkboxes   = document.getElementsByClassName("selectId_"+key);
+                            var checkApprove = document.getElementsByClassName("approvedId_"+key);
+                            var approvalDateValue =  document.getElementsByClassName("approvalDate_"+key);
+                            var rejectFlags = j$("[id*='flagId']");
+                            for(var i=0, n=checkboxes.length;i<n;i++) {
+                                
+
+                                    checkboxes[i].checked = ele.checked;
+                                    checkApprove[i].checked = false;
+                                    
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = null;
+                                    }
+                                if(ele.checked == true) {
+                                    rejectFlags[i].innerHTML = 'YES';
+                                } else {
+                                    rejectFlags[i].innerHTML = 'NO';
+                                }
+                                
+                            }
+                        }
+                        function checkApprove(ele,key) {
+                            var tableCheckApprove = document.getElementsByClassName("allApproveBox_"+key);
+                            var tableCheckReject = document.getElementsByClassName("allCheckBox_"+key);
+                                for(var i=0, n=tableCheckApprove.length;i<n;i++) {
+                                    console.log(tableCheckApprove[i].checked);
+                                    if(tableCheckApprove[i].checked == true){
+                                        tableCheckReject[i].checked = false;
+                                    } /*else {
+                                        tableCheckReject[i].disabled = false;
+                                    }*/
+                                    
+                                }
+                            var checkboxes   = document.getElementsByClassName("selectId_"+key);
+                            var checkApprove = document.getElementsByClassName("approvedId_"+key);
+                            var approvalDateValue =  document.getElementsByClassName('approvalDate_'+key);
+                            var rejectFlags = j$("[id*='flagId']");
+                            for(var i=0, n=checkApprove.length;i<n;i++) {
+                                if(ele.checked == true) {
+                                    checkApprove[i].checked = ele.checked;
+                                    checkboxes[i].checked = false;
+                                    rejectFlags[i].innerHTML = 'NO';
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = fixDate(today);
+                                    }
+                                } else {
+                                    checkApprove[i].checked = ele.checked;
+                                    //checkboxes[i].disabled = false;
+                                    
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = null;
+                                    }
+                                }
+                            }
+                        }
+
+                        function reverseApprove(ele,key) {
+                            var checkboxes   = document.getElementsByClassName("selectId_"+key);
+                            var checkApprove = document.getElementsByClassName("approvedId_"+key);
+                            var approvalDateValue =  document.getElementsByClassName('approvalDate_'+key);
+                            var rejectFlags = j$("[id*='flagId']");
+                            var count = 0;
+                            for(var i=0, n=checkApprove.length;i<n;i++) {
+                                if(checkApprove[i].checked == false) {
+                                    //checkboxes[i].disabled = false;
+                                   
+                                    //rejectFlags[i].innerHTML = 'NO';
+                                    count++;
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = null;
+                                    }
+                                }else {
+
+                                    checkboxes[i].checked = false;
+                                   rejectFlags[i].innerHTML = 'NO';
+                                   // rejectFlags[i].innerHTML = 'YES';
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = fixDate(today);
+                                    }
+                                }
+                            }
+                            var tableCheckApprove = document.getElementsByClassName("allApproveBox_"+key);
+                            var tableCheckReject = document.getElementsByClassName("allCheckBox_"+key);
+                            for(var i=0, n=tableCheckApprove.length;i<n;i++) {
+                                if(count > 0) {
+                                    tableCheckApprove[i].checked = false;
+                                    tableCheckReject[i].checked = false;
+                                }else {
+                                    tableCheckApprove[i].checked = true;
+                                    tableCheckReject[i].checked = false;
+                                }
+                            }
+                        }
+
+                        function reverseSelect(element,key) {
+
+                            var checkboxes   = document.getElementsByClassName("selectId_"+key);
+                            var checkApprove = document.getElementsByClassName("approvedId_"+key);
+                            var approvalDateValue =  document.getElementsByClassName('approvalDate_'+key);
+                            var rejectFlags = j$("[id*='flagId']");
+                            
+                            var count = 0;
+
+                            for(var i=0, n=checkboxes.length;i<n;i++) {
+                                if(checkboxes[i].checked == true) {
+                                    checkApprove[i].checked = false;
+                                    rejectFlags[i].innerHTML = 'YES';
+                                    if(typeof approvalDateValue[i].value === "undefined") {
+                                        approvalDateValue[i].innerHTML = null;
+                                    }
+                                }else {
+                                    count++;
+                                    rejectFlags[i].innerHTML = 'NO';
+                                }
+                            }
+
+                            var tableCheckReject = document.getElementsByClassName("allCheckBox_"+key);
+                            var tableCheckApprove = document.getElementsByClassName("allApproveBox_"+key);
+                            for(var i=0, n=tableCheckReject.length;i<n;i++) {
+                                if(count > 0) {
+                                    tableCheckReject[i].checked = false;
+                                    tableCheckApprove[i].checked = false;
+                                }else {
+                                    tableCheckReject[i].checked = true;
+                                    tableCheckApprove[i].checked = false;
+                                }
+                            }
+                        }
+
+                        function uncheckParent(key){   
+
+                            var parentCheckApprove = document.getElementsByClassName("allReimbursement_"+key);
+                            parentCheckApprove[0].checked = false;
+                        }
+
+                        function beforesubmit(){
+                            try 
+                            {
+                                var reimEle = j$("[class*='allReimbursement_']"); 
+                                reimtoremove = [];
+                                for(var index = 0; index < reimEle.length ; index ++)
+                                {   
+                                    var element = reimEle[index];
+                                    if(element.checked && element.parentNode.className.indexOf('0') === -1)
+                                    {
+                                        reimtoremove.push(element.parentNode.parentNode.className);
+                                    }
+                                }
+
+                                var mileagesEle = j$("[class*='approvedId']");
+                                var mileagesrejectEle = j$("[class*='selectId_']");
+                                mileagetoremove = [];
+                                for(var idx = 0; idx < mileagesEle.length ; idx ++)
+                                {   
+                                    var element = mileagesEle[idx];
+                                    var rejelement = mileagesrejectEle[idx];
+                                    if(element.checked || rejelement.checked)
+                                    {
+                                        mileagetoremove.push(element.parentNode.parentNode.className);
+                                    }
+
+                                }
+                                console.log(mileagetoremove);
+                            } catch (e) {
+                                console.log(e);
+                            }
+
+                            submit();
+                            //aftersubmit();
+                        }
+
+                        function aftersubmit()
+                        {
+                            try
+                            {
+
+                                var mileagesEle = j$("[class*='mileange_']");
+                                for(var idx = 0; idx < mileagesEle.length ; idx ++)
+                                {   
+                                    var element = mileagesEle[idx];
+                                    if(mileagetoremove.indexOf(element.className) != -1)
+                                    {
+                                        element.parentNode.removeChild(element);
+                                        //alert(element.className);
+                                    }
+                                }
+
+                                var reimEle = j$("[class*='summary_']");
+                                for(var idx = 0; idx < reimEle.length ; idx ++)
+                                {   
+                                    var element = reimEle[idx];
+                                    if(reimtoremove.indexOf(element.className) != -1)
+                                    {
+                                        element.parentNode.removeChild(element);
+                                        //(element.className);
+                                    }
+                                }
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    </script>
+                </div>
+            
+            </apex:form>
+        
+        </body>
+    
+    </html>
+</apex:page>

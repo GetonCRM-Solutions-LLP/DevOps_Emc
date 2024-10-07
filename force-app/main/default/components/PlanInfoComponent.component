@@ -1,0 +1,750 @@
+<apex:component >
+    <apex:attribute name="driverPacketDocCount" description="Size of Driver packet document" type="Integer" required="true"/>
+    <apex:attribute name="insuranceDocCount" description="Size of Insurance document" type="Integer" required="true"/>
+    <apex:attribute name="mvrCheckDocCount" description="Size of MVR Check document" type="Integer" required="true" />
+    <apex:attribute name="driverPacketId" description="Size of Insurance document" type="Id" />
+    <apex:attribute name="insuranceId" description="Size of Insurance document" type="Id" />
+    <apex:attribute name="mvrCheckId" description="Size of MVR Check document" type="Id" />
+    <apex:attribute name="contentVersionUrl" description="Document Download url" type="String" />
+        <style type="text/css">
+            @media (min-width: 320px) and (max-width: 767px) {
+                .emc_new_insurance_tab_pills .plan-info-timeline {
+                    margin-right: 0px !important;
+                }
+                .tab-pills-width.emc_insurance_tab_pills {
+                    width: 349px !important;
+                    float: left;
+                    text-align: left;
+                    align-items: left;
+                    display: flex;
+                    justify-content: flex-end;
+                }
+                .emc_insurance_tab_pills .plan-info-input::before,
+                .emc_insurance_tab_pills .plan-info-input::after {
+                    width: 35vw;
+                    max-width: 35vw;
+                }
+
+                .emc_insurance_tab_pills .input-flex-container {
+                    margin: 0px 194px !important;
+                }
+                .emc_insurance_tab_pills .plan-info-timeline {
+                    margin-right: 88px !important;
+                }
+                .emc_insurance_tab_pills.emc-btn-download {
+                    margin-left: 0px !important;
+                }
+                li.nav-item.emc_nav_tab {
+                    margin-bottom: 10px;
+                }
+                .emc_insurance_tab_pills .input-flex-container-driver {
+                    display: flex;
+                    width: 385px !important;
+                    max-width: 384px !important;
+                    position: relative !important;
+                    z-index: 0 !important;
+                    justify-content: space-evenly !important;
+                    margin-right: 0 !important;
+                    height: 200px !important;
+                }
+                .emc_insurance_tab_pills .plan-info-timeline {
+                    margin-right: 0px !important;
+                }
+                .emc_insurance_tab_pills .plan-info-input {
+                    margin: 0 40px 50px;
+                }
+                .emc_insurance_tab_pills .plan-info-input::before {
+                    margin-right: 14px !important;
+                }
+                .emc_new_tab_pills .plan-info-input::before,
+                .emc_insurance_tab_pills .plan-info-input::after {
+                    width: 26vw;
+                    max-width: 26vw;
+                }
+                .emc_insurance_tab_pills .plan-info-input span::after {
+                    font-size: 14px;
+                }
+                .emc_new_btn_download.emc-btn-download {
+                    margin-left: 20px !important;
+                    margin-bottom: 20px !important;
+                }
+                .emc_new_insurance_tab_pills .plan-info-input::before,
+                .emc_new_insurance_tab_pills .plan-info-input::after {
+                    width: 30vw;
+                    max-width: 30vw;
+
+                }
+                .emc_new_insurance_tab_pills .input-flex-container-driver {
+                    width: 420px !important;
+                    max-width: 420px !important;
+                }
+                .tab-pills-width.ng-pristine.ng-valid.emc_new_insurance_tab_pills {
+                    width: 522px !important;
+                }
+                .tab-pills-width.ng-pristine.ng-valid.emc_new_tab_pills {
+                    width: 595px !important;
+                }
+
+                .emc_new_tab_pills .input-flex-container-driver {
+                    margin-right: 144px !important;
+                }
+            }
+
+            /* @media (min-width: 1250px){
+                    .plan-info-input::before{
+                       width:6.5vw !important;
+                    } 
+                } */
+
+            @media  (min-width: 1920px) {
+                    /*For Projectors or Higher Resolution Screens (Full HD)*/
+                .plan-info-input::after,
+                .plan-info-input::before {
+                    width: 65px !important;
+                    right: 0px !important;
+                }
+            }
+            @media (min-width: 3840px) {
+            /*For 4K Displays (Ultra HD)*/
+                .plan-info-input::after,
+                .plan-info-input::before {
+                    width: 64px;
+                    right: 0px;
+                }
+
+            }
+            @media (min-width: 1250px) {
+                .plan-info-input::after,
+                .plan-info-input::before {
+                    width: 65px;
+                    right: 0px;
+                }
+                .emc_insurance_tab_pills .plan-info-input::after, .emc_insurance_tab_pills .plan-info-input::before {
+                    width: 8.5vw !important;
+                    right: 0px !important;
+                }
+                .emc_insurance_tab_upload_pills .plan-info-input::after, .emc_insurance_tab_upload_pills .plan-info-input::before {
+                    width: 8.5vw !important;
+                    right: 0px !important;
+                }
+
+            }
+
+            @media (max-width: 1151px) and (min-width: 1024px) {
+                .plan-info-input::before,
+                .plan-info-input::after {
+                    width: 12vw !important;
+                }
+
+                .emc_insurance_tab_pills .plan-info-input::after, .emc_insurance_tab_pills .plan-info-input::before {
+                    width: 9.5vw !important;
+                    right: 0px !important;
+                }
+            }
+
+            @media (min-width: 1024px) and (max-width: 1366px) {
+                .emc_insurance_tab_pills .plan-info-input::after, .emc_insurance_tab_pills .plan-info-input::before {
+                    width: 113px !important;
+                    right: 0px !important;
+                }
+                #uploaded.plan-info-input::before {
+                    right: 22px !important;
+                    width: 7vw !important;
+                }
+            }
+
+            @media (max-width: 767px) and (min-width: 601px) {
+                /* .emc_new_tab_pills .plan-info-input::before,
+                .emc_insurance_tab_pills .plan-info-input::after {
+                    width: 12vw;
+                    max-width: 12vw;
+                }       
+
+                .emc_new_insurance_tab_pills .plan-info-input::before, .emc_new_insurance_tab_pills .plan-info-input::after {
+                    width: 20vw;
+                    max-width: 20vw;
+                } */
+                .emc_insurance_tab_pills .plan-info-input::before, .emc_insurance_tab_pills .plan-info-input::after {
+                    width: 15vw;
+                    max-width: 15vw;
+                }
+                .emc_insurance_tab_pills .input-flex-container {
+                    margin: 0px 128px !important;
+                }
+                .emc_new_tab_pills .plan-info-input::before, .emc_new_tab_pills .plan-info-input::after {
+                    width: 14vw;
+                    max-width: 14vw
+                }
+            }
+            @media (max-width: 805px) and (min-width: 768px) {
+                .emc_insurance_tab_pills .plan-info-input::before, .emc_insurance_tab_pills .plan-info-input::after {
+                    width: 18vw;
+                    max-width: 18vw;
+                }
+            }   
+
+            @media (min-width: 1024px) and (max-width: 1200px) {
+                .emc_new_tab_pills .plan-info-input::before, .emc_new_tab_pills .plan-info-input::after {
+                    width: 12vw !important;
+                }
+                .emc_new_insurance_tab_pills .plan-info-input::before, .emc_new_insurance_tab_pills .plan-info-input::after {
+                    width: 16vw !important;
+                    max-width: 14vw !important;
+                }
+
+                .emc_new_insurance_tab_pills .plan-info-input::after {
+                    left: 17px;
+                }
+
+                .emc_insurance_tab_upload_pills .plan-info-input::before, .emc_insurance_tab_upload_pills .plan-info-input::after {
+                    width: 23vw !important;
+                    max-width: 23vw !important;
+                }
+                .emc_insurance_tab_upload_pills .plan-info-input::after {
+                    left: 6px;
+                }
+            }
+
+
+            
+            .plan-info-timeline .plan-new-info-timeline {
+                padding: 0px !important;
+            }
+            .plan-info-timeline_downloadbtn{
+                    position: absolute;
+                    top: 18rem;
+            }
+            
+            
+            .emc_new_btn_download.emc-btn-download {
+                margin-left: -37px;
+            }
+
+            .tab-pills-width {
+                width: 840px !important;
+                height: 300px !important;
+                float: left;
+            }
+
+            .emc-btn-download {
+                margin-left: -25px;
+            }
+
+            .blank-stepper {
+                background-color: #ffffff !important;
+            }
+
+            .completed-blank {
+                /*mobio:hide completed div when did not attend is selected*/
+                display: none !important;
+            }
+
+            .didnotattend-blank {
+                display: none !important;
+                /* mobio:hide completed div when did not attend is selected*/
+            }
+
+            /* .sent::after {
+                background-color: #FF0000 !important;
+                /*mobio:color red for sent div*/
+            
+            .schedule::after{
+                background-color: #FF0000 !important;
+            }
+            .plan-info-timeline {
+                margin-right: 135px !important;
+            }
+
+            .input-flex-container {
+                justify-content: space-evenly !important;
+                /*mobio:remove space after hiding completed div*/
+                margin-right: 460px !important;
+                height: 200px !important;
+            }
+            .emc_driver_packet_padding{
+                padding-left:  26px;
+            }
+            .emc_new_insurance_tab_pills .input-flex-container-driver {
+                margin-right: 340px !important;
+            }
+            .input-flex-container-driver {
+                display: flex !important;
+                width: 100% !important;
+                max-width: 1000px !important;
+                position: relative !important;
+                z-index: 0 !important;
+                justify-content: space-evenly !important;
+                /*mobio:remove space after hiding completed div*/
+                margin-right: 317px !important;
+                height: 115px !important;
+            }
+
+            .didnotattend {
+                background-color: #FF0000 !important;
+                
+                border: 3px solid #FF0000 !important;
+            }
+
+            .didnotattend::before {
+                background-color: #FF0000 !important;
+                
+            }
+
+            .completed::after {
+                background-color: #ffffff !important;
+                
+            }
+
+            .span-did-not-attend::after {
+                color: #FF0000 !important;
+                
+            }
+
+            .span-not-uploaded::after {
+                color: #FF0000 !important;
+                position: relative !important;
+            }
+
+            .span-requested::after {
+                position: relative !important;
+            }
+
+            .pull-right {
+                float: left;
+
+            }
+
+            .pull-right2 {
+                width: 566% !important;
+            }
+
+            .plan-info-input span::after {
+                width: 95px !important;
+                text-align: left !important;
+                transform: translate(-10%) !important;
+                word-break: normal !important;
+            }
+
+            #notuploaded.plan-info-input::before,
+            #requestednotupload.plan-info-input::after {
+                background-color: #FF0000 !important;
+            }
+            #pills-timeline-compliance{
+                margin-top: 10px;
+            }
+            #notuploaded.plan-info-input {
+                background-color: #FF0000 !important;
+                border: 3px solid #FF0000 !important;
+            }
+
+            #notuploaddownloadbtn {
+                visibility: hidden !important;
+            }
+
+            #image-not-upload {
+                float: left !important;
+                margin-top: 99px;
+            }
+
+            #image-upload {
+                float: left !important;
+                margin-top: 80px;
+                height: 70px;
+            }
+
+            .span-drivername {
+                /*Mobio - Compliance message displays in green*/
+                font-size: 16px;
+                text-align: center;
+                color: #78bc42;
+                font-weight: bold;
+            }
+
+            .span-pendingcompliance {
+                /*Mobio - Pending message displays in red*/
+                font-size: 16px;
+                text-align: center;
+                color: #FF0000;
+                font-weight: bold;
+            }
+
+            .span-compliancestatus{
+                font-size: 16px;
+                text-align: center;
+                color: #FF0000;
+                font-weight: bold;
+            }
+            .reim-table td, .reim-table th{
+                padding: .2rem !important;
+            }
+            .mb-r{
+                margin-bottom: 0.3rem !important;
+            }
+            .pl{
+                width: 6em;
+            }
+            .plr{
+               width: 5em;
+            }
+            .font-white{
+                color: #ffffff;
+                font-weight: bold;
+            }
+            .header-lt{
+                background: #11113e;
+                color: #fff;
+                border: 1px solid #11113e;
+                padding:0.7rem 0.75rem;
+            }
+            .header-middle-lt{
+                background : #efefef;
+                border: 1px solid #efefef;
+                padding: 0.4rem 0.75rem 0 0.75rem;
+            }
+            .header-bottom-lt{
+                background: rgb(161 165 169);
+                border: 1px solid rgb(161 165 169);
+                padding: 0rem 0.75rem 0 0.75rem;
+                color: #fff;
+            }
+            .header-font{
+                font-size: 18px !important;
+            }
+        </style>
+    
+        <ul class="nav nav-pills pt-3 pb-3" >
+            <li class="nav-item emc_nav_tab">
+                <a class="nav-link active" data-toggle="pill" href="#pills-timeline-driving-packet">Driver Packet</a>
+            </li>
+            <li class="nav-item emc_nav_tab">
+                <a class="nav-link" data-toggle="pill" href="#pills-timeline-driver-meeting">Driver Meeting</a>
+            </li>
+            <li class="nav-item emc_nav_tab">
+                <a class="nav-link" data-toggle="pill" href="#pills-timeline-insurance-declatarion">Insurance</a>
+            </li>
+            <li class="nav-item emc_nav_tab">
+                <a class="nav-link" data-toggle="pill" ng-click="complianceCalculation()" data-target="#pills-timeline-compliance">Compliance</a>
+            </li>
+            <li class="nav-item emc_nav_tab">
+                <a class="nav-link" data-toggle="pill"  href="#pills-timeline-reimbursement">My Reimbursement</a>
+            </li>
+            <li class="nav-item emc_nav_tab"  ng-show="isMVR">
+                <a class="nav-link" data-toggle="pill"  data-target="#pills-timeline-mvrCheck">MVR Check</a>
+            </li>
+        </ul>
+        <div class="p-41">
+            <div class="tab-content ">
+                <div class="tab-pane active" id="pills-timeline-driving-packet">
+                    <div class="tab-pills-width ng-pristine ng-valid emc_new_tab_pills">
+                        <div class="plan-info-timeline">
+                            <div class="flex-parent">
+                                <div class="input-flex-container-driver emc_driver_packet_padding">
+                                    <div class="plan-info-input" id="beinggenratedsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Sent to Driver" data-info=""></span>
+                                    </div>
+                                    <!-- <div class="plan-info-input" id="sentforsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Sent For Signature" data-info=""></span>
+                                    </div> -->
+                                     <!-- <div class="plan-info-input" id="waitingforsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Waiting For Signature" data-info=""></span>
+                                    </div>  -->
+                                    <div class="plan-info-input" id="waitingforsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Driver Signed" data-info=""></span>
+                                    </div>
+                                    <div class="plan-info-input" id="waitingforadminsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Admin Signed" data-info=""></span>
+                                    </div>
+                                    <div class="plan-info-input" id="completesignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Packet Completed" data-info=""></span>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <!--mobio-->
+                            <div class="col-lg-12">
+                                <apex:form html-ng-non-bindable="true">
+                                    <apex:outputPanel rendered="{!contentVersionUrl != null}">
+                                        <div class="plan-info-timeline plan-new-info-timeline"> 
+                                            <a id="downloadbtn1" class="btn btn-secondary pull-right emc-btn-download emc_new_btn_download" target="_blank" href="{!contentVersionUrl}">Download Signed Document</a>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:form>
+                                <apex:outputPanel rendered="{!contentVersionUrl == null}">
+                                    <apex:form html-ng-non-bindable="true">
+                                        <apex:outputPanel rendered="{!driverPacketDocCount > 0}">
+                                            <div class="plan-info-timeline plan-new-info-timeline">
+                                                <a id="downloadbtn" style="margin-left: 10px" class="btn btn-secondary pull-right  emc_new_btn_download" target="_blank" href="{!URLFOR($Action.Attachment.Download, driverPacketId)}">Download Signed Document</a>
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:form>
+                                </apex:outputPanel>
+                            </div>
+                            <!-- <div class="col-lg-12">
+                                <apex:form html-ng-non-bindable="true">
+                                    <apex:outputPanel rendered="{!driverPacketDocCount > 0}">
+                                        <div class="plan-info-timeline plan-new-info-timeline">
+                                            <a id="downloadbtn" style="margin-left: 10px" class="btn btn-secondary pull-right  emc_new_btn_download" target="_blank" href="{!URLFOR($Action.Attachment.Download, driverPacketId)}">Download</a>
+                                        </div>
+                                    </apex:outputPanel>
+                                </apex:form>
+                            </div> -->
+                        </div> 
+                    </div>
+                </div>
+                <div class="tab-pane" id="pills-timeline-driver-meeting">
+                    <div class="tab-pills-width ng-pristine ng-valid emc_insurance_tab_pills emc_new_insurance_tab_pills">
+                        <div class="plan-info-timeline">
+                            <div class="flex-parent">
+                                <div class="input-flex-container-driver">
+                                    <div class="plan-info-input" id="sentsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Sent" data-info=""></span>
+                                    </div>
+                                    <div class="plan-info-input" id="scheduledsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Scheduled" data-info=""></span>
+                                    </div>
+                                    <div class="plan-info-input" id="completedsignature">
+                                        <div class="input-ring"></div>
+                                        <span data-year="Attended" data-info=""></span>
+                                    </div>
+                                    <!-- <div class="plan-info-input" id="completedsignature">
+                                        <span data-year="Completed" data-info=""></span>
+                                    </div> -->
+                                    <div class="plan-info-input" id="didnotattendsignature">
+                                        <span class="span-did-not-attend" id="span-didnotattend" data-year="Did Not Attend" data-info=""></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- mobio -->
+                <div class="tab-pane" id="pills-timeline-insurance-declatarion">
+                    <apex:form html-ng-non-bindable="true" styleClass="pull-right">
+                        <apex:outputPanel rendered="{!insuranceDocCount > 0}">
+                            <div class="tab-pills-width ng-pristine ng-valid emc_insurance_tab_pills emc_insurance_tab_upload_pills">
+                                <div class="plan-info-timeline">
+                                    <div class="flex-parent">
+                                        <div class="input-flex-container">
+                                            <div class="plan-info-input" id="requested">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Requested" data-info=""></span>
+                                            </div>
+                                            <div class="plan-info-input" id="uploaded">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Uploaded" data-info=""></span>
+                                                <img id="image-upload" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/file-uploaded.png')}" alt="icon" />
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <apex:outputPanel rendered="{!insuranceId != null}">
+                                <div class="plan-info-timeline_downloadbtn">
+                                    <a class="btn btn-secondary pull-right emc-btn-download emc_insurance_tab_pills" target="_blank" href="{!URLFOR($Action.Attachment.Download, insuranceId)}">Download</a>
+                                </div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+    
+                        
+                        <apex:outputPanel rendered="{!insuranceDocCount == 0}">
+                            <div class="tab-pills-width ng-pristine ng-valid emc_insurance_tab_pills">
+                                <div class="plan-info-timeline">
+                                    <div class="flex-parent">
+                                        <div class="input-flex-container">
+                                            <div class="plan-info-input" id="requestednotupload">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Requested" data-info="" class="span-requested"></span>
+                                            </div>
+                                            <div class="plan-info-input" id="notuploaded">
+                                                <span data-year="Not Uploaded" data-info="" class="span-not-uploaded"></span>
+                                                <img id="image-not-upload" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/file-notuploaded.png')}" alt="icon" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                    </apex:form>
+                </div>
+
+                <div class="tab-pane" id="pills-timeline-compliance">
+                    <span id="drivername" class="span-drivername">{{messageofcompliance}}</span>
+                    <!--<span id="drivername" ng-if="empContact[0].compliancestatus__c!=null && empContact[0].compliancestatus__c=='Yes' && compliancedata.length > 0" class="span-drivername">{{empContact[0].Name}} is Compliance, But not driving the equivalent annual 5,000-mile minimum at this time.</span>
+                    <span id="drivername" ng-if="empContact[0].compliancestatus__c!=null && empContact[0].compliancestatus__c=='Yes' && compliancedata.length == 0"
+                        class="span-drivername">{{empContact[0].Name}} is Compliance.</span>
+                        <span id="drivername" ng-if="empContact[0].compliancestatus__c!=null && empContact[0].compliancestatus__c!='Yes' && compliancedata.length > 0"
+                            class="span-drivername">{{empContact[0].Name}} is not in Compliance, Because of "{{empContact[0].compliancestatus__c}}"</span>
+                        <span id="drivername" ng-if="empContact[0].compliancestatus__c!=null && empContact[0].compliancestatus__c!='Yes' && compliancedata.length == 0"
+                            class="span-drivername">{{empContact[0].Name}} is not in Compliance, Because of "{{empContact[0].compliancestatus__c}}"</span>
+                           <span id="drivername" ng-if="empContact[0].compliancestatus__c==null" class="span-drivername">{!$Label.waitingfordocumentation}</span>-->
+                       <!--     <span id="drivername" ng-if="empContact[0].compliancestatus__c==null"
+                                class="span-drivername">We are either Waiting for documentation or reviewing your documentation</span>-->
+                    <!-- <span id="drivername" ng-if="compliancedata.length == 0" class="span-drivername">{{empContact[0].Name}} is in Compliance</span>
+                     <span id="drivername">{{empContact[0].Name}} Is In Compliance<span id="status2"></span></span>
+                        <span id="pendingcompliance">{{empContact[0].Name}} Not In Compliance <span id="status"></span></span>
+                        <span id="compliancestatus"></span> -->
+                    <c:ComlianceCalculation />
+                </div>
+
+                <div class="tab-pane" id="pills-timeline-mvrCheck" ng-show="isMVR">
+                    <apex:form html-ng-non-bindable="true" styleClass="pull-right">
+                        <apex:outputPanel rendered="{!mvrCheckDocCount > 0}">
+                            <div class="tab-pills-width ng-pristine ng-valid emc_insurance_tab_pills emc_insurance_tab_upload_pills">
+                                <div class="plan-info-timeline">
+                                    <div class="flex-parent">
+                                        <div class="input-flex-container">
+                                            <div class="plan-info-input" id="requested">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Requested" data-info=""></span>
+                                            </div>
+                                            <div class="plan-info-input" id="uploaded">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Uploaded" data-info=""></span>
+                                                <img id="image-upload" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/file-uploaded.png')}" alt="icon" />
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+                            <apex:outputPanel rendered="{!mvrCheckId != null}">
+                                <div class="plan-info-timeline_downloadbtn">
+                                    <a class="btn btn-secondary pull-right emc-btn-download emc_insurance_tab_pills" target="_blank" href="{!URLFOR($Action.Attachment.Download, mvrCheckId)}">Download</a>
+                                </div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+    
+                        <apex:outputPanel rendered="{!mvrCheckDocCount == 0}">
+                            <div class="tab-pills-width ng-pristine ng-valid emc_insurance_tab_pills">
+                                <div class="plan-info-timeline">
+                                    <div class="flex-parent">
+                                        <div class="input-flex-container">
+                                            <div class="plan-info-input" id="requestednotupload">
+                                                <div class="input-ring"></div>
+                                                <span data-year="Requested" data-info="" class="span-requested"></span>
+                                            </div>
+                                            <div class="plan-info-input" id="notuploaded">
+                                                <span data-year="Not Uploaded" data-info="" class="span-not-uploaded"></span>
+                                                <img id="image-not-upload" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/file-notuploaded.png')}" alt="icon" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
+                    </apex:form>
+                </div>
+
+                <div class="tab-pane" id="pills-timeline-reimbursement">
+                    <div class="col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12 ml-16 mt-35">
+                        <div class="row">
+                            <div class="col-12 col-lg-6 col-xl-3 col-md-6 col-sm-12 mb-lg-4 mb-4">
+                                <div class="header-lt mb-6">
+                                    <h5 class="font-weight-bold header-font">My Annual Fixed Costs Rates</h5>
+                                </div>
+                                <div class="header-middle-lt mb-1">
+                                    <table class="table table-borderless reim-table">
+                                        <tbody >
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{empContact[0].Insurance_Rate__c | currency:"$":2}}</td>
+                                                <td>Insurance</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{empContact[0].License_Ragistration__c| currency:"$":2}}</td>
+                                                <td >License/Registration</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12" ng-if="empContact[0].Taxes__c != undefined">{{empContact[0].Taxes__c| currency:"$":2}}</td>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12" ng-if="empContact[0].Taxes__c === undefined">{{ 0 | currency:"$":2}}</td>
+                                                <td >Taxes</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{empContact[0].Depreciation__c| currency:"$":2}}</td>
+                                                <td >Depreciation</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="header-middle-lt mb-1">
+                                    <table class="table table-borderless reim-table">
+                                        <tbody >
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{empContact[0].Total_Monthly_Costs__c | currency:"$":2}}</td>
+                                                <td>Annual Fixed Costs</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{businessUse| currency:"$":2}}</td>
+                                                <td >{{empContact[0].Business_Use__c}}% of Business Use</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="header-bottom-lt">
+                                    <table class="table table-borderless reim-table mb-r">
+                                        <tbody >
+                                            <tr>
+                                                <td class="font-white col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{totalMonthlyAmount| currency:"$":2}}</td> <!-- plr -->
+                                                <td class="font-white">Monthly Fixed Amount</td>
+                                            </tr>
+                                            <tr ng-if="fixedcostadjustment != undefined || fixedcostadjustment != null">
+                                                <td class="font-white col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{fixedcostadjustment| currency:"$":2}}</td> <!-- plr -->
+                                                <td class="font-white">Fixed Cost Adjustment</td>
+                                            </tr>
+                                            <tr ng-if="totalMonthlyFixedCost != undefined || totalMonthlyFixedCost != null">
+                                                <td class="font-white col-12 col-lg-6 col-xl-5 col-md-6 col-sm-12">{{totalMonthlyFixedCost| currency:"$":2}}</td> <!-- plr -->
+                                                <td class="font-white">Total Monthly Fixed Amount</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 col-xl-3 col-md-6 col-sm-12 mb-lg-4 mb-4">
+                                <div class="header-lt mb-6">
+                                    <h5 class="font-weight-bold header-font">My Monthly Variable Costs Rates</h5>
+                                </div>
+                                <div class="header-middle-lt mb-1">
+                                    <table class="table table-borderless reim-table">
+                                        <tbody >
+                                            <tr ng-if="variablefuelprice != null">
+                                                <td class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12">{{ variablefuelprice | currency:"$":4}}</td>
+                                                <td>Gas Rate</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12" ng-if="empContact[0].Maintenance__c != undefined">{{empContact[0].Maintenance__c| currency:"$":4}}</td>
+                                                <td class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12"  ng-if="empContact[0].Maintenance__c === undefined">{{0 |  currency:"$":4 }}</td>
+                                                <td >Oil/Maintenance</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12" ng-if="empContact[0].Tires__c != undefined">{{empContact[0].Tires__c| currency:"$":4}}</td>
+                                                <td class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12" ng-if="empContact[0].Tires__c === undefined">{{0 |  currency:"$":4 }}</td>
+                                                <td >Tires</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="header-bottom-lt">
+                                    <table class="table table-borderless reim-table mb-r">
+                                        <tbody >
+                                            <tr>
+                                                <td class="font-white col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12">{{miles | currency:"$":4}}</td>
+                                                <td class="font-white">Per Mile</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</apex:component>

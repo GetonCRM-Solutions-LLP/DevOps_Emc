@@ -1,0 +1,8 @@
+<apex:page standardController="Account" extensions="CalculateImputedAmount" lightningStylesheets="true" action="{!contAnnualTaxUpadte}">
+
+    <apex:form >        
+        <apex:commandButton value="Back" action="{!backMethod}" />
+        <apex:pageMessages id="showmsg"></apex:pageMessages>
+    </apex:form>
+
+</apex:page>

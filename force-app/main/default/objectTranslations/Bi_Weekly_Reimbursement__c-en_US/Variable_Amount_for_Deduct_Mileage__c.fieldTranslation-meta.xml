@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Variable Amount for Deduct Mileage --></label>
+    <name>Variable_Amount_for_Deduct_Mileage__c</name>
+</CustomFieldTranslation>

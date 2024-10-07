@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Report Category --></label>
+    <name>Report_Category__c</name>
+    <picklistValues>
+        <masterLabel>My Custom Reports</masterLabel>
+        <translation><!-- My Custom Reports --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reconciliation Reports</masterLabel>
+        <translation><!-- Reconciliation Reports --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reimbursement Reports</masterLabel>
+        <translation><!-- Reimbursement Reports --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Tax Liability Reports</masterLabel>
+        <translation><!-- Tax Liability Reports --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

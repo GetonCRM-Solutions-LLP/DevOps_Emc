@@ -1,0 +1,277 @@
+<template>
+		<c-navigation-menu driver-menu-item={driverProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} onlogout={handleLogout} profile-id={profile}></c-navigation-menu>
+		<c-dashboard-profile-header user-name={firstName} full-name={userName} unread={unreadCount} driver-menu={menu} page-source={isHomePage} onredirect={navigateToInsurance}  onresourcenavigate={navigateToResource} onnotify={viewAllNotification} company-logo={companyLogoUrl} expiration-date={dateOfExpiration} 
+			onlogout={handleLogout} is-navigate="true"></c-dashboard-profile-header>
+		<section class={section} id="default">
+			<template lwc:if={reimbursementView}>
+				<template lwc:if={tripView}>
+					<c-preview-trips contact-id={_contactId} contact-info={userName} trip-month={monthOfTrip} trip-year={yearOfTrip} onnavigate={revertToReimbursement} start-date={startDt} end-date={endDt} 
+					biweek-id={biweekId} biweek-value={biweek}></c-preview-trips>
+				</template>
+				<template lwc:else>
+					<c-driver-reimbursement-profile contact-id={_contactId}  account-id={_accountId} my-trip={isTrip} is-archive={archive} time-attendance={isAttendance} driver-details={contactInformation} reimbursement-ytd={ytdList} excel-ytd={excelYtdList} onnavigate={reimbursementArchived} onopen={myTripDetail} ontoast={handleToastEvent} onmessage={handleToastEvent} onshow={showSpinner} ontoggle={toggleHandler} onback={backToDashboard} activation-date={updatedDate}></c-driver-reimbursement-profile>
+				</template>
+			</template> 
+			<template lwc:else>
+				<template lwc:if={reimbursementArchive}>
+					<template lwc:if={tripView}>
+						<c-preview-trips contact-id={_contactId} contact-info={userName} trip-month={monthOfTrip} trip-year={yearOfTrip} onnavigate={revertToReimbursement}
+						start-date={startDt} end-date={endDt} biweek-id={biweekId} biweek-value={biweek}></c-preview-trips>
+					</template>
+					<template lwc:else>
+						<c-archive-reimbursement-profile trip={isTripType} driver-details={contactInformation} contact-id={_contactId}  account-id={_accountId} onnavigate={navigateToReimbursement} onopen={myTripDetail} ontoast={handleToast} onshow={showSpinner}></c-archive-reimbursement-profile>
+					</template>
+				</template>
+			</template>
+		
+			<template lwc:if={myProfile}>
+				<c-driver-user-profile contact-id={_contactId} chart-info={chartData} account-id={_accountId} onnavigate={navigateToPage} onredirectview={viewPage} reimbursement-ytd={ytdList} excel-ytd={excelYtdList} notify-message-list={unnotificationList} notify-message={unnotifyList} is-notify={isUnNotify} onclose={handleNotification} ontoast={handleToastEvent} onmodal={viewAllNotification} onreimburevent={reimburseEvent} activation-date={updatedDate}></c-driver-user-profile>
+			</template>
+			<template lwc:elseif={complianceView}>
+				<c-user-compliance contact-id={_contactId} onredirect={switchToLiability} settings={customSetting}></c-user-compliance>
+			</template>
+			<template lwc:elseif={liabilityView}>
+				<c-user-tax-liability contact-id={_contactId} onredirect={switchToCompliance}></c-user-tax-liability>
+			</template>
+			<template  lwc:elseif={insuranceView}>
+				<c-user-upload-insurance onrevert={viewDashboardProfile} insurance-video={insuranceVideo} video-style={videoCss} content-style={contentCss}></c-user-upload-insurance>
+			</template>
+			<template  lwc:elseif={locationUploadView}>
+				<c-user-location contact-id={_contactId} account-id={_accountId} user-triplog-id={userTriplogId} map-country={mapCountry} ontoastmessage={handleToastEvent} ontoast={showToastEvent} onmodal={showModalEvent} onlistmodal={showModalListEvent} onerror={throwError}></c-user-location>
+			</template>
+			<template  lwc:elseif={manualEntryView}>
+				<c-driver-manual-entry contact-id={_contactId} account-id={_accountId} map-country={mapCountry} user-triplog-id={userTriplogId} ontoast={handleToastEvent} onspinner={showSpinner} onback={backToDashboard}></c-driver-manual-entry>
+			</template>
+			<template  lwc:elseif={resources}>
+				<c-user-resource minimums={contactInformation} onback={backToDashboard} settings={customSetting} onsend={emailSent} driver-meeting={driverMeeting}></c-user-resource>
+			</template>
+			<c-user-profile-modal header={headerModalText} month='' show-footer={isFalse} show-btn={isFalse}
+				modal-class={modalClass}
+				header-class={headerClass}
+				subheader-class={subheaderClass}
+				modal-content-style={modalContent}
+				style-header={styleHeader}
+				close-btn-class={styleClosebtn} onclosedialogesc={handleCloseModal} onclosedialog={handleCloseModal}>
+				<template lwc:if={navFeature}>
+					<video id="video-source" width={videoWidth} height={videoHeight} autoplay controls="controls"
+					controlslist="noplaybackrate  nodownload" style="object-fit: cover;border-bottom-right-radius: 20px;
+						border-bottom-left-radius: 20px;
+						border-top-right-radius: 20px;
+						border-top-left-radius: 20px;">
+						<source type="video/mp4" src={navFeatureLink} />
+					</video>
+				</template>
+				<template lwc:else>
+					<template lwc:if={isNewFeature}>
+						<div class="slds-p-left_large slds-p-right_large slds-p-bottom_large" style="display: flex;flex-flow: column;">
+							<div class="info-text-sync">Push the <div class="content-text"
+									style="font-family: 'Proxima Nova Bold' !important; font-size: 22px; line-height: 27px; color: rgb(29, 29, 29);padding-left: 7px;opacity: 0.2">
+									<template lwc:if={monthMilesLast}>
+										<lightning-formatted-number value={monthMilesLast} maximum-fraction-digits="2"></lightning-formatted-number>
+									</template>
+								</div>
+								<div class="content-text"
+									style="font-family: 'Proxima Nova Bold' !important;display:flex;font-size: 22px;line-height: 27px;color: rgb(29, 29, 29);padding-right: 7px;opacity: 0.2">
+									&nbsp;|&nbsp;
+									<template lwc:if={monthMilesThis}>
+										<lightning-formatted-number value={monthMilesThis} maximum-fraction-digits="2"></lightning-formatted-number>
+									</template>
+							
+								</div> <svg class="synIcon" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none"><path fill="#404B5A" d="M11.25 0h7.5A11.25 11.25 0 0 1 30 11.25v7.5A11.25 11.25 0 0 1 18.75 30h-7.5A11.25 11.25 0 0 1 0 18.75v-7.5A11.25 11.25 0 0 1 11.25 0"/><path d="m19.971 9.857-.237-.237a6.1 6.1 0 0 0-1.98-1.109q-.712-.237-1.425-.237h-.95a5.2 5.2 0 0 0-1.583.475q-2.02.95-2.85 2.85c-.316.554-.475 1.188-.554 1.821 0 .237 0 .475-.08.712 0 .316-.316.554-.554.633-.316.08-.634 0-.791-.316-.08-.159-.159-.316-.159-.475 0-1.109.237-2.059.712-3.088.712-1.425 1.741-2.534 3.166-3.325.712-.396 1.505-.634 2.375-.791.554-.08 1.109-.08 1.663-.08 1.505.159 2.85.712 4.037 1.742l.08.079V7.402c0-.158 0-.316.079-.395.159-.237.554-.396.871-.318.316.08.475.318.475.634v3.325c-.08.316-.318.554-.634.554h-3.088c-.316 0-.555-.079-.712-.395-.237-.396-.079-.871.316-1.109.08-.079.159-.079.318-.079.235 0 .559.079 1.504.237q0 .117 0 0M10.4 20.067v1.109c0 .079 0 .237-.079.316-.079.318-.554.555-.95.396-.316-.159-.395-.316-.475-.634v-3.325c.08-.316.318-.554.634-.554h3.088c.237 0 .475.079.634.237.237.237.316.871-.159 1.109-.159.079-.237.158-.396.158h-1.425l.08.08q.475.475.95.712c.554.316 1.107.554 1.663.633.633.159 1.345.159 1.979.08 1.188-.159 2.296-.634 3.166-1.505.95-.87 1.505-1.979 1.741-3.166.08-.316.08-.634.08-.95a.72.72 0 0 1 .237-.554c.237-.237.475-.237.791-.159s.396.316.475.634v.712c-.079.554-.159 1.107-.316 1.663-.316.95-.791 1.82-1.504 2.532-.634.712-1.425 1.268-2.296 1.742-.634.316-1.268.475-1.98.633-.633.08-1.266.08-1.9.08-1.425-.159-2.612-.634-3.72-1.584a2.3 2.3 0 0 0-.316-.396" fill="#fff"/></svg> icon and follow the instructions.</div>
+							<div style="display: flex;gap:30px">
+								<button class="slds-button slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0" onclick={dontShow}>
+									Don't Show Again
+								</button>
+								<button class="slds-button slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 is-active-close" onclick={closeModal}>
+									Close
+								</button>
+							</div>
+						</div>
+					</template>
+					<template lwc:else>
+							<div class="slds-p-around_large" style="display: flex;flex-flow: column;">
+								<div class="slds-align_absolute-center"><i class="fa-solid fa-3x fa-check"></i></div>
+								<div class="slds-align_absolute-center slds-p-around_medium message">{contentMessage}</div>
+								<div class="slds-align_absolute-center sub-message">{subMessage}</div>
+							</div>
+					</template>
+				</template>
+			
+			</c-user-profile-modal>
+			<!-- <c-user-profile-modal header={headerModalText} month='' show-footer={isFalse} show-btn={isFalse}
+				modal-class={modalClass}
+				header-class={headerClass}
+				subheader-class={subheaderClass}
+				modal-content-style={modalContent}
+				style-header={styleHeader}
+				close-btn-class={styleClosebtn} onclosedialog={handleCloseModal}>
+					<template lwc:if={notificationModal}>
+						<div class="slds-p-left_x-large slds-p-right_x-large slds-scrollable_y">
+							<template lwc:if={isNotify}> 
+								<template for:each={notifyList} for:item="notify" for:index="index">
+									<div data-id={notify.id} key={notify.id}
+										class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12  slds-m-vertical_medium slds-m-horizontal_x-small slds-p-around_small"
+										style="
+										width: 100%;
+										height: auto;
+										border-radius: 13px;
+										background: #404B5A;
+										display: flex;
+										flex-direction: row;">
+										<div class="slds-p-top_xx-small
+												slds-p-left_xx-small slds-p-right_x-small">
+											<div><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 30 30" fill="none">
+												<circle cx="15" cy="15" r="12.2828" stroke="#FA7800" stroke-width="1.43448"/>
+												<path d="M16.5016 16.6054C16.4736 17.2346 15.9554 17.7302 15.3257 17.7302V17.7302C14.697 17.7302 14.1793 17.2361 14.15 16.608L13.8506 10.1943C13.8125 9.37672 14.4651 8.69297 15.2836 8.69297H15.3536C16.1708 8.69297 16.8229 9.37471 16.7867 10.1911L16.5016 16.6054ZM16.4717 21.807C16.1504 22.1283 15.7688 22.289 15.327 22.289C14.8851 22.289 14.5036 22.1283 14.1822 21.807C13.8743 21.4857 13.7203 21.1108 13.7203 20.6824C13.7203 20.2406 13.8743 19.859 14.1822 19.5377C14.5036 19.2163 14.8851 19.0557 15.327 19.0557C15.7688 19.0557 16.1504 19.2163 16.4717 19.5377C16.793 19.859 16.9537 20.2406 16.9537 20.6824C16.9537 21.1108 16.793 21.4857 16.4717 21.807Z" fill="#FA7800"/>
+												</svg></div>
+										</div>
+										<div class="slds-p-right_small slds-p-top_xx-small" style="font-family: Proxima Nova;font-size: 14px;font-weight: 500;
+											width: 100%;
+											line-height: 17px;
+											letter-spacing: 0em;
+											color: #FFFFFF;
+											text-align: left;
+											">{notify.notificationMessage}
+											<div style="font-weight: 700;
+											font-size: 12px;
+											line-height: 12px;
+											color: #7ABB4A;
+											" class="slds-p-top_x-small"><lightning-formatted-date-time
+											value={notify.modifiedDate}
+											year="numeric"
+											day="2-digit"
+											month="long"
+											hour="2-digit"
+											minute="2-digit"
+											time-zone="America/Panama"
+										>
+										</lightning-formatted-date-time></div>
+										</div>
+										<div class="white-cross slds-align_absolute-center">
+											<i data-id={notify.id} class="fa-solid fa-lg fa-xmark" onclick={handleClose}></i>
+										</div>
+									</div>
+								</template>
+							</template> 
+						
+							<template lwc:else={isNotify}>
+								<div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">You have no notifications right now.</div>
+							</template>
+						</div>
+					</template>
+					<template  lwc:else>
+						<div class="slds-p-around_large" style="display: flex;flex-flow: column;">
+							<div class="slds-align_absolute-center"><i class="fa-solid fa-3x fa-check"></i></div>
+							<div class="slds-align_absolute-center slds-p-around_medium message">{contentMessage}</div>
+							<div class="slds-align_absolute-center sub-message">{subMessage}</div>
+						</div>
+					</template>
+			</c-user-profile-modal> -->
+			<template lwc:if={notificationModal}>
+				<div class="vue-sidebar transition" data-id="Notification" onclick={handleLiveNotification}>
+					<div class="vue-sidebar-content">
+						<div class="custom-app-tabs-wrapper">
+							<div class="close-btn slds-p-left_x-large slds-p-top_medium">
+								<svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none" onclick={closeNotification}>
+									<path d="M1 9L6.04889 5.21333C6.19111 5.10667 6.19111 4.89333 6.04889 4.78667L1 1" stroke="#404B5A" stroke-width="1.77778" stroke-linecap="round"></path>
+								</svg>
+							</div>
+							<div class="header-content">
+								<div class="slds-p-left_xx-large slds-p-bottom_large wrapper-filter">
+									<!-- <div class="slds-form-element">
+									  <label class="slds-checkbox_toggle slds-grid_vertical">
+										<input type="checkbox" name="checkbox-toggle-16" value="checkbox-toggle-16" aria-describedby="checkbox-toggle-16" onchange={handleToggle} checked={checkAll}/>
+										<span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+											<span class="slds-checkbox_faux toogle-input"></span>
+											<span class="slds-checkbox_on"></span>
+											<span class="slds-checkbox_off"></span>
+										</span>
+									  </label>
+									</div> -->
+									<button data-name="admin" class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black--outline waves-light mleft-0 btn-black-outlined btn-toggle is-active" onclick={handleToggle}>
+										Admin <span class="count" lwc:if={adminCount}>{adminCount}</span>
+									</button>
+									<button data-name="auto" class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black--outline waves-light mleft-0 btn-black-outlined btn-toggle" onclick={handleToggle}>
+										Auto <span class="count" lwc:if={autoCount}>{autoCount}</span>
+									</button>
+								</div>
+								<template lwc:if={isGeneral}>
+									<div class="slds-p-left_large slds-p-bottom_large filter-wrapper">
+										<div class="filter-view-1">
+											<!-- <div class="filter-label">Year</div> -->
+											<div>
+												<c-dropdown-select data-id="yearSelect" options={yearList} value={value} 
+												onchange={handleYearChange} main-class="default-box-input slds-truncate" selected-value={defaultYear}></c-dropdown-select>
+											</div>
+										</div>
+										<div  class="filter-view-2">
+											<!-- <div class="filter-label" style="padding-left: 16px;">Month</div> -->
+											<div>
+												<c-dropdown-select data-id="monthSelect" options={monthList} value={value} 
+												onchange={handleMonthChange} main-class="default-box-input slds-truncate" selected-value={defaultMonth}></c-dropdown-select>
+											</div>
+										</div>
+									</div>
+								</template>
+							</div>
+							<div class="tab-content">
+									<div class="slds-p-left_xx-large slds-p-right_medium notification-wrapper">
+										<template lwc:if={isNotify}>
+											<template for:each={notifyList} for:item="notify" for:index="index">
+												<template lwc:if={notify.unread}>
+													<div data-id={notify.id} key={notify.id}
+													class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text">
+														<div class="slds-p-top_xx-small slds-p-left_xx-small slds-p-right_x-small">
+															<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+																<circle cx="4.5" cy="4.5" r="4.5" fill="#FA7800" />
+															</svg>
+															<!-- <img style="width: 12px;" src={circle} /> -->
+														</div>
+														<div class="slds-p-right_small notify-message-tab">{notify.notificationMessage}
+															<div class="slds-p-top_x-small notify-message-date"> <lightning-formatted-date-time value={notify.modifiedDate} year="numeric"
+																	day="2-digit" month="long" hour="2-digit" minute="2-digit" time-zone="America/Panama">
+																</lightning-formatted-date-time></div>
+														</div>
+														<div class="slds-p-right_xx-small close-notify-icon" data-id={notify.id} onclick={handleClose}>
+															<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+																<path d="M4.53906 13.6328L13.6303 4.54161" stroke="#FA7800" stroke-width="1.7"
+																	stroke-linecap="round" />
+																<path d="M4.53906 4.55469L13.6303 13.6459" stroke="#FA7800" stroke-width="1.7"
+																	stroke-linecap="round" />
+															</svg>
+														</div>
+													</div>
+												</template>
+												<template lwc:else>
+													<div data-id={notify.id} key={notify.id}
+													class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text-read">
+														<div class="slds-p-top_xx-small slds-p-left_xx-small slds-p-right_x-small">
+															<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+																<circle cx="4.5" cy="4.5" r="4.5" fill="#FFF" />
+															</svg>
+															<!-- <img style="width: 12px;" src={circle} /> -->
+														</div>
+														<div class="slds-p-right_small notify-message-tab">{notify.notificationMessage}
+															<div class="slds-p-top_x-small notify-message-date-read"> <lightning-formatted-date-time value={notify.modifiedDate} year="numeric"
+																	day="2-digit" month="long" hour="2-digit" minute="2-digit" time-zone="America/Panama">
+																</lightning-formatted-date-time></div>
+														</div>
+													</div>
+												</template>
+												
+											</template>
+										</template>
+									
+										<template lwc:else>
+											<div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">You have no notifications right now.</div>
+										</template>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</template>
+			
+		
+		</section>
+</template>

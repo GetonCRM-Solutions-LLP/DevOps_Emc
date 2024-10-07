@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomMetadata xmlns="http://soap.sforce.com/2006/04/metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <label>SyncErrorTripsCommuteBatch</label>
+    <protected>false</protected>
+    <values>
+        <field>Test_Query__c</field>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>revertReimVal__c</field>
+        <value xsi:type="xsd:string">SELECT Id,Endpoint__c,Total_Mileages__c, Total_Trips__c,Response__c,Response_Data__c,Contact__r.Account.Triplog_API__c, Contact__r.External_Email__c, Contact__r.Email,Contact__c FROM Tripslog__c WHERE Total_Mileages__c &gt; 0 and Total_Trips__c = 0</value>
+    </values>
+    <values>
+        <field>savePrevMonthVal__c</field>
+        <value xsi:type="xsd:string">SELECT Id,Endpoint__c,Total_Mileages__c, Total_Trips__c,Response__c,Response_Data__c,Contact__r.Account.Triplog_API__c, Contact__r.External_Email__c, Contact__r.Email,Contact__c FROM Tripslog__c</value>
+    </values>
+</CustomMetadata>

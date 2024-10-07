@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <alerts>
+        <fullName>Send_Email</fullName>
+        <description>Send Email</description>
+        <protected>false</protected>
+        <recipients>
+            <field>Driver_Email__c</field>
+            <type>email</type>
+        </recipients>
+        <senderAddress>driverservices@askemc.com</senderAddress>
+        <senderType>OrgWideEmailAddress</senderType>
+        <template>unfiled$public/Sending_Email_To_Drivers</template>
+    </alerts>
+    <alerts>
+        <fullName>Send_email_notification</fullName>
+        <ccEmails>driversupport@mburse.com</ccEmails>
+        <description>Send email notification</description>
+        <protected>false</protected>
+        <senderType>CurrentUser</senderType>
+        <template>unfiled$public/Send_Email_To_Drivers</template>
+    </alerts>
+    <fieldUpdates>
+        <fullName>EmpIdEmailMonth</fullName>
+        <field>EmpIdEmailMonth__c</field>
+        <formula>IF( Contact_Id__r.Account.Name !=  &apos;Test Account&apos;, Contact_Id_Employee_ID__c &amp; &apos;#&apos; &amp; TRIM(Contact_Id_External_Email__c) &amp; &apos;#&apos; &amp;  Month__c , null)</formula>
+        <name>EmpIdEmailMonth</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Remove_Reimbursement</fullName>
+        <field>Remove_Reimbursement__c</field>
+        <literalValue>1</literalValue>
+        <name>Remove Reimbursement</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_blank_for_approval_date</fullName>
+        <field>Approved_Date__c</field>
+        <name>update_blank_for_approval_date</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Null</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>update_reim_unique</fullName>
+        <field>Reimbursement_Unique__c</field>
+        <formula>Contact_Email__c  +  Month__c</formula>
+        <name>update reim unique</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>EmpIdEmailMonth</fullName>
+        <actions>
+            <name>EmpIdEmailMonth</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <formula>true</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Send email to driver once approved</fullName>
+        <actions>
+            <name>Send_email_notification</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Employee_Reimbursement__c.Status__c</field>
+            <operation>equals</operation>
+            <value>Approved</value>
+        </criteriaItems>
+        <description>Send email to driver once approved</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Sending Email To Drivers</fullName>
+        <actions>
+            <name>Send_Email</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <description>Send email to each driver about their mileages</description>
+        <formula>1=1</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Remove Reimbursement</fullName>
+        <actions>
+            <name>Remove_Reimbursement</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Employee_Reimbursement__c.Remove_Current_Month_Reimbursement__c</field>
+            <operation>equals</operation>
+            <value>True</value>
+        </criteriaItems>
+        <description>Update Remove Reimbursement Field based on Remove Current Month Reimbursement	field</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>blanks_approvedate</fullName>
+        <actions>
+            <name>update_blank_for_approval_date</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <booleanFilter>1 AND 2</booleanFilter>
+        <criteriaItems>
+            <field>Employee_Reimbursement__c.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Approved</value>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Employee_Reimbursement__c.Status__c</field>
+            <operation>notEqual</operation>
+            <value>Rejected</value>
+        </criteriaItems>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+</Workflow>

@@ -1,0 +1,23 @@
+.slds-listbox.slds-listbox_vertical.slds-dropdown.slds-dropdown_fluid.slds-dropdown_left{
+   position: relative;
+   display: block;
+   z-index: 3;
+}
+.custom_drop_down{
+    position: absolute;
+    top: 4px;
+}
+.slds-button.slds-button_brand{
+    margin-top: 10px;
+    margin-left: 736px;
+}
+.slds-card{
+    height: 462px;
+    overflow-y: scroll;
+}
+.slds-card__header{
+    display: none;
+}
+.slds-page-header{
+    display: none;
+}

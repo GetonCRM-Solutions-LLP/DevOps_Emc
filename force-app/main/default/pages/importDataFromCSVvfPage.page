@@ -1,0 +1,16 @@
+<apex:page sidebar="false" controller="importDataFromCSVController">
+        <apex:form >
+            <apex:pagemessages />
+            <apex:pageBlock >
+                    <apex:inputFile value="{!csvFileBody}"  filename="{!csvAsString}"/>
+                    <apex:commandButton value="Import" action="{!ReadFile}"/>
+                <br/> <br/> 
+                <font color="red"> 
+                    <b>NOTE: Please use this template. 
+                        <a href="https://www.google.com/" target="_blank"> Click here to download the template</a>. 
+                    </b> 
+                </font>
+                
+            </apex:pageBlock>
+        </apex:form>
+    </apex:page>

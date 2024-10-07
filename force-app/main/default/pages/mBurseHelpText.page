@@ -1,0 +1,71 @@
+<apex:page showHeader="false" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false">
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <style>
+            *{
+                user-select: none;
+            }
+            ::-webkit-scrollbar {
+                width: 0;  /* Remove scrollbar space */
+                background: transparent;  /* Optional: just make scrollbar invisible */
+            }
+            body {
+                font-family: 'Proxima Nova' !important;
+            }
+        </style>
+    </head>
+    <apex:includeLightning />
+
+    <div id="dTest" />
+    <script>
+            var $url = location.href;
+            var $urlString = new URL($url);
+            var $key = $urlString.searchParams.get("key");
+            var carouselKey, styleOfCarousel, styleBody, styleFooter, styleHeader, title;
+            if($key === 'Roster'){
+                carouselKey = [{
+                    "id": "1",
+                    "name": "Add the upload insurance with the upward icon and text"
+                }, {
+                    "id": "2",
+                    "name": "Complete all required fields. You can edit any of the fields after the users have been created"
+                }, {
+                    "id": "3",
+                    "name": "Make sure to use the correct date format. For example, if the driver activation date is March 2, 2023, it should be entered as 03/02/2023 (MM/DD/YY)"
+                },{
+                    "id": "4",
+                    "name": "Double-check your data and formatting before uploading"
+                },{
+                    "id": "4",
+                    "name": "Uploads are limited to 100 new users or less. If importing more than 100 new users repeat the upload process or contact your Success Manager"
+                }];
+
+                styleOfCarousel = 'slds-popover slds-nubbin_left-top  slds-popover_large position-relative c_popover';
+                styleBody = 'slds-popover__body border';
+                styleFooter = 'slds-popover__footer border-footer slds-hide';
+                styleHeader = 'slds-popover__header bg-dark-blue p_all';
+                title = 'Pro Tips';
+            }
+            $Lightning.use("c:LWCLightningApp", function () {
+                $Lightning.createComponent("c:helpText", {
+                    //pass parameter values to lwc js controller
+                    "carousel": styleOfCarousel,
+                    "header": styleHeader,
+                    "body": styleBody,
+                    "footer": styleFooter,
+                    "content": JSON.stringify(carouselKey),
+                    "titleName": title
+                }, "dTest", function (cmp) {
+                    console.log("Component Created Successfully");
+
+                    document.querySelector('c-help-text').addEventListener('closetext', (e) => {
+                        window.top.postMessage(e.detail, '*')
+                    });
+                }
+                );
+            });
+    </script>
+</apex:page>

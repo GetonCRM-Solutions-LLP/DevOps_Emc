@@ -1,0 +1,572 @@
+<apex:page showHeader="false" title="Reports - Tax Liablity" sidebar="false" controller="ReportComplianceofDriver" action="{!getRedirected}">
+    <head>
+        <apex:include pageName="EMC_Common_Head"/>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" rel="stylesheet" />
+        <!-- for excel download directive-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/jszip.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.8.1/xlsx.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular-sanitize.js"></script>
+        
+        <script type="text/javascript" src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/js/select.js')}"></script>
+        <link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/select.css')}"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css"/>    
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.8.5/css/selectize.default.css"/>
+        <!-- for complete excel download directive-->
+        <style>
+        /*body {
+            padding: 15px;
+        }*/
+
+        .select2 > .select2-choice.ui-select-match {
+            /* Because of the inclusion of Bootstrap */
+            height: 29px;
+        }
+
+        .selectize-control > .selectize-dropdown {
+            top: 36px;
+        }
+        /* Some additional styling to demonstrate that append-to-body helps achieve the proper z-index layering. */
+        .select-box {
+          background: #fff;
+          position: relative;
+          z-index: 1;
+        }
+        .alert-info.positioned {
+          margin-top: 1em;
+          position: relative;
+          z-index: 10000; /* The select2 dropdown has a z-index of 9999 */
+        }
+    </style>
+        <style type="text/css">
+            .toast-progress {
+                background-color: #000000 !important;
+            }
+            .toast-error {
+                background-color: #FF0000 !important;
+            }
+            
+/*          #toast-container > div {
+                opacity: 5.8 !important;
+                border-radius: 3px 3px 3px 3px !important;
+                width: 100% !important;
+            }*/
+            .toast-progress {
+                background-color: #000000 !important;
+            }
+            .toast-success {
+                background-color: #78bc42 !important;
+            }
+            .toast-error {
+                background-color: #FF0000 !important;
+            }
+            
+            #toast-container > div {
+                opacity: 5.8 !important;
+                border-radius: 3px 3px 3px 3px !important;
+                width: 100% !important;
+                margin: 10px;
+            }
+            .spinner-background {
+                width: 100%; 
+                height:100%; 
+                background:#000; 
+                opacity: 0.4; 
+                top:0px; 
+                left:0px; 
+                position: fixed; 
+                z-index:1000000;
+            }
+
+            .spinner-load {
+                position:fixed;
+                top:49%;
+                left:49%;
+                z-index:1000000;
+            }
+            
+            /* Css Changes by mitul*/
+            .ui-select-search{
+            font-size:16px !important;
+            }            
+            .selectize-control.single .selectize-input:after {
+            display: contents !important;
+            content: ' ';
+            }
+        </style>
+        <script type="text/javascript">
+            var app = angular.module('reportDetailModule',['ngSanitize', 'ui.select']);
+            app.filter('propsFilter', function() {
+                return function(items, props) {
+                var out = [];
+    
+                if (angular.isArray(items)) {
+                    var keys = Object.keys(props);
+    
+                    items.forEach(function(item) {
+                    var itemMatches = false;
+    
+                    for (var i = 0; i < keys.length; i++) {
+                        var prop = keys[i];
+                        var text = props[prop].toLowerCase();
+                        if (item[prop].toString().toLowerCase().indexOf(text) !== -1) {
+                            itemMatches = true;
+                            break;
+                            }
+                        }
+    
+                        if (itemMatches) {
+                            out.push(item);
+                        }
+                    });
+                    } else {
+                    // Let the output be the input untouched
+                    out = items;
+                }
+                    return out;
+                    };
+            });
+        
+            app.directive('excelExport',function () {
+                return {
+                    restrict: 'A',
+                    scope: {
+                        fileName: "@", 
+                        data: "&exportData"
+                    },
+                    replace: true,
+                    template: '<button class="btn btn-primary float-right" ng-click="download()">Download </button>',
+                    link: function (scope, element) {
+                        scope.download = function() {
+
+                            function datenum(v, date1904) {
+                                if(date1904) v+=1462;
+                                var epoch = Date.parse(v);
+                                return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+                            };
+                            
+                            function getSheet(data, opts) {
+                                var ws = {};
+                                var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+                                for(var R = 0; R != data.length; ++R) {
+                                    for(var C = 0; C != data[R].length; ++C) {
+                                        if(range.s.r > R) range.s.r = R;
+                                        if(range.s.c > C) range.s.c = C;
+                                        if(range.e.r < R) range.e.r = R;
+                                        if(range.e.c < C) range.e.c = C;
+                                        var cell = {v: data[R][C] };
+                                        if(cell.v == null) continue;
+                                        var cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+                                        
+                                        if(typeof cell.v === 'number') cell.t = 'n';
+                                        else if(typeof cell.v === 'boolean') cell.t = 'b';
+                                        else if(cell.v instanceof Date) {
+                                            cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                                            cell.v = datenum(cell.v);
+                                        }
+                                        else cell.t = 's';
+                                        ws[cell_ref] = cell;
+                                    }
+                                }
+                                if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+                                return ws;
+                            };
+                            
+                            function Workbook() {
+                                if(!(this instanceof Workbook)) return new Workbook();
+                                this.SheetNames = [];
+                                this.Sheets = {};
+                            }
+                             
+                            var wb = new Workbook(), ws = getSheet(scope.data());
+                            /* add worksheet to workbook */
+                            wb.SheetNames.push(scope.fileName);
+                            wb.Sheets[scope.fileName] = ws;
+                            var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+
+                            function s2ab(s) {
+                                var buf = new ArrayBuffer(s.length);
+                                var view = new Uint8Array(buf);
+                                for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                                return buf;
+                            }
+                            saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), scope.fileName+'.xlsx');
+                        };
+                    }
+                };
+            });
+            app.controller('ReportComplianceofDriver',['$scope',function($scope) {
+  
+                var url_string = $(location).attr("href");
+                var url = new URL(url_string);
+                $scope.reportid = url.searchParams.get("reportid");
+                $scope.id = url.searchParams.get("id");
+                $scope.showteam = url.searchParams.get("showteam");
+                $scope.accid = url.searchParams.get("accid");
+                $scope.PLMarketing = '{!($Label.PL_Marketing)}';
+                $scope.admindriver = false;
+                $scope.admindriver = url.searchParams.get("admindriver");
+                if($scope.admindriver == undefined || $scope.admindriver == ''){
+                    $scope.admindriver = false;
+                }
+                $scope.manId = url.searchParams.get("managerid");
+                $scope.manVisible = false;
+                if ($scope.manId == undefined || $scope.manId == '') {
+                    $scope.manVisible = false;
+                } else {
+                    $scope.manVisible = true;
+                }
+                $scope.managerList = {!AllDrivers};
+                $scope.accountYear = {!AccountYear};
+                console.log("Account Year -> ", $scope.accountYear);
+                $scope.selectedManager="";
+                $scope.selectedYear="";
+                $scope.managerList.sort(function(a, b){
+                    var nameA=a.Name.toLowerCase(), nameB=b.Name.toLowerCase();
+                    if (nameA < nameB){ //sort string ascending
+                        return -1;
+                    }else if (nameA > nameB){
+                        return 1;
+                    }else{
+                    return 0; //default return value (no sorting)
+                    }
+                })
+                $scope.reportname='Driver Tax Liability Report';
+                //AI-000227 -- Start
+                $scope.year =[];
+                
+                var maxYear = new Date().getFullYear();
+                var minYear = $scope.accountYear;
+                //var minYear = new Date().getFullYear() - 2;
+
+                for(var i = minYear; i<=maxYear ; i++){
+                    $scope.year.push(i);
+                }
+                let finalyear = $scope.year;
+                $scope.year = [];
+                finalyear.map(function(item){
+                    $scope.year.push({
+                        value:item
+                })
+            });
+                //AI-000227 -- End
+                
+               // $scope.showapplybtn = true;
+                $('#spinner').hide();
+                /* Toaster Option */
+                this.setOptions = function() {
+                    toastr.options.positionClass = "toast-bottom-right";
+                    toastr.options.closeButton = true;
+                    toastr.options.progressBar = true;
+                    //toastr.options.hideMethod = 'noop';
+                }
+                this.setOptions();
+                this.clear = function() {
+                    toastr.clear();
+                }
+                /* Toaster Option Complete with clear funtion */
+                $scope.showbtn = function(dt){
+                    $scope.selectedManager = dt.Id;
+                };
+               $scope.showBtn = function(yt){
+                   $scope.selectedYear = yt.value;
+               }
+
+                $scope.comlianceCalculation = function(selectedManager,selectedYear) {
+                    if(selectedManager==undefined)
+                    {
+                        selectedManager ="";
+                    }
+                    if(selectedYear==undefined){
+                       $scope.selectedYear = "";
+                    }
+                   
+                  //  console.log("selected Managers:- "+selectedManager);
+                 //   console.log("selected Managers:- " +selectedYear);
+                    $('#spinner').show();
+                    $scope.detailreportfordownload = [];
+                    $scope.summaryreportfordownload = [];
+                    $scope.maxmileages = 0;
+                    Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ReportComplianceofDriver.getCompliance}',$scope.selectedManager,$scope.selectedYear,
+                        function(result, event) {
+                            if(event.status && result != null ) {
+                               // console.log(result.length);
+                             
+                                $scope.drivername = JSON.parse(result[0]);
+                                 $scope.messageofcompliance = JSON.parse(result[1]);
+                                $scope.reportname = $scope.drivername + ' Tax Liability Report';
+                                if(result.length > 2){
+                                    $scope.compliancedata = [];
+                                  //  console.log('=== quarter ==='+$scope.compliancedata.quarterno);
+                                    $scope.$apply(function () {
+                                        $scope.compliancedata = JSON.parse(result[2]);
+                                        $scope.detailreport = JSON.parse(result[3]);
+                                        $scope.summaryreport = JSON.parse(result[4]);
+                                        $scope.Reimbursements = JSON.parse(result[5]);
+                                        $scope.maxallow = JSON.parse(result[6]);
+                                        $scope.taxliablity = JSON.parse(result[7]);
+                                    });
+
+                                    angular.forEach($scope.detailreport, function(d){
+                                        if(d.approvedmileages){
+                                            $scope.maxmileages = $scope.maxmileages + d.approvedmileages;
+                                        }
+                                    })
+                                 
+                                    $scope.filenamefordetail = $scope.drivername + ' Annual Tax Liability Detail Report';
+                                    $scope.fileNameforsummary = $scope.drivername + ' Annual Tax Liability Summary Report';
+                                    $scope.detailreportfordownload.push(["Driver Name","Email","Employee Id","Month","Year","Total Reimbursement","IRS allowable","Imputed Income","Approved Mileage"]);
+                                    angular.forEach($scope.detailreport,function(item){
+                                        $scope.detailreportfordownload.push([item.drivername,item.emailid,item.employeeid,item.month,item.year,"$" + item.totalreim,"$" + item.iRSallowable,"$" + item.imputedincome, item.approvedmileages]);
+                                    });
+                                    $scope.detailreportfordownload.push([" ", " ", " ", " ", " ", "$" + $scope.Reimbursements, "$" + $scope.maxallow, "$" + $scope.taxliablity, $scope.maxmileages]);
+                                    $scope.summaryreportfordownload.push(["Driver Name","Email","Employee Id", "Total Reimbursement", "IRS allowable", "Imputed Income"]);
+                                    angular.forEach($scope.summaryreport,function(item){
+                                        $scope.summaryreportfordownload.push([item.drivername,item.emailid,item.employeeid,"$" + $scope.Reimbursements, "$" + $scope.maxallow, "$" + item.imputedincome]);
+                                    });
+                                    $scope.$apply(function(){
+                                        $scope.summrylenth = $scope.summaryreportfordownload.length
+                                    });
+                                    $('#spinner').hide();
+                                }
+                                else
+                                {   
+                                  //  console.log('lenth');
+                                    $scope.$apply(function(){
+                                        $scope.compliancedata = [];
+                                        $scope.summrylenth = 0;
+                                        $scope.selectedYear = new Date().getFullYear();
+                                    });
+                                    toastr.error('No Tax Liability');
+                                    $('#spinner').hide();
+                                }
+                            }
+                        },
+                        {escape: false}
+                    );
+                }
+                
+                //Disable date
+                /*$scope.loadDatePicker = function(selectedDate) {
+                    console.log('date:- '+selectedDate);
+                    loaddatepicker(selectedDate);
+                }   */               
+            }]);
+        </script>
+    </head>
+    <body ng-app="reportDetailModule" ng-controller="ReportComplianceofDriver"  ng-cloak="true">
+        <header>
+            <div class="main-header sticky" id="myHeader">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12 p-0">
+                            <nav class="navbar navbar-expand-md my-0 my-md-1 px-0">
+                                <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" ng-show="!admindriver" href="/app/admindashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">
+                                    <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)" alt="logo"/>
+                                </a>
+                                <a class="navbar-brand col-6 col-sm-6 col-md-3 col-lg-3 col-xl-3 px-0" ng-show="admindriver" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">
+                                    <img src="{!URLFOR($Resource.EmcCSS,'emc-design/assets/images/logo/mBurse-logo_rev.png')}" class="img-fluid" href="javascript:void(0)" alt="logo"/>
+                                </a>
+                                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+                                    <span class="navbar-toggler-icon"><i class="fa fa-bars"></i></span>
+                                </button>
+                                <div class="collapse navbar-collapse flex-column col-12 col-sm-6 col-md-9 col-lg-9 col-xl-9 ml-3 ml-sm-0 ml-lg-0 align-items-end" id="collapsibleNavbar">
+                                    
+                                    <ul class="navbar-nav flex-row">
+                                        <li class="nav-item">
+                                             <a class="nav-link text-white"  ng-show="!admindriver && !manVisible" href="/app/admindashboard?accid={{accid}}&id={{id}}">Dashboard</a>
+                                             <a class="nav-link text-white"  ng-show="admindriver  && !manVisible" href="/app/admindriverdashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Dashboard</a>
+                                             <a class="nav-link text-white" ng-show="!admindriver && manVisible" href="/app/managerdashboardfromadmin?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Dashboard</a>
+                                             <a class="nav-link text-white" ng-show="admindriver && manVisible" href="/app/managerdashboardfromadmindriver?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Dashboard</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/MileageDashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Mileage</a>
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/MileageDashboard?accid={{accid}}&id={{id}}&showteam={{showteam}}">Mileage</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                             <a class="nav-link text-white"  ng-show="!admindriver" href="/app/roster?accid={{accid}}&id={{id}}&showteam={{showteam}}">Drivers</a>
+                                             <a class="nav-link text-white"  ng-show="admindriver" href="/app/roster?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Drivers</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/roster?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Drivers</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/roster?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Drivers</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/ManageNotification?accid={{accid}}&id={{id}}&showteam={{showteam}}">Communications</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/ManageNotification?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Communications</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible && accid === PLMarketing">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/ManageNotification?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Communications</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/ManageNotification?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Communications</a>
+                                        </li>
+                                        <li class="nav-item active" ng-show="!manVisible">
+                                             <a class="nav-link text-white"  ng-show="!admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}">Reports</a>
+                                             <a class="nav-link text-white"  ng-show="admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Reports</a>
+                                        </li>
+                                        <li class="nav-item active" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="!admindriver" href="/app/reportlist?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}">Reports</a>
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/reportlist?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">Reports</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/driveradminmanagermydetail?managerid={{manId}}&accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">My Details</a>
+                                        </li>
+                                        <li class="nav-item" ng-show="!manVisible">
+                                            <a class="nav-link text-white" ng-show="admindriver" href="/app/driveradminmanagermydetail?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true">My Details</a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link text-white" href="/app/secur/logout.jsp">Logout</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div id="spinner">
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <section class="container-fluid">
+            <div class="back-btn my-3">
+                <a ng-show="!admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}"><i class="fas fa-chevron-left"></i> Back</a>
+                <a ng-show="admindriver" href="/app/reportlist?accid={{accid}}&id={{id}}&showteam={{showteam}}&admindriver=true"><i class="fas fa-chevron-left"></i> Back</a>
+            </div>
+            <h1 class="form-heading mb-30">{{reportname}}</h1>
+            <div class="form-divider"></div>
+            <form class="needs-validation col-xl-12 col-lg-12 col-md-12 col-sm-12" action="" novalidate ="true">
+                <toaster-container toaster-options="{'time-out': 1000}"></toaster-container>
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                        <div class="form-group-theme mb-0 row">
+                            <label for="Filter" class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-form-label form-lable">Filter
+                                By:</label>
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 validate-div" style="font-size: 16px !important">
+                                <!--Searchable Drop down-->
+                                    <ui-select ng-model="selectedManager" style="font-size: 16px;" theme="selectize" title="Search manager" ng-change="showbtn(selectedManager)" append-to-body="true">
+                                        <ui-select-match placeholder="Search..." style="font-size: 16px;">{{$select.selected.Name}}</ui-select-match>
+                                            <ui-select-choices repeat="mg in managerList | filter: $select.search">
+                                                <span style="font-size: 16px;" ng-bind-html="mg.Name | highlight: $select.search"></span>
+                                            </ui-select-choices>
+                                            <ui-select-no-choice>
+                                                No result found
+                                            </ui-select-no-choice>
+                                    </ui-select>
+                            </div>
+                            
+                            <label for="Filter" class="col-xl-1 col-lg-2 col-md-2 col-sm-2 col-form-label form-lable">Year:</label>
+                            <div class="col-12 col-sm-3 col-md-3 col-lg-3 col-xl-3 validate-div" style="font-size: 16px !important">
+                                <!-- Drop down for year-->
+                                <ui-select ng-model="selectedYear" style="font-size: 16px;" id="yeardropdown" theme="selectize" ng-change="showBtn(selectedYear)" append-to-body="true">
+                                    <ui-select-match placeholder="Select Year..." style="font-size: 16px;">{{$select.selected.value}}</ui-select-match>
+                                    <ui-select-choices repeat="yr in year | filter: $select.search">
+                                        <span style="font-size: 16px;" ng-bind-html="yr.value | highlight: $select.search"></span>
+                                    </ui-select-choices>
+                                    <ui-select-no-choice>
+                                       No result found
+                                    </ui-select-no-choice>
+                                </ui-select>
+                            </div>
+                            <div class="col-12 col-sm-7 col-md-7 col-lg-7 col-xl-7 validate-div">
+                                <div class="row">
+                                    <!-- <label for="Date"
+                                        class="col-xl-2 col-lg-2 col-md-2 col-sm-2 col-form-label form-lable text-secondary">
+                                        Date
+                                    </label>
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 validate-div">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control rounded-0" ng-model="emp.startDate" ng-click="loadDatePicker(emp.startDate);" id="adminreport-from" placeholder="Select Start Date" required="true" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="text-secondary">to</span>
+                                    <div class="col-12 col-sm-4 col-md-4 col-lg-4 col-xl-4 validate-div">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control rounded-0" id="adminreport-to" ng-model="emp.endDate" placeholder="Select End Date" required="true" />
+                                            <div class="input-group-prepend" id="">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                    <div class="col-12 col-sm-1 col-md-1 col-lg-1 col-xl-1" ng-if="selectedManager!='' && selectedYear!=''">
+                                    <button class="btn btn-secondary"  type="submit" ng-click="comlianceCalculation(selectedManager,selectedYear);">Apply</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="form-divider">
+
+            </div>
+                    <!-- <h3>timeline-compliance</h3> -->
+                    <c:ComlianceCalculation />
+                    
+                
+            <!-- <div class="pt-2 table-responsive" ng-clock="true">
+                <table id="admin-report" class="table table-striped dt-responsive nowrap py-1 py-sm-2" cellspacing="0"
+                    width="100%">
+                    <thead>
+                        <tr>
+                            <th ng-click="sort('Name')">Name
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Name'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span> 
+                            </th>
+                            <th ng-click="sort('Trip_Origin__c')">Trip Origin
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Trip_Origin__c'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"> 
+                            </span>
+                            </th>
+                            <th ng-click="sort('Trip_Destination__c')">Trip Destination
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Trip_Destination__c'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('Trip_Date__c')">Trip Date
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Trip_Date__c'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('Trip_Status__c')">Trip Status
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Trip_Status__c'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('EmployeeReimbursement__r.Name')">EmployeeReimbursement Name
+                                <span class="sort-icon pull-right" ng-show="sortKey=='EmployeeReimbursement__r.Name'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span>
+                            </th>
+                            <th ng-click="sort('Mileage__c')">Mileage
+                                <span class="sort-icon pull-right" ng-show="sortKey=='Mileage__c'" ng-class="{'fa fa-chevron-up':reverse,'fa fa-chevron-down':!reverse}"></span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr ng-repeat="dat in dataList|orderBy:sortKey:reverse">
+                            <td>{{ dat.Name }}</td>
+                            <td>{{ dat.Trip_Origin__c }}</td>
+                            <td>{{ dat.Trip_Destination__c }}</td>
+                            <td>{{ dat.Trip_Date__c }}</td>
+                            <td>{{ dat.Trip_Status__c }}</td>
+                            <td>{{ dat.EmployeeReimbursement__r.Name }}</td>
+                            <td>{{ dat.Mileage__c }}</td>
+                        </tr>                    
+                    </tbody>
+                </table>
+                <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true" autoHide="true" responsive="true" class="pull-right"></dir-pagination-controls>
+            </div> -->
+            <!-- <div class="my-5">
+                <label for="Export As" class="mr-2 col-form-label form-lable">Export As:</label>
+                <button class="btn btn-secondary rounded-0" id="btn">PDF</button>
+                <button class="btn btn-secondary rounded-0" id="btn">Excel</button>
+                <button class="btn btn-secondary rounded-0" id="btn">CSV</button>
+                <button class="btn btn-secondary rounded-0" id="btn">Print</button>
+                <button class="btn btn-secondary rounded-0" id="btn">Copy</button>
+            </div> -->
+        </section>
+        <apex:include pageName="EMC_Common_footer"/>
+    </body> 
+</apex:page>

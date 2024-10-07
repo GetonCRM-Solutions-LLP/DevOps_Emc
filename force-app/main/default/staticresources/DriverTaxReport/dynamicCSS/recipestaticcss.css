@@ -1,0 +1,25 @@
+.slds-card__header{
+     display: none;
+}
+.slds-page-header{
+     display: none;
+}
+.slds-card{
+    margin-top: -19px;
+    margin-left: -11px;
+    margin-right: -11px;
+}
+.ingredient-input{
+    width: 1222px;
+    margin-right: 10px;
+    font-weight: 500;
+}
+.search_button{
+    display: inline-flex;
+    margin-top: -6px;
+    margin-bottom: -6px;
+}
+.button_search , .button_random_recipe , .button_clear{
+    margin-right: 0.5px;
+    -webkit-text-stroke-width: thin;
+}

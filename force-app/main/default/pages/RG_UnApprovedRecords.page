@@ -1,0 +1,219 @@
+<apex:page standardStylesheets="false" controller="RG_UnApprovedRecordsClass" showHeader="false" >
+  
+    <apex:includescript value="https://code.jquery.com/jquery-1.11.1.min.js" />
+    <script src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/js/jquery.dataTables.min.js')}" type='text/javascript' />    
+    <apex:stylesheet value="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css" />
+    
+    <apex:form >
+        <html lang="en-US" class="no-js">
+            <head>
+                <link rel='stylesheet' href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/bootstrap.min.css')}" type='text/css' media='all'/>
+                <title>Unapproved Records</title> 
+                <link rel='stylesheet' id='rcap-style-css'  href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/style.css')}" type='text/css' media='all'/>
+                <!--[if lt IE 9]>
+                <script src="http://mburse2.chadlightner.com//mburse2.chadlightner.com/wp-content/themes/rcap/js/html5shiv.min.js"></script>
+                <![endif]-->
+                <apex:variable value="{!0}" var="i"/>
+                <link rel="stylesheet" href="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/asset/css/dashboard.css')}"/>
+            </head>
+            <body>  
+                <div id="wrapper"> 
+                    <div id="header">
+                        <img src="{!URLFOR($Resource.DashboardCSS,'dashboardfinal/images/mBurse.png')}" alt="mBurse"/>
+                        <apex:outputLink style="float: right;" value="/secur/logout.jsp"  >Log Out</apex:outputLink><br/>
+                        <apex:outputLink style="float: right;" rendered="{!isSuperManager}" value="/apex/RG_Create_New_User_Page" >Create New User</apex:outputLink><br/>
+                        <apex:outputPanel rendered="{!EnableReports}" >
+                            <apex:outputLink style="float: right;" value="/apex/RG_Reports_List_Page" >Reports</apex:outputLink>
+                        </apex:outputPanel>
+                         <div id="mtitle">My Teams Monthly Reimbursement Summary</div> 
+                    </div>   
+                    <div>     
+                        <div>
+                            <apex:include pageName="Rg_Charting"/>  
+                        </div>
+                        <style>
+                        .tdefault {
+                          display: table-row;
+                        }
+                        .selmonth {
+                          float:left;
+                          width: 123px;
+                          text-align: center;
+                          text-transform: none;
+                          font-size: 12px !important;
+                          font-weight: 100;
+                        }
+                        #d2_filter {
+                            float:left;
+                            margin-top:-3px;
+                            margin-left:20px;
+                        }
+                        .ProcessingBackground {
+                            background-color: black;
+                            opacity: 0.50;
+                            filter: alpha(opacity = 50);
+                            width: 100%;
+                            height: 100%;
+                            position: fixed;
+                            z-index: 10000;
+                            top:0;
+                            left:0;
+                        }
+                        .Processing {
+                            z-index: 10001;
+                            left: 50%;
+                            top: 50%;
+                            text-align: center;
+                            position: fixed;
+                        }  
+                        .confirmM3 {
+                            width:250px;
+                            margin:0px auto;
+                        }  
+                        .msgIcon img {
+                            margin-top: 11px;
+                        }    
+                        .messageText {
+                            margin-top:-36px;
+                        }
+                        .messageCell {
+                            border : none;
+                        }
+                        .msgIcon {
+                            border : none;
+                        }
+                        </style>
+
+                        <div id="data">
+                            <!--<div id="dtitle">Monthly Reimbursement Summary</div>--> 
+                            <apex:outputPanel rendered="{!isSuperManager}">
+                                <ul class="nav nav-pills nav-justified" >
+                                    <li><apex:outputlink value="/apex/RG_DashboardAdmin1"> My Team Records</apex:outputlink></li>
+                                    <li class="active"> <apex:outputLink >Unapproved Records</apex:outputLink></li>
+                                    <li>
+                                        <apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">Login As
+                                            <apex:param name="l" value="xyz"/>
+                                        </apex:outputLink>
+                                    </li>
+                                </ul>
+                            </apex:outputPanel>
+                            <apex:outputPanel rendered="{!isSuperManagerDriver}">
+                                <ul class="nav nav-pills nav-justified" >
+                                    <li><apex:outputlink value="/apex/RG_DashboardAdmin1"> My Team Records</apex:outputlink></li>
+                                    <li >
+                                        <apex:outputlink value="/apex/RG_MonthlyReimbursementSummary">My Records
+                                            <apex:param name="id" value="{!conid}"/> 
+                                        </apex:outputlink>
+                                    </li>
+                                    <li class="active"> <apex:outputLink >Unapproved Records</apex:outputLink></li>
+                                    <li>
+                                        <apex:outputLink value="/apex/RG_MonthlyReimbursementSummary">Login As
+                                            <apex:param name="l" value="xyz"/>
+                                        </apex:outputLink>
+                                    </li>
+                                </ul>
+                            </apex:outputPanel>
+                            <apex:outputPanel id="unappTbl">
+                                <apex:outputPanel id="showmessage" >
+                                    <!--<apex:pageMessages id="successmsgid"/>-->
+                                    <div style=" width: auto; border: 1px solid #000;height: 32px;text-align:  center; border-radius: 8px;margin-top: 1%;display:{!if(pageMsg != '','','none') }">
+                                        <div style="width:auto;float:left;padding: 11px;">
+                                            <img alt="CONFIRM" class="msgIcon" src="/img/msg_icons/{!if(isSuccess==true,'confirm16.png','error16.png')}" title="CONFIRM"/>
+                                        </div>
+                                        <div style="width:auto;float:left">
+                                            <h1 style="font-size:14px;"><b> {!if(isSuccess==true,'Success: ','Error: ')} </b></h1>
+                                            <span style="font-size:12px;">{!pageMsg}</span>
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                                <div id="table">
+                                    <table id="d2" class="Display">
+                                        <thead>      
+                                            <tr id="theader">
+                                                <th class="approval" style="width:200px;">Approve</th>            
+                                                <th class="name">name</th>
+                                                <th class="autoapproval" style="width:135px">Monthly Auto<br/>Approval Threshold</th>
+                                                <th class="submittedmileage">submitted mileage</th>
+                                                <apex:outputPanel rendered="{!IF(isManager == false,true,false)}">
+                                                <th class="submittedmileage">Manager's Email</th>
+                                                <th class="approval" style="width:120px;">Reminder<br/>Email <br/> 
+                                                    <span> Select All </span> <apex:inputcheckBox onclick="checkAll()"/>
+                                                </th>
+                                                </apex:outputPanel>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <apex:repeat value="{!wraplist}" var="item">  
+                                                <tr class="summary_861 tdefault"> 
+                                                    <td class="approval" ><apex:inputcheckBox value="{!item.b}"/></td>
+                                                    <td class="name">
+                                                        <apex:outputLink value="/apex/RG_UnApprovedRecordsByName">{!item.Name} 
+                                                            <apex:param name="p" value="{!item.conid}"/>
+                                                        </apex:outputLink>
+                                                    </td>
+                                                    <td class="autoapproval">
+                                                        <apex:inputtext style="padding: 0px;width: 104px;height: 24px; text-align: center;" value="{!item.monthlythershold}"/>
+                                                    </td>
+                                                    <td class="submittedmileage">{!item.submil}</td>
+                                                    <apex:outputPanel rendered="{!IF(isManager == false,true,false)}">
+                                                    <td class="submittedmileage">{!item.Email}</td>
+                                                    <td class="approval check" ><apex:inputcheckBox value="{!item.isCheck}">
+                                                        <!-- <apex:actionSupport event="onClick" action="{!applySelectedFlags}"/>  -->
+                                                    </apex:inputcheckBox>
+                                                    </td>
+                                                    </apex:outputPanel>
+                                                </tr>
+                                            </apex:repeat>
+                                        </tbody>
+                                    </table>
+
+                                    <apex:commandButton action="{!UpdateRecord}" status="Processing" value="Submit" onComplete="window.location.reload();"  rendered="{!wraplist.size>0}" style="align:Center;padding: 0px;width: 104px;height: 30px;"/>
+                                    <apex:outputPanel rendered="{!IF(isManager == false,true,false)}">
+                                    <apex:commandButton action="{!sendEmail}" reRender="showmessage" status="Processing" rendered="{!wraplist.size>0}" value="Send Email" id="sending" style="align:Center;padding: 0px;width: 104px;height: 30px;margin-left:20px;"/>
+                                    <apex:repeat var="em" value="{!emailAddress}">
+                                        <apex:outputText value="{!em}"/>
+                                    </apex:repeat>
+                                    </apex:outputPanel>
+                                </div> 
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+                <div id="divProcessing" style="display:none;">
+                    <div class="ProcessingBackground">
+                    </div>
+                    <div class="Processing">
+                        <apex:image alt="Processing"  value="/img/loading32.gif" />
+                    </div>
+                </div>  
+                <apex:actionStatus id="Processing" onstart="document.getElementById('divProcessing').style.display = '';" onstop="document.getElementById('divProcessing').style.display = 'none';">                            
+                </apex:actionStatus>
+                    
+                <script>
+                    shdetails=function(obj,vis) {
+                        if(vis == 0) {
+                            jQuery('.summary_'+obj).css('display','table-row');
+                            jQuery('.details_'+obj).css('display','none');
+                        } else {
+                            jQuery('.summary_'+obj).css('display','none');
+                            jQuery('.details_'+obj).css('display','table-row');
+                        }
+                    }
+                    jQuery(".tdefault:odd").css( "background-color", "#f2f2f2" );
+                    
+                    function checkAll() {
+                        jQuery("td[class*='check']").children().attr('checked', true);
+                    }
+                </script>
+                <script>
+                    j$ = jQuery.noConflict();
+                    j$(document).ready( function () {
+                        var contactTable = j$('[id$="d2"]').DataTable({                
+                            });
+                    jQuery("#d2_wrapper").css( "padding-top", "1%" );
+                            });
+                </script>  
+            </body>
+        </html>
+    </apex:form>
+</apex:page>

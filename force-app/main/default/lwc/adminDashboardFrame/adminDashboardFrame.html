@@ -1,0 +1,237 @@
+<template >
+    <c-navigation-menu driver-menu-item={adminProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} profile-id={profile} onlogout={handleLogout} ongetreport={redirectToReportDetail}></c-navigation-menu>
+	<c-dashboard-profile-header user-name={firstName} full-name={contactTitle} unread={unreadCount} page-source={isHomePage} onnotify={viewAllNotification} onlogout={handleLogout} driver-menu={menu} is-navigate="true">
+		<template lwc:if={isProfile}>
+			<div slot="buttons">
+				<button onclick={addUser} class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-colored">
+					<svg fill="none" viewBox="0 0 12 13.091" height="13.091" width="12" xmlns="http://www.w3.org/2000/svg" class="svg-space"><path stroke-linecap="round" stroke-width="1.6363636363636362" stroke="#fff" d="M5.849 11.305V1.785M1.091 6.545h9.519"></path></svg>
+					New user
+				</button>
+				<button onclick={removeUser} class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-outline--background waves-light mleft-0 btn-outline-green-sm">
+					<svg class="svg-space" xmlns="http://www.w3.org/2000/svg" width="14" height="2.334" viewBox="0 0 14 2.334" fill="none"><path d="M1.911 1.166h10.179" stroke="#7ABB4A" stroke-width="1.75" stroke-linecap="round"/></svg>
+					Remove user
+				</button>
+			</div>
+		</template>
+	</c-dashboard-profile-header>
+    <section class={section} id="default">
+        <template lwc:if={isProfile}>
+            <c-manager-user-profile contact-id={_contactId} account-id={_accountId} acc-name={accName} role={userRole} onmileage={getMileageList} onteam={getMyTeamList} onaccess={getUnapproveMileage} onhighrisk={redirectToHighRiskMileage} onhighriskaccess={redirectToRiskMileage} onhighaccess={redirectMileage} onhighmileage={redirectToHighMileage} onuserview={redirectToDriverView} notify-message-list={unnotificationList} notify-message={unnotifyList} is-notify={isUnNotify} onclose={handleNotification} onmodal={viewAllNotification}></c-manager-user-profile>
+        </template>
+        <template lwc:elseif={mileageApproval}>
+            <template lwc:if={listOfDriver}>
+                <c-user-mileage-grid contact-id={_contactId} account-id={_accountId} role={userRole} is-account-biweek={biweekAccount} contact-list={listOfDriver} onpreview={getUnapproveMileage} onshow={showSpinner} oncomplete={handleSyncComplete} onhide={hideSpinner} ontoast={showToast} show-team={showTeam} filter={nameFilter} contact-info={userName} onback={backToDashboard} single-user={singleUser} user-list={userOfDriver}></c-user-mileage-grid>
+            </template>
+        </template>
+        <template lwc:elseif={teamList}>
+            <template lwc:if={myTeamList}>
+               <c-user-view-mileage contact-id={_contactId} account-id={_accountId} contact-list={myTeamList} show-team={showTeam} contact-info={userName} filter={contactTitle} trip-column={teamColumn} trip-key-fields={teamKeyFields} onpreview={redirectToDriverView} onback={backToDashboard}></c-user-view-mileage>
+            </template>
+        </template>
+        <template lwc:elseif={mileageSummary}>
+            <template lwc:if={listOfReimbursement}>
+               <c-user-view-mileage contact-id={_contactId} account-id={_accountId} contact-list={listOfReimbursement} role={userRole} contact-info={userName} filter={contactTitle} show-team={showTeam} account-year={mileageAccountList} month-year={lastMonthSelected} trip-column={summaryColumn} trip-key-fields={summaryKeyFields} onpreview={getMileage} onmonthyearchange={handleMonthYearRender} onback={backToDashboard}></c-user-view-mileage>
+            </template>
+        </template>
+        <template lwc:elseif={mileageSummaryView}>
+            <template lwc:if={viewMileages}>
+               <c-view-detail-user contact-id={_contactId} account-id={_accountId} contact-list={viewMileages} role={userRole} user-name={mileageContactName} trip-column={summaryDetailColumn} trip-key-fields={summaryDetailKeyFields} month={mileageMonthList} selected-month={monthSelected} onback={redirectToSummary} onmonthchange={refreshDetailSummary} redirect-dashboard={isDashboard}></c-view-detail-user>
+            </template>
+        </template>
+        <template lwc:elseif={mileageView}>
+			<template lwc:if={mileageRecord}>
+				<c-new-datatable-component main-class="slds-table--header-fixed_container preview-height" driver-data={mileageRecord} month-list={mileageAccountList} driver-list={driverdetail} status-list={Statusoptions} ontoastmessage={handleToastMessage} norecord-message="There is no trip data available" onshowloader={showLoader} onhideloader={hideLoader} onbacktodashboard={backToDashboard}></c-new-datatable-component> 
+			</template>
+        </template>
+		<template lwc:elseif={showDriverView}>
+			<c-manager-driver-profile account-id={_accountId} contact-id={idContact} role={userRole} ontoast={showToast} onback={redirectToMyTeam} redirect-dashboard={isDashboard}></c-manager-driver-profile>
+        </template>
+		<template  lwc:elseif={resources}>
+			<c-user-resource minimums={contactInformation} vehicle-minimums={contactVehicle} role={userRole} settings={customSetting} driver-meeting={driverMeeting} onback={backToDashboard} onsend={emailSent}></c-user-resource>
+		</template>
+		<template  lwc:elseif={showReports}>
+			<c-report-list onviewreport={redirectToReportDetail} ontoastmessage={handleToastMessage}  onshow={showSpinner} onhide={hideSpinner} onbacktodashboard={backToDashboard}></c-report-list>
+		</template>
+		<template lwc:elseif={reportDetail}>
+			<template lwc:if={reportId}>
+				<c-report-detail contact-id={_contactId} account-id={_accountId} report-id={reportId} month-list={reportMonthList}  onshow={showSpinner} onhide={hideSpinner} onclosemodal={redirectToReports} onprint={handlePrint} oncopy={handleCopy} ontoastmessage={handleToastMessage}></c-report-detail>
+			</template>
+        </template>
+		<template  lwc:elseif={showUsers}>
+			<c-users-roster employees={employees} frequency={reimbursementFrequency} cellphone={cellPhone} redirect-user-id={redirectUserId} onupdateemployee={refreshEmpData} 
+				managers={managers} roles={roles} job-titles={jobTitles} departments={departments} companies={companies} vehicle-type={vehicleType} driver-types={driverTypes}
+						ontoast={showToast} onshow={showSpinner} onhide={hideSpinner} onerror={showErrorToast} onbacktodashboard={backToDashboard}></c-users-roster>
+		</template>
+		<template  lwc:elseif={showTools}>
+			<c-user-tools contact-id={_contactId} account-id={_accountId} onuserpreview={handleUserNavigate} 
+			onshow={showSpinner} onhide={hideSpinner}  ontoast={showToast} onshowloader={showConditionalLoader} 
+			onhideloader={hideConditionalLoader} oncloseparent={closeDialogBox} onbacktodashboard={backToDashboard}></c-user-tools>
+		</template>
+        <template lwc:else>
+            <template lwc:if={unapproveMileages}>
+                 <c-user-flagging-trip contact-id={_contactId} account-id={_accountId}  is-account-biweek={biweekAccount} all-reimbursement-list={reimbursement} commute-list={commuteMileageList} header-name={driverName} emailaddress={userEmail} role={userRole} contact-list={unapproveMileages} onback={redirectToMileage} onshow={showSpinner} onhide={hideSpinner} ontoast={showToast} element={unapproveReimbursements} onflagcomplete={handleComplete} onsyncdone={handleSyncDone} redirect-dashboard={isDashboard}></c-user-flagging-trip>
+            </template>
+        </template>
+		<c-manage-employee-field accid={_accountId} frequency={reimbursementFrequency} cellphone={cellPhone}  onformfield={handleFormField}></c-manage-employee-field>
+		<c-user-profile-modal header={headerModalText} month='' show-footer={isFalse} show-btn={isFalse}
+			modal-class={modalClass} header-class={headerClass} subheader-class={subheaderClass}
+			modal-content-style={modalContent} style-header={styleHeader} close-btn-class={styleClosebtn} onclosedialogesc={handleCloseModal} onclosedialog={handleCloseModal} >
+			<template lwc:if={navFeature}>
+					<video id="video-source" width={videoWidth} height={videoHeight} autoplay controls="controls"
+					controlslist="noplaybackrate  nodownload" style="object-fit: cover;border-bottom-right-radius: 20px;
+						border-bottom-left-radius: 20px;
+						border-top-right-radius: 20px;
+						border-top-left-radius: 20px;">
+						<source type="video/mp4" src={navFeatureLink} />
+					</video>
+			</template>
+			<template lwc:if={isAddUser}>
+				<div class="add-employee-container">
+					<c-add-employee accid={_accountId} form-field={addEmpFormField} contactid={_contactId} ontoast={showToast} is-add-employe-modal={isAddEmployeModal} onhide={hideSpinner} onshow={showSpinner} onaddemployee={addEmployee} >
+					</c-add-employee>
+				</div>
+			</template>
+			<template lwc:if={isRemoveUser}>
+				<div slot="header">
+					<div class="slds-float_right slds-p-right_small">
+						<div class="slds-input-has-icon slds-input-has-icon_right search-holder">
+							<img class="search-icon" src={searchIcon} loading="eager" />
+							<template lwc:if={isSearchEnable}>
+							</template>
+							<template lwc:else>
+								<div class="close-btn-sm"  onclick={handleClearInput}>
+									<svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+								</div>
+							</template>
+							
+							<input class="slds-input filter-input" type="text" placeholder="Search"
+								onkeyup={handleRemoveUserFilter} value={_value} />
+						</div>
+					</div>
+				</div>
+				<div class="remove-employee-container">
+					<c-remove-employee accid={_accountId}  contactid={_contactId} employees={employees} ontoast={showToast} onhide={hideSpinner} onshow={showSpinner} ></c-remove-employee>
+				</div>
+			</template>
+			<template lwc:if={isLockReport}>
+				<div class="">
+					<div class="m-placeholder">{confirmingMsg}</div> 
+					<div class="m-placeholder">{quoteMsg}</div> 
+				</div>
+				<div class="button_class_modal slds-align_absolute-center" >
+					<button type="button" class="slds-btn slds-btn-primary slds-btn-sm waves-effect c_button waves-light mleft-0 c_button_green" onclick={handleReportSubmit}>
+						Yes
+					</button>
+					<button type="button" class="slds-btn slds-btn-primary slds-btn-sm waves-effect c_button waves-light mleft-0 c_button_black" onclick={handleCloseReport}>
+						No
+					</button>
+				</div>
+			</template>
+		</c-user-profile-modal>
+       
+		<template lwc:if={notificationModal}>
+			<div class="vue-sidebar transition" data-id="Notification" onclick={handleLiveNotification}>
+				<div class="vue-sidebar-content">
+					<div class="custom-app-tabs-wrapper">
+						<div class="close-btn slds-p-left_x-large slds-p-top_medium">
+							<svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none" onclick={closeNotification}>
+								<path d="M1 9L6.04889 5.21333C6.19111 5.10667 6.19111 4.89333 6.04889 4.78667L1 1" stroke="#404B5A" stroke-width="1.77778" stroke-linecap="round"></path>
+							</svg>
+						</div>
+						<div class="header-content">
+							<div class="slds-p-left_xx-large slds-p-bottom_large wrapper-filter">
+								<!-- <div class="slds-form-element">
+								  <label class="slds-checkbox_toggle slds-grid_vertical">
+									<input type="checkbox" name="checkbox-toggle-16" value="checkbox-toggle-16" aria-describedby="checkbox-toggle-16" onchange={handleToggle} checked={checkAll}/>
+									<span id="checkbox-toggle-16" class="slds-checkbox_faux_container" aria-live="assertive">
+										<span class="slds-checkbox_faux toogle-input"></span>
+										<span class="slds-checkbox_on"></span>
+										<span class="slds-checkbox_off"></span>
+									</span>
+								  </label>
+								</div> -->
+								<button data-name="admin" class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black--outline waves-light mleft-0 btn-black-outlined btn-toggle is-active" onclick={handleToggle}>
+									Admin <span class="count" lwc:if={adminCount}>{adminCount}</span>
+								</button>
+								<button data-name="auto" class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black--outline waves-light mleft-0 btn-black-outlined btn-toggle" onclick={handleToggle}>
+									Auto <span class="count" lwc:if={autoCount}>{autoCount}</span>
+								</button>
+							</div>
+							<template lwc:if={isGeneral}>
+								<div class="slds-p-left_large slds-p-bottom_large filter-wrapper">
+									<div class="filter-view-1">
+										<!-- <div class="filter-label">Year</div> -->
+										<div>
+											<c-dropdown-select data-id="yearSelect" options={yearList} value={value} 
+											onchange={handleYearChange} main-class="default-box-input slds-truncate" selected-value={defaultYear}></c-dropdown-select>
+										</div>
+									</div>
+									<div  class="filter-view-2">
+										<!-- <div class="filter-label" style="padding-left: 16px;">Month</div> -->
+										<div>
+											<c-dropdown-select data-id="monthSelect" options={monthList} value={value} 
+											onchange={handleMonthChange} main-class="default-box-input slds-truncate" selected-value={defaultMonth}></c-dropdown-select>
+										</div>
+									</div>
+								</div>
+							</template>
+						</div>
+						<div class="tab-content">
+								<div class="slds-p-left_xx-large slds-p-right_medium notification-wrapper">
+									<template lwc:if={isNotify}>
+										<template for:each={notifyList} for:item="notify" for:index="index">
+											<template lwc:if={notify.unread}>
+												<div data-id={notify.id} key={notify.id}
+												class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text">
+													<div class="slds-p-top_xx-small slds-p-left_xx-small slds-p-right_x-small">
+														<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+															<circle cx="4.5" cy="4.5" r="4.5" fill="#FA7800" />
+														</svg>
+														<!-- <img style="width: 12px;" src={circle} /> -->
+													</div>
+													<div class="slds-p-right_small notify-message-tab">{notify.notificationMessage}
+														<div class="slds-p-top_x-small notify-message-date"> <lightning-formatted-date-time value={notify.modifiedDate} year="numeric"
+																day="2-digit" month="long" hour="2-digit" minute="2-digit" time-zone="America/Panama">
+															</lightning-formatted-date-time></div>
+													</div>
+													<div class="slds-p-right_xx-small close-notify-icon" data-id={notify.id} onclick={handleClose}>
+														<svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+															<path d="M4.53906 13.6328L13.6303 4.54161" stroke="#FA7800" stroke-width="1.7"
+																stroke-linecap="round" />
+															<path d="M4.53906 4.55469L13.6303 13.6459" stroke="#FA7800" stroke-width="1.7"
+																stroke-linecap="round" />
+														</svg>
+													</div>
+												</div>
+											</template>
+											<template lwc:else>
+												<div data-id={notify.id} key={notify.id}
+												class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text-read">
+													<div class="slds-p-top_xx-small slds-p-left_xx-small slds-p-right_x-small">
+														<svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+															<circle cx="4.5" cy="4.5" r="4.5" fill="#FFF" />
+														</svg>
+														<!-- <img style="width: 12px;" src={circle} /> -->
+													</div>
+													<div class="slds-p-right_small notify-message-tab">{notify.notificationMessage}
+														<div class="slds-p-top_x-small notify-message-date-read"> <lightning-formatted-date-time value={notify.modifiedDate} year="numeric"
+																day="2-digit" month="long" hour="2-digit" minute="2-digit" time-zone="America/Panama">
+															</lightning-formatted-date-time></div>
+													</div>
+												</div>
+											</template>
+											
+										</template>
+									</template>
+								
+									<template lwc:else>
+										<div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">You have no notifications right now.</div>
+									</template>
+								</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</template>
+    </section>
+</template>

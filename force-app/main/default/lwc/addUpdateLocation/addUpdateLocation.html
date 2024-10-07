@@ -1,0 +1,220 @@
+<template>
+    <c-user-profile-modal
+        class="modal_position"
+        data-id='addedit_loction'
+        month=''
+        show-btn= {showDownloadButton}
+        modal-class={modalclass}
+        header-class={headerclass}
+        modal-content-style={modalcontentstyle}
+        style-header={styleheader}
+        subheader-class={subheaderClass}
+        close-btn-class={closebtnclass}
+    >
+        <template lwc:if={addModal}>
+            <div class="location_title">Add location</div>
+        </template>
+        <template lwc:else>
+            <div class="location_title">Edit location</div>
+        </template>
+        <template lwc:if={addModal}></template>
+        <template lwc:else>
+            <div class="usage_note">*Do not change the location name, only edit the address.</div>
+        </template>
+        <template lwc:if={showLocation}>
+            <div class="map_component">
+                <div class="slds-grid slds-wrap card_header">
+                    <div class="slds-col slds-size_6-of-12 slds-p-right_small">
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>Name:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large input-border">
+                                    <div>
+                                        <input class="content-input" data-id="name" placeholder="Home, Office etc." value={locationToAddUpdate.name} oninput={handleInputChange}/>
+                                        <span class="asterisk_textarea">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>Street:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large input-border">
+                                    <div>
+                                        <textarea class="textarea-input" data-id="street" oninput={handleInputChange} value={locationToAddUpdate.street}>{locationToAddUpdate.street}</textarea>
+                                        <span class="asterisk_textarea">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>
+                                        <template lwc:if={isCanadianDriver}>
+                                            Province:
+                                        </template>
+                                        <template lwc:else>
+                                            State:
+                                        </template>
+                                    </label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large input-border">
+                                    <div>
+                                        <template lwc:if={isCanadianDriver}>
+                                            <c-select2-dropdown data-id="state" class="sync_dropdown"
+                                                title="Select province"
+                                                options={statesList}
+                                                selected-value={locationToAddUpdate.state}
+                                                onchange={handleInputChange}
+                                                data-field="state"
+                                                main-class="default-box-input slds-truncate">
+                                            </c-select2-dropdown>
+                                        </template>
+                                        <template lwc:else>
+                                            <c-select2-dropdown data-id="state" class="sync_dropdown"
+                                                title="Select state"
+                                                options={statesList}
+                                                selected-value={locationToAddUpdate.state}
+                                                onchange={handleInputChange}
+                                                data-field="state"
+                                                main-class="default-box-input slds-truncate">
+                                            </c-select2-dropdown>
+                                        </template>
+                                        <span class="asterisk_textarea">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>
+                                        <template lwc:if={isCanadianDriver}>
+                                            Postal Code:
+                                        </template>
+                                        <template lwc:else>
+                                            Zip Code:
+                                        </template>
+                                    </label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large input-border">
+                                    <div>
+                                        <input class="content-input" data-id="zipCode" value={locationToAddUpdate.zipCode} oninput={handleInputChange} onfocusout={handleLatLong}/>
+                                        <span class="asterisk_textarea">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_6-of-12 slds-p-right_small">
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>Phone:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large right-input-border">
+                                    <div>
+                                        <input class="content-input" data-id="phone" value={locationToAddUpdate.phone} oninput={handleInputChange}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>City:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large right-input-border">
+                                    <div>
+                                        <input class="content-input" data-id="city" value={locationToAddUpdate.city} oninput={handleInputChange}/>
+                                        <span class="asterisk">*</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>Latitude:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large right-input-border">
+                                    <div>
+                                        <input class="content-input disabled-input" disabled data-id="latitude" value={locationToAddUpdate.latitude} oninput={handleInputChange}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="slds-col slds-size_6-of-6 slds-m-bottom_medium">
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size_1-of-6 slds-p-left_small">
+                                    <label>Longitude:</label>
+                                </div>
+                                <div class="slds-col slds-size_5-of-6 slds-p-left_xx-large right-input-border">
+                                    <div>
+                                        <input class="content-input disabled-input" disabled data-id="longitude" value={locationToAddUpdate.longitude} oninput={handleInputChange}/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="slds-col slds-size_12-of-12">
+                        <div class="slds-grid slds-wrap range_content">
+                            <div class="slds-col slds-size_1-of-12 slds-p-left_small">
+                                <label>Range:</label>
+                            </div>
+                            <div class="slds-col slds-size_4-of-12 slds-p-left_xx-large">
+                                <div class="number_inpt">
+                                    <div style="width: 80%;">
+                                        <template lwc:if={isCanadianDriver}>
+                                            <input class="mileage-input" data-id="range" placeholder="Max 90" value={locationToAddUpdate.range} oninput={handleInputChange} onfocus={handleFocus} onfocusout={handleRangeLimit}/>
+                                        </template>
+                                        <template lwc:else>
+                                            <input class="mileage-input" data-id="range" placeholder="Max 300" value={locationToAddUpdate.range} oninput={handleInputChange} onfocus={handleFocus} onfocusout={handleRangeLimit}/>
+                                        </template>
+                                    </div>
+                                    <div class="auto_number_button">
+                                        <button class="up-down-button" onclick={handleRangeUp}><i class="fa green_color fa-sort-asc"></i></button>
+                                        <button class="up-down-button" onclick={handleRangeDown}><i class="fa green_color fa-sort-desc"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="slds-col slds-size_1-of-12 slds-p-left_small">
+                                <p class="range_ft">
+                                    <template lwc:if={isCanadianDriver}>
+                                        mtr
+                                    </template>
+                                    <template lwc:else>
+                                        ft
+                                    </template>
+                                </p>
+                            </div>
+                            <div class="slds-col slds-size_6-of-12 slds-p-left_small">
+                                <p class="range_info">
+                                    <template lwc:if={isCanadianDriver}>
+                                        (plus {locationToAddUpdate.range} mtr when matching locations)
+                                    </template>
+                                    <template lwc:else>
+                                        (plus {locationToAddUpdate.range} ft when matching locations)
+                                    </template>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="button_class">
+                    <button onclick={handleSaveLocation} type="button"
+                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip">
+                        Save</button>
+                    <button onclick={handleCloseLocation} type="button"
+                        class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-black waves-light mleft-0 btn-trip">
+                        Close</button>
+                </div>
+            </div>
+        </template>
+    </c-user-profile-modal>
+</template>

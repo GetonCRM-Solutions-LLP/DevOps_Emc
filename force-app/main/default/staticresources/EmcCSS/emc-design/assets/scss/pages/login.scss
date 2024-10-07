@@ -1,0 +1,105 @@
+.container-login {
+    width: auto;
+    min-height: 100vh;
+    display: -moz-box;
+    display: -ms-flexbox;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: $primary-color;
+    }
+    .login-lable{
+    font-family: 'Proxima Nova Bold';
+    color:$primary-color;
+    font-size: 18px;
+    }
+    .login-btn,.rset-btn{
+    background-color:$secondary-color !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    padding: 10px 26px !important;
+    font-size: 18px !important;
+    font-weight: bold !important;
+    color:#fff !important;
+    margin: 20px 0 !important;
+    }
+    .login-btn:hover,.rset-btn:hover{
+    color:$primary-color !important;
+    text-decoration: none !important;
+    }
+    .fw{
+    color: $secondary-color !important;
+    text-decoration: none;
+    font-size: 18px;
+    }
+    .rset{
+    color: $primary-color !important;
+    text-decoration: underline;
+    }
+    .rset:hover{
+    color: $secondary-color !important;
+    text-decoration: none;
+    text-decoration: underline;
+    }
+    .input-bg{
+    background-color: #e2e2e2;
+    border: none;
+    }
+    .form-group {
+        margin-bottom: 1rem !important;
+    }
+    // validation css start
+    .form-error {
+    color: $danger-color !important;
+    margin-top: 5px;
+    }
+    
+    .toaster {
+    position: fixed;
+    z-index: 1;
+    top: 10px;
+    right: 10px;
+    }
+    
+    .toast {
+    color: #fff;
+    padding: 10px 20px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    -webkit-transform: translateY(-10px) rotateY(40deg);
+    transform: translateY(-10px) rotateY(40deg);
+    transition: all 300ms ease;
+    }
+    .toast.toast--show {
+    -webkit-transform: translateY(0) rotateY(0);
+    transform: translateY(0) rotateY(0);
+    opacity: 1;
+    }
+    
+    .toast--success {
+    background-color: $primary-color;
+    }
+    
+    .toast--error {
+    background-color:$danger-color;
+    }
+    
+    .form-addon.is-valid [class*="icon-valid"], .form-addon.is-invalid [class*="icon-invalid"] {
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    opacity: 1;
+    }
+    .form-addon.is-invalid {
+    background-color: #fef4f7;
+    border-color:$danger-color;
+    }
+    .form-addon.is-invalid .form-addon__icon {
+    color: $danger-color;
+    }
+    .form-addon.is-invalid .form-addon__addon:before {
+    border-color: $danger-color;
+    }
+    // validation css end

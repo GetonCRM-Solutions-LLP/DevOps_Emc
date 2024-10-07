@@ -1,0 +1,45 @@
+<apex:page showHeader="false" sidebar="false">
+	<!-- Meta Tag Description -->
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge"/>
+
+	<!-- Meta Tag Description -->
+
+	<!-- favicon icon -->
+	<link rel="apple-touch-icon" sizes="57x57" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-57x57.png')}"/>
+	<link rel="apple-touch-icon" sizes="60x60" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-60x60.png')}"/>
+	<link rel="apple-touch-icon" sizes="72x72" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-72x72.png')}"/>
+	<link rel="apple-touch-icon" sizes="76x76" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-76x76.png')}"/>
+	<link rel="apple-touch-icon" sizes="114x114" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-114x114.png')}"/>
+	<link rel="apple-touch-icon" sizes="120x120" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-120x120.png')}"/>
+	<link rel="apple-touch-icon" sizes="144x144" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-144x144.png')}"/>
+	<link rel="apple-touch-icon" sizes="152x152" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-152x152.png')}"/>
+	<link rel="apple-touch-icon" sizes="180x180" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/apple-icon-180x180.png')}"/>
+	
+	<link rel="icon" type="image/png" sizes="192x192" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/android-icon-192x192.png')}"/>
+	<link rel="icon" type="image/png" sizes="32x32" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-32x32.png')}"/>	
+	<link rel="icon" type="image/png" sizes="96x96" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-96x96.png')}"/>	
+	<link rel="icon" type="image/png" sizes="16x16" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/favicon-16x16.png')}"/>	
+	<!-- favicon icon -->
+
+	<link rel="manifest" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/favicon-icon/manifest.json')}"/>
+	<meta name="msapplication-TileColor" content="#ffffff"/>
+	<meta name="msapplication-TileImage" content="/ms-icon-144x144.png"/>
+	<meta name="theme-color" content="#ffffff"/>
+	
+	<!-- Data table start -->
+	<link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/bootstrap.min.css')}"/>
+	<!-- Data table end -->
+	<link rel="stylesheet" type="text/css" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/jquery.dataTables.css')}"/>
+	<!-- Css Part Start -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"/>
+	<link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/bootstrap-datepicker.min.css')}"/>
+	<link href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/tagsinput.css')}" rel="stylesheet" type="text/css"/>
+	<link href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/jquery.toast.css')}" rel="stylesheet" type="text/css"/>
+	<link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/main.css')}"/>
+	<link rel="stylesheet" href="{!URLFOR($Resource.EmcCSS,'emc-design/assets/css/media.css')}"/>
+	
+	<!-- Css Part End -->
+</apex:page>

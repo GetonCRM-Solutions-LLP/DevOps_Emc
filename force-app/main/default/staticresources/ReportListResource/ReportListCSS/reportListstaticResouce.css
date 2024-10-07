@@ -1,0 +1,27 @@
+.header_style{
+    color: #1D1D1D !important;
+    /* font-weight: bold !important; */
+    font-size: 16px !important;
+    /* margin: 10px 0px !important; */
+  }
+  .container_style{
+    width: 414px !important;
+  }
+  .container_style_1{
+    width: 340px !important;
+  }
+  .hedear-style_class{
+    padding: 20px 0px 10px 0px !important;
+  }
+  .close-notify{
+    right: 5px !important;
+    top: -11px !important;
+  }
+  .content_div_scroll{
+    overflow: visible !important;
+    overflow-y: unset !important;
+  }
+  .listoption_css{
+    max-height: 16rem !important;
+    overflow-x: hidden;
+  }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mailing_state_not_Null_For_Driver_Role</fullName>
+    <active>true</active>
+    <errorConditionFormula>NOT(IF((ISPICKVAL(Role__c , &apos;Driver&apos;) || ISPICKVAL(Role__c , &apos;Driver/Manager&apos;) || ISPICKVAL(Role__c , &apos;Driver/Admin&apos;)) , MailingState &lt;&gt; null , null))</errorConditionFormula>
+    <errorDisplayField>MailingState</errorDisplayField>
+    <errorMessage>Please add Mailing state value</errorMessage>
+</ValidationRule>

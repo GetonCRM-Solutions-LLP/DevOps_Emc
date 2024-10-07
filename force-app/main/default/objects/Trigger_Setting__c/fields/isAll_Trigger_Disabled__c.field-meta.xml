@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>isAll_Trigger_Disabled__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>Mark this checkbox to true if all triggers needs to be disabled</description>
+    <inlineHelpText>Mark this checkbox to true if all triggers needs to be disabled</inlineHelpText>
+    <label>All Trigger Disabled?</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,116 @@
+.accordion_table{
+    margin-top: 46px !important;
+    display: flex !important;
+    border: solid 1px lightgray !important;
+    flex-direction: column;
+    width: 1269px !important;
+    position: absolute !important;
+    left: 254px !important;
+    padding-left: 8px !important;
+}
+.table_header{
+    font-weight: bold !important;
+    width: 11rem !important;
+}
+.datatable_box{
+    border: 1px solid lightgray;
+    margin-left: 246px;
+    margin-top: 125px;
+    border-radius: 20px;
+    height: 200px;
+    background-color: rgba(122, 187, 74 , 0.1);
+}
+.datatable_header{
+    padding-top: 7px;
+    padding-bottom: 7px;
+}
+
+.checkin_icon{
+    --sds-c-icon-color-foreground-default: #7ABB4A !important;
+    height: 15px !important;
+    max-width: 11px !important;
+}
+.reject_checkin_icon{
+    --sds-c-icon-color-foreground-default: #FA7800 !important;
+    height: 15px !important;
+    max-width: 11px !important;
+}
+
+.sorting_icon{
+    position: absolute ;
+    top: 6px;
+    margin-left: 144px;
+}
+.paginate-content{
+    margin-left: 1150px !important;
+    /* margin-top: 8px !important; */
+}
+.totalRows{
+    padding-top: 9px !important;
+    right: -44px;
+    position: relative!important;
+}
+.recordperpageSelect{
+    height: 29px !important;
+    width: 54px !important;
+    border-radius: 8px !important;
+}
+.total-mileges{
+    padding-top: 9px !important;
+    margin-right: 9px;
+}
+.header-of-search{
+    position: relative;
+    display: flex;
+    bottom: 22px;
+    justify-content: space-between;
+    padding-top: 26px;
+}
+.thead_style{
+    border-bottom: 1px solid lightgray !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+}
+
+  .recordperpageDiv{
+    position: relative;
+    top: 5px;
+  }
+  .location{
+    width: 38px !important;
+  }
+  .tbody-header{
+    display: block;
+    width: 1254px;
+    border-radius: 8px !important;
+    position: relative !important;
+    top: 1px !important;
+  }
+  .td_style{
+    width: 171px !important;
+    color: black;
+  }
+  .paginate-plugin{
+    top: 16px;
+    position: absolute;
+    left: 534px;
+  }
+.start_time{
+    color: #65B244;;
+}
+.reject_time{
+    color: #FA7800;
+}
+.hedear-style_class{
+    font-size: 20px;
+    color: #1D1D1D !important;
+    font-family: 'Proxima Nova Bold' !important;
+    padding: 30px 0px 6px 0px !important;
+}
+.modal_width{
+    width: 33% !important;
+  }
+  .green_checkbox{
+    border-radius: 4px;
+  }
+

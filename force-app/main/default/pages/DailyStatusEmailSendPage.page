@@ -1,0 +1,40 @@
+<apex:page standardController="DailyStatus__c" recordSetVar="DailyStatuses" action="{!dailyStatusRecord}" extensions="DailyStatusEmailSendController" lightningStylesheets="true" >
+
+	<script src="/soap/ajax/28.0/connection.js" type="text/javascript"></script>
+    <script src="/soap/ajax/28.0/apex.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <script type="text/javascript">
+    	if('{!selectedListCount}' == 0)
+        {
+        	alert('Please select atleast one checkbox.');
+        	window.history.back(); 
+        } 
+	</script>
+	
+	<apex:form >
+	    <apex:pageBlock >
+	    	<apex:pageBlockSection columns="1">	
+    			<apex:outputPanel >
+	    			<div style="text-align: center">
+	    				<apex:commandButton action="{!sendMail}" value="Send"/>
+	    				<apex:commandButton action="{!backPage}" value="Back"/>
+	    			</div>
+    			</apex:outputPanel>
+	    		<apex:outputText value="{!subject}" label="Subject" />
+	    		<apex:inputText label="To" size="100" id="emailTo" value="{!emailTo}"/>  
+	    		<apex:inputText label="Cc" size="100" id="emailCc" value="{!emailCc}"/>   
+	    		<apex:inputText label="Bcc" size="100" id="emailBcc" value="{!emailBcc}"/>   		
+	    		<apex:outputText value="{!emailTemplateBody}" escape="false"/>	    		
+	    	</apex:pageBlockSection>
+	    </apex:pageBlock>
+	</apex:form>
+	
+	<script type="text/javascript">
+    	if('{!sendEmailMessage}' != null && '{!sendEmailMessage}' != '')
+        {
+        	alert('{!sendEmailMessage}');        	
+        } 
+    </script>
+	
+</apex:page>

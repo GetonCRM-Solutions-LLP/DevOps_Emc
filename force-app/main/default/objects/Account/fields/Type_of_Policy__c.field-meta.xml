@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Type_of_Policy__c</fullName>
+    <description>What are they providing their employees</description>
+    <label>Type of Policy</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Flat Taxable Car Allowance</fullName>
+                <default>false</default>
+                <label>Flat Taxable Car Allowance</label>
+            </value>
+            <value>
+                <fullName>IRS Mileage Rate</fullName>
+                <default>false</default>
+                <label>IRS Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>Car Allowance Non-Taxable</fullName>
+                <default>false</default>
+                <label>Car Allowance Non-Taxable</label>
+            </value>
+            <value>
+                <fullName>Car Allowance with Mileage Substantiation</fullName>
+                <default>false</default>
+                <label>Car Allowance with Mileage Substantiation</label>
+            </value>
+            <value>
+                <fullName>Car Allowance with Mileage Reimbursement</fullName>
+                <default>false</default>
+                <label>Car Allowance with Mileage Reimbursement</label>
+            </value>
+            <value>
+                <fullName>Car Allowance with Fuel Reimbursement</fullName>
+                <default>false</default>
+                <label>Car Allowance with Fuel Reimbursement</label>
+            </value>
+            <value>
+                <fullName>Car Allowance with Fuel Card</fullName>
+                <default>false</default>
+                <label>Car Allowance with Fuel Card</label>
+            </value>
+            <value>
+                <fullName>Old Runzheimer Plan (non-compliant)</fullName>
+                <default>false</default>
+                <label>Old Runzheimer Plan (non-compliant)</label>
+            </value>
+            <value>
+                <fullName>Runzheimer</fullName>
+                <default>false</default>
+                <label>Runzheimer</label>
+            </value>
+            <value>
+                <fullName>Motus</fullName>
+                <default>false</default>
+                <label>Motus</label>
+            </value>
+            <value>
+                <fullName>Car Data Consultants</fullName>
+                <default>false</default>
+                <label>Car Data Consultants</label>
+            </value>
+            <value>
+                <fullName>Company Car</fullName>
+                <default>false</default>
+                <label>Company Car</label>
+            </value>
+            <value>
+                <fullName>Wheels</fullName>
+                <default>false</default>
+                <label>Wheels</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

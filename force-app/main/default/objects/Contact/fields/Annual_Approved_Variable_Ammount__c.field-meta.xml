@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Annual_Approved_Variable_Ammount__c</fullName>
+    <label>Annual Approved Variable Ammount</label>
+    <summarizedField>Employee_Reimbursement__c.Total_Monthly_Approved_Variable__c</summarizedField>
+    <summaryForeignKey>Employee_Reimbursement__c.Contact_Id__c</summaryForeignKey>
+    <summaryOperation>sum</summaryOperation>
+    <trackHistory>false</trackHistory>
+    <type>Summary</type>
+</CustomField>

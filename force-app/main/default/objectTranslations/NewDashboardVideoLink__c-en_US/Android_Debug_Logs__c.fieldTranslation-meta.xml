@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Android Debug Logs --></label>
+    <name>Android_Debug_Logs__c</name>
+</CustomFieldTranslation>

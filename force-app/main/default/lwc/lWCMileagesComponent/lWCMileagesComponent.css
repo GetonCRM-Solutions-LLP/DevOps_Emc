@@ -1,0 +1,40 @@
+.mileageInputStyle1 {
+    position: absolute !important;
+    width: 9%;
+    left: 40.5rem !important;
+}
+
+.mileageInputStyle2 {
+    position: absolute !important;
+    left: 47rem !important;
+    width: 9%;
+}
+
+.mileageLabelStyle1 {
+    position: absolute !important;
+    max-width: calc(40% - 1.25rem) !important;
+}
+
+.mileageLabelStyle2 {
+    position: absolute !important;
+    left: 47.3rem !important;
+}
+
+.slds-form-element__label {
+    font-size: 1rem;
+    color: #78bc42;
+    font-weight: bold;
+    font-family: 'Proxima Nova' !important;
+}
+
+.unitStyle {
+    /* padding-left: 14.2em; */
+    font-size: 1rem  !important;
+    color: #78bc42;
+    font-weight: bold !important;
+    font-family: 'Proxima Nova' !important;
+}
+
+td {
+    display: inline-block;
+}

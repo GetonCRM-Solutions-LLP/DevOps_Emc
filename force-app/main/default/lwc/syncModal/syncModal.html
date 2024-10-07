@@ -1,0 +1,78 @@
+<template>
+  <div id="spinner" if:true={waiting}>
+    <div class="spinner-background"></div>
+    <div class="spinner-load">
+      <div class="spinner-border text-light" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+  </div>
+  <section id="modal" role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true"
+    aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open slds-hide">
+    <div class="slds-modal__container slds-size_1-of-3">
+      <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close"
+        onclick={handleCancel}>
+        <lightning-icon icon-name="utility:close" size="x-small">
+          <svg focusable="false" data-key="check" class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+            <use xlink:href="#check" class="slds-icon-text-default"></use>
+          </svg>
+        </lightning-icon>
+        <span class="slds-assistive-text">Close</span>
+      </button>
+      <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+        <div class="slds-grid slds-wrap">
+          <template if:true={syncType}>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-p-top_xx-small">
+              <label class="slds-truncate slds-col-label default-font">Sync Month:</label>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 default-font">
+              <lightning-combobox name="month" class="default-font" placeholder="Choose Sync Month" value={value}
+                onchange={handleChange} options={options}>
+              </lightning-combobox>
+            </div>
+          </template>
+
+          <template if:false={syncType}>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_3-of-12 slds-p-top_xx-small">
+              <label class="slds-truncate slds-col-label default-font">Trip Type:</label>
+            </div>
+            <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 default-font">
+              <lightning-combobox name="activity" class="default-font" placeholder="Choose Activity" value={tripValue}
+                onchange={changeOfTrip} options={tripActivity}>
+              </lightning-combobox>
+            </div>
+          </template>
+          <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12 slds-p-left_small slds-p-top_xx-small">
+                <label class="slds-truncate slds-col-label default-font">Trip Status:</label>
+              </div>
+              <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_4-of-12 default-font">
+                <lightning-combobox
+                name="month"
+                class="default-font"
+                placeholder="Trip Status"
+                value={stValue}
+                onchange={handleStatusChange}
+                options={status}>
+                </lightning-combobox>
+              </div> -->
+          <!-- <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_2-of-12 slds-m-top_large">
+                <lightning-input type="checkbox" id="checkboxId" label="Do you want to change status of trip to mLog system"  class="slds-p-top_xx-small text-end" variant="label-hidden"  onchange={handleCheckboxChange} ></lightning-input>
+              </div>
+              <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_8-of-12 slds-m-top_large">
+                <label class="mlog" for="checkboxId">Do you want to change status of trip to mLog system ?</label>
+              </div> -->
+          <div class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 align-content">
+            <template if:true={syncType}>
+              <button class="slds-button slds-button_brand" onclick={handleSelect} disabled>Select</button>
+            </template>
+            <template if:false={syncType}>
+              <button class="slds-button slds-button_brand" onclick={selectTrip} disabled>Submit</button>
+            </template>
+            <button class="slds-button slds-button_neutral" onclick={handleCancel}>Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="slds-backdrop slds-backdrop_open slds-hide Backdrops" id="Backdrops"></div>
+</template>

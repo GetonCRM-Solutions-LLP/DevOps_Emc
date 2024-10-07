@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FlowDefinition xmlns="http://soap.sforce.com/2006/04/metadata">
+    <activeVersionNumber>14</activeVersionNumber>
+    <description>If Expiration Date of any contact is Less than Today then Update Insurance = Expired, Insurance_Attachment_Id__c - null and Insurance_Upload_Date__c = null on the contact.</description>
+    <masterLabel>Update Insurance Fields</masterLabel>
+</FlowDefinition>

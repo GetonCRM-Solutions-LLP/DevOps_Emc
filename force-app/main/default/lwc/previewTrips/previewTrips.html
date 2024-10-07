@@ -1,0 +1,62 @@
+<template>
+    <div class="slds-p-horizontal_x-large animate__animated animate__slideInLeft animate__delay-1s">
+        <div class="row">
+            <div class="container">
+                <template lwc:if={modelList}>
+                    <c-user-preview-table   show-footer="true" header-name="true" d-flex="grid-block" divider-class="row-divider--v1"  head-th="header-title--v1" sort-th="sort-container p-top-v1" trip-month={tripMonth}  biweek-value={biweekValue} start-date={startDate} end-date={endDate} main-class={classToTable} scrollable={isScrollable} is-paginate={paginatedModal} model-data={modelList}
+                    columns={modalListColumn} options={modalKeyFields} is-sortable={sortable} norecord-message={noMessage} is-default-sort={isSort} colname="tripdate" coltype="Date" sortorder="asc">
+                    <div slot="filter" class="slds-p-left_small slds-m-top_xx-small row">
+                        <template lwc:if={recordDisplay}>
+                            <button
+                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip"
+                            onclick={downloadAllTrips}><svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none" class="download-svg">
+                                <path d="M3.42685 5.66718L3.42684 5.66717C3.1633 5.40363 3.1633 4.97864 3.42685 4.71511C3.69039 4.45156 4.11538 4.45156 4.37891 4.71511L6.28511 6.62131V0.816062C6.28511 0.444945 6.5864 0.143652 6.95752 0.143652C7.32864 0.143652 7.62993 0.444945 7.62993 0.816062V6.62131L9.53613 4.71511C9.79967 4.45156 10.2247 4.45156 10.4882 4.71511C10.7517 4.97865 10.7517 5.40364 10.4882 5.66717L7.43365 8.72173C7.40101 8.75436 7.36607 8.78115 7.33186 8.80475L7.33131 8.80512C7.32183 8.8114 7.31252 8.81605 7.3052 8.81971L7.30461 8.82001C7.29674 8.82394 7.29103 8.82684 7.28549 8.83051L7.28471 8.83103L7.28471 8.83102L7.28383 8.83156C7.26428 8.84381 7.241 8.85839 7.21403 8.86748C7.21383 8.86755 7.21362 8.86762 7.21342 8.86769L7.20202 8.8335C7.18994 8.83802 7.17792 8.84167 7.16537 8.84547C7.15671 8.8481 7.1478 8.8508 7.13845 8.85392L3.42685 5.66718ZM3.42685 5.66718L6.48211 8.72173L6.48219 8.72181C6.51154 8.75097 6.54645 8.78071 6.58467 8.80527M3.42685 5.66718L6.58467 8.80527M6.58467 8.80527C6.58459 8.80522 6.58452 8.80517 6.58445 8.80512L6.60436 8.77508M6.58467 8.80527C6.58474 8.80531 6.58482 8.80536 6.58489 8.80541L6.60436 8.77508M6.60436 8.77508C6.56867 8.75218 6.53564 8.72412 6.50759 8.69625L6.69829 8.86607C6.69799 8.86592 6.69769 8.86577 6.69739 8.86562L6.71373 8.8335C6.69974 8.82732 6.68667 8.82014 6.67401 8.81318C6.66594 8.80875 6.65804 8.80441 6.65017 8.80047C6.63489 8.79283 6.61962 8.7852 6.60436 8.77508ZM7.28849 8.78778C7.29612 8.78396 7.30376 8.78014 7.31139 8.77508L7.28849 8.78778ZM7.28849 8.78778C7.28085 8.7916 7.27322 8.79541 7.26559 8.80047L7.28849 8.78778ZM12.9508 11.1841V11.184C12.9506 10.8128 12.6497 10.5117 12.2784 10.5117H1.63637C1.26526 10.5117 0.963965 10.8129 0.963965 11.1841C0.963965 11.5552 1.26526 11.8565 1.63637 11.8565H12.2784C12.6495 11.8565 12.9508 11.5552 12.9508 11.1841Z" fill="white" stroke="white" stroke-width="0.0720703"/>
+                                </svg>Download</button>
+                        </template>
+                    </div>
+                    <div slot="header">
+                        <div class="slds-float_right">
+                            <div  class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                                <div class="search-icon-block">
+                                    <img class="search-icon" src={searchIcon} />
+                                </div>
+                                <template lwc:if={isSearchEnable}>
+                                </template>
+                                <template lwc:else>
+                                    <div class="close-btn" onclick={handleClearInput}>
+                                        <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                    </div>
+                                </template>
+                                <input  class="slds-input filter-input" type="text" placeholder="Search" value={_value}  onkeyup={handleChange}/>
+                            </div>
+                        </div>
+                    </div>
+                    </c-user-preview-table>
+                </template>
+                <!-- <div class="preview slds-m-top_medium">
+                    <div class="slds-p-left_medium slds-p-bottom_small slds-p-top_xx-small">
+                        <h2 class="slds-text-heading_medium slds-hyphenate month-header" lwc:else={biweekValue}>
+                            {tripMonth}
+                        </h2>
+                        <h2 class="slds-text-heading_medium slds-hyphenate month-header" lwc:if={biweekValue}>
+                            Pay Period <lightning-formatted-date-time value={startDate} year="2-digit" month="numeric" day="numeric">
+                            </lightning-formatted-date-time> - <lightning-formatted-date-time value={endDate} year="2-digit" month="numeric"
+                                day="numeric">
+                            </lightning-formatted-date-time>
+                        </h2>
+                    </div>
+                    <div  class="slds-p-left_medium slds-p-right_medium">
+                        <template lwc:if={modelList}>
+                            <c-user-data-table main-class={classToTable} scrollable={isScrollable} is-paginate={paginatedModal} model-data={modelList}
+                            columns={modalListColumn} options={modalKeyFields} ></c-user-data-table>
+                        </template>
+                    </div>
+                </div> -->
+                <div class="slds-m-top_medium">
+                    <button class="slds-btn waves-effect btn-grey slds-btn-sm" onclick={backToDashboard}><i class="fas fa-arrow-left"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <c-export-excel></c-export-excel>
+</template>

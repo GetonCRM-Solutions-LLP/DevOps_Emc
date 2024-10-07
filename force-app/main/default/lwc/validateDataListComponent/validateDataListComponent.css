@@ -1,0 +1,48 @@
+.selectedOption {
+    width: 100%;
+    position: absolute;
+    z-index: 6;
+}
+
+.targetOption {
+    position: relative;
+}
+
+.search-result_left-pad {
+    padding-left: 35px !important;
+}
+
+.slds-input-has-border_padding {
+    border: 1px solid grey;
+    padding: 3px;
+    background: white;
+}
+
+.slds-combobox_container {
+    margin-left: 4px;
+    /* width: 95%; */
+    width: 171px;
+}
+
+.slds-dropdown_fluid {
+    /* margin-left: 18px; */
+    z-index: 8;
+    left: 85px;
+    min-width: 160px;
+    /* margin-top: -1px; */
+}
+
+.spinner-padding {
+    position: absolute;
+    padding-top: 80%;
+    left: 44rem;
+}
+
+input {
+    font-family: 'Proxima Nova' !important;
+}
+
+/* .expand-css{
+    min-width: max-content;
+    width: auto;
+} */

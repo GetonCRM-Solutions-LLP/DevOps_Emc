@@ -1,0 +1,10 @@
+<apex:page controller="RG_EmpMileageUpdate" >
+    <apex:form >
+        <apex:pageBlock mode="maindetail" > 
+            <apex:pageblockbuttons location="bottom"> 
+                <apex:commandbutton value="Update" action="{!updatebatchEmployeeMileage}" onclick="return confirm('Do you want to proceed?');"/>
+                 <apex:commandbutton value="Send Email to Contact" action="{!sendEmailToContact}"  onclick="return confirm('Do you want to proceed?');"/> 
+            </apex:pageblockbuttons> 
+        </apex:pageBlock> 
+    </apex:form>
+</apex:page>

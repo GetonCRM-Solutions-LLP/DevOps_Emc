@@ -1,0 +1,84 @@
+<apex:page showHeader="false" title="My Insights" sidebar="false" lightningStylesheets="true" standardStylesheets="false"
+    showChat="false" controller="ResourceController">
+
+    <head>
+        <meta charset="UTF-8" />
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v6.1.1/css/all.css"/>
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!--Toaster -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+        <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <style>
+            * {
+                user-select: none;
+            }
+
+            body {
+                font-family: 'Proxima Nova' !important;
+            }
+        </style>
+    </head>
+    <apex:includeLightning />
+    <apex:slds />
+
+    <body oncontextmenu="return false;">
+        <div id="resourceUI"></div>
+    </body>
+    <script>
+        var videoWrapper = {!videoCustom},
+               Id = "{!$CurrentPage.parameters.id}",
+               accId = "{!$CurrentPage.parameters.accid}",
+               information = {!contactDetails},
+               documentUrl = "{!obj_content_version}",
+               emailAddress = information[0].contactEmail,
+               contactPhone = information[0].phone
+        /* Toaster Option */
+        this.setOptions = function () {
+            toastr.options.positionClass = "toast-top-right";
+            toastr.options.closeButton = true;
+            toastr.options.progressBar = true;
+            toastr.options.fadeOut = 100000;
+        };
+
+        this.setOptions();
+        // this.clear = function () {
+        //     toastr.clear();
+        // };
+        $Lightning.use("c:LWCLightningApp", function () {
+            $Lightning.createComponent("c:mBurseInsights", {
+                //pass parameter values to lwc js controller
+                "contactId": Id,
+                "accountid": accId,
+                "linkList": videoWrapper,
+                "client": information[0],
+                "docUrl": documentUrl
+            }, "resourceUI", function (cmp) {
+                window.top.postMessage('component', '*')
+                document.querySelector('c-m-burse-insights').addEventListener('complete', (e) => {
+                    console.log('vf event data window listener => ', e.detail);
+                    window.top.postMessage(e.detail, '*')
+                });
+
+                document.querySelector('c-m-burse-insights').addEventListener('sent', (e) => {
+                    if(emailAddress != undefined && contactPhone != undefined){
+                        toastr.success("The email was sent to "+ emailAddress + " as well as a text message to " + contactPhone +". Please check your email and text message to get started.") //  + " as well as a text message to " + contactPhone  Please check your email and text message to get started
+                    }else{
+                        if(emailAddress != undefined){
+                            toastr.success("The email was sent to "+ emailAddress +". Please check your email to get started.")
+                        }
+                    }
+                });
+
+                document.querySelector('c-m-burse-insights').addEventListener('senterror', (e) => {
+                    toastr.error(e.detail)
+                });
+
+                console.log("component created successfully");
+                // do some stuff
+            }
+            );
+        });
+    </script>
+</apex:page>

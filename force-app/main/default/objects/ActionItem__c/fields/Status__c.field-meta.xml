@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Status__c</fullName>
+    <label>Status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Not Started</fullName>
+                <default>true</default>
+                <label>Not Started</label>
+            </value>
+            <value>
+                <fullName>Requirement Confirmed By Client</fullName>
+                <default>false</default>
+                <label>Requirement Confirmed By Client</label>
+            </value>
+            <value>
+                <fullName>Analyzed and Estimated</fullName>
+                <default>false</default>
+                <label>Analyzed and Estimated</label>
+            </value>
+            <value>
+                <fullName>On Going Task</fullName>
+                <default>false</default>
+                <label>On Going Task</label>
+            </value>
+            <value>
+                <fullName>Unit Test Development</fullName>
+                <default>false</default>
+                <label>Unit Test Development</label>
+            </value>
+            <value>
+                <fullName>Ready for Review for Client</fullName>
+                <default>false</default>
+                <label>Ready for Review for Client</label>
+            </value>
+            <value>
+                <fullName>Move to Production</fullName>
+                <default>false</default>
+                <label>Move to Production</label>
+            </value>
+            <value>
+                <fullName>Completed</fullName>
+                <default>false</default>
+                <label>Completed</label>
+            </value>
+            <value>
+                <fullName>Under Maintainance</fullName>
+                <default>false</default>
+                <label>Under Maintainance</label>
+            </value>
+            <value>
+                <fullName>ReOpen</fullName>
+                <default>false</default>
+                <label>ReOpen</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

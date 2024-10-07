@@ -1,0 +1,327 @@
+:host {
+    --grey-color: #D7D7D7;
+    --green-color: #7ABB4A;
+    --link-color: #1D1D1D;
+    --text-color: #6C6C6C;
+    --even-row-color: #FFFFFF;
+    --odd-row-color: #F7F7F7;
+    --scroll-color: #F6F6F6;
+    --active-color: #404B5B;
+    --step-bg: #F1F8EC;
+    --step-error-bg: #FA7800;
+}
+
+@keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media only screen and (device-width: 768px)  {
+    .m-right{
+        margin-right: 4px !important;
+    }
+    .m-left{
+        margin-left: 4px !important
+    }
+    .step-info{
+        font-size: 11px !important
+    }
+}
+
+@media only screen and (max-width: 1000px)  {
+    .m-right{
+        margin-right: 32px !important;
+    }
+    .m-left{
+        margin-left: 32px !important
+    }
+    .step-info{
+        font-size: 10px !important
+    }
+}
+
+@media only screen 
+  and (min-width: 1024px) 
+  and (max-height: 1366px) 
+  and (-webkit-min-device-pixel-ratio: 1.5)  {
+    .m-right{
+        margin-right: 70px !important;
+    }
+    .m-left{
+        margin-left: 70px !important
+    }
+    .step-info{
+        font-size: 14px !important
+    }
+}
+
+@media only screen and (min-width: 2880px) and (max-width: 4480px) {
+    .step-info{
+        font-size: 32px !important
+    }
+    .p-step{
+        padding: 5rem 4rem 5rem 4rem !important;
+    }
+    .step-num, .step-check{
+        height: 100px !important;
+    }
+}
+
+@media only screen and (min-width: 1921px) and (max-width: 2800px)  {
+    .step-info{
+        font-size: 20px !important
+    }
+    .p-step{
+        padding: 4rem 2rem 3rem 2rem !important;
+    }
+    .step-num, .step-check{
+        height: 70px !important;
+    }
+}
+
+@media only screen and (device-width: 1920px)  {
+    .step-info{
+        font-size: 20px !important
+    }
+    .p-step{
+        padding: 4rem 2rem 3rem 2rem !important;
+    }
+    .step-num, .step-check{
+        height: 70px !important;
+    }
+}
+
+@media only screen and (device-width: 1880px)  {
+    .step-info{
+        font-size: 20px !important
+    }
+    .p-step{
+        padding: 4rem 2rem 3rem 2rem !important;
+    }
+    .step-num, .step-check{
+        height: 70px !important;
+    }
+}
+
+@media screen and (min-width: 1440px) {
+    .m-right{
+        margin-right: 176px !important;
+    }
+    .m-left{
+        margin-left: 176px !important;
+    }
+}
+
+.panel{
+    -webkit-transition: all .6s ease-in-out;
+	-moz-transition: all .6s ease-in-out;
+	-o-transition: all .6s ease-in-out;
+	-ms-transition: all .6s ease-in-out;
+	transition: all .6s ease-in-out;
+}
+
+.panel{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.panel > div {
+    min-height: 290px;
+}
+.donut.multi{
+    border-bottom-color: #979fd0;
+}
+.donut-loading{
+    width: 174px;
+    height: 162px;
+    padding: 2rem 1rem 1rem 1rem;
+}
+.donut {
+    width: 2rem;
+    height: 2rem;
+    margin-left: 3.5rem;
+    margin-top: 2rem;
+    border-radius: 50%;
+    border: 0.3rem solid rgba(151, 159, 208, 0.3);
+    border-top-color: #979fd0;
+    -webkit-animation: 1.5s spin infinite linear;
+    animation: 1.5s spin infinite linear;
+}
+.step{
+    background: #FFFFFF;
+    border: 1px solid #D7D7D7;
+    border-radius: 20px;
+    margin: 0 12px 0 12px;
+    position: relative;
+}
+.step-info-detail{
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.m-left{
+    margin-left: 95px;
+}
+.m-right{
+    margin-right: 95px;
+}
+
+.p-step{
+    padding: 2rem 1rem 1rem 1rem;
+}
+
+.step-margin-1{
+    margin: 23px 10px 10px 10px;
+}
+
+.step-margin-2{
+    margin: 11px 10px 10px 10px;
+}
+
+.step-margin-3{
+    margin: 0px 10px 10px 10px;
+}
+
+.step-info{
+    padding: 0 1rem 1.5rem 1rem;
+    text-align: center;
+    font-size: 15px;
+    color: #000;
+}
+
+.step-padding{
+    padding-top: 0.688rem;
+}
+
+.step-padding-v1{
+    padding-top: 0.1rem;
+}
+
+.step-num{
+    height: 42px;
+    position: absolute;
+    transform: translate(-50%,-50%);
+    left: 50%;
+    /* top: 128px;
+    left: 183px;
+    right: 183px; */
+}
+
+.step-check{
+    height: 50px;
+    position: absolute;
+    left: 50%;
+    transform: translate(-32%,-70%);
+}
+
+.step-count{
+    background: var(--step-bg);
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 100px;
+    text-align: center;
+    justify-content: center;
+    padding-top: 4px;
+    margin-left: 9px;
+    margin-top: 10px;
+    color: var(--text-color);
+    font-family: 'Proxima Nova' !important;
+}
+
+.step-complete{
+    display: flex;
+    width: 79px;
+    padding: 1px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    border-radius: 100px;
+    background: #00AFE8;
+    position: absolute;
+    top: 17px;
+    right: 15px;
+}
+
+.step-complete-pending{
+    display: flex;
+    width: 79px;
+    padding: 1px 6px;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    border-radius: 100px;
+    background: rgb(235, 188, 54);
+    position: absolute;
+    top: 17px;
+    right: 15px;
+}
+
+.complete-text{
+    color: #FFF;
+    font-family: 'Proxima Nova Semibold' !important;
+    font-size: 12px;
+    line-height: 16px;
+    text-transform: capitalize
+}
+
+.opaque{
+    background: rgba(0, 175, 232, 0.08) !important;
+}
+
+.plan-info-top{
+    display: flex;
+}
+
+.background-blurry{
+    background: #F1F8EC !important;
+}
+
+.step-inner{
+    justify-self: center;
+    text-align: center;
+}
+
+.info-check{
+    padding-left: 5px;
+    padding-top: 10px;
+}
+
+.body__img img {
+    width: 100%;
+    height: 100%;
+    -o-object-fit: cover;
+    object-fit: cover;
+    margin: auto;
+}
+/* .i-size{
+    width: 3088px;
+    height: 148px;
+} */
+
+.opacity{
+    opacity: 0.4 !important;
+}
+
+.body__img{
+    height: 120px;
+    margin: 1.5rem 1.2rem 1.5rem 1.2rem;
+    width: 162px;
+}
+
+.skeleton {
+    animation: skeleton-loading 1s linear infinite alternate;
+  }
+  
+  @keyframes skeleton-loading {
+    0% {
+      background-color: hsl(200, 20%, 80%);
+    }
+    100% {
+      background-color: hsl(200, 20%, 95%);
+    }
+  }

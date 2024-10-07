@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>IsCreatedFromCommunity__c</fullName>
+    <defaultValue>false</defaultValue>
+    <inlineHelpText>This Field is used in RG_CreateNewUserPageClass for creating new user for community page</inlineHelpText>
+    <label>IsCreatedFromCommunity</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>true</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

@@ -1,0 +1,601 @@
+<template>
+    <div class="slds-p-left_medium slds-p-right_large">
+        <div class="flex-container-view">
+            <div class="flex-view-1">
+                <div class="slds-col slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Unapproved Mileage</h2>
+                </div>
+                <div class="slds-p-around_medium">
+                    <template lwc:if={driverIsUnapprove}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_header-hidden driver-top">
+                            <template for:each={driverVisibleList} for:item="list">
+                                <tr key={list.contactid}>
+                                    <td>
+                                        <div class="name-eh">{list.name}</div><!--<a class="name" data-id={list.contactid}
+                                            onclick={navigateToFlag}>{list.name}</a>-->
+                                    </td>
+                                    <td class="mileage">
+                                        <template lwc:if={list.isMileage}>
+                                            <lightning-formatted-number value={list.totalMileages} maximum-fraction-digits="2">
+                                            </lightning-formatted-number>
+                                            &nbsp; miles
+                                        </template>
+                                        <template lwc:else>
+                                        </template>
+                                    </td>
+                                </tr>
+                            </template>
+                        </table>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                            style="margin-left: 10px; margin-right: 10px;padding: 40px 0;">
+                            <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                viewBox="0 0 30 30" fill="none">
+                                <g clip-path="url(#a)">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                        fill="#1d1d1d66" />
+                                    <path
+                                        d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                        stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                    <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                        stroke="#1d1d1d66" stroke-width="1.128" />
+                                    <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                        transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66"
+                                        stroke-width="1.128" />
+                                    <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                                </g>
+                                <defs>
+                                    <clipPath>
+                                        <path fill="#fff" d="M0 0h30v30H0z" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                                No Data
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <template lwc:if={driverIsUnapprove}>
+                    <div class="slds-p-around_small">
+                        <div class="view-all slds-p-around_medium view-link" onclick={navigateToMileage}>
+                            View all
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-2">
+                <div class="slds-col slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">My Team</h2>
+                </div>
+                <template lwc:if={driverIsMyteam}>
+                    <div class="slds-p-around_medium list-view">
+                        <template for:each={driverTeamVisibleList} for:item="list">
+                            <div class="slds-p-horizontal_x-small slds-p-top_x-small" key={list.id}>
+                                <div><a class="name" data-id={list.id} onclick={navigateToUser}>{list.name}</a></div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+
+                <template lwc:if={driverIsMyteam}>
+                    <div class="slds-p-around_small">
+                        <div class="view-all slds-p-around_medium view-link" onclick={navigateToTeam}>
+                            View all
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+
+            <div class="flex-view-3">
+                <div class="slds-col slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">High Risk Trips (Last month)</h2>
+                </div>
+                <template lwc:if={driverIsHighRisk}>
+                    <div class="slds-p-around_medium list-view">
+                        <template for:each={driverRiskList} for:item="list">
+                            <div class="slds-p-horizontal_x-small slds-p-top_x-small" key={list.id}>
+                                <div><a data-id={list.id} class="name" onclick={navigateToRisk}>{list.name}</a></div>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+
+                <template lwc:if={driverIsHighRisk}>
+                    <div class="slds-p-around_small">
+                        <div class="view-all slds-p-around_medium view-link" onclick={navigateToHighRiskMileage}>
+                            View all
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-1">
+                <div class="slds-col slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Compliance Status</h2>
+                </div>
+                <template lwc:if={complianceList}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12  slds-p-horizontal_medium"
+                        style="--aspect-ratio: 16/9;">
+                        <c-chart-view-dashboard chart-list={complianceList}
+                            view-name="Compliance"></c-chart-view-dashboard>
+                    </div>
+                    <div class="download-btn" onclick={getComplianceReport}>
+                        <svg class="download-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="18.462"
+                            viewBox="0 0 20 18.462" fill="none">
+                            <path
+                                d="M5.272 8.718a1.034 1.034 0 1 1 1.465 -1.465l2.932 2.932V1.255a1.035 1.035 0 0 1 2.069 0v8.931l2.932 -2.932a1.034 1.034 0 1 1 1.465 1.465L11.437 13.418a1.108 1.108 0 0 1 -0.157 0.128l-0.042 0.023a0.272 0.272 0 0 0 -0.031 0.015v0.002h-0.002a0.509 0.509 0 0 1 -0.108 0.055l-0.018 -0.052a0.918 0.918 0 0 1 -0.057 0.018l-0.042 0.014 -5.709 -4.903Zm0 0 4.7 4.7c0.046 0.045 0.098 0.091 0.158 0.128M5.272 8.718l4.858 4.828m0 0 0.031 -0.046m-0.031 0.046 0.031 -0.046m0 0a0.923 0.923 0 0 1 -0.149 -0.122l0.292 0.262 0.025 -0.049a0.785 0.785 0 0 1 -0.062 -0.031L10.231 13.538a0.651 0.651 0 0 1 -0.071 -0.038Zm1.051 0.02 0.035 -0.02 -0.035 0.02Zm0 0c-0.011 0.006 -0.023 0.011 -0.034 0.018l0.034 -0.018Zm8.712 3.686a1.035 1.035 0 0 0 -1.035 -1.034H2.517a1.035 1.035 0 0 0 0 2.069h16.372a1.035 1.035 0 0 0 1.035 -1.035Z"
+                                fill="#7abb4a" stroke="#7abb4a" stroke-width="0.11076923076923077" />
+                        </svg>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-2">
+                <div class="slds-col slds-p-left_large slds-p-top_small slds-p-bottom_medium">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Onboarding Status</h2>
+                </div>
+                <template lwc:if={complianceList}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-p-horizontal_medium"
+                        style="--aspect-ratio: 16/9;">
+                        <c-chart-view-dashboard chart-list={complianceList}
+                            view-name="Onboarding"></c-chart-view-dashboard>
+                    </div>
+                    <div class="download-btn" onclick={getOnboardingReport}>
+                        <svg class="download-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="18.462"
+                            viewBox="0 0 20 18.462" fill="none">
+                            <path
+                                d="M5.272 8.718a1.034 1.034 0 1 1 1.465 -1.465l2.932 2.932V1.255a1.035 1.035 0 0 1 2.069 0v8.931l2.932 -2.932a1.034 1.034 0 1 1 1.465 1.465L11.437 13.418a1.108 1.108 0 0 1 -0.157 0.128l-0.042 0.023a0.272 0.272 0 0 0 -0.031 0.015v0.002h-0.002a0.509 0.509 0 0 1 -0.108 0.055l-0.018 -0.052a0.918 0.918 0 0 1 -0.057 0.018l-0.042 0.014 -5.709 -4.903Zm0 0 4.7 4.7c0.046 0.045 0.098 0.091 0.158 0.128M5.272 8.718l4.858 4.828m0 0 0.031 -0.046m-0.031 0.046 0.031 -0.046m0 0a0.923 0.923 0 0 1 -0.149 -0.122l0.292 0.262 0.025 -0.049a0.785 0.785 0 0 1 -0.062 -0.031L10.231 13.538a0.651 0.651 0 0 1 -0.071 -0.038Zm1.051 0.02 0.035 -0.02 -0.035 0.02Zm0 0c-0.011 0.006 -0.023 0.011 -0.034 0.018l0.034 -0.018Zm8.712 3.686a1.035 1.035 0 0 0 -1.035 -1.034H2.517a1.035 1.035 0 0 0 0 2.069h16.372a1.035 1.035 0 0 0 1.035 -1.035Z"
+                                fill="#7abb4a" stroke="#7abb4a" stroke-width="0.11076923076923077" />
+                        </svg>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+
+            </div>
+
+            <div class="flex-view-3">
+                <div class="slds-col slds-p-left_large slds-p-top_small slds-p-bottom_medium">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+                    font-size: 20px;color: #7ABB4A;">Insurance Status</h2>
+                </div>
+                <template lwc:if={insuranceList}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12  slds-p-horizontal_medium"
+                        style="--aspect-ratio: 16/9;">
+                        <c-chart-view-dashboard chart-list={insuranceList}
+                            view-name="Insurance"></c-chart-view-dashboard>
+                    </div>
+                    <div class="download-btn" onclick={getInsuranceReport}>
+                        <svg class="download-svg" xmlns="http://www.w3.org/2000/svg" width="20" height="18.462"
+                            viewBox="0 0 20 18.462" fill="none">
+                            <path
+                                d="M5.272 8.718a1.034 1.034 0 1 1 1.465 -1.465l2.932 2.932V1.255a1.035 1.035 0 0 1 2.069 0v8.931l2.932 -2.932a1.034 1.034 0 1 1 1.465 1.465L11.437 13.418a1.108 1.108 0 0 1 -0.157 0.128l-0.042 0.023a0.272 0.272 0 0 0 -0.031 0.015v0.002h-0.002a0.509 0.509 0 0 1 -0.108 0.055l-0.018 -0.052a0.918 0.918 0 0 1 -0.057 0.018l-0.042 0.014 -5.709 -4.903Zm0 0 4.7 4.7c0.046 0.045 0.098 0.091 0.158 0.128M5.272 8.718l4.858 4.828m0 0 0.031 -0.046m-0.031 0.046 0.031 -0.046m0 0a0.923 0.923 0 0 1 -0.149 -0.122l0.292 0.262 0.025 -0.049a0.785 0.785 0 0 1 -0.062 -0.031L10.231 13.538a0.651 0.651 0 0 1 -0.071 -0.038Zm1.051 0.02 0.035 -0.02 -0.035 0.02Zm0 0c-0.011 0.006 -0.023 0.011 -0.034 0.018l0.034 -0.018Zm8.712 3.686a1.035 1.035 0 0 0 -1.035 -1.034H2.517a1.035 1.035 0 0 0 0 2.069h16.372a1.035 1.035 0 0 0 1.035 -1.035Z"
+                                fill="#7abb4a" stroke="#7abb4a" stroke-width="0.11076923076923077" />
+                        </svg>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-1" style="
+            border: 1px solid #D7D7D7;
+            flex: 30%;
+            height: auto;
+            border-radius: 20px;">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+        font-size: 20px;color: #7ABB4A;">High Mileage Drivers</h2>
+                </div>
+                <div class="slds-p-around_medium">
+                    <template lwc:if={driverIsHighMileage}>
+                        <table class="slds-table slds-table_cell-buffer slds-table_header-hidden driver-top">
+                            <template for:each={driverMileageList} for:item="list">
+                                <tr key={list.id}>
+                                    <td><a data-id={list.id} class="name" onclick={navigateToHigh}>{list.name}</a></td>
+                                    <td class="mileage">
+                                        <lightning-formatted-number value={list.mileage} maximum-fraction-digits="2">
+                                        </lightning-formatted-number>
+                                        &nbsp; miles
+                                    </td>
+                                </tr>
+                            </template>
+                        </table>
+                    </template>
+                    <template lwc:else>
+                        <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                            style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                            <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                viewBox="0 0 30 30" fill="none">
+                                <g clip-path="url(#a)">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                        fill="#1d1d1d66" />
+                                    <path
+                                        d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                        stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                    <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                        stroke="#1d1d1d66" stroke-width="1.128" />
+                                    <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                        transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66"
+                                        stroke-width="1.128" />
+                                    <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                                </g>
+                                <defs>
+                                    <clipPath>
+                                        <path fill="#fff" d="M0 0h30v30H0z" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                            <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                                No Data
+                            </div>
+                        </div>
+                    </template>
+                </div>
+                <template lwc:if={driverIsHighMileage}>
+                    <div class="slds-p-around_small">
+                        <div class="view-all slds-p-around_medium view-link" onclick={navigateToHighMileage}>
+                            View all
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-2" style="
+            border: 1px solid #D7D7D7;
+            flex: 30%;
+            height: auto;
+            border-radius: 20px;">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+            font-size: 20px;color: #7ABB4A;">My Team’s Locations</h2>
+                </div>
+                <template lwc:if={locationList}>
+                    <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12 slds-align_absolute-center slds-p-top_medium"
+                        style="--aspect-ratio: 16/9;"> <!--type={typeMap}-->
+                        <c-point-chloropleth type={typeMap} background="#FFFFFF" locate={locationList}
+                            map-navigation={navigation} margin={margin} v-h={vhHeight} spacing-top={top}
+                            spacing-bottom={bottom} border-color="#FFFFFF" width="260"
+                            frame-class="vf-iframe slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12"
+                            height="200"></c-point-chloropleth>
+                    </div>
+                </template>
+                <template lwc:else>
+                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                        style="margin-left: 22px; margin-right: 22px;padding: 40px 0;">
+                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                            viewBox="0 0 30 30" fill="none">
+                            <g clip-path="url(#a)">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                    fill="#1d1d1d66" />
+                                <path
+                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                <circle cx="18.318" cy="19.339" r="4.849" transform="rotate(49.135 18.318 19.34)"
+                                    stroke="#1d1d1d66" stroke-width="1.128" />
+                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66" stroke-width="1.128" />
+                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66" stroke-width=".961" />
+                            </g>
+                            <defs>
+                                <clipPath>
+                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                            No Data
+                        </div>
+                    </div>
+                </template>
+
+                <template lwc:if={isLocation}>
+                    <div class="slds-p-around_small">
+                        <div class="view-map slds-p-around_medium" lwc:if={canadaToggle}>
+                            <div dir="ltr">
+                                <div class="slds-form-element">
+                                    <label class="slds-checkbox_toggle slds-grid">
+                                        <input type="checkbox" name="checkbox-toggle-16" value="checkbox-toggle-16"
+                                            aria-describedby="checkbox-toggle-16" onchange={handleMap}
+                                            checked={checkAll} />
+                                        <span id="checkbox-toggle-16" class="slds-checkbox_faux_container"
+                                            aria-live="assertive">
+                                            <span class="slds-checkbox_faux toogle-input"></span>
+                                            <span class="slds-checkbox_on"></span>
+                                            <span class="slds-checkbox_off"></span>
+                                        </span>
+                                        <!-- <span
+                                            class="slds-form-element__label slds-m-bottom_none slds-m-left_small input-label"><span
+                                                class="map-label map--us">USA</span> <span
+                                                class="map-label map--canada">/ Canada</span></span> -->
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view-all slds-p-around_medium view-link" onclick={getLocation}>
+                            View all
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="flex-view-3" style="
+            border: 1px solid #D7D7D7;
+            flex: 30%;
+            height: auto;
+            border-radius: 20px;">
+                <div
+                    class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-p-left_large slds-p-top_small">
+                    <h2 style="font-family: 'Proxima Nova Bold' !important;
+        font-size: 20px;color: #7ABB4A;">Notifications</h2>
+                </div>
+                <div class="slds-col slds-size_1-of-1 slds-medium-size_12-of-12 slds-large-size_12-of-12">
+                    <template lwc:if={notifyMessage}>
+                        <div class="notify-container overflow">
+                            <template lwc:if={isNotify}>
+                                <div class="slds-grid slds-wrap slds-align_absolute-center slds-m-vertical_small"
+                                    style="margin-left:22px; margin-right:22px;">
+                                    <template for:each={notifyMessageList} for:item="notify" for:index="index">
+                                        <div data-id={notify.id} key={notify.id}
+                                            class="slds-col slds-size_1-of-1 slds-medium-size_6-of-12 slds-large-size_12-of-12 slds-m-around_xx-small slds-p-horizontal_x-small slds-p-vertical_small notify-text"
+                                            style="
+                            width: 100%;
+                            height: auto;
+                            border-radius: 10px;
+                            background: #fa780014;
+                            display: flex;
+                            flex-direction: row;">
+                                            <div class="slds-p-top_xx-small
+                                    slds-p-left_xx-small slds-p-right_x-small">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9"
+                                                    viewBox="0 0 9 9" fill="none">
+                                                    <circle cx="4.5" cy="4.5" r="4.5" fill="#FA7800" />
+                                                </svg>
+                                                <!-- <img style="width: 12px;" src={circle} /> -->
+                                            </div>
+                                            <div class="slds-p-right_small" style="font-family: 'Proxima Nova Bold' !important;font-size: 14px;width:100%;
+                                    line-height: 17px;
+                                    letter-spacing: 0em;
+                                    text-align: left;
+                                    ">{notify.notificationMessage}
+                                                <div style="font-family: 'Proxima Nova Semibold' !important;
+                                    font-size: 12px;
+                                    line-height: 12px;
+                                    color: #FA7800;
+                                    " class="slds-p-top_x-small"> <lightning-formatted-date-time
+                                                        value={notify.modifiedDate} year="numeric" day="2-digit"
+                                                        month="long" hour="2-digit" minute="2-digit"
+                                                        time-zone="America/Panama">
+                                                    </lightning-formatted-date-time></div>
+                                            </div>
+                                            <div class="slds-p-right_xx-small close-notify" data-id={notify.id}
+                                                onclick={handleClose}>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19"
+                                                    viewBox="0 0 19 19" fill="none">
+                                                    <path d="M4.53906 13.6328L13.6303 4.54161" stroke="#FA7800"
+                                                        stroke-width="1.7" stroke-linecap="round" />
+                                                    <path d="M4.53906 4.55469L13.6303 13.6459" stroke="#FA7800"
+                                                        stroke-width="1.7" stroke-linecap="round" />
+                                                </svg>
+                                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18"
+                                    viewBox="0 0 20 18" fill="none" data-id={notify.id}
+                                    onclick={handleClose}>
+                                    <path d="M5.57812 13.4141L14.7504 4.58439" stroke="#1D1D1D"
+                                        stroke-linecap="round" />
+                                    <path d="M5.57812 4.58594L14.7504 13.4156" stroke="#1D1D1D"
+                                        stroke-linecap="round" />
+                                </svg> -->
+                                            </div>
+                                        </div>
+                                    </template>
+                                    <div class="slds-p-around_small">
+                                        <div class="view-all slds-p-around_medium view-link" onclick={showAll}>
+                                            View all
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <template lwc:else>
+                                <div class="slds-grid slds-wrap slds-p-left_large slds-m-vertical_small">
+                                    <div class="slds-grid_vertical slds-wrap slds-m-vertical_small slds-align_absolute-center"
+                                        style="padding: 40px 0;">
+                                        <svg class="opaque" xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+                                            viewBox="0 0 30 30" fill="none">
+                                            <g clip-path="url(#a)">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5.003 2a1.12 1.12 0 0 0-1.12 1.12v.658h.836V3.12c0-.157.127-.285.284-.285h.673V2h-.673Zm3.366 0H7.022v.835H8.37V2Zm2.693 0H9.715v.835h1.347V2Zm2.692 0h-1.346v.835h1.346V2Zm2.693 0H15.1v.835h1.346V2Zm2.02 0h-.674v.835h.673V2ZM3.882 5.095V6.41h.836V5.095h-.837Zm0 2.633v1.316h.836V7.728h-.837ZM25.594 9.52v-.64h-.836v.64h.837Zm-21.711.84v1.317h.836v-1.316h-.837Zm21.711 1.722v-1.28h-.836v1.28h.837Zm-21.711.911v1.317h.836v-1.317h-.837Zm21.711 1.652v-1.281h-.836v1.28h.837Zm-21.711.981v1.317h.836v-1.317h-.837Zm21.711 1.581v-1.281h-.836v1.281h.837ZM3.883 18.26v1.317h.836V18.26h-.837Zm21.711 1.51v-1.28h-.836v1.28h.837ZM3.883 20.893v1.317h.836v-1.317h-.837Zm21.711 1.44V21.05h-.836v1.28h.837ZM3.883 23.525v1.317h.836v-1.317h-.837Zm21.711 1.37v-1.282h-.836v1.281h.837ZM3.883 26.157v.658c0 .619.501 1.12 1.12 1.12h.608V27.1h-.608a.285.285 0 0 1-.285-.284v-.658h-.836Zm21.711.14v-.122h-.106l.106.122Zm-1.302 1.638-.426-.492v.493h.426Zm-17.464 0h1.217V27.1H6.828v.837Zm2.434 0h1.217V27.1H9.262v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1H14.13v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Zm2.434 0h1.217V27.1h-1.217v.837Z"
+                                                    fill="#1d1d1d66" />
+                                                <path
+                                                    d="M18.082 3.754h.418v1.342h-.418v1.342h.418v1.341h-.418v.671c0 .461.374.835.836.835h.717v-.417h1.434v.417h1.435v-.417h1.434v.417h.718a.627.627 0 0 0 .428-1.083l-.495-.465-.286.305-.991-.93.286-.304-.992-.93-.285.305-.991-.929.285-.304-.99-.93-.287.305-.99-.93.285-.304-.496-.464a.627.627 0 0 0-1.055.457v.67Z"
+                                                    stroke="#1d1d1d66" stroke-width=".835" stroke-dasharray="1.3 1.3" />
+                                                <circle cx="18.318" cy="19.339" r="4.849"
+                                                    transform="rotate(49.135 18.318 19.34)" stroke="#1d1d1d66"
+                                                    stroke-width="1.128" />
+                                                <rect x="23.336" y="23.688" width="5.682" height="2.057" rx="1.028"
+                                                    transform="rotate(49.135 23.336 23.688)" stroke="#1d1d1d66"
+                                                    stroke-width="1.128" />
+                                                <path d="m21.117 22.625 1.69 1.953" stroke="#1d1d1d66"
+                                                    stroke-width=".961" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="a">
+                                                    <path fill="#fff" d="M0 0h30v30H0z" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                        <div class="slds-p-top_medium slds-p-bottom_x-large opaque no-data-message">
+                                            No Data
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+        <c-export-excel></c-export-excel>
+    </div>
+    <template lwc:if={paginatedModal}> 
+                <div class="parent overlay-slide-down"><!--type={typeMap}-->
+                   <c-point-chloropleth title="My Team's Locations" type={typeMap} background="#FFFFFF" margin={margin}  spacing-top={top} spacing-bottom={bottom} v-h={vhHeight} map-navigation={navigation} frame-class="vf-iframe frame-full" locate={locationList} border-color="#FFFFFF" width="260"
+                    ></c-point-chloropleth>
+                </div>
+                <button type="button" class="close popup-close-btn" onclick={exitFullscreen}><span aria-hidden="true" title="Exit fullscreen">×</span></button>
+     </template>
+</template>

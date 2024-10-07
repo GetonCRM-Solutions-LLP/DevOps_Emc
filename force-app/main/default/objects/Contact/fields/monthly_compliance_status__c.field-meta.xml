@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>monthly_compliance_status__c</fullName>
+    <description>this picklist will show the monthly compliance status which is defined on the contact based on the value of previous month reimbursement</description>
+    <label>monthly compliance status</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Yes</fullName>
+                <default>false</default>
+                <label>Yes</label>
+            </value>
+            <value>
+                <fullName>No – Vehicle Age</fullName>
+                <default>false</default>
+                <label>No – Vehicle Age</label>
+            </value>
+            <value>
+                <fullName>No – Vehicle Value</fullName>
+                <default>false</default>
+                <label>No – Vehicle Value</label>
+            </value>
+            <value>
+                <fullName>No – Insurance Not Meeting Minimum</fullName>
+                <default>false</default>
+                <label>No – Insurance Not Meeting Minimum</label>
+            </value>
+            <value>
+                <fullName>No - Insurance Not Provided</fullName>
+                <default>false</default>
+                <label>No - Insurance Not Provided</label>
+            </value>
+            <value>
+                <fullName>No - Mileage</fullName>
+                <default>false</default>
+                <label>No - Mileage</label>
+            </value>
+            <value>
+                <fullName>No - Missing Coverage Dates</fullName>
+                <default>false</default>
+                <label>No - Missing Coverage Dates</label>
+            </value>
+            <value>
+                <fullName>No – Insurance Card</fullName>
+                <default>false</default>
+                <label>No – Insurance Card</label>
+            </value>
+            <value>
+                <fullName>Expired Insurance</fullName>
+                <default>false</default>
+                <label>Expired Insurance</label>
+            </value>
+            <value>
+                <fullName>No - Umbrella Policy</fullName>
+                <default>false</default>
+                <label>No - Umbrella Policy</label>
+            </value>
+            <value>
+                <fullName>No - Insurance Dec Page</fullName>
+                <default>false</default>
+                <label>No - Insurance Dec Page</label>
+            </value>
+            <value>
+                <fullName>No - Mileage &amp; Vehicle Value</fullName>
+                <default>false</default>
+                <label>No - Mileage &amp; Vehicle Value</label>
+            </value>
+            <value>
+                <fullName>No - Mileage &amp; Vehicle Age</fullName>
+                <default>false</default>
+                <label>No - Mileage &amp; Vehicle Age</label>
+            </value>
+            <value>
+                <fullName>No - Mileage &amp; Insurance</fullName>
+                <default>false</default>
+                <label>No - Mileage &amp; Insurance</label>
+            </value>
+            <value>
+                <fullName>Pending</fullName>
+                <default>false</default>
+                <label>Pending</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

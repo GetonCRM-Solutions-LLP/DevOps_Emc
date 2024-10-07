@@ -1,0 +1,448 @@
+<template>
+    <div class="slds-container" if:true={ready}>
+        <div if:true={loadingSpinner}  data-id="spinnerblock"> <!--class="spinner-padding left-padSpin"-->
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            <!-- <span class="loader"></span> -->
+        </div>
+        <div class="slds-context-bar">
+            <div class="slds-context-bar__primary">
+                <a href={dashboardurl} class="navbar__brand">
+                    <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                        <img alt="logo" class="img-fluid"
+                            src="/resource/1578571752000/EmcCSS/emc-design/assets/images/logo/mBurse-logo_rev.png">
+                    </span>
+                </a>
+            </div>
+            <nav class="slds-context-bar__secondary" role="navigation">
+                <ul class="slds-grid">
+                    <li class="slds-context-bar-item">
+                        <a href={dashboardurl} class="slds-context-bar__label-action" title="Home">
+                            <span class="slds-assistive-text">Current Page:</span>
+                            <span class="slds-truncate" title="Home">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="slds-context-bar-item bar-item_active">
+                        <a href={mileageurl} class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Mileage</span>
+                        </a>
+                    </li>
+                    <template if:true={managerLoggedIn}>
+                        <li class="slds-context-bar-item" if:true={showUrl}>
+                            <a href={notificationUrl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Communications</span>
+                            </a>
+                        </li>
+                    </template>
+                    <template if:true={drivermanagerLoggedIn}>
+                        <li class="slds-context-bar-item"  if:true={showUrl}>
+                            <a href={notificationUrl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Communications</span>
+                            </a>
+                        </li>
+                        <template if:true={isInsurance}>
+                            <li class="slds-context-bar-item">
+                                <a href={myDetailurl} class="slds-context-bar__label-action" title="Menu Item">
+                                    <span class="slds-truncate" title="Menu Item">My Details</span>
+                                </a>
+                            </li>
+                        </template>
+                        <template if:false={isInsurance}>
+                            <li class="slds-context-bar-item">
+                                <a href={myDetailInsuranceurl} class="slds-context-bar__label-action" title="Menu Item">
+                                    <span class="slds-truncate" title="Menu Item">My Details</span>
+                                </a>
+                            </li>
+                        </template>
+                    </template>
+                    <template if:true={adminLoggedIn}>
+                        <li class="slds-context-bar-item">
+                            <a href={driverurl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Drivers</span>
+                            </a>
+                        </li>
+                        <li class="slds-context-bar-item">
+                            <a href={notificationUrl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Communications</span>
+                            </a>
+                        </li>
+                        <li class="slds-context-bar-item">
+                            <a href={reporturl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Reports</span>
+                            </a>
+                        </li>
+
+                    </template>
+                    <template if:true={admindriverLoggedIn}>
+                        <li class="slds-context-bar-item">
+                            <a href={driverurl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Drivers</span>
+                            </a>
+                        </li>
+                        <li class="slds-context-bar-item">
+                            <a href={notificationUrl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Communications</span>
+                            </a>
+                        </li>
+                        <li class="slds-context-bar-item">
+                            <a href={reporturl} class="slds-context-bar__label-action" title="Menu Item">
+                                <span class="slds-truncate" title="Menu Item">Reports</span>
+                            </a>
+                        </li>
+                        <template if:true={isInsurance}>
+                            <li class="slds-context-bar-item">
+                                <a href={myDetailurl} class="slds-context-bar__label-action" title="Menu Item">
+                                    <span class="slds-truncate" title="Menu Item">My Details</span>
+                                </a>
+                            </li>
+                        </template>
+                        <template if:false={isInsurance}>
+                            <li class="slds-context-bar-item">
+                                <a href={myDetailInsuranceurl} class="slds-context-bar__label-action" title="Menu Item">
+                                    <span class="slds-truncate" title="Menu Item">My Details</span>
+                                </a>
+                            </li>
+                        </template>
+                       
+                    </template>
+
+                    <li class="slds-context-bar-item">
+                        <a href="/app/secur/logout.jsp" class="slds-context-bar__label-action" title="Menu Item">
+                            <span class="slds-truncate" title="Menu Item">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <c-lwc-alert show-alert={isAlertEnabled} alert-message={alertMessage}></c-lwc-alert>
+        <c-toast></c-toast>
+        <div class="box-container slds-hide">
+            <div class="slds-form">
+                <table class="slds-table_resizable-cols">
+                    <tbody style="width: 100%;float: left;">
+                        <tr style="width: 30%;float: left;">
+                            <td>
+                                <table>
+                                    <tbody style="width: 100%;">
+                                        <tr>
+                                            <td>
+                                                <label class="slds-form-element__label" for="select-01">Driver</label>
+                                            </td>
+                                            <td class="slds_driverList" style="padding-left: 12px">
+                                                <c-validate-data-list-component field-name="Name" key-field="Id"
+                                                    object-name="Contact" admin-id={Id} acc-field="AccountId"
+                                                    acc-id={accountId} search-key="Name" id-of-driver='' where-field=''
+                                                    default-option="All Drivers" class="driverList"
+                                                    onhandleclickevent={handleClickEvent}
+                                                    dynamic-placeholder="Search All Drivers">
+                                                </c-validate-data-list-component>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">
+                                                <div>
+                                                    <div>
+                                                        <lightning-input style="position: absolute;top: 9px;left: 78px;"
+                                                        type="checkbox" name="driverchk" onchange={handleActiveDriver}
+                                                        checked>
+                                                    </lightning-input>
+                                                    <label class="slds-form-element__label" style="font-size: 13px;
+                                                    padding-left: 96px;">Show
+                                                        only active drivers</label>
+                                                    </div>
+                                                    <div>
+                                                        <lightning-input style="position: absolute;top: 34px;left: 78px;"
+                                                        type="checkbox" name="driverchk" onchange={handleHighRiskTrip}
+                                                        >
+                                                    </lightning-input>
+                                                    <label class="slds-form-element__label" style="font-size: 13px;
+                                                    padding-left: 96px;">Show
+                                                        high risk trips</label>
+                                                    </div>
+                                                </div>
+                                            
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="width: 40%;float: left;">
+                            <td colspan="3">
+                                <c-l-w-c-start-end-date-component class="lwcstartenddatecomponent"
+                                    onhandlestartdateclickevent={handleStartDateClickEvent}
+                                    onenddateclickevent={handleEndDateClickEvent}>
+                                </c-l-w-c-start-end-date-component>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 6vw">
+                                <label class="slds-form-element__label" for="horizontal-input-id-tags">Tags</label>
+                            </td>
+                            <td style="padding-top: 10px;
+                            padding-left: 3px;">
+                                <c-validate-data-list-component field-name="Tag__c" key-field="Id"
+                                    object-name="Employee_Mileage__c" admin-id=''
+                                    acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId" acc-id={accountId}
+                                    search-key="Tag__c" id-of-driver='' class="tagList" where-field=''
+                                    default-option="All Tags" is-active={isActive} onhandleselectevent={handleTagSelect}
+                                    dynamic-placeholder="All Tags">
+                                </c-validate-data-list-component>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="slds-form-element__label" for="select-status">Status</label>
+                            </td>
+                            <td style="padding-top:21px">
+                                <c-multiple-dropdown-component class="statusList" field-name="Trip_Status__c"
+                                    key-field="Id" acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId"
+                                    acc-id={accountId} admin-id='' object-name="Employee_Mileage__c"
+                                    search-key="Trip_Status__c" id-of-driver='' where-field=''
+                                    default-option="All Status" dynamic-placeholder="Search All Status"
+                                    onhandleselectevent={handleTripStatus}>
+                                </c-multiple-dropdown-component>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <table style="margin-top: 17px;">
+                    <tbody style="width: 100%; float: left;">
+                        <tr style="width: 28%;float: left;">
+                            <td>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td style="width: 5vw;">
+                                                <label class="slds-form-element__label" for="select-02">From</label>
+                                            </td>
+                                            <td class="slds_driverList">
+                                                <c-validate-data-list-component field-name={field} key-field={idfield}
+                                                    acc-field={accfield} acc-id={accountId} admin-id=''
+                                                    object-name={object} search-key={searchkeyvalue}
+                                                    default-option="All Locations" id-of-driver={driverId}
+                                                    where-field={wherefieldvalue} class="fromLocationList"
+                                                    onhandleselectevent={handleFromLocation}
+                                                    dynamic-placeholder="Search All Locations">
+                                                </c-validate-data-list-component>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="width: 5vw;"><label class="slds-form-element__label"
+                                                    for="select-02">to</label></td>
+                                            <td class="slds_driverList">
+                                                <c-validate-data-list-component field-name={key} key-field={idfield}
+                                                    acc-field={accfield} acc-id={accountId} admin-id=''
+                                                    object-name={object} search-key={key} default-option="All Locations"
+                                                    id-of-driver={driverId} where-field={wherefieldvalue}
+                                                    class="toLocationList" onhandleselectevent={handleToLocation}
+                                                    dynamic-placeholder="Search All Locations">
+                                                </c-validate-data-list-component>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr style="float: left;padding-left: 30px;width: 42%;">
+                            <td colspan="3">
+                                <c-l-w-c-mileages-component onhandlemileagechange={handleMileageChangeEvent}
+                                    onhandlemileagechangeatend={handleMileageChangeEnd}></c-l-w-c-mileages-component>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width: 6vw">
+                                <label class="slds-form-element__label"
+                                    for="horizontal-input-id-tracking">Tracking</label>
+                            </td>
+                            <td>
+                                <c-multiple-dropdown-component field-name="Tracing_Style__c" key-field="Id"
+                                    acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId" admin-id=''
+                                    acc-id={accountId} object-name="Employee_Mileage__c" search-key="Tracing_Style__c"
+                                    id-of-driver='' where-field='' default-option="All Tracking Methods"
+                                    class="tracingList" dynamic-placeholder="All Tracking Methods"
+                                    onhandleselectevent={handleTrackMethod}>
+                                </c-multiple-dropdown-component>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="slds-form-element__label"
+                                for="horizontal-input-id-activity">Activity</label>
+                            </td>
+                            <td>
+                                <c-multiple-dropdown-component field-name="Activity__c" key-field="Id"
+                                    acc-field="EmployeeReimbursement__r.Contact_Id__r.AccountId" admin-id=''
+                                    acc-id={accountId} object-name="Employee_Mileage__c" search-key="Activity__c"
+                                    id-of-driver='' where-field='' default-option="All Activities"
+                                    class="activityList" dynamic-placeholder="All Activities"
+                                    onhandleselectevent={handleActivity}>
+                                </c-multiple-dropdown-component>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table>
+                    <tr>
+                        <td colspan="6" class="pt-px">
+                            <button class="slds-button slds-button_brand ml-px font-color"
+                                onclick={handleSearchEvent}>Search</button>
+
+
+                            <button class="slds-button slds-button_outline-brand font-color ml-15"
+                                onclick={handleClearEvent}>Reset</button>
+
+
+                            <button class="slds-button slds-button_outline-brand font-color ml-15"
+                                onclick={handleCancelEvent}>Cancel</button>
+                            <!-- <a class="slds-button ml-15" onclick={handleCancelEvent}>Cancel</a> -->
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="nav_bar_wrap ml-84">
+            <div class="box_button trip_btn">
+                <div class="slds-form--horizontal">
+                    <div class="slds-grid slds-gutters slds_grid_content">
+                        <div class="slds-form-element slds-m-left_small">
+                            <div class="slds-form-element__control slds-input-has-icon slds-input-has-icon_right">
+                                <lightning-icon icon-name="utility:search"
+                                    class="slds-icon-utility-search slds-input__icon slds-input__icon_right slds-searchIcon"
+                                    alternative-text="Approved" size="xx-small">
+                                </lightning-icon>
+                                <input type="text" placeholder="Quick Search" class="slds-input quickSearchInput"
+                                    onkeyup={handleQuickSearchEvent} />
+                            </div>
+                        </div>
+                        <div class="slds-form-element slds-m-left_x-small">
+                            <button class="slds-button slds-button_neutral slds-p-left_small advSearch"
+                                onclick={handleButtonClick}>
+                                <lightning-icon icon-name="utility:rows" size="x-small" class="slds-p-right_small">
+                                </lightning-icon>
+                                Advanced Search
+                            </button>
+                        </div>
+                        <div class="slds-dropdown-trigger slds-m-left_x-small">
+                            <button class="slds-button slds-button_brand slds-p-left_x-small slds-m-right_xx-small"
+                                aria-haspopup="true">
+                                <lightning-icon icon-name="utility:share" size="x-small" class="slds-p-right_small slds-p-bottom_xxx-small"
+                                    variant="inverse">
+                                </lightning-icon>Share/Export
+                            </button>
+                            <div class="slds-dropdown slds-dropdown--left slds-dropdown--menu zIndex">
+                                <ul class="slds-dropdown__list" role="menu">
+                                    <li id="menu-0-0" class="slds-dropdown__item">
+                                        <a onclick={exportTripsByDate} role="menuitem">
+                                            <p class="slds-truncate">Trips by Date Range</p>
+                                        </a>
+                                    </li>
+                                    <li id="menu-1-1" class="slds-dropdown__item">
+                                        <a onclick={exportSelectedTrips} role="menuitem">
+                                            <p class="slds-truncate">Selected Trips</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <template if:true={showSync}>
+                            <div class="slds-form-element slds-m-left_x-small">
+                                <button class="slds-button slds-button_brand slds-p-left_x-small"
+                                    onclick={handleSyncAll}>
+                                    <lightning-icon icon-name="utility:sync" size="x-small" class="slds-p-right_small" variant="inverse">
+                                    </lightning-icon>
+                                     Sync All
+                                </button>
+                            </div>
+                        </template>
+                        <template if:true={showTripChange}>
+                            <div class="slds-form-element slds-m-left_x-small">
+                                <button class="slds-button slds-button_brand slds-p-left_x-small"
+                                    onclick={handleChangeActivity}>
+                                    <lightning-icon icon-name="utility:button_choice" size="x-small" class="slds-p-right_small" variant="inverse">
+                                    </lightning-icon>
+                                    Change Trip Type
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+            <div class="box_button trip_box">
+                <div class="slds-form--horizontal">
+                    <div class="slds-grid slds-gutters slds_grid_content">
+                        <div class="slds-form-element slds-m-right_small">
+                            <button class="slds-button slds-button_neutral slds-p-left_x-small slds-unapprovebtn"
+                            onclick={handleUnapproveClick} >
+                                <lightning-icon icon-name="utility:close" size="x-small"  class="slds-p-right_x-small">
+                                </lightning-icon>Unapprove
+                            </button>
+                        </div>
+                        <div class="slds-form-element slds-m-right_small">
+                            <button class="slds-button slds-button_neutral slds-p-left_x-small slds-flagbtn"
+                                onclick={handleRejectClick}>
+                                <lightning-icon icon-name="utility:close" size="x-small" variant="inverse" class="slds-p-right_x-small">
+                                </lightning-icon>Flag
+                            </button>
+                        </div>
+                        <div class="slds-form-element slds-m-right_small">
+                            <button class="slds-button slds-button_neutral slds-p-left_x-small slds-approvebtn"
+                                onclick={handleApproveClick}>
+                                <lightning-icon icon-name="utility:check" size="x-small"  variant="inverse" class="slds-p-right_x-small">
+                                </lightning-icon>Approve
+                            </button>
+                        </div>
+                         <button class="slds-button slds-button_outline-brand slds-p-left_x-small font-color"
+                                        onclick={handleDeleteTrips}>
+                                        <lightning-icon icon-name="utility:delete" size="x-small"
+                                            class="slds-p-right_small" variant="inverse">
+                                        </lightning-icon>Delete Trips
+                                    </button>
+                        <!-- <div class="slds-form-element slds-m-left_xxx-small">
+                            <button class="slds-button slds-button_neutral closeModalBtn slds-hide"
+                                onclick={handleCancelEvent}>
+                                <lightning-icon icon-name="utility:close" size="x-small" class="slds-p-right_xx-small">
+                                </lightning-icon>
+                                Cancel
+                            </button>
+                        </div> -->
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+      
+        <div class="content-body">  
+            <c-data-table-component account-i-d={accountId} contact-i-d={Id} pl-i-d={plMarketing}
+                onhandleapproverejectevent={handleApproveRejectEvent}
+                onhandleapproverejectsearchevent={handleApproveRejectSearchEvent}
+                onhandlesuccessevent={handleSuccessEvent} onhandledeletesuccessevent={handleDeleteSuccessEvent}
+                onhandledeleteevent={handleDeleteEvent} onhandledefaultsuccessevent={handleDefaultSuccessEvent}
+                onhandleupdateevent={handleUpdateEvent} onperpageactionevent={perPageActionEvent}
+                onrowactionevent={rowActionEvent}
+                onhandleexportexcelevent={handleExportExcelEvent}
+                onhandlecountexcel={handleCountExcel}
+                onhandlesearchcountexcel={handleSearchCountExcel}
+                onhandlesearchactivity={handleSearchActivity}
+                onhandledefaultactivity={handleDefaultActivity}
+                onhandletripmodal={handleTripModal}></c-data-table-component>
+
+            <c-modal-popup modal-header={modalHeader} modal-content={modalContent}
+                approved-trip-list={emailaddressvalue} is-checked={isSelectedChecked} is-unapprove={unapproveCheck}
+                onhandlesendemailevent={handleSendEmailEvent} onhandledeletetripevent={handleDeleteTripEvent}
+                onhandleresetevent={handleResetEvent}>
+            </c-modal-popup>
+            <c-sync-modal acc-id={accountId} pl-account={plMarketing} onhandlesyncevent={handleSyncEvent} onhandlemasschangetriptype={handleMassChangeTripType} sync-type={isSyncType} trip-type-list={typeOfTripList}></c-sync-modal>
+           
+        </div>
+
+    </div>
+
+</template>

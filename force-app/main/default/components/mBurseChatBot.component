@@ -1,0 +1,13 @@
+<apex:component >
+      <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=f696683e-2f24-4e6c-97b0-b3da9d4e0a8e"> </script>
+      <script type="text/javascript">
+        window.zESettings = {
+          webWidget: {
+            offset: {
+              horizontal: '20px',
+              vertical: '5px'
+            }
+          }
+        };
+      </script>
+</apex:component>

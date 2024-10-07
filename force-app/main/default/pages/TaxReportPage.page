@@ -1,0 +1,43 @@
+<apex:page controller="TaxReportPageController" contentType="txt/xml#{!excelfileName}.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Monthly Tax Report" >
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Name</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Email</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >State</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Working Days</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Month</Data></Cell>
+                </Row>
+
+                <apex:repeat value="{!dayStateWrapList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.driverName}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.email}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.stateName}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.daysCountInState}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!monthNameYear}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

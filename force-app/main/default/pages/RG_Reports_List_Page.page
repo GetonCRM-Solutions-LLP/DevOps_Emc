@@ -1,0 +1,23 @@
+<apex:page controller="RG_Reports_List_Page_Class" showHeader="false" sidebar="false" >
+<apex:form >
+<script>
+function goBack()
+  {
+  window.history.back()
+  }
+</script>
+
+<br/>
+<!-- &nbsp;&nbsp;<apex:outputpanel rendered="{!enable}"><apex:commandbutton value="New Report" onclick="window.location='/apex/DynamicReportPage';return false;"/></apex:outputpanel>  -->  
+&nbsp;&nbsp;<apex:commandButton action="{!goHome}" value="Home"/>
+<apex:pageblock >
+<apex:pageblockTable value="{!reportlist}" var="key">  
+<apex:column headerValue="List of Reports:" >
+
+<apex:commandbutton value="Run" onclick="window.location='/Comm/apex/ReportPage?id={!key.access.Custom_Report__c}'; return false;"/>
+<!-- <apex:outputpanel rendered="{!key.enable}"><apex:commandbutton value="Edit" onclick="window.location='/apex/DynamicReportPage?id={!key.access.Custom_Report__c}&p=update'; return false;"/></apex:outputpanel>  -->    
+{!key.access.Custom_Report__r.Name}</apex:column>      
+</apex:pageblockTable>
+</apex:pageblock>
+</apex:form>
+</apex:page>

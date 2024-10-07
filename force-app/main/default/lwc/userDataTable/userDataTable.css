@@ -1,0 +1,454 @@
+:host {
+    --grey-color: #D7D7D7;
+    --green-color: #7ABB4A;
+    --link-color: #1D1D1D;
+    --text-color: #6C6C6C;
+    --even-row-color: #FFFFFF;
+    --odd-row-color: #F7F7F7;
+    --scroll-color: #F6F6F6;
+    --active-color: #404B5B;
+    --red-color: #FA7800;
+    --blue-color: #00AFE8;
+}
+
+* {
+    font-family: 'Proxima Nova';
+}
+
+/* Media Queries Start ------- */
+
+/* Portrait and landscape iPad, iPad mini 2, iPad mini 3, iPad mini 4, iPad 3, iPad 4, iPad Air and iPad Air 2 */
+@media only screen and (min-device-width: 768px) and (max-device-width: 1023px) and (-webkit-min-device-pixel-ratio: 2) {
+    .modal-height {
+        height: calc(100vh - 433px) !important;
+    }
+}
+
+/* Portrait and landscape iPad Pro */
+@media only screen and (min-device-width: 1024px) and (max-device-width: 1366px) and (-webkit-min-device-pixel-ratio: 2) {
+    .modal-height {
+        height: calc(100vh - 418px) !important;
+    }
+}
+
+.fa,
+.fas,
+.fa-solid,
+.fa-regular {
+    font-family: "Font Awesome 6 Free" !important
+}
+
+.navigate-icon {
+    color: var(--green-color) !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-item.navigate {
+    border: 1px solid var(--grey-color);
+    border-radius: 10px;
+}
+
+.slds-item.navigate a {
+    padding: 0.85rem !important;
+}
+
+.pageEdit {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 45px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #1D1D1D !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.linked {
+    text-decoration: none;
+    color: var(--blue-color);
+    font-family: 'Proxima Nova' !important;
+}
+
+.linked:hover {
+    text-decoration: none !important;
+    color: var(--blue-color) !important;
+}
+
+.flow-block a {
+    color: #1D1D1D !important;
+    font-family: 'Proxima Nova';
+}
+
+.fa-lg {
+    line-height: 1.05em !important;
+    font-family: 'Proxima Nova';
+}
+
+.header-title a {
+    color: var(--link-color) !important;
+    line-height: 294.8% !important;
+    font-family: 'Proxima Nova';
+}
+
+.header-title a:hover {
+    text-decoration: none !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-table thead th {
+    font-weight: 700;
+    font-size: 14px !important;
+    width: 10rem !important;
+    padding-left: 0.6em;
+    font-family: 'Proxima Nova';
+}
+
+.slds-table thead .download-th {
+    width: 4rem !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-table .modal-content {
+    font-weight: 400;
+    font-size: 14px !important;
+    line-height: 172.8% !important;
+    font-family: 'Proxima Nova';
+    color: #1D1D1D !important;
+}
+
+.slds-table tr .modal-content {
+    color: var(--link-color) !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-table tr.rejected {
+    border-top: 1px solid var(--even-row-color);
+    border-bottom: 1px solid var(--even-row-color);
+}
+
+.slds-table tr.rejected .modal-content {
+    color: var(--red-color) !important;
+    font-family: 'Proxima Nova' !important;
+}
+
+.slds-table tr td.modal-content:empty:after{
+    content: "—";
+    vertical-align: middle;
+}
+
+
+.slds-table tr.rejected>td {
+    background-color: rgba(250, 120, 0, 0.2) !important;
+}
+
+.model-content.download-td {
+    text-align: end !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-table_striped tbody tr:nth-of-type(even)>td {
+    background-color: var(--even-row-color);
+}
+
+.slds-table_striped tbody tr:nth-of-type(odd)>td {
+    background-color: var(--odd-row-color);
+}
+
+.slds-table_cell-buffer tr:nth-of-type(odd)>td:first-child {
+    border-bottom-left-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+}
+
+.slds-table_cell-buffer tr:nth-of-type(odd)>td:last-child {
+    border-bottom-right-radius: 10px !important;
+    border-top-right-radius: 10px !important;
+}
+
+.slds-table_cell-buffer tr>td:first-child {
+    padding-left: 1rem !important;
+}
+
+.slds-table--header-fixed_container:before {
+    border-bottom: none !important;
+}
+
+.slds-table--header-fixed_container {
+    padding-top: 3.1rem !important;
+}
+
+.slds-cell-fixed {
+    width: 10rem !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.slds-table thead th:first-child {
+    padding-left: 1rem;
+}
+
+.fixed-table{
+    min-width: max-content;
+    /* scroll-snap-align: start;
+    scroll-margin: 5px 0 0 0px; */
+}
+
+.fixed-table thead th{
+    position: sticky;
+    z-index: 2;
+    top: 0;
+}
+
+.scrollable_wrapper::-webkit-scrollbar-track {
+    -webkit-box-shadow: none;
+    border-radius: 100px;
+    background-color: transparent;
+}
+
+.scrollable_wrapper::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+    background: transparent; 
+    /* background-color: var(--scroll-color); */
+}
+
+.scrollable_wrapper::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    height: 6px;
+    background-color: rgb(64 75 91 / 70%) /*var(--active-color)*/
+}
+
+.slds-scrollable_y::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px var(--scroll-color);
+    border-radius: 100px;
+    background-color: var(--scroll-color);
+}
+
+.slds-scrollable_y::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background-color: var(--scroll-color);
+}
+
+.slds-scrollable_y::-webkit-scrollbar-thumb {
+    border-radius: 100px;
+    height: 5px;
+    background-color: var(--active-color)
+}
+
+.footer-heading {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 27px;
+    color: var(--green-color);
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.sub-value {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-weight: 700;
+    font-size: 32px;
+    line-height: 39px;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.sub-value-1 {
+    color: var(--link-color);
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.sub-value-2 {
+    color: rgb(108 108 108 / 38%);
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.sub-text {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    font-size: 14px;
+    line-height: 189.8%;
+    color: var(--link-color);
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.no-bold{
+    font-family: 'Proxima Nova' !important;
+}
+
+.no-data-message {
+    font-size: 24px;
+    line-height: 29px;
+    text-align: center;
+    font-weight: 600;
+    color: var(--link-color);
+    font-family: 'Proxima Nova';
+}
+
+.icon-holder {
+    background-color: var(--green-color);
+    color: var(--even-row-color);
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-family: 'Proxima Nova';
+}
+
+.navigate {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.fa-xs {
+    line-height: 2em !important;
+}
+
+.flex-row {
+    display: flex;
+    font-weight: 700 !important;
+}
+
+.bold-text {
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1D1D1D !important;
+}
+
+.modal-height {
+    height: calc(100vh - 292px);
+}
+
+.preview-height {
+    height: 100%;
+    /* height: calc(100vh - 365px); */
+}
+
+.slds-scrollable_y {
+    max-height: calc(100vh - 293px) !important;
+}
+
+.tooltipText {
+    position: relative;
+}
+
+.tooltipValue {
+    display: none;
+    position: absolute;
+    z-index: 1; /*100*/
+    background-color: #404B5A;
+    height: auto;
+    width: 180px;
+    box-shadow: 0 4px 4px rgb(0 0 0 / 0.25);
+    font-family: 'Proxima Nova';
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top-right-radius: 10px;
+    padding: 10px 18px;
+    color: white;
+    top: 34px;
+    left: 7px;
+    white-space: pre-wrap;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 145.8%;
+}
+
+.tooltipText:hover span.tooltipValue {
+    display: block;
+}
+
+.download-icon {
+    cursor: pointer;
+}
+
+.sort_icon {
+    color: var(--grey-color) !important;
+    line-height: 0 !important;
+    display: flex;
+    /* --slds-c-icon-color-foreground-default: var(--green-color) !important */
+}
+
+.overflow-none {
+    overflow: visible !important;
+}
+
+.head-sort {
+    display: flex;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.green_icon {
+    color: var(--green-color) !important;
+    line-height: 0 !important;
+    display: flex;
+}
+
+.sort-container {
+    display: flex;
+    flex-flow: column;
+    line-height: 0.12 !important;
+    padding-top: 20px;
+    padding-left: 6px;
+    width: 20px;
+    font-family: 'Proxima Nova';
+}
+
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.slds-btn {
+    /* margin: .375rem; */
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+    /* -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); */
+    font-family: 'Proxima Nova';
+}
+
+.waves-effect:focus {
+    outline: none !important;
+}
+
+.slds-btn-sm {
+    padding: 11px 14px;
+    font-size: 16px;
+}
+
+.btn-trip {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: row;
+    /* gap: 8px; */
+    align-items: center;
+    text-decoration: none !important;
+    color: var(--even-row-color) !important;
+}
+
+.bc-green {
+    background: none !important;
+    background-color: var(--green-color) !important;
+    font-family: 'Proxima Nova Bold' !important;
+    color: var(--even-row-color);
+}
+
+.footer-container {
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.scrollable_wrapper{
+    overflow-y: auto;
+    overflow-x: auto;
+    height: fit-content;
+    /* max-height: 66.4vh; */
+    max-height: calc(100vh - 340px);
+    padding-bottom: 1rem;
+    /* scroll-snap-type: y mandatory;
+    scroll-padding: 20px; */
+}
+
+.fixed-container{
+    max-height: fit-content;
+}

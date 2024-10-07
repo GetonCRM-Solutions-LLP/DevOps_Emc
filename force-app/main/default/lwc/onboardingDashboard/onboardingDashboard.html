@@ -1,0 +1,12 @@
+<template>
+    <template lwc:if={mBurseMeeting}>
+        <c-onboarding-meeting contact-id={contactId} schedule={scheduleMeeting} account-type={accountType} custom-setting={settings} onnext={nextProcess} onback={backToWelcome}></c-onboarding-meeting>
+    </template>
+    <template lwc:elseif={mTour}>
+        <c-onboardingm-dash-tour  driver-meeting={meetingType} onnavigate={navigateToMeeting} contact-id={contactId}
+         schedule={scheduleMeeting} role={role} account-type={accountType} cell-type={cellphoneType} custom-setting={settings} onback={backToPlanPreview}></c-onboardingm-dash-tour>
+    </template>
+    <template lwc:else>
+        <c-onboarding-welcome contact-id={contactId} custom-setting={settings} onnavigate={navigateToPlanPreview}></c-onboarding-welcome>
+    </template>
+</template>

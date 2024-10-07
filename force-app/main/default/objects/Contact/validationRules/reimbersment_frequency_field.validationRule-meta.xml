@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>reimbersment_frequency_field</fullName>
+    <active>true</active>
+    <description>checking wheather reimbersment frequency is provided or not at the time of creation of contact when the associated account contain the reimbersment frequency value as Both</description>
+    <errorConditionFormula>AND(ISPICKVAL( Account.Reimbursement_Frequency__c ,&quot;Both&quot;),ISBLANK(TEXT( Reimbursement_Frequency__c )))</errorConditionFormula>
+    <errorDisplayField>Reimbursement_Frequency__c</errorDisplayField>
+    <errorMessage>provide reimbersment frequency field value as it is not specified on the account</errorMessage>
+</ValidationRule>

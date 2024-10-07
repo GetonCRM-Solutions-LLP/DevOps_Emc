@@ -1,0 +1,55 @@
+.overlay-slide-down {
+    transition: all .4s ease-in-out;
+    transform: translateY(0)
+}
+
+.overlay-slide-up {
+    transition: all .8s ease-in-out;
+    transform: translateY(-100%)
+}
+
+.parent{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsl(0deg 0% 100%);
+}
+
+.add-index{
+    z-index: 1000;
+}
+
+.index{
+    z-index: 9999;
+}
+
+.close{
+    font-family: 'Proxima Nova Bold' !important;
+    position: relative;
+    float: right;
+}
+
+.popup-close-btn span {
+    background: none !important;
+    font-size: 2.75rem;
+    color: #7ABB4A;
+    position: fixed;
+    top: 10px;
+    cursor: pointer;
+    z-index: 10000;
+    right: 2.5rem;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    line-height: 30px;
+}
+
+.parent.index + .popup-close-btn span{
+    opacity: 1;
+}
+
+.parent.add-index + .popup-close-btn span{
+    opacity: 0;
+}

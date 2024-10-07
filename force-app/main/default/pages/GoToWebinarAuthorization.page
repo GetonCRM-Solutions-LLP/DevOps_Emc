@@ -1,0 +1,22 @@
+<apex:page id="Authpage" controller="GoToWebinarVFController" action="{!getAccessToken}" lightningStylesheets="true">
+    <apex:pageBlock title="Click to Authenticate with G2W ">
+        <apex:form id="formId"> 
+        <p>Steps for Authorization:<br></br> 1.  Authorization<br></br>2.  Update Webhook<br></br></p>  <br></br>
+          
+            <apex:commandButton value="Authorization"  action="{!getAuthCode}" reRender="formId"/>
+            <apex:commandButton value="Update Webhook"  action="{!updateWebhookDetails}"  oncomplete="checkError({!returnValue})"/>
+            
+           <!--<apex:commandButton value="Get All Attendees"  action="{!getAllAttendees}" reRender="formId"/>-->
+
+        </apex:form>
+        <script>
+        function checkError(returnVal){
+            if(returnVal){
+                alert('Success!');
+            }else{
+                alert('Some Exception Accured!');
+            }
+        }
+        </script>
+    </apex:pageBlock>
+</apex:page>

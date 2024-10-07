@@ -1,0 +1,371 @@
+<apex:page controller="ReportPageClass" sidebar="false" showHeader="false" renderAs="{!renderAsdoc}"  contentType="{!renderAsExcel}" >
+    <head>
+        <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"/>
+        <apex:includeScript value="{!URLFOR($Resource.PageBlockTableEnhancerADVResources,'jquery.dataTables.js')}"/>
+        <apex:stylesheet value="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+        <apex:stylesheet value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8/themes/smoothness/jquery-ui.css"/>
+        <apex:stylesheet value="{!URLFOR($Resource.PageBlockTableEnhancerADVResources, 'jquery.dataTables_themeroller.css')}" /> 
+        <script>
+            j$ = jQuery.noConflict();
+            var el,table,currPage;
+            j$(document).ready( function () {
+                el = j$('*[id*=pbt]')[0];
+                table = j$(el).DataTable({
+                   "bJQueryUI": true,
+                    "aaSorting": [['{!sortfrom}','{!sortby}']],
+                    "bPaginate" : true,
+                    "bDestroy": true,
+                    "sPaginationType": "full_numbers"
+                });
+
+            });
+
+        </script>
+    </head>
+    
+    
+    <style>
+        div.DTTT_container{
+            display: none;
+        }
+
+        body .bPageBlock .pbBody .dataCol {
+            width: 100%;
+        }
+
+        .pbBody, .pbBody a, .pbBody td, .lbBody a, .lbBodyDescription, .list .headerRow .noRowsHeader{
+            padding: 10px;
+        }
+
+        .rg1 {
+            background-color: lightblue; 
+            color:black; 
+            background-image:none
+        }
+
+        .rg2 {
+            background-color: white; 
+            color:black; 
+            background-image:none
+        }
+
+        .SelectlistStyle {
+            background-color: lightblue; 
+            color:black; 
+            font-size: 100%; 
+            background-image:none
+        }
+
+        .btn-export {
+            color: white !important;
+            background: #66b3ff !important;
+            border-radius: 5px !important;
+            padding: 4px 9px !important;
+            margin-left: 5px !important;
+            border-color: #66b3ff !important;
+            font-size: 11px !important;
+            /* font-weight: bold !important; */
+        }
+
+        .paging_full_numbers .ui-button{
+            color:black !important;
+        }
+
+        .btn-form {
+            border-radius: 4px !important;
+            padding: 4px 10px !important;
+            margin-left:  5px  !important;
+        }
+        .pbSubheader.first {
+            margin-top: 12px;
+        }
+        .title-span {
+            margin: 10px;
+            font-size: 19px;
+        }
+        body .bDetailBlock.bPageBlock .pbBody .pbSubheader{
+            padding-top: 15px;
+            padding-left: 12px;
+        } 
+        .pbTitle {
+            width: 44% !important;
+        }
+    </style> 
+    
+    <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+    
+    <apex:form > 
+        
+        <apex:outputPanel id="searchTable" styleClass="cButtons" rendered="{!if((renderAsExcel != '' || renderAsdoc != '' ) ,false,true)}">
+            <div id="status" style="display:none;">
+                <div style="width: 100%; height:100%; background:#000; opacity : 0.7; top:0px; left:0px; position: fixed; z-index:105000"></div>
+                <div style="top: 40%;padding: 10px;left: 43%;  width: 150px;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                    <img src="/img/loading24.gif" style="vertical-align:middle;float:left;"/>
+                    <span class="content" style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Please wait...</span>
+                </div>
+            </div>
+            <div id="copiedmsg" style="display:none;">
+                <div style="width: 100%; height:700px; background:#000; opacity: 0.4; top:0px; left:0px; position: fixed; z-index:105000;"></div>
+                <div class="dv_load" style="top: 40%;padding: 10px;left: 43%;  width: 150px;position: fixed;background-color: #FFF;box-shadow: 0 5px 10px #ccc;z-index: 106000;border-radius: 3px;">
+                    <span style="float:left;margin-left: 10px; font-size: 13px; margin-top: 4px; font-weight: bold; color: #474747">Copied to clipboard!</span>
+                </div>
+            </div>
+            <div class="slds">
+                <apex:messages style="float: left;width: 50%;" styleClass="slds-notify slds-notify_toast slds-theme_info slds-notify--toast"/>
+            </div>
+            
+            <!-- <c:PageBlockTableEnhancerADV targetPbTableIds="pbt" pageSizeOptions="5,10,15,30" defaultPageSize="15" enableExport="true" sortfield="{!sortfrom}" sortby="{!sortby}"/>  -->
+            
+            <apex:pageblock mode="maindetail" id="pb">
+                <span class="title-span"><font> Report Name: {!reportname} </font></span>
+                <br/>
+
+                <apex:pageBlockSection collapsible="false" Title="Report Filters" columns="6"> 
+
+                </apex:pageBlockSection>
+                <table id="tableForFilter">
+                    <tr>
+                        <th></th>
+                        <th>Filter By Manager</th>
+                        <th>Business Unit</th>
+                        <th>From Date</th>
+                        <th>To Date</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td width="15%"></td>
+                        <td width="25%">
+                            <apex:selectList value="{!selectedManager}" multiselect="true" size="5" >
+                            <!--    <apex:actionSupport event="onchange" action="{!run}" />  -->
+                            <apex:selectOptions value="{!ManagerNames}"/>
+                            </apex:selectList> 
+                        </td>
+
+                        <td width="20%">
+
+                            <apex:selectList value="{!selectedbv}" multiselect="true" size="5" >
+                            <!--      <apex:actionSupport event="onchange" action="{!run}" /> -->
+                                <apex:selectOptions value="{!Businessunit}"/>
+                            </apex:selectList>
+
+                        </td>
+                        <td valign="top">
+                            <!--<apex:inputText value="{!fromdate}" size="10" id="demo" onfocus="DatePicker.pickDate(false, this , false);" />-->
+                            <apex:inputField value="{!fromDateEmpR.Approved_Date__c }"/>                      
+                            <!-- <apex:input type="date" value="{!fromdate}"/> -->
+                        </td>
+                        <td valign="top">
+                            <!--  <apex:input type="date" value="{!todate}"/> -->
+                            <apex:inputField value="{!toDateEmpR.Approved_Date__c }"/>                      
+                        </td>
+                        <td width="10%"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="6">
+                            <center>    
+                                <apex:commandButton styleclass="btn-form" action="{!run}" value="Apply Filters" reRender="tablepanel" onclick="showLoader(true);" oncomplete="applyDatatable();showLoader(false);"/>
+                                <apex:outputPanel rendered="{!isShowButton}">
+                                    <apex:commandButton styleclass="btn-form" value="Lock Date" action="{!updateAccount}" onclick="showLoader(true);" oncomplete="showLoader(false);"/>
+                                </apex:outputPanel> 
+                            </center>
+                        </td>
+                    </tr>
+                </table>
+                <br/>
+                <apex:pageBlockButtons >
+                    <apex:commandButton styleclass="btn-form" action="{!back}" value="Back"/>
+                    <apex:commandButton styleclass="btn-form" action="{!home}" value="Home"/>
+                </apex:pageBlockButtons>
+            </apex:pageblock>
+        </apex:outputPanel>
+        
+        <apex:pageblock id="p">
+
+            <apex:outputPanel rendered="{!if((renderAsExcel != '' || renderAsdoc != '' ) ,false,true)}">
+                <Apex:commandButton value="Export as PDF" action="{!SaveAspdf}" StyleClass="btn-export" />
+                <Apex:commandButton value="Export as Excel" action="{!SaveAsExcel}" StyleClass="btn-export"/>
+                <Apex:commandButton value="Export as CSV" onclick="showLoader(true);createCSVFile();return false;" StyleClass="btn-export" />
+                <Apex:commandButton value="Print View" StyleClass="btn-export" onclick="printView();return false;"/>
+                <Apex:commandButton value="Copy" StyleClass="btn-export" onclick="copyElementContents();return false;"/>
+            </apex:outputPanel>
+
+            <apex:outputPanel id="tablepanel">
+                <apex:pageBlockSection >
+                    <apex:pageblockTable value="{!q}" var="t" id="pbt" >
+                        <apex:repeat value="{!soqlfield}" var="sf">       
+                            <apex:column >
+                                <apex:facet name="header">{!labelmap[sf]}</apex:facet>
+                                {!t[sf]}
+                            </apex:column>  
+                        </apex:repeat>
+                        
+                    </apex:pageblockTable>
+                </apex:pageBlockSection> 
+                
+            </apex:outputPanel>
+        </apex:pageblock>
+        
+    </apex:form> 
+    
+    
+    <!--  <apex:includescript value="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"/>
+    <apex:stylesheet value="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css"/> -->
+    <script>
+        j$ = jQuery.noConflict();
+        function goBack(){
+            window.history.back()
+        }
+
+        function printView(){
+            j$('*[id*=searchTable]')[0].style.display = 'none';
+            window.print();
+            j$('*[id*=searchTable]')[0].style.display = 'inline';
+        }   
+
+        function doPlcPickBlank() { 
+            var isCheck = false;
+            
+
+            if(isCheck == false){
+                
+                j$("[id$='tableForFilter']").find('tbody').hide();
+            }
+
+        }
+
+        function copyElementContents() {
+            var el = j$('*[id*=pbt]')[3];
+            var body = document.body, range, sel;
+            if (document.createRange && window.getSelection) {
+                range = document.createRange();
+                sel = window.getSelection();
+                sel.removeAllRanges();
+                try {
+                    range.selectNodeContents(el);
+                    sel.addRange(range);
+                } catch (e) {
+                    range.selectNode(el);
+                    sel.addRange(range);
+                }
+                document.execCommand("copy");
+                sel.removeAllRanges();
+            } else if (body.createTextRange) {
+                range = body.createTextRange();
+                range.moveToElementText(el);
+                range.select();
+                range.execCommand("copy");
+                
+            }
+            copymessage();
+        }
+
+        function createCSVFile() {
+           var rows = j$('*[class*=ui-state-disabled');
+           var n = 0;
+           for (var i = 0; i < rows.length; i++) {
+                if(!isNaN(rows[i].innerText)) 
+                    n = parseInt(rows[i].innerText) - 1;
+           }
+           j$('*[class*=ui-state-disabled')[0].innerText;
+           destroyDatatable();
+           var tablehtml = j$('*[id*=pbt]')[0].outerHTML;
+           applyDatatable();
+           table.fnPageChange( n );          
+           let date = new Date();
+           export_table_to_csv(tablehtml,'{!reportname}_' + date + '.csv');
+
+        }
+        function download_csv(csv, filename) {
+            var csvFile;
+            var downloadLink;
+
+            // CSV FILE
+            csvFile = new Blob([csv], {type: "text/csv"});
+
+            // Download link
+            downloadLink = document.createElement("a");
+
+            // File name
+            downloadLink.download = filename;
+
+            // We have to create a link to the file
+            downloadLink.href = window.URL.createObjectURL(csvFile);
+
+            // Make sure that the link is not displayed
+            downloadLink.style.display = "none";
+
+            // Add the link to your DOM
+            document.body.appendChild(downloadLink);
+
+            // Lanzamos
+            downloadLink.click();
+
+            showLoader(false);
+        }
+
+
+
+        function export_table_to_csv(html, filename) {
+            var csv = [];
+            var doc = document.implementation.createHTMLDocument("New Document");
+            var p = doc.createElement("p");
+            p.innerHTML = html;
+            doc.body.appendChild(p);
+            var rows = doc.querySelectorAll("table tr");
+
+            for (var i = 0; i < rows.length; i++) {
+                var row = [], cols = rows[i].querySelectorAll("td, th");
+                
+                for (var j = 0; j < cols.length; j++) {
+                    if(cols[j].innerText.trim().includes(',')){
+                        row.push('"'+cols[j].innerText.trim() +'"');
+                    } else{
+                        row.push(cols[j].innerText.trim());
+                    }
+                    
+                   
+                }
+                
+                csv.push(row.join(","));        
+            }
+
+            // Download CSV
+            download_csv(csv.join("\n"), filename);
+        }
+
+        function applyDatatable() {
+            var ele = j$('*[id*=pbt]')[0];
+            table = j$(ele).DataTable({
+                "pagingType": "full_numbers" ,
+                "bJQueryUI": true,
+                "aaSorting": [['{!sortfrom}','{!sortby}']],
+                "bPaginate" : true,
+                "bDestroy": true,
+                "sPaginationType": "full_numbers"
+            });
+
+            
+        }
+
+        function destroyDatatable() {
+            table.fnDestroy();
+        }
+
+        function showLoader(show){
+            if(show){
+                j$("#status").show();
+            }else{
+                j$("#status").hide();
+            }
+        }
+
+        function copymessage() {
+            j$("#copiedmsg").show();
+            setInterval(function() {
+                j$("#copiedmsg").hide();
+            },1000);
+        }
+    </script>
+    
+</apex:page>

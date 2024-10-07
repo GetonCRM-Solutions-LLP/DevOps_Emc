@@ -1,0 +1,1519 @@
+<apex:page sidebar="false" showHeader="false" lightningStylesheets="true" controller="UpdateInsuranceDataController">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!-- EMC Common Head -->
+        <apex:include pageName="EMC_Common_Head" />
+        <!-- Title of the page -->
+        <title>Compliance</title>
+        <apex:slds />
+        <link href='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/ui-lightness/jquery-ui.css' rel='stylesheet' />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" />
+        <script src="{!URLFOR($Resource.EmcCSS,'/emc-design/assets/jquery-datepicker/js/jquery.min.js')}"></script>
+        <script src="{!URLFOR($Resource.EmcCSS,'/emc-design/assets/jquery-datepicker/js/jquery-ui.min.js')}"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/angular.js')}"></script>
+        <!--Toaster -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/toastr.min.js')}"></script>
+        <link href="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/css/toastr.min.css')}" rel="stylesheet" />
+        <!-- Pagination -->
+        <script src="{!URLFOR($Resource.dirPagination)}"></script>
+        <!-- Excel Download -->
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/jszip.js')}"></script>
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/xlsx.js')}"></script>
+        <script src="{!URLFOR($Resource.EMC_Header_Scripts,'EMC_Header_Scripts/js/FileSaver.min.js')}"></script>
+        <style>
+            table th {
+                font-family: 'Proxima Nova' !important;
+                font-size: 15px !important;
+            }
+
+            .insurance-td {
+                    white-space: normal !important;
+            }
+
+            @media only screen and (min-width: 768px) and (max-width: 1356px) {
+                .vehicle-value-td{
+                    white-space: normal !important;
+                }
+                .vehicle-age-td{
+                    white-space: normal !important;
+                }
+            }
+
+            ::placeholder {
+                /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: rgb(153 148 148 / 87%) !important;
+                font-family: 'Proxima Nova' !important;
+                font-size: 15px !important;
+                opacity: 1;
+                /* Firefox */
+            }
+
+            :-ms-input-placeholder {
+                /* Internet Explorer 10-11 */
+                color: rgb(153 148 148 / 87%) !important;
+                font-family: 'Proxima Nova' !important;
+                font-size: 15px !important;
+            }
+
+            ::-ms-input-placeholder {
+                /* Microsoft Edge */
+                color: rgb(153 148 148 / 87%) !important;
+                font-family: 'Proxima Nova' !important;
+                font-size: 15px !important;
+            }
+
+            .filter-label {
+                font-size: 15px;
+                color: #000000;
+                font-family: 'Proxima Nova' !important;
+            }
+
+            .table-nodata {
+                text-align: center;
+                font-family: 'Proxima Nova' !important;
+            }
+
+            .select2-container--default .select2-selection--single {
+                border-radius: 0 !important;
+                border: 1px solid #569be1 !important;
+            }
+
+            .select2-container .select2-selection--single {
+                height: 38px !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 35px !important;
+                font-size: 15px !important;
+                color: #000 !important;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 34px !important;
+            }
+
+            .select2-results__option {
+                padding-left: 6px !important;
+                font-size: 15px !important;
+            }
+
+            .form-control:focus {
+                box-shadow: none !important;
+            }
+
+            .input-group>.form-control:not(:first-child) {
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+            }
+
+            #filtericon {
+                padding: 13px;
+                right: 0;
+                position: absolute;
+                display: block;
+                z-index: 4;
+                cursor: pointer;
+            }
+
+            #search_filter input {
+                border: none;
+                background: #f5f7fc;
+                padding: 7px 18px;
+                color: #050505;
+                font-family: 'Proxima Nova' !important;
+                font-size: 15px !important;
+            }
+
+            .border-search {
+                border: 1px solid #569be1 !important;
+            }
+
+            .pagination {
+                display: inline-block;
+                padding-left: 0;
+                margin: 20px 0;
+                border-radius: 4px;
+            }
+
+            .pagination>li {
+                display: inline;
+            }
+
+            .pagination>li>a,
+            .pagination>li>span {
+                position: relative;
+                float: left;
+                padding: 6px 12px;
+                margin-left: -1px;
+                line-height: 1.42857143;
+                color: #0176d3;
+                text-decoration: none;
+                background-color: #fff;
+                border: 1px solid #ddd;
+            }
+
+            .pagination>li:first-child>a,
+            .pagination>li:first-child>span {
+                margin-left: 0;
+                border-top-left-radius: 4px;
+                border-bottom-left-radius: 4px;
+            }
+
+            .pagination>.disabled>a,
+            .pagination>.disabled>a:focus,
+            .pagination>.disabled>a:hover,
+            .pagination>.disabled>span,
+            .pagination>.disabled>span:focus,
+            .pagination>.disabled>span:hover {
+                color: rgb(167, 162, 162);
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+            }
+
+            .pagination>.disabled>a,
+            .pagination>.disabled>a:focus,
+            .pagination>.disabled>a:hover,
+            .pagination>.disabled>span,
+            .pagination>.disabled>span:focus,
+            .pagination>.disabled>span:hover {
+                color: #0176d3;
+                cursor: not-allowed;
+                background-color: #fff;
+                border-color: #ddd;
+            }
+
+            .pagination>.active>a,
+            .pagination>.active>a:focus,
+            .pagination>.active>a:hover,
+            .pagination>.active>span,
+            .pagination>.active>span:focus,
+            .pagination>.active>span:hover {
+                z-index: 3;
+                color: #fff;
+                cursor: default;
+                background-color: #0176d3;
+                ;
+                border-color: #0176d3;
+                ;
+            }
+
+            .spinner-background {
+                width: 100%;
+                height: 100%;
+                background: #000;
+                opacity: 0.4;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 1000000;
+            }
+
+            .spinner-load {
+                position: fixed;
+                top: 49%;
+                left: 49%;
+                z-index: 1000000;
+            }
+
+            .slds-table thead th {
+                line-height: 1 !important;
+                text-align: center;
+            }
+
+            .pd-0{
+                padding: 0 !important
+            }
+            .date-added-th {
+                width: 8vw;
+                cursor: pointer !important;
+            }
+
+            .insurance-th {
+                width: 44vw;
+            }
+
+            .action-th{
+                width: 3vw;
+                padding: 0 !important;
+            }
+
+            .driver-th {
+                width: 10vw;
+                cursor: pointer !important;
+            }
+
+            .expire-th {
+                width: 10vw;
+                cursor: pointer !important;
+            }
+
+            .compliance-th {
+                cursor: pointer !important;
+            }
+
+            .border-red {
+                border: 2px solid red !important;
+            }
+
+            .slds-table td {
+                text-align: center;
+            }
+
+            .driver-name-td {
+                text-align: left !important;
+                color: rgba(65, 148, 249, 1) !important;
+            }
+
+            .driver-link{
+                text-decoration: underline !important;
+            }
+            .driver-link:hover{
+                font-family: 'Proxima Nova Semibold' !important;
+                text-decoration: underline !important;
+            }
+            .slds-context-bar_tab {
+                background-color: aliceblue !important;
+            }
+
+            .cursor-pointer {
+                cursor: pointer;
+            }
+
+            .slds-selected {
+                font-weight: 600;
+            }
+
+            .slds-table .slds-cell-edit td {
+                box-shadow: rgb(0 68 135) 0 0 0 1px inset;
+            }
+
+            .slds-modal__close {
+                position: relative !important;
+                top: 0 !important;
+                right: -38.5rem !important;
+            }
+
+            .slds-col-label {
+                padding-bottom: calc(.175rem + 1px);
+                margin-bottom: 0;
+                font-size: inherit;
+                line-height: 1.5;
+                font-size: 16px;
+                padding-top: calc(.175rem + 1px);
+            }
+
+            .date {
+                text-align: center;
+            }
+
+            .d-none {
+                display: none;
+            }
+
+            .d-block {
+                display: block;
+            }
+
+            .align-content {
+                text-align: center;
+                margin-top: 35px;
+            }
+
+            .span-error {
+                color: red;
+            }
+
+            .float {
+                z-index: 1;
+                box-shadow: 2px 2px 3px #999 !important;
+                text-align: center;
+            }
+
+            .slds-form-element__label {
+                color: #000 !important;
+            }
+
+            .slds-table td {
+                font-size: 14px !important;
+            }
+
+            .slds-button_brand {
+                background-color: #404b5b!important;
+                border-color: #404b5b!important;
+                color: #fff !important;
+            }
+        </style>
+        <!-- Common script -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('.js-example-basic-single').select2({
+                    placeholder: "Column",
+                    width: 'resolve' // need to override the changed default
+                });
+                $("input[type=text]").keydown(function (e) {
+                    var keyCode = e.which;
+                    /*
+                    8 - (backspace)
+                    32 - (space)
+                    48-57 - (0-9)Numbers
+                    */
+                    if ((keyCode == 8 || keyCode == 32) || ((keyCode < 48 && keyCode > 57) || (keyCode >= 48 && keyCode <= 57))) {
+                        return false;
+                    }
+                });
+            })
+
+            var app = angular.module('updateInsuranceModule', ['angularUtils.directives.dirPagination']);
+            app.controller('updateInsuranceController', ['$scope', '$filter', '$timeout',
+                function ($scope, $filter, $timeout) {
+                    /** 
+                   * EMC - 167 : Excel Download, Sorting, Compliance, Searching 
+                   * Date Added : 16 Dec 2021 */
+                    $scope.waiting = false;
+                    $scope.selectedRow = null;
+                    $scope.currentPage = 1;
+                    $scope.pageSize = 20;
+                    $scope.showError = false;
+                    $scope.IsVisibleUpdatebtn = false;
+                    $scope.showCancelActionBtn = false;
+                    $scope.checkboxobjActionShow = false;
+                    $scope.updateInsuranceList = [];
+                    $scope.compliancelist = [];
+                    $scope.empupdatelist = [];
+                    $scope.queryBy = "name";
+                    $scope.actionBy = "default";
+                    var url_string = $(location).attr("href");
+                    var url = new URL(url_string);
+                    var beforeUpdateInsurance = [];
+                    var insurance;
+                    $scope.origin = url.origin;
+                    $scope.complianceList = {!conWrapper}
+                    angular.forEach($scope.complianceList, function (cop) {
+                            cop.aDate = (cop.addedDate != null) ? $filter('date')(new Date(cop.addedDate), 'MM/dd/yy') : cop.addedDate;
+                            cop.eDate = (cop.expirationDate != null) ? $filter('date')(new Date(cop.expirationDate), 'MM/dd/yy') : cop.expirationDate;
+                            cop.isActionDone = false;
+                    })
+                    $scope.insuranceList = angular.copy($scope.complianceList)
+                    console.log("From List-> ", $scope.complianceList);
+                    /* Toaster Option */
+                    this.setOptions = function () {
+                        toastr.options.positionClass = "toast-bottom-right";
+                        toastr.options.closeButton = true;
+                        toastr.options.progressBar = true;
+                        toastr.options.fadeOut = 2500;
+                    };
+
+                    this.setOptions();
+                    this.clear = function () {
+                        toastr.clear();
+                    };
+
+
+                    /* Method For Compliance Status */
+                    $scope.getCompliance = function () {
+                        Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UpdateInsuranceDataController.getComplianceStatus}',
+                            function (result, event) {
+                                $scope.compliancelist = JSON.parse(result);
+                                console.log("Compliance status", JSON.parse(result));
+                            },
+                            { escape: false }
+                        );
+                    }
+
+                    $scope.getCompliance();
+                    /* Toaster Option Complete with clear funtion */
+                    $scope.editInsurance = function (insurance, cId) {
+                        $scope.selectedRow = cId;
+                        $scope.IsVisibleUpdatebtn = true;
+                        if (beforeUpdateInsurance.length == 0) {
+                            beforeUpdateInsurance = angular.copy($scope.insuranceList);
+                        }
+                    }
+                    $scope.keyPressed = function (keyEvent, th) {
+                        if ($scope.queryBy === undefined) {
+                            toastr.error("Select column name for search");
+                        }
+                        if (keyEvent.keyCode == 13) {
+                            event.preventDefault();
+                        }
+                    }
+                    /** Reloads the page **/
+                    $scope.refreshList = function () {
+                        $scope.$apply(function () {
+                            location.reload();
+                        });
+                    }
+
+                    /** 
+                     * EMC - 194 : Action button Functionality on Compliance Page
+                     * Date Added : 13 January 2022 */
+
+                    $scope.CheckUncheckAllForAction = function (CheckUncheckAllForAction) {
+                        $scope.checkboxobj.isCheckedAllForAction = CheckUncheckAllForAction;
+                        if ($scope.checkboxobj.isCheckedAllForAction == true) {
+                            $scope.showCancelActionBtn = true;
+                        }
+                        else {
+                            $scope.showCancelActionBtn = false;
+                        }
+                        if ($scope.search != undefined) {
+                            var searchKey = $scope.search[$scope.queryBy]
+                            var object = $scope.queryBy;
+                            $scope.filteredArray = $filter('filter')($scope.insuranceList, { [object]: searchKey });
+                            angular.forEach($scope.filteredArray, function (e) {
+                                e.isActionDone = $scope.checkboxobj.isCheckedAllForAction;
+                                $scope.empupdatelist.push(e);
+                            });
+                        } else {
+                            angular.forEach($scope.insuranceList, function (e) {
+                                e.isActionDone = $scope.checkboxobj.isCheckedAllForAction;
+                                $scope.empupdatelist.push(e);
+                            });
+                        }
+                    }
+
+                    $scope.displayCheckboxForAction = function (){
+                        $scope.checkboxobj = {}	
+                        $scope.checkboxobj.isCheckedAllForAction = false;
+                        angular.forEach($scope.insuranceList, function (item) {
+                              item.isActionDone = false;
+                        });
+                    }
+                    $scope.CheckUncheckForAction = function (e) {
+                            $scope.recordfoundindex = -1;
+                            var employeeLen = $scope.insuranceList.length;
+                            var count = 0;
+                            angular.forEach($scope.insuranceList, function (item) {
+                                if (item.isActionDone) {
+                                    count++;
+                                }
+                            });
+
+                            if (count > 0) {
+                                $scope.showCancelActionBtn = true;
+                            }
+                            else {
+                                $scope.showCancelActionBtn = false;
+                            }
+                            if (count === employeeLen) {
+                                $scope.checkboxobj.isCheckedAllForAction = true;
+                            } else {
+                                $scope.checkboxobj.isCheckedAllForAction = false;
+                            }
+
+                            if ($scope.empupdatelist.length > 0) {
+                                for (var i = 0; i < $scope.empupdatelist.length; i++) {
+                                    if ($scope.empupdatelist[i].contactId === e.contactId) {
+                                        $scope.recordfoundindex = i;
+                                        break;
+                                    }
+                                }
+
+                                if ($scope.recordfoundindex != -1) {
+                                    $scope.empupdatelist.splice($scope.recordfoundindex, 1);
+                                }
+
+                                else {
+                                    $scope.empupdatelist.push(e);
+                                }
+                            } else {
+                                $scope.empupdatelist.push(e);
+                            }
+                    }
+
+                    $scope.resetAction = function (action) {
+                        $scope.empupdatelist = [];
+                        if(action != "default"){
+                            $scope.checkboxobjActionShow = true;
+                            $scope.showCancelActionBtn = false;
+                            $scope.displayCheckboxForAction();
+                        }else{
+                            $scope.checkboxobj.isCheckedAllForAction = false;
+                            angular.forEach($scope.insuranceList, function (item) {
+                                item.isActionDone = false;
+                            });
+                            $scope.checkboxobjActionShow = false;
+                            $scope.showCancelActionBtn = false;
+                        }
+                       
+                    }
+
+                    $scope.resetEmployees = function() {
+                        if($scope.empupdatelist.length > 0) {
+                            angular.forEach($scope.empupdatelist, function (k) {
+                                    k.vehicleAge = (k.vehicleAge === "false") ? false : (k.vehicleAge === "true") ? true : k.vehicleAge;
+                                    k.vehicleValue = (k.vehicleValue === "false") ? false : (k.vehicleValue === "true") ? true : k.vehicleValue;
+                                    k.expirationDate = (k.expirationDate === null) ? k.expirationDate : $filter('date')(new Date(k.expirationDate), "yyyy-MM-dd");
+                                    k.addedDate = (k.addedDate === null) ? k.addedDate : $filter('date')(new Date(k.addedDate), "yyyy-MM-dd");
+                                });
+                                angular.forEach($scope.empupdatelist, function (k) {
+                                    k.vehicleAge = ($scope.actionBy === "vehicleAge") ? null : k.vehicleAge;
+                                    k.vehicleValue = ($scope.actionBy === "vehicleValue") ? null : k.vehicleValue;
+                                    k.complianceStatus = ($scope.actionBy === "complianceStatus") ? null : k.complianceStatus;
+                                    k.expirationDate = ($scope.actionBy === "expirationDate") ? null : k.expirationDate;
+                                });
+                                var listToReset = angular.copy($scope.empupdatelist);
+                                $scope.waiting = true;
+                                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UpdateInsuranceDataController.editInlineNewEmployee}', JSON.stringify(listToReset),
+                                    function (result, event) {
+                                        if (event.status) {
+                                            if (result === 'Success') {
+                                                toastr.success("Records have been reset successfully");
+                                                angular.forEach($scope.empupdatelist, function (u) {
+                                                    u.isActionDone = false;
+                                                });
+                                                $scope.empupdatelist = [];
+                                                $scope.showCancelActionBtn = false;
+                                                $scope.waiting = false;
+                                                $scope.$apply();
+                                                $scope.refreshList();
+                                            } else {
+                                                toastr.error("Server Error Occured");
+                                            }
+                                        } else {
+                                            toastr.error("Server Error Occured");
+                                        }
+                                    },
+                                    { escape: false }
+                                );
+                        }else{
+                            toastr.error("No record available to reset");
+                        }
+                             
+                    }
+
+                    $scope.cancelActionProcess = function(){
+                       $timeout(function() {
+                            $('#single-action').val('default').trigger('change')
+                            $scope.actionBy = "default"
+                            $scope.showCancelActionBtn = false;
+                            $scope.checkboxobj.isCheckedAllForAction = false;
+                            angular.forEach($scope.insuranceList, function (item) {
+                                item.isActionDone = false;
+                            });
+                            $scope.checkboxobjActionShow = false;
+                            $scope.empupdatelist = [];
+                        }, 0)
+                    }
+                    /** 
+                     * EMC - 167 : Excel Download 
+                     * Date Added : 16 Dec 2021 */
+                    $scope.exportToExcel = function () {
+                        var exportData = [];
+                        var excelData = $scope.insuranceList
+                        angular.forEach(excelData, function (l) {
+                            l.expirationDate = (l.expirationDate != null) ? $filter('date')(new Date(l.expirationDate), "MM/dd/yy") : l.expirationDate;
+                            l.addedDate = (l.addedDate != null) ? $filter('date')(new Date(l.addedDate), "MM/dd/yy") : l.addedDate
+                        });
+
+                        exportData.push(["Driver Name", "Date Added", "Insurance Status", "Compliance Status", "Expiration Date", "Vehicle Value", "Vehicle Age"]);
+                        angular.forEach(excelData, function (l) {
+                            exportData.push([l.name, l.addedDate, l.insurance, l.complianceStatus, l.expirationDate, l.vehicleValue, l.vehicleAge]);
+                        })
+
+                        function datenum(v, date1904) {
+                            if (date1904) v += 1462;
+                            var epoch = Date.parse(v);
+                            return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+                        }
+                        function getSheet(exportData) {
+                            var ws = {};
+                            var range = { s: { c: 10000000, r: 10000000 }, e: { c: 0, r: 0 } };
+
+                            for (var R = 0; R != exportData.length; ++R) {
+                                for (var C = 0; C != exportData[R].length; ++C) {
+                                    if (range.s.r > R) range.s.r = R;
+                                    if (range.s.c > C) range.s.c = C;
+                                    if (range.e.r < R) range.e.r = R;
+                                    if (range.e.c < C) range.e.c = C;
+                                    var cell = { v: exportData[R][C] };
+                                    if (cell.v == null) continue;
+                                    var cell_ref = XLSX.utils.encode_cell({ c: C, r: R });
+                                    // console.log('cell', cell)
+                                    if (typeof cell.v === 'number') cell.t = 'n';
+                                    else if (typeof cell.v === 'boolean') cell.t = 'b';
+                                    else if (cell.v instanceof Date) {
+                                        cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                                        cell.v = datenum(cell.v);
+                                    }
+                                    else cell.t = 's';
+
+                                    ws[cell_ref] = cell;
+                                }
+                            }
+                            if (range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+                            return ws;
+                        }
+                        function Workbook() {
+                            if (!(this instanceof Workbook)) return new Workbook();
+                            this.SheetNames = [];
+                            this.Sheets = {};
+                        }
+
+                        var wb = new Workbook(), ws = getSheet(exportData);
+
+                        $scope.FromDate = $filter('date')(new Date(), "MMddyyyyHHmmss");
+                        wb.SheetNames.push("Employee compliance");
+                        wb.Sheets["Employee compliance"] = ws;
+                        var wbout = XLSX.write(wb, { bookType: 'xlsx', bookSST: false, type: 'binary' });
+                        function s2ab(s) {
+                            var buf = new ArrayBuffer(s.length);
+                            var view = new Uint8Array(buf);
+                            for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                            return buf;
+                        }
+                        $scope.name = 'Employee\'s  Compliance' + ' ' + $scope.FromDate + ".xlsx"
+                        saveAs(new Blob([s2ab(wbout)], { type: "application/octet-stream" }), $scope.name);
+
+                    }
+
+                    $scope.searchType = function (type) {
+                        $scope.search = ""
+                        document.getElementById('example-search-input').placeholder = (type === "name") ? "Search by driver name" : (type === "eDate") ? "Search by (mm/dd/yy) format" : (type === "aDate") ? "Search by (mm/dd/yy) format" : (type === "complianceStatus") ? "Search by Compliance" : "Search"
+                    }
+                    // $scope.currentLevelDateClick = function(event){
+                    //     $(`#currentLeval${event.$index}`).datepicker({
+                    //         dateFormat: "mm/dd/yy",
+                    //         maxDate: new Date($(`#expirationDate${event.$index}`).val())
+                    //     }).datepicker("show");
+                    // }
+
+                    /* MM/dd/yy format start*/
+                    $scope.formateDate = function (dateString) {
+                        if (dateString != '' && dateString != null) {
+                            let datesplit = dateString.split('/');
+                            if(datesplit[2] != undefined) {
+                                if (datesplit[2].length > 2)
+                                return (datesplit[0].padStart(2, '0') + '/' + datesplit[1].padStart(2, '0') + '/' + datesplit[2].substr(2, 3));
+                            }
+                         
+                        }
+
+                        return dateString;
+                    }
+                    $scope.changeInput = function (event) {
+                        var tId = event.list.contactId;
+                        $(`#expirationDate${tId}`).datepicker({
+                            dateFormat: "mm/dd/yy",
+                            //  minDate: new Date($(`#currentLeval${event.$index}`).val())
+                        }).datepicker("show");
+                    }
+
+                    $scope.addCustomClass = function (docid) {
+                        angular.forEach($scope.docElement, function (doc) {
+                            if (doc.id == docid) {
+                                doc.classList.add("border-red");
+                            }
+                        })
+                    }
+                    /** Update Record **/
+                    $scope.update = function () {
+                        if ($scope.updateInsuranceList.length > 0) {
+                            let count = 0;
+                            angular.forEach($scope.updateInsuranceList, function (kItem) {
+                                $scope.docElement = $(`#expirationDate${kItem.contactId}`)
+                                if (kItem.insurance === 'Yes' && (kItem.expirationDate === null || kItem.expirationDate === '')) {
+                                    count++;
+                                    $scope.docElement.addClass('border-red');
+                                } else {
+                                    $scope.docElement.removeClass('border-red');
+                                }
+                            });
+                            if (count > 0) {
+                                toastr.error("Please enter expiration date");
+                            } else {
+                                angular.forEach($scope.updateInsuranceList, function (kItem) {
+                                    kItem.vehicleAge = (kItem.vehicleAge === "false") ? false : (kItem.vehicleAge === "true") ? true : kItem.vehicleAge;
+                                    kItem.vehicleValue = (kItem.vehicleValue === "false") ? false : (kItem.vehicleValue === "true") ? true : kItem.vehicleValue;
+                                    // kItem.meetingMinimum = (kItem.meetingMinimum === undefined) ? true : kItem.meetingMinimum;
+                                    // kItem.currentLeval = (kItem.currentLeval === null) ? kItem.currentLeval : $filter('date')(new Date(kItem.currentLeval),"yyyy-MM-dd");
+                                    kItem.expirationDate = (kItem.expirationDate === null) ? kItem.expirationDate : $filter('date')(new Date(kItem.expirationDate), "yyyy-MM-dd");
+                                    kItem.addedDate = (kItem.addedDate === null) ? kItem.addedDate : $filter('date')(new Date(kItem.addedDate), "yyyy-MM-dd");
+                                });
+                                var listToUpdate = angular.copy($scope.updateInsuranceList);
+                                $scope.waiting = true;
+                                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.UpdateInsuranceDataController.editInlineNewEmployee}', JSON.stringify(listToUpdate),
+                                    function (result, event) {
+                                        if (event.status) {
+                                            if (result === 'Success') {
+                                                beforeUpdateInsurance = [];
+                                                toastr.success("Records Updated Successfully");
+                                                angular.forEach($scope.updateInsuranceList, function (ulist) {
+                                                    ulist.isEditable = false;
+                                                });
+                                                $scope.updateInsuranceList = [];
+                                                $scope.IsVisibleUpdatebtn = false;
+                                                $scope.selectedRow = '';
+                                                $scope.waiting = false;
+                                                $scope.$apply();
+                                                $scope.refreshList();
+                                            } else {
+                                                toastr.error("Server Error Occured");
+                                                $scope.waiting = false;
+                                            }
+                                        } else {
+                                            toastr.error("Server Error Occured");
+                                            $scope.waiting = false;
+                                        }
+                                    },
+                                    { escape: false }
+                                );
+                            }
+
+                        } else {
+                            toastr.error("Please edit atleast one record to Update");
+                        }
+
+                    }
+
+                    /* Sorting For table */
+                    $scope.sortKey = 'name';
+                    $scope.reverse = true;
+                    $scope.sort = function (keyname) {
+                        $scope.reverse = ($scope.sortKey === keyname) ? !$scope.reverse : false;
+                        $scope.sortKey = keyname;
+                        if (keyname === 'name' || keyname === 'complianceStatus') {
+                            $scope.insuranceList.sort(function (a, b) {
+                                var nameA = (a[keyname] === null) ? '' : a[keyname].toLowerCase(),
+                                    nameB = (b[keyname] === null) ? '' : b[keyname].toLowerCase()
+                                if ($scope.reverse) {
+                                    if (nameA < nameB) //sort string ascending
+                                        return -1
+                                    if (nameA > nameB)
+                                        return 1
+                                    return 0 //default return value (no sorting)
+                                } else {
+                                    if (nameA < nameB) //sort string ascending
+                                        return 1
+                                    if (nameA > nameB)
+                                        return -1
+                                    return 0 //default return value (no sorting)
+                                }
+                            })
+                        }
+
+
+                        if (keyname === 'addedDate' || keyname === 'expirationDate') {
+                            $scope.insuranceList.sort(function (a, b) {
+                                var nameA = (a[keyname] === null) ? '' : new Date(a[keyname].toLowerCase()),
+                                    nameB = (b[keyname] === null) ? '' : new Date(b[keyname].toLowerCase())
+                                if ($scope.reverse) {
+                                    if (nameA < nameB) //sort string ascending
+                                        return -1
+                                    if (nameA > nameB)
+                                        return 1
+                                    return 0 //default return value (no sorting)
+                                } else {
+                                    if (nameA < nameB) //sort string ascending
+                                        return 1
+                                    if (nameA > nameB)
+                                        return -1
+                                    return 0 //default return value (no sorting)
+                                }
+                            })
+
+                        }
+                    }
+                    /** Compliance status change **/
+                    $scope.statusChange = function (status) {
+                        $scope.statusfoundindex = -1;
+                        if ($scope.updateInsuranceList.length > 0) {
+                            for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                if ($scope.updateInsuranceList[i].contactId === status.list.contactId) {
+                                    $scope.statusfoundindex = i;
+                                    break;
+                                }
+                            }
+
+                            if ($scope.statusfoundindex != -1) {
+                                $scope.updateInsuranceList.remove($scope.statusfoundindex);
+                            }
+                            else {
+                                $scope.updateInsuranceList.push(status.list);
+                            }
+
+                        } else {
+                            $scope.updateInsuranceList.push(status.list);
+                        }
+                    }
+                    /** Insurance radio button change **/
+                    $scope.radioChange = function (target) {
+                        $scope.insurancefoundindex = -1;
+                        if ($scope.updateInsuranceList.length > 0) {
+                            for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                if ($scope.updateInsuranceList[i].contactId === target.list.contactId) {
+                                    $scope.insurancefoundindex = i;
+                                    break;
+                                }
+                            }
+
+                            if ($scope.insurancefoundindex != -1) {
+                                $scope.updateInsuranceList.remove($scope.insurancefoundindex);
+                            }
+                            else {
+                                $scope.updateInsuranceList.push(target.list);
+                            }
+
+                        } else {
+                            $scope.updateInsuranceList.push(target.list);
+                        }
+
+                        //$scope.updateInsuranceList.push(target.list);
+                        // console.log($scope.updateInsuranceList)
+                    }
+
+                    /** Vehicle Age Radio Button Change **/
+                    $scope.vehicleAgeChange = function (target) {
+                        $scope.recordfoundindex = -1;
+                        if ($scope.updateInsuranceList.length > 0) {
+                            for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                if ($scope.updateInsuranceList[i].contactId === target.list.contactId) {
+                                    $scope.recordfoundindex = i;
+                                    break;
+                                }
+                            }
+
+                            if ($scope.recordfoundindex != -1) {
+                                $scope.updateInsuranceList.remove($scope.recordfoundindex);
+                            }
+
+                            else {
+                                $scope.updateInsuranceList.push(target.list);
+                            }
+                        } else {
+                            $scope.updateInsuranceList.push(target.list);
+                        }
+
+                        //$scope.updateInsuranceList.push(target.list);
+                        //console.log($scope.updateInsuranceList)
+                    }
+
+                    /** Vehicle Value Radio Button Change **/
+                    $scope.vehicleChange = function (target) {
+                        $scope.vehiclefoundindex = -1;
+                        if ($scope.updateInsuranceList.length > 0) {
+                            for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                if ($scope.updateInsuranceList[i].contactId === target.list.contactId) {
+                                    $scope.vehiclefoundindex = i;
+                                    break;
+                                }
+                            }
+
+                            if ($scope.vehiclefoundindex != -1) {
+                                $scope.updateInsuranceList.remove($scope.vehiclefoundindex);
+                            }
+
+                            else {
+                                $scope.updateInsuranceList.push(target.list);
+                            }
+                        } else {
+                            $scope.updateInsuranceList.push(target.list);
+                        }
+                        //  updatelist.vehicleAge = (target.list.vehicleAge === "No") ? false : true;
+                        //$scope.updateInsuranceList.push(target.list);
+                        // console.log($scope.updateInsuranceList)
+                    }
+
+                    /** Date Input Validation **/
+                    $scope.inputExpirationDate = function (lt) {
+                        var inputDate = lt.list.expirationDate;
+                        // if(inputDate != undefined){
+                        //         $(`#currentLeval${lt.$index}`).datepicker('destroy');
+                        // }
+                        // var regex = /(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/
+                        // if (!inputDate.match(regex) && inputDate != "") {
+                        //  document.getElementById(`span-error-exp${lt.$index}`).classList.remove('d-none');
+                        //  } else {
+                        // document.getElementById(`span-error-exp${lt.$index}`).classList.add('d-none');
+                        lt.list.expirationDate = (lt.list.expirationDate === "") ? null : lt.list.expirationDate;
+                        $scope.inputfoundindex = -1;
+                        if ($scope.updateInsuranceList.length > 0) {
+                            for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                if ($scope.updateInsuranceList[i].contactId === lt.list.contactId) {
+                                    $scope.inputfoundindex = i;
+                                    break;
+                                }
+                            }
+
+                            if ($scope.inputfoundindex != -1) {
+                                $scope.updateInsuranceList.remove($scope.inputfoundindex);
+                            }
+
+                            else {
+                                $scope.updateInsuranceList.push(lt.list);
+                            }
+                        } else {
+                            $scope.updateInsuranceList.push(lt.list);
+                        }
+                        //}
+                    }
+                    // $scope.inputLevelDate = function (ld) {
+                    //         var input = ld.list.currentLeval;
+                    //         if(input != undefined){
+                    //             $(`#expirationDate${ld.$index}`).datepicker('destroy');
+                    //         }
+                    //         var pattern = /(0[1-9]|1[012])[- /.](0[1-9]|[12][0-9]|3[01])[- /.](19|20)\d\d/
+                    //         if (!input.match(pattern) && input != "") {
+                    //             document.getElementById(`span-error${ld.$index}`).classList.remove('d-none');
+                    //         } else {
+                    //             document.getElementById(`span-error${ld.$index}`).classList.add('d-none');
+                    //             ld.list.currentLeval = (ld.list.currentLeval === "") ? null : ld.list.currentLeval;
+                    //             $scope.currentfoundindex = -1;
+                    //             if ($scope.updateInsuranceList.length > 0) {
+                    //                 for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                    //                     if ($scope.updateInsuranceList[i].contactId === ld.list.contactId) {
+                    //                         $scope.currentfoundindex = i;
+                    //                         break;
+                    //                     }
+                    //                 }
+
+                    //                 if ($scope.currentfoundindex != -1) {
+                    //                     $scope.updateInsuranceList.remove($scope.currentfoundindex);
+                    //                 }
+
+                    //                 else {
+                    //                     $scope.updateInsuranceList.push(ld.list);
+                    //                 }
+                    //             } else {
+                    //                 $scope.updateInsuranceList.push(ld.list);
+                    //             }
+                    //         }
+                    //     }
+                    $scope.pageChangeHandler = function () {
+                        $("input[type=text]").keydown(function (e) {
+                            var keyCode = e.which;
+                            /*
+                            8 - (backspace)
+                            32 - (space)
+                            48-57 - (0-9)Numbers
+                            */
+                            if ((keyCode == 8 || keyCode == 32) || ((keyCode < 48 && keyCode > 57) || (keyCode >= 48 && keyCode <= 57))) {
+                                return false;
+                            }
+                        });
+                    }
+                    $scope.inputValid = function (lt) {
+                        var input = lt.list.currentLeval;
+                        var pattern = /([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/
+                        if (!input.match(pattern) && input != "") {
+                            $scope.showError = true;
+                        } else {
+                            lt.list.currentLeval = (lt.list.currentLeval === "") ? null : lt.list.currentLeval;
+                            lt.list.expirationDate = (lt.list.expirationDate === "") ? null : lt.list.expirationDate;
+                            $scope.showError = false;
+                            $scope.inputfoundindex = -1;
+                            if ($scope.updateInsuranceList.length > 0) {
+                                for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                                    if ($scope.updateInsuranceList[i].contactId === lt.list.contactId) {
+                                        $scope.inputfoundindex = i;
+                                        break;
+                                    }
+                                }
+
+                                if ($scope.inputfoundindex != -1) {
+                                    $scope.updateInsuranceList.remove($scope.inputfoundindex);
+                                }
+
+                                else {
+                                    $scope.updateInsuranceList.push(lt.list);
+                                }
+                            } else {
+                                $scope.updateInsuranceList.push(lt.list);
+                            }
+                        }
+                    }
+
+                    // $scope.meetingMinimumChange = function(m){
+                    //     $scope.meetingfoundindex = -1;
+                    //     if ($scope.updateInsuranceList.length > 0) {
+                    //         for (var i = 0; i < $scope.updateInsuranceList.length; i++) {
+                    //             if ($scope.updateInsuranceList[i].contactId === m.list.contactId) {
+                    //                 $scope.meetingfoundindex = i;
+                    //                 break;
+                    //             }
+                    //         }
+
+                    //         if ($scope.meetingfoundindex != -1) {
+                    //             $scope.updateInsuranceList.remove($scope.meetingfoundindex);
+                    //         }
+
+                    //         else {
+                    //             $scope.updateInsuranceList.push(m.list);
+                    //         }
+                    //     } else {
+                    //         $scope.updateInsuranceList.push(m.list);
+                    //     }
+                    //     console.log($scope.updateInsuranceList)
+                    //     console.log("meeting minimum change", m)
+                    // }
+                    /** Cancel Update Process **/
+                    $scope.cancelUpdate = function () {
+                        $scope.waiting = true;
+                        $scope.selectedRow = '';
+                        angular.forEach(beforeUpdateInsurance, function (inList) {
+                            inList.isEditable = false;
+                        });
+                        $scope.IsVisibleUpdatebtn = false;
+                        $scope.insuranceList = angular.copy(beforeUpdateInsurance);
+                        $scope.waiting = false;
+                    }
+                }
+            ]);
+        </script>
+    </head>
+
+    <body class="slds-scope" ng-app="updateInsuranceModule" ng-controller="updateInsuranceController" ng-cloak="true">
+        <div id="spinner" ng-show="waiting">
+            <div class="spinner-background"></div>
+            <div class="spinner-load">
+                <div class="spinner-border text-light" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+        </div>
+        <div class="slds-container">
+            <div class="slds-context-bar slds-context-bar_tab">
+                <div class="slds-context-bar__primary">
+                    <div class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_click slds-no-hover">
+                        <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                            <!-- <img alt="logo" class="img-fluid"
+                                    src="{!URlFOR($Resource.EmcCSS, '/emc-design/assets/images/logo/mBurse-logo_rev.png')}"/> -->
+                        </span>
+                    </div>
+                    <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                        <span class="slds-truncate" title="Compliance">Compliance</span>
+                    </span>
+                </div>
+            </div>
+            <div class="slds-box">
+                <!-- <input type="text" id="currentLevelDate" /> -->
+                <div class="pl-0 pr-3 pt-2 pull-left filter-label">Search By</div>
+                <div class="col-md-2 pl-0 pr-0 pull-left">
+                    <select id="single" class="js-example-basic-single js-states form-control" style="width: 90%" ng-model="queryBy" ng-change="searchType(queryBy)">
+                        <option></option>
+                        <option value="name">Driver Name</option>
+                        <option value="complianceStatus">Compliance</option>
+                        <option value="eDate">Expiration Date</option>
+                        <option value="aDate">Date Added</option>
+                    </select>
+                </div>
+                <div id="search_filter" class="dataTables_filter pull-left d-block slds-m-bottom_small col-md-3 pl-0">
+                    <div class="input-group">
+                        <i id="filtericon" class="fa fa-search"></i>
+                        <input class="form-control border-search" type="search" ng-model="search[queryBy]" placeholder="Search by driver name" aria-controls="example"
+                            id="example-search-input" ng-keypress="keyPressed($event, this)" 
+                            ondrop="return false;" oncopy="return false;" oninput="this.value = this.value.replace(/[^A-Za-z0-9-,.;'&/.() ]|^ /g,'')"
+                        />
+                    </div>
+                </div>
+                <div class="col-md-2 pl-0 pr-0 pull-left">
+                    <select id="single-action" class="js-example-basic-single js-states form-control" style="width: 90%" ng-model="actionBy" ng-change="resetAction(actionBy)">
+                        <option value="default">Action</option>
+                        <option value="complianceStatus">Reset Compliance Status</option>
+                        <option value="vehicleValue">Reset Vehicle Value</option>
+                        <option value="vehicleAge">Reset Vehicle Age</option>
+                        <option value="expirationDate">Reset Expiration Date</option>
+                    </select>
+                </div>
+                <div class="col-md-2 pl-0 pr-0 pull-left" ng-show="showCancelActionBtn">
+                    <button aria-expanded="true" class="slds-button float slds-button_neutral slds-button_dual-stateful slds-is-pressed" ng-click="resetEmployees()">
+                        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#skip_forward')}"></use>
+                        </svg>
+                        <span class="slds-truncate">Reset</span>
+                    </button>
+                </div>
+                <div ng-show="showCancelActionBtn">
+                    <button aria-expanded="true" class="slds-button float slds-button_brand slds-button_dual-stateful slds-is-pressed" ng-click="cancelActionProcess()">
+                        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                        </svg>
+                        <span class="slds-truncate" title="Cancel">Cancel Action</span>
+                    </button>
+                </div>
+                <!-- <div class="pl-0 pr-3 pt-1 pull-left">
+                    <i class="fa fa-hand-point-right fa-2x"></i>
+                </div> -->
+                
+                <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table_col-bordered slds-table_fixed-layout slds-border_right slds-border_left">
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <th class="action-th" ng-show="checkboxobjActionShow"><input type="checkbox" ng-model="checkboxobj.isCheckedAllForAction"  ng-click="CheckUncheckAllForAction(checkboxobj.isCheckedAllForAction);"
+                                /></th>
+                            <th class="driver-th" ng-click="sort('name')">Driver Name
+                                <span class="slds-icon_container slds-icon-utility-chevronup" ng-show="reverse" ng-if="sortKey=='name'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevronup')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+
+                                <span class="slds-icon_container slds-icon-utility-chevrondown" ng-show="!reverse" ng-if="sortKey=='name'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </th>
+                            <th class="date-added-th" ng-click="sort('addedDate')">Date Added
+                                <span class="slds-icon_container slds-icon-utility-chevronup" ng-show="reverse" ng-if="sortKey=='addedDate'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevronup')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+
+                                <span class="slds-icon_container slds-icon-utility-chevrondown" ng-show="!reverse" ng-if="sortKey=='addedDate'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </th>
+                            <th class="insurance-th">Insurance (100/300/50)</th>
+                            <!-- <th>Meeting Minimum</th>
+                            <th>Current Level</th> -->
+                            <th class="expire-th" ng-click="sort('expirationDate')">Expiration Date
+                                <span class="slds-icon_container slds-icon-utility-chevronup" ng-show="reverse" ng-if="sortKey=='expirationDate'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevronup')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+
+                                <span class="slds-icon_container slds-icon-utility-chevrondown" ng-show="!reverse" ng-if="sortKey=='expirationDate'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </th>
+                            <th class="compliance-th" ng-click="sort('complianceStatus')">Compliance
+                                <span class="slds-icon_container slds-icon-utility-chevronup" ng-show="reverse" ng-if="sortKey=='complianceStatus'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevronup')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+
+                                <span class="slds-icon_container slds-icon-utility-chevrondown" ng-show="!reverse" ng-if="sortKey=='complianceStatus'">
+                                    <svg class="slds-icon slds-icon-text-default slds-icon_x-small" aria-hidden="true">
+                                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#chevrondown')}"></use>
+                                    </svg>
+                                    <span class="slds-assistive-text"></span>
+                                </span>
+                            </th>
+                            <th>
+                                <div>Vehicle Value</div>
+                                <div>($25,442)</div>
+                            </th>
+                            <th>
+                                <div>Vehicle Age</div>
+                                <div>(5 yrs)</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr dir-paginate="list in insuranceList | filter:search  | itemsPerPage: pageSize" current-page="currentPage" ng-class="{'slds-selected slds-cell-edit slds-is-edited':list.contactId == selectedRow}">
+                            <td class="pd-0" ng-show="checkboxobjActionShow">
+                                <input type="checkbox" ng-model="list.isActionDone"  ng-change="CheckUncheckForAction(list);" />
+                            </td>
+                            <td class="driver-name-td slds-cell-wrap"><a href="{{origin}}/{{list.contactId}}" class="driver-link" target="_blank">{{list.name}}</a></td>
+                            <td class="driver-added">{{list.addedDate | date:"MM/dd/yy"}}</td>
+                            <td ng-model="list.insurance" ng-show="!list.isEditable" ng-click="editInsurance(insurance,list.contactId);list.isEditable = !list.isEditable"
+                                class="cursor-pointer insurance-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Yes'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="yes-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'No Expiration Date'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="no-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No Expiration Date</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="not-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Not Submitted'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="not-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Not Submitted</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="card-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Insurance Card'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="card-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Insurance Card</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="card-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Missing Umbrella Policy'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="missing-umbrella">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Missing Umbrella Policy</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="card-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Missing Insurance Dec Page'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="missing-insurance-dec">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Missing Insurance Dec Page</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="expired-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Expired'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="expired-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Expired</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="plan-insurance" name="edit-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Not Meeting Plan Minimum'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="plan-insurance">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Not Meeting Plan Minimum</span>
+                                    </label>
+                                </span>
+                            </td>
+                            <td ng-model="list.insurance" ng-show="list.isEditable" class="insurance-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-insurance-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" value="Yes" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'Yes'}}" />
+                                    <label class="slds-radio__label" for="yes-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-insurance-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" value="No Expiration Date" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'No Expiration Date'}}" />
+                                    <label class="slds-radio__label" for="no-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No Expiration Date</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="not-insurance-{{$index}}" ng-change="radioChange(this)" name="insure-{{$index}}" value="Not Submitted"
+                                        ng-model="list.insurance" ng-checked="{{list.insurance == 'Not Submitted'}}" />
+                                    <label class="slds-radio__label" for="not-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Not Submitted</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="card-insurance-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'Insurance Card'}}" value="Insurance Card" />
+                                    <label class="slds-radio__label" for="card-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Insurance Card</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="missing-umbrella-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'Missing Umbrella Policy'}}" value="Missing Umbrella Policy" />
+                                    <label class="slds-radio__label" for="missing-umbrella-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Missing Umbrella Policy</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="missing-insurance-dec-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'Missing Insurance Dec Page'}}" value="Missing Insurance Dec Page" />
+                                    <label class="slds-radio__label" for="missing-insurance-dec-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Missing Insurance Dec Page</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="expired-insurance-{{$index}}" name="insure-{{$index}}" ng-change="radioChange(this)" ng-model="list.insurance"
+                                        ng-checked="{{list.insurance == 'Expired'}}" value="Expired" />
+                                    <label class="slds-radio__label" for="expired-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Expired</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="plan-insurance-{{$index}}" name="insure-{{$index}}" ng-model="list.insurance" ng-checked="{{list.insurance == 'Not Meeting Plan Minimum'}}"
+                                        value="Not Meeting Plan Minimum" ng-change="radioChange(this)" />
+                                    <label class="slds-radio__label" for="plan-insurance-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Not Meeting Plan Minimum</span>
+                                    </label>
+                                </span>
+                            </td>
+                            <!-- <td ng-model="list.meetingMinimum" ng-show="!list.isEditable" ng-click="editInsurance(list,list.contactId);list.isEditable = !list.isEditable"  class="cursor-pointer">
+                                    <span class="slds-radio">
+                                        <input type="radio" id="meeting"  name="meetEdit-{{$index}}" ng-model="list.meetingMinimum" ng-checked="{{list.meetingMinimum}}"  disabled="true"/>
+                                        <label class="slds-radio__label" for="meeting">
+                                            <span class="slds-radio_faux"></span>
+                                          </label>
+                                      </span>
+                            </td> -->
+                            <!-- <td ng-model="list.meetingMinimum"  ng-show="list.isEditable">
+                                <span class="slds-radio">
+                                    <input type="radio" id="meeting-{{$index}}" name="meet-{{$index}}" ng-model="list.meetingMinimum" ng-checked="{{list.meetingMinimum}}"
+                                    ng-change="meetingMinimumChange(this)"/>
+                                    <label class="slds-radio__label" for="meeting-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                    </label>
+                                </span>
+                            </td>
+                            <td ng-model="list.currentLeval" ng-show="!list.isEditable" ng-click="editInsurance(list,list.contactId);list.isEditable = !list.isEditable"
+                             class="cursor-pointer">{{list.currentLeval  | date:"MM/dd/yyyy"}}</td>
+                            <td ng-model="list.currentLeval" ng-show="list.isEditable">
+                                <input type="text" class="slds-selected date" id="currentLeval{{$index}}" value="{{list.currentLeval}}" ng-model="list.currentLeval" 
+                                ng-click="currentLevelDateClick(this)" ng-change="inputLevelDate(this)" placeholder="Select Date" />
+                                <span class="span-error d-none" id="span-error{{$index}}">Invalid Date</span>
+                            </td> -->
+                            <td ng-model="list.expirationDate" ng-show="!list.isEditable" ng-click="editInsurance(list,list.contactId);list.isEditable = !list.isEditable"
+                                class="cursor-pointer">{{formateDate(list.expirationDate)}}</td>
+                            <td ng-model="list.expirationDate" ng-show="list.isEditable">
+                                <input type="text" class="slds-selected date" id="expirationDate{{list.contactId}}" value="{{list.expirationDate}}" ng-model="list.expirationDate"
+                                    ng-click="changeInput(this)" ng-change="inputExpirationDate(this)" placeholder="Select Date"
+                                />
+                                <span class="span-error d-none" id="span-error-exp{{$index}}">Invalid Date</span>
+                            </td>
+                            <td ng-model="list.complianceStatus" ng-show="list.isEditable">
+                                <select ng-model="list.complianceStatus" name="complianceStatus_{{list.contactId}}" class="form-control rounded-0 a-hover-pointer"
+                                    ng-change="statusChange(this)">
+                                    <option ng-if="list.complianceStatus!=null"></option>
+                                    <option ng-selected="{{list.complianceStatus == compliance}}" ng-repeat="compliance in compliancelist" value="{{compliance}}">{{compliance}}</option>
+                                </select>
+                            </td>
+                            <td ng-model="emp.complianceStatus" ng-show="!list.isEditable" ng-click="editInsurance(list,list.contactId);list.isEditable = !list.isEditable"
+                                class="a-hover-pointer slds-cell-wrap">
+                                <div class="">{{list.complianceStatus}}</div>
+                            </td>
+                            <td ng-model="list.vehicleValue" ng-show="!list.isEditable" ng-click="editInsurance(insurance,list.contactId);list.isEditable = !list.isEditable"
+                                class="cursor-pointer vehicle-value-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-vehicle-value" ng-model="list.vehicleValue" ng-checked="{{list.vehicleValue == 'Yes'}}" name="default-{{$index}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="yes-vehicle-value">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-vehicle-value" ng-model="list.vehicleValue" ng-checked="{{list.vehicleValue == 'No'}}" name="default-{{$index}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="no-vehicle-value">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </td>
+                            <td ng-model="list.vehicleValue" ng-show="list.isEditable" class="vehicle-value-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-vehicle-value-{{$index}}" ng-model="list.vehicleValue" name="vehval-{{$index}}" ng-change="vehicleChange(this)"
+                                        ng-checked="{{list.vehicleValue  == 'Yes'}}" value="Yes" />
+                                    <label class="slds-radio__label" for="yes-vehicle-value-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-vehicle-value-{{$index}}" ng-model="list.vehicleValue" ng-checked="{{list.vehicleValue == 'No'}}"
+                                        ng-change="vehicleChange(this)" name="vehval-{{$index}}" value="No" />
+                                    <label class="slds-radio__label" for="no-vehicle-value-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </td>
+                            <td ng-model="list.vehicleAge" ng-show="!list.isEditable" ng-click="editInsurance(insurance,list.contactId);list.isEditable = !list.isEditable"
+                                class="cursor-pointer vehicle-age-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-vehicle-age" name="vage-{{$index}}" ng-model="list.vehicleAge" ng-checked="{{list.vehicleAge == 'Yes'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="yes-vehicle-age">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-vehicle-age" name="vage-{{$index}}" ng-model="list.vehicleAge" ng-checked="{{list.vehicleAge == 'No'}}"
+                                        disabled="true" />
+                                    <label class="slds-radio__label" for="no-vehicle-age">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </td>
+                            <td ng-model="list.vehicleAge" ng-show="list.isEditable" class="vehicle-age-td">
+                                <span class="slds-radio">
+                                    <input type="radio" id="yes-vehicle-age-{{$index}}" name="vehicleage-{{$index}}" ng-model="list.vehicleAge" ng-change="vehicleAgeChange(this)"
+                                        ng-checked="{{list.vehicleAge == 'Yes'}}" value="Yes" />
+                                    <label class="slds-radio__label" for="yes-vehicle-age-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">Yes</span>
+                                    </label>
+                                </span>
+                                <span class="slds-radio">
+                                    <input type="radio" id="no-vehicle-age-{{$index}}" name="vehicleage-{{$index}}" ng-model="list.vehicleAge" ng-change="vehicleAgeChange(this)"
+                                        ng-checked="{{list.vehicleAge == 'No'}}" value="No" />
+                                    <label class="slds-radio__label" for="no-vehicle-age-{{$index}}">
+                                        <span class="slds-radio_faux"></span>
+                                        <span class="slds-form-element__label">No</span>
+                                    </label>
+                                </span>
+                            </td>
+                        </tr>
+                        <tr ng-if="(insuranceList | filter:search).length == 0">
+                            <td colspan="7" class="table-nodata">No record available.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="slds-p-top_x-large">
+                    <dir-pagination-controls max-size="1" direction-links="true" boundary-links="true" responsive="true" auto-hide="false" on-page-change="pageChangeHandler(newPageNumber)"></dir-pagination-controls>
+                    <button ng-if="insuranceList.length != 0" aria-expanded="true" class="slds-button float slds-button_brand slds-button_dual-stateful slds-is-pressed slds-float_right"
+                        ng-click="exportToExcel()">
+                        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#download')}"></use>
+                        </svg>
+                        <span class="slds-truncate" title="Download">Download</span>
+                    </button>
+                </div>
+                <div class="slds-float_right slds-p-top_x-large slds-p-bottom_x-large">
+                    <button aria-expanded="true" class="slds-button float slds-button_neutral slds-button_dual-stateful slds-is-pressed" ng-click="update();"
+                        ng-show="IsVisibleUpdatebtn">
+                        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#record_update')}"></use>
+                        </svg>
+                        <span class="slds-truncate" title="Update List">Update</span>
+                    </button>
+                    <button aria-expanded="true" class="slds-button float slds-button_brand slds-button_dual-stateful slds-is-pressed" ng-click="cancelUpdate();"
+                        ng-show="IsVisibleUpdatebtn">
+                        <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                            <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#close')}"></use>
+                        </svg>
+                        <span class="slds-truncate" title="Cancel">Cancel</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    </html>
+</apex:page>

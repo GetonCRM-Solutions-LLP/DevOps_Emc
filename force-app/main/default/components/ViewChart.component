@@ -1,0 +1,230 @@
+<apex:component >
+    <script>       
+        var viewChartDialogModel = function (visible) {
+                    this.visible = visible;
+                };
+                viewChartDialogModel.prototype.open = function(chartdata) {
+                                 
+                    this.visible = true;
+                    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+                    
+                    var todaysdate = new Date();
+                    var currentmonth = todaysdate.getMonth();
+                    var chartlabels = [];
+                    var mileages = [];
+                    var splittedmonth = [];
+                    if(currentmonth == 0)
+                    {
+                        
+                        chartlabels.push(months[9]);
+                        chartlabels.push(months[10]);
+                        chartlabels.push(months[11]);
+                    }
+                    else if(currentmonth == 1)
+                    {
+                        chartlabels.push(months[0]);
+                        chartlabels.push(months[10]);
+                        chartlabels.push(months[11]);
+                        
+                    }
+                    else if(currentmonth == 2)
+                    {
+                        chartlabels.push(months[0]);
+                        chartlabels.push(months[1]);
+                        chartlabels.push(months[11]);
+                    }
+                    else
+                    {                       
+                        chartlabels.push(months[currentmonth-3]);
+                        chartlabels.push(months[currentmonth-2]);
+                        chartlabels.push(months[currentmonth-1]);
+                    }
+                    
+                    if(chartdata!=null && chartdata!=undefined)
+                    {
+                        for(var i=0;i<chartdata.length;i++)
+                        {                            
+                            if(chartdata[i].Month__c!=null && chartdata[i].Month__c!=undefined)
+                            {
+                                
+                                splittedmonth = chartdata[i].Month__c.split("-");
+                                                           
+                                if(currentmonth == 0)
+                                {                                    
+                                    if(splittedmonth[0] == "10")
+                                    {
+                                         mileages[0]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[0]!=null)?mileages[0]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "11")
+                                    {
+                                         mileages[1]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[1]!=null)?mileages[1]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "12")
+                                    {
+                                         mileages[2]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[2]!=null)?mileages[2]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                }
+                                else if(currentmonth == 1)
+                                {
+                                    if(splittedmonth[0] == "12")
+                                    {
+                                         mileages[0]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[0]!=null)?mileages[0]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;   
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "1" || splittedmonth[0] == "01")
+                                    {
+                                         mileages[1]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[1]!=null)?mileages[1]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "11")
+                                    {
+                                         mileages[2]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[2]!=null)?mileages[2]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                }
+                                else if(currentmonth == 2)
+                                {
+                                    if(splittedmonth[0] == "2" || splittedmonth[0] == "02")
+                                    {
+                                        mileages[1]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[1]!=null)?mileages[1]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                        
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "12")
+                                    {
+                                        mileages[0]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[0]!=null)?mileages[0]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;   
+                                         
+                                    }
+                                    else if(splittedmonth[0] == "1" || splittedmonth[0] == "01")
+                                    {
+                                         mileages[2]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[2]!=null)?mileages[2]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                         
+                                    }
+                                }
+                                else
+                                {
+                                    
+                                    if(currentmonth-parseInt(splittedmonth[0])==2)
+                                    {                                         
+                                         mileages[0]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[0]!=null)?mileages[0]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;   
+                                         
+                                        
+                                    }
+                                    else if(currentmonth-parseInt(splittedmonth[0])==1)
+                                    {                                        
+                                        mileages[1]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[1]!=null)?mileages[1]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                        
+                                       
+                                    }
+                                    else if(currentmonth-parseInt(splittedmonth[0])==0)
+                                    {
+                                        mileages[2]=(mileages!=null && mileages!=undefined && mileages.length>0 && mileages[2]!=null)?mileages[2]+chartdata[i].Total_Mileage__c:chartdata[i].Total_Mileage__c;
+                                        
+                                        
+                                    }  
+                                }                                                                
+                            }
+                        }
+                    }
+                    
+                    this.chartdata = mileages;                    
+                    this.chartlabels = chartlabels;
+                }
+
+                viewChartDialogModel.prototype.close = function() {
+                    this.visible = false;
+                };
+
+                app.directive('viewChartDialog', [function() {
+                    return {
+                        restrict: 'E',
+                        scope: {
+                          model: '=',
+                        },
+                        link: function(scope, element, attributes) {
+                            scope.$watch('model.visible', function(newValue) {
+                                var modalElement = element.find('.modal');
+                                modalElement.modal(newValue ? 'show' : 'hide');
+                                if(newValue == true){
+                                    scope.chartconfiguration();
+                                }
+                            });
+                            scope.chartconfiguration = function() {
+                                scope.data = [];
+                                scope.labels = [];
+                                scope.data = scope.model.chartdata;
+                                scope.labels = scope.model.chartlabels;
+                                scope.data = scope.data.map(function(each_element){
+                                    return each_element.toFixed(2);
+                                });
+
+                               // console.log(scope.data);
+                              
+                                scope.colorBar = ['#313A49','#313A49','#313A49'];
+                                scope.options = {
+                                    hover: {mode: null},
+                                    tooltips: {
+                                        custom: function(tooltip) {
+                                            if (!tooltip) return;
+                                            // disable displaying the color box;
+                                            tooltip.displayColors = false;
+                                        },
+                                        titleFontSize: 100,
+                                        bodyFontSize: 20,
+                                        enabled: true,
+                                        mode: 'single',
+                                        callbacks: {
+                                            label: function(tooltipItems, data) {
+                                                return tooltipItems.yLabel;
+                                               
+                                            },
+                                            labelColor: function(tooltipItem, chart) {
+                                                return {
+                                                    backgroundColor: 'rgb(255, 0, 0)'
+                                                }
+                                            },
+                                            title: function(tooltipItem, data) {
+                                            return;
+                                               
+                                            }
+                                        },
+                                        backgroundColor: '#78bc42'
+                                    },
+                                    scales: {
+                                        yAxes: [{
+                                            ticks: {
+                                                beginAtZero: true
+                                            }
+                                        }],
+                                        xAxes: [{
+                                            gridLines: {
+                                                display: false
+                                            }
+                                        }]
+                                    }
+                                }
+                            }
+                            element.on('shown.bs.modal', function() {
+                                scope.$apply(function() {
+                                    scope.model.visible = true;
+                                });
+                            });
+    
+                            element.on('hidden.bs.modal', function() {
+                                scope.$apply(function() {
+                                    scope.model.visible = false;
+                                });
+                            });
+                        },
+                        template: '<div class="modal fade show in" tabindex="-1" role="dialog" aria-labelledby="driver-dashboard-monthrecord" id="driver-dashboard-monthrecord"><div class="modal-dialog modal-xl modal-dialog-centered"><div class="modal-content rounded-0"><button type="button" class="close popup-close-btn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button><div class="modal-body"><h4 class="chart-header">Team Reimbursement Monthly Mileage</h4><div class="modal-divider"></div><div class="row"><div class="col-12 col-md-12 col-sm-12 col-lg-12 col-xl-12"><div class="card"><canvas id="bar" chart-colors="colorBar" class="chart chart-bar" width="400" height="140" chart-data="data" chart-labels="labels" chart-options="options"></canvas></div></div></div></div></div></div></div>',
+                    };
+                }]);
+    </script>
+   <!-- <div class="back-btn my-3"> -->
+        <button class="btn btn-secondary float-right" ng-click="viewchart()">View Chart</button>
+    <!-- </div> -->
+    <view-chart-dialog model="viewchartdata"></view-chart-dialog>
+</apex:component>

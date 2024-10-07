@@ -1,0 +1,220 @@
+<apex:page showHeader="false" title="Driver" sidebar="false" lightningStylesheets="true" standardStylesheets="false" showChat="false"
+    controller="NewdriverdashboardController" action="{!getRedirected}">
+
+    <head>
+        <link rel="stylesheet" href="{!URLFOR($Resource.LwcDesignCss,'lwcDesign/assets/css/customstyle.css')}" />
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <apex:slds />
+        <style>
+            ::-webkit-scrollbar {
+                width: 0;  /* Remove scrollbar space */
+                background: transparent;  /* Optional: just make scrollbar invisible */
+            }
+            @-moz-keyframes spinner-border {
+                from {
+                    -moz-transform: rotate(0deg);
+                }
+                to {
+                    -moz-transform: rotate(360deg);
+                }
+            }
+
+            @-webkit-keyframes spinner-border {
+                from {
+                    -webkit-transform: rotate(0deg);
+                }
+                to {
+                    -webkit-transform: rotate(360deg);
+                }
+            }
+
+            @keyframes spinner-border {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+
+            .text-light {
+                color: #78bc42 !important;
+            }
+
+            .spinner-border {
+                display: inline-block;
+                width: 2rem;
+                height: 2rem;
+                vertical-align: text-bottom;
+                border: .25em solid currentColor;
+                border-right-color: transparent;
+                border-radius: 50%;
+                -webkit-animation: spinner-border .75s linear infinite;
+                animation: spinner-border .75s linear infinite;
+            }
+
+            .spinner-background {
+                width: 100%;
+                height: 100%;
+                background: #fff;
+                opacity: 0.4;
+                top: 0px;
+                left: 0px;
+                position: fixed;
+                z-index: 1000000;
+            }
+
+            .spinner-load {
+                position: fixed;
+                top: 49%;
+                left: 49%;
+                z-index: 1000000;
+            }
+
+            .sr-only {
+                border: 0;
+                clip: rect(0, 0, 0, 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+        </style>
+        <script src="{!URLFOR($Resource.metaScript)}"></script>
+    </head>
+    <div id="spinner">
+        <div class="spinner-background"></div>
+        <div class="spinner-load">
+            <div class="spinner-border text-light" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    </div>
+    <apex:includeLightning />
+
+    <div id="lwcDriverDemo" />
+
+    <script>
+        $("#spinner").show();
+        function sortByMonth(arr) {
+            var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+            arr.sort(function (a, b) {
+                return months.indexOf(a.month)
+                    - months.indexOf(b.month);
+            });
+        }
+        var details = {!contactObj};
+        console.log("details----->", details)
+        var chartDetail = {!chartData};
+        var unapproved = {!unreimbursement};
+        var gasPrice = {!gasPrice};
+        var role = {!contactRole};
+        console.log(details);
+        console.log("chartData", {!chartData});
+        console.log("gasPrice: " + gasPrice);
+        sortByMonth(chartDetail);
+        var chartlabels = [];
+        var chartDataValue = [{
+            "Mileagechart": {},
+            "Reimbursementchart": {}
+        }];
+        var mileage = [];
+        var reimbursement = [];
+        var averageReimbursement = [];
+        var averageMileage = [];
+        var midMonth = [];
+        if (chartDetail != null && chartDetail != undefined) {
+            for (var i = 0; i < chartDetail.length; i++) {
+                if (chartDetail[i].month != null && chartDetail[i].month != undefined) {
+                    midMonth.push(chartDetail[i].month);
+                    chartlabels.push(chartDetail[i].month.charAt(0));
+                    var reimb = (chartDetail[i].reimbursement == null) ? 0 : chartDetail[i].reimbursement;
+                    var mil = (chartDetail[i].mileage == null) ? 0 : chartDetail[i].mileage;
+                    var avgReimb = (chartDetail[i].averagereimbursement == null) ? 0 : chartDetail[i].averagereimbursement;
+                    var avgMileage = (chartDetail[i].averageMileage == null) ? 0 : chartDetail[i].averageMileage;
+                    averageReimbursement.push(avgReimb);
+                    averageMileage.push(avgMileage);
+                    reimbursement.push(reimb);
+                    mileage.push(mil);
+                }
+
+            }
+            chartDataValue[0].Mileagechart["chartLabel"] = chartlabels;
+            chartDataValue[0].monthName = midMonth;
+            chartDataValue[0].Mileagechart["labelA"] = "Monthly Mileage";
+            chartDataValue[0].Mileagechart["dataA"] = mileage;
+            chartDataValue[0].Mileagechart["labelB"] = "Average Mileage";
+            chartDataValue[0].Mileagechart["dataB"] = averageMileage;
+            chartDataValue[0].Reimbursementchart["chartLabel"] = chartlabels;
+            chartDataValue[0].Reimbursementchart["labelA"] = "Monthly Reimbursement";
+            chartDataValue[0].Reimbursementchart["dataA"] = reimbursement;
+            chartDataValue[0].Reimbursementchart["labelB"] = "Average Reimbursement";
+            chartDataValue[0].Reimbursementchart["dataB"] = averageReimbursement;
+        }
+        console.log(chartDataValue);
+
+       var url_string = $(location).attr("href");
+       var url = new URL(url_string);
+       var accid = url.searchParams.get("accid");
+       var id = url.searchParams.get("id");
+       var plMarketing = '{!($Label.PL_Marketing)}';
+       var currentDay = new Date();
+       var currentYear;
+       var selectedYear;
+       if(currentDay.getMonth() === 0){
+           currentYear = currentDay.getFullYear() - 1;
+           selectedYear = currentYear.toString();
+       }else{
+        currentYear = currentDay.getFullYear();
+        selectedYear = currentYear.toString();
+       }
+       console.log(id, selectedYear, accid);
+       var listOfMileages = [];
+                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.NewdriverdashboardController.getAllReimbursements}', selectedYear, id, accid,
+                    function (result, event) {
+                        if (event.status && result != '') {
+                            if (result != '') {
+                                listOfMileages = [];
+                                listOfMileages = JSON.parse(result);
+                                console.log(listOfMileages);
+                            }
+                            else {
+                                listOfMileages = [];
+                                $('#spinner').hide();
+                            }
+                            
+                        }
+                        else {
+                            $('#spinner').hide();
+                        }
+                    },
+                    { escape: false }
+                );
+        $Lightning.use("c:LWCLightningApp", function () {
+            $Lightning.createComponent("c:driverProfile", {
+                //pass parameter values to lwc js controller
+                "accountId": accid,
+                "plMarketing": plMarketing,
+                "Role": role,
+                "mileageList": listOfMileages,
+                "contactDetails": details,
+                "unapproveMileage": unapproved,
+                "GasPrice": gasPrice,
+                "chartInfo": chartDataValue
+            }, "lwcDriverDemo", function (cmp) {
+                document.querySelector('c-driver-profile').addEventListener('expandmessage', (e) => {
+                    console.log('vf event data window listener => ', e.detail);
+                    window.top.postMessage(e.detail, '*')
+                });
+                $("#spinner").hide();
+                console.log("Component Created Successfully");
+            }
+            );
+        });
+
+
+    </script>
+</apex:page>

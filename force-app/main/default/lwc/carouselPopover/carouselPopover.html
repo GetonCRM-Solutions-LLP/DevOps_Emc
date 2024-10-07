@@ -1,0 +1,29 @@
+<template>
+    <section aria-describedby="dialog-body-id-110" aria-label="Dialog Title" class={styleCarousel} role="dialog">
+      <button type="button" class="close-popover slds-float_right" data-dismiss="modal" aria-label="Close" onclick={closePopover}>
+        <span aria-hidden="true">&times;</span>
+      </button>
+        <header class={styleHeader}>
+          <div class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__body">
+              <h4>{headerTitle}</h4>
+            </div>
+          </div>
+        </header>
+        <div class={styleBody} id="dialog-body-id-110">
+          <div class="slds-media">
+            <div class="slds-media__body">
+               <c-carousel records={totalContacts} count-style={countStyle}  onupdate={updateContactHandler}></c-carousel>
+            </div>
+          </div>
+        </div>
+        <footer class={styleFooter}>
+          <div class="slds-grid slds-grid_vertical-align-center slds-grid_align-end">
+            <div direction="row" wrap="nowrap" class="ui-flex">
+              <strong>{footerText} <a href={videoIOS} target="_blank">here</a> and Android <a href={videoAndroid} target="_blank"
+                onclick={handleRedirect}>here</a> </strong>
+            </div>
+          </div>
+        </footer>
+      </section>
+</template>

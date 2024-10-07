@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_Mileage_Fuel_Price</fullName>
+    <availability>online</availability>
+    <description>Update Fuel Price in Mileage from Bi weekly Reimbursement based on Condition for all Contact associated with Account</description>
+    <displayType>button</displayType>
+    <height>600</height>
+    <linkType>page</linkType>
+    <masterLabel>Update Mileage Fuel Price</masterLabel>
+    <openType>sidebar</openType>
+    <page>UpdateMileageFuelPrice</page>
+    <protected>false</protected>
+</WebLink>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Emp_reim_update_gasprice_for_Contact__c</fullName>
+    <defaultValue>true</defaultValue>
+    <label>Emp reim update gasprice for Contact</label>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

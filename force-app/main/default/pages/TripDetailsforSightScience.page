@@ -1,0 +1,51 @@
+<apex:page controller="TripDetailsforSightScienceController" contentType="txt/xml#Trip Detail Report.xls" cache="true">
+    <apex:outputText value="{!xlsHeader}"/>
+    
+    <Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" xmlns:html="https://www.w3.org/TR/html401/">
+        <Styles>
+            <Style ss:ID="s1">
+                <Alignment/>
+                <Borders/>
+                <Font ss:Bold="1"/>
+                <Interior/>
+                <NumberFormat/>
+                <Protection/>
+            </Style>
+        </Styles>
+
+        <Worksheet ss:Name="Trip Detail Report">
+            <Table x:FullColumns="1" x:FullRows="1">
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Column ss:Width="100"/>
+                <Row>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Name</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="Date" >Trip Date</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="DateTime" >Start Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="DateTime" >End Time</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Status</Data></Cell>  
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Origin</Data></Cell>
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Destination</Data></Cell>  
+                    <Cell ss:StyleID="s1"><Data ss:Type="Number" >Mileage</Data></Cell>  
+                    <Cell ss:StyleID="s1"><Data ss:Type="Date" >Approval Date</Data></Cell>  
+                    <Cell ss:StyleID="s1"><Data ss:Type="String" >Approval Name</Data></Cell>  
+                </Row>
+                <apex:repeat value="{!tripDetailWrapperList}" var="wrap">
+                    <Row>
+                        <Cell><Data ss:Type="String">{!wrap.Name}</Data></Cell>
+                        <Cell><Data ss:Type="Date">{!wrap.TripDate}</Data></Cell>
+                        <Cell><Data ss:Type="DateTime">{!wrap.startTime}</Data></Cell>
+                        <Cell><Data ss:Type="DateTime">{!wrap.endTime}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.status}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.origin}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.destination}</Data></Cell>
+                        <Cell><Data ss:Type="Number">{!wrap.mileage}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.approvalDate}</Data></Cell>
+                        <Cell><Data ss:Type="String">{!wrap.approvalName}</Data></Cell>
+                    </Row>
+                </apex:repeat>
+            </Table>
+        </Worksheet>
+    </Workbook>
+</apex:page>

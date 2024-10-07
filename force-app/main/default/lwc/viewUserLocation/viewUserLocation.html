@@ -1,0 +1,41 @@
+<template>
+    <div class="transition">
+        <div class="slds-p-top_x-small">
+            <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_large font-style"><div class="sub-heading"> <span>Step 1. </span>
+                Click a row to edit a location</div>
+            </div>
+            <div class="slds-p-horizontal_large">
+                <c-user-preview-table  header-name="true" divider-class="row-divider--v1" head-th="header-title--v1" sort-th="sort-container p-top-v1" trip-month="Location Preview"  main-class={classToTable} scrollable={isScrollable} 
+                    d-flex="flow-block" is-paginate={paginatedModal} norecord-message={noMessage} model-data={locationModelList}  columns={column}  editable-view={editableView}
+                    options={keyFields} map-country={mapCountry} is-sortable={isSortable} onupdate={handleUpdateList} oneditmode={editMode}> 
+                        <div slot="header">
+                            <div class="slds-float_right">
+                                <div  class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                                    <div class="search-icon-block">
+                                        <img class="search-icon" src={searchIcon} />
+                                    </div>
+                                    <template lwc:if={isSearchEnable}>
+                                    </template>
+                                    <template lwc:else>
+                                        <div class="close-btn" onclick={handleClearInput}>
+                                            <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                        </div>
+                                    </template>
+                                    <input class="slds-input filter-input" value={_value} type="text" placeholder="Search"
+                                    onkeyup={handleChange}/>
+                                </div>
+                            </div>
+                        </div>
+                    </c-user-preview-table>
+            </div>
+            <div class="slds-align_absolute-center" lwc:if={isEditMode}>
+                <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={updateLocations}>
+                    Update
+                </button>
+                <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={cancelEditMode}>
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

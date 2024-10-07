@@ -1,0 +1,36 @@
+@font-face {
+  font-family: 'Proxima Nova';
+  src:url('../font/ProximaNovaReg.ttf'), /* IE9 Compat Modes */
+  url('../font/ProximaNovaReg.woff') format('woff'), /* Pretty Modern Browsers */
+  url('../font/ProximaNovaReg.eot'), /* IE9 Compat Modes */
+  url('../font/ProximaNovaReg.svg#svgFontName') format('svg'); /* Legacy iOS */
+  font-weight: normal;
+  font-style: normal;
+  }
+  @font-face {
+  font-family: 'Proxima Nova Bold';
+  src:url('../font/ProximaNovaBold.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../font/ProximaNovaBold.woff') format('woff'), /* Pretty Modern Browsers */
+  url('../font/ProximaNovaBold.eot'), /* IE9 Compat Modes */
+  url('../font/ProximaNovaBold.svg#svgFontName') format('svg'); /* Legacy iOS */
+  font-weight: bold;
+  font-style: normal;
+  }
+  @font-face {
+  font-family: 'Proxima Nova SemiBold';
+  src:url('../font/ProximaNovaSemibold.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../font/ProximaNovaSemibold.woff') format('woff'), /* Pretty Modern Browsers */
+  url('../font/ProximaNovaSemibold.eot'), /* IE9 Compat Modes */
+  url('../font/ProximaNovaSemibold.svg#svgFontName') format('svg'); /* Legacy iOS */
+  font-weight: 600;
+  font-style: normal;
+  }
+  @font-face {
+  font-family: 'Proxima Nova Light';
+  src:url('../font/ProximaNovaLight.ttf') format('truetype'), /* Safari, Android, iOS */
+  url('../font/ProximaNovaLight.woff') format('woff'), /* Pretty Modern Browsers */
+  url('../font/ProximaNovaLight.eot'), /* IE9 Compat Modes */
+  url('../font/ProximaNovaLight.svg#svgFontName') format('svg'); /* Legacy iOS */
+  font-weight: normal;
+  font-style: normal;
+  }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>no_parenthesis</fullName>
+    <active>false</active>
+    <description>on contact object phone field no parenthesis will be accepeted in the input from the user side</description>
+    <errorConditionFormula>REGEX(Phone, &quot;.*[()]+.*&quot;)</errorConditionFormula>
+    <errorDisplayField>Phone</errorDisplayField>
+    <errorMessage>Before inserting a value for the Phone, ensure that the input does not contain parentheses, and remove any parentheses if they are present.</errorMessage>
+</ValidationRule>

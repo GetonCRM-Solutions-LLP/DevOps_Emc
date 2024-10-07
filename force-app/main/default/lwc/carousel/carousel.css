@@ -1,0 +1,111 @@
+p{
+    font-weight: 400;
+    font-size: 16px;
+    color: #33475b;
+    line-height: 24px;
+    font-family: 'Proxima Nova' !important;
+}
+
+.icon-unit{
+    height: 50px !important;
+}
+
+.slds-btn {
+    font-size: 16px;
+    width: 32px;
+    line-height: 14px;
+    padding: 8px 0px;
+    border-radius: 3px;
+    border-style: solid;
+    border-width: 1px;
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
+    font-weight: 400;
+    text-align: center;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transition: all .15s ease-out;
+    display: inline-block;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    white-space: nowrap;
+    margin: 0;
+    word-wrap: break-word;
+    cursor: pointer;
+    background-color: #eaf0f6;
+    border-color: #cbd6e2;
+    color: #506e91;
+}
+.is--text--help {
+    color: #516f90;
+    font-size: 16px;
+    line-height: 18px;
+    display: block;
+    margin: 0px 8px;
+    text-align: center;
+    font-family: 'Proxima Nova Bold' !important;
+}
+.layout-grid-item-2{
+    flex-basis: calc(100% - 104px);
+    grid-area: contents / contents / contents / contents;
+    align-self: center;
+    flex: 1 1 100%;
+}
+.layout-grid{
+    display: grid;
+    flex-wrap: wrap;
+    column-gap: 1px;
+    grid-template-areas:
+        "header header header"
+        ". steps ."
+        "prev contents next"
+        ". callout ."
+        ". footer .";
+    grid-template-columns: auto 1fr auto;
+    max-width: 826px;
+    /* padding: 0px 20px 20px; */
+    position: relative;
+}
+.carousel_inner>p>span{
+    font-size: 14px;
+}
+.layout-grid-item-1{
+    align-self: center;
+    flex-basis: 52px;
+    grid-area: prev / prev / prev / prev;
+}
+.layout-grid-item-3{ 
+    align-self: center;
+    flex-basis: 52px;
+    grid-area: next / next / next / next;
+    text-align: right;
+}
+.uI-Carousel-Footer{
+    grid-area: footer / footer / footer / footer;
+    margin-top: 20px;
+    margin-right: 0px;
+    padding: 0px;
+}
+.carousel-ui-extra{
+    grid-area: header / header / header / header;
+    margin-bottom: 24px;
+    text-align: center;
+}
+button[disabled]{
+    background-color: #eaf0f6!important;
+    border-color: #eaf0f6!important;
+    color: #b0c1d4!important;
+    cursor: not-allowed;
+}
+
+.total-font-style {
+    color: black;
+}
+
+.right-icon {
+    margin-left: 16px;
+}

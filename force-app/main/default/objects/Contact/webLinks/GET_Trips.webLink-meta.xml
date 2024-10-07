@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GET_Trips</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>GET Trips</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;/soap/ajax/15.0/apex.js&quot;)}
+var today = new Date(); 
+var pm, py;
+if ((today.getMonth()+1) == 1) {
+    py = today.getFullYear() - 1;
+    pm = 12;
+} else {
+    py = today.getFullYear();
+    pm = today.getMonth();
+}
+var priMin = py+&apos;-&apos;+pm+&apos;-1&apos;;
+var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+var priMax =  py+&apos;-&apos;+pm+&apos;-&apos;+lastDayOfMonth.getDate();
+var lastMonth = pm+&apos;-&apos;+py;
+var empReID, empReMPG, empReMT,empReFuel;
+
+var accounts = sforce.connection.query(&quot;SELECT id, Name, Account.Triplog_API__c FROM Contact WHERE id = &apos;{!Contact.Id}&apos;&quot;);
+var apiToken = accounts.records.Account.Triplog_API__c;
+
+var contacts = sforce.connection.query(&quot;SELECT id, Name, (SELECT id, Fuel_Price__c, MPG__c, Maintenance_and_Tires__c FROM Employee_Reimbursements__r WHERE Month__c = &apos;&quot; + lastMonth + &quot;&apos; LIMIT 1) FROM Contact WHERE id = &apos;{!Contact.Id}&apos;&quot;);
+if(contacts.size &gt; 0) {
+			empReID = contacts.records.Employee_Reimbursements__r.records.Id;
+			empReFuel = contacts.records.Employee_Reimbursements__r.records.Fuel_Price__c != undefined ? contacts.records.Employee_Reimbursements__r.records.Fuel_Price__c: null;
+   empReMPG = contacts.records.Employee_Reimbursements__r.records.MPG__c != undefined ? contacts.records.Employee_Reimbursements__r.records.MPG__c: null;
+   empReMT = contacts.records.Employee_Reimbursements__r.records.Maintenance_and_Tires__c != undefined ? contacts.records.Employee_Reimbursements__r.records.Maintenance_and_Tires__c: null;
+}
+if(apiToken != null &amp;&amp; apiToken != &apos;&apos;) {
+    sforce.apex.execute(&quot;GetTripCallout&quot;,&quot;GetTripCalloutForMileage&quot;,{empReID:empReID, contactEmail:&apos;{!Contact.External_Email__c}&apos;, priMin:priMin, priMax:priMax, fuel:empReFuel, mpg:empReMPG, maintenansAndTires:empReMT, apiToken:apiToken, tripStatus:&apos;{!Contact.Triplog_Status__c}&apos;});
+    location.reload(true);
+} else {
+    alert(&apos;Please fill Account API Token field&apos;);
+}</url>
+</WebLink>

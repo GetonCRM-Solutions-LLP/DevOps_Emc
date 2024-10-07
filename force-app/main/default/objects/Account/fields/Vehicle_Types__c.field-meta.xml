@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Vehicle_Types__c</fullName>
+    <label>Vehicle Types</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>MultiselectPicklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>2020 Ford F-150</fullName>
+                <default>false</default>
+                <label>2020 Ford F-150</label>
+            </value>
+            <value>
+                <fullName>2020 Ford Escape</fullName>
+                <default>false</default>
+                <label>2020 Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2020 AWD Ford Escape</fullName>
+                <default>false</default>
+                <label>2020 AWD Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2020 Ford F-250</fullName>
+                <default>false</default>
+                <label>2020 Ford F-250</label>
+            </value>
+            <value>
+                <fullName>2020 Chevrolet Malibu</fullName>
+                <default>false</default>
+                <label>2020 Chevrolet Malibu</label>
+            </value>
+            <value>
+                <fullName>2020 Dodge Journey</fullName>
+                <default>false</default>
+                <label>2020 Dodge Journey</label>
+            </value>
+            <value>
+                <fullName>2020 Dodge Durango</fullName>
+                <default>false</default>
+                <label>2020 Dodge Durango</label>
+            </value>
+            <value>
+                <fullName>2020 Ford Fusion</fullName>
+                <default>false</default>
+                <label>2020 Ford Fusion</label>
+            </value>
+            <value>
+                <fullName>2020 Full Size Sedan 2</fullName>
+                <default>false</default>
+                <label>2020 Full Size Sedan 2</label>
+            </value>
+            <value>
+                <fullName>2020 Ford Taurus</fullName>
+                <default>false</default>
+                <label>2020 Ford Taurus</label>
+            </value>
+            <value>
+                <fullName>2020 Dodge Ram 2500</fullName>
+                <default>false</default>
+                <label>2020 Dodge Ram 2500</label>
+            </value>
+            <value>
+                <fullName>2020 SUV 1</fullName>
+                <default>false</default>
+                <label>2020 SUV 1</label>
+            </value>
+            <value>
+                <fullName>2020 Mid Size Sedan 4</fullName>
+                <default>false</default>
+                <label>2020 Mid Size Sedan 4</label>
+            </value>
+            <value>
+                <fullName>2020 Full Size Sedan 3</fullName>
+                <default>false</default>
+                <label>2020 Full Size Sedan 3</label>
+            </value>
+            <value>
+                <fullName>2020 Chevrolet Impala</fullName>
+                <default>false</default>
+                <label>2020 Chevrolet Impala</label>
+            </value>
+            <value>
+                <fullName>2020 Ford Explorer</fullName>
+                <default>false</default>
+                <label>2020 Ford Explorer</label>
+            </value>
+            <value>
+                <fullName>2021 Dodge Charger</fullName>
+                <default>false</default>
+                <label>2021 Dodge Charger</label>
+            </value>
+            <value>
+                <fullName>2021 Dodge Durango</fullName>
+                <default>false</default>
+                <label>2021 Dodge Durango</label>
+            </value>
+            <value>
+                <fullName>2020 Full-Size Sedan</fullName>
+                <default>false</default>
+                <label>2020 Full-Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2020 Toyota Camry</fullName>
+                <default>false</default>
+                <label>2020 Toyota Camry</label>
+            </value>
+            <value>
+                <fullName>2020 Honda Civic</fullName>
+                <default>false</default>
+                <label>2020 Honda Civic</label>
+            </value>
+            <value>
+                <fullName>2021 Ford F-250</fullName>
+                <default>false</default>
+                <label>2021 Ford F-250</label>
+            </value>
+            <value>
+                <fullName>2021 Ford Escape</fullName>
+                <default>false</default>
+                <label>2021 Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2021 4x4 V8 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2021 4x4 V8 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size SUV</fullName>
+                <default>false</default>
+                <label>2021 Full Size SUV</label>
+            </value>
+            <value>
+                <fullName>2021 Compact Sedan</fullName>
+                <default>false</default>
+                <label>2021 Compact Sedan</label>
+            </value>
+            <value>
+                <fullName>2021 Ford Fusion</fullName>
+                <default>false</default>
+                <label>2021 Ford Fusion</label>
+            </value>
+            <value>
+                <fullName>2021 Midsize Sedan</fullName>
+                <default>false</default>
+                <label>2021 Midsize Sedan</label>
+            </value>
+            <value>
+                <fullName>2021 AWD Ford Escape</fullName>
+                <default>false</default>
+                <label>2021 AWD Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2021 Dodge Journey</fullName>
+                <default>false</default>
+                <label>2021 Dodge Journey</label>
+            </value>
+            <value>
+                <fullName>2021 Chevrolet Malibu</fullName>
+                <default>false</default>
+                <label>2021 Chevrolet Malibu</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size Sedan</fullName>
+                <default>false</default>
+                <label>2021 Full Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2021 Subaru Outback</fullName>
+                <default>false</default>
+                <label>2021 Subaru Outback</label>
+            </value>
+            <value>
+                <fullName>2021 4x4 V6 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2021 4x4 V6 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2021 IRS Mileage Rate</fullName>
+                <default>false</default>
+                <label>2021 IRS Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2021 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2021 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size SUV 2</fullName>
+                <default>false</default>
+                <label>2021 Full Size SUV 2</label>
+            </value>
+            <value>
+                <fullName>2021 4x4 Pickup Truck No FCA</fullName>
+                <default>false</default>
+                <label>2021 4x4 Pickup Truck No FCA</label>
+            </value>
+            <value>
+                <fullName>2021 4x4 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2021 4x4 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2021 Compact SUV</fullName>
+                <default>false</default>
+                <label>2021 Compact SUV</label>
+            </value>
+            <value>
+                <fullName>2021 Mid Size SUV</fullName>
+                <default>false</default>
+                <label>2021 Mid Size SUV</label>
+            </value>
+            <value>
+                <fullName>2021 Mileage Rate</fullName>
+                <default>false</default>
+                <label>2021 Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2021 Clare Rose Reimbursement Rate</fullName>
+                <default>false</default>
+                <label>2021 Clare Rose Reimbursement Rate</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size Sedan 2</fullName>
+                <default>false</default>
+                <label>2021 Full Size Sedan 2</label>
+            </value>
+            <value>
+                <fullName>2021 SUV 1</fullName>
+                <default>false</default>
+                <label>2021 SUV 1</label>
+            </value>
+            <value>
+                <fullName>2021 Mid Size Sedan 4</fullName>
+                <default>false</default>
+                <label>2021 Mid Size Sedan 4</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size Sedan 3</fullName>
+                <default>false</default>
+                <label>2021 Full Size Sedan 3</label>
+            </value>
+            <value>
+                <fullName>2021 Ford F-150</fullName>
+                <default>false</default>
+                <label>2021 Ford F-150</label>
+            </value>
+            <value>
+                <fullName>2021 Ford Taurus</fullName>
+                <default>false</default>
+                <label>2021 Ford Taurus</label>
+            </value>
+            <value>
+                <fullName>2020 Dodge Charger</fullName>
+                <default>false</default>
+                <label>2020 Dodge Charger</label>
+            </value>
+            <value>
+                <fullName>2021 Full Size Pick Up Truck</fullName>
+                <default>false</default>
+                <label>2021 Full Size Pick Up Truck</label>
+            </value>
+            <value>
+                <fullName>2021 Pickup Truck 1</fullName>
+                <default>false</default>
+                <label>2021 Pickup Truck 1</label>
+            </value>
+            <value>
+                <fullName>2021 Pickup Truck 2</fullName>
+                <default>false</default>
+                <label>2021 Pickup Truck 2</label>
+            </value>
+            <value>
+                <fullName>2021 Pickup Truck 3</fullName>
+                <default>false</default>
+                <label>2021 Pickup Truck 3</label>
+            </value>
+            <value>
+                <fullName>2021 Chrysler 300</fullName>
+                <default>false</default>
+                <label>2021 Chrysler 300</label>
+            </value>
+            <value>
+                <fullName>2022 Voltswagon Atlas</fullName>
+                <default>false</default>
+                <label>2022 Voltswagon Atlas</label>
+            </value>
+            <value>
+                <fullName>2022 Volkswagen Atlas</fullName>
+                <default>false</default>
+                <label>2022 Volkswagen Atlas</label>
+            </value>
+            <value>
+                <fullName>2022 Mid Size SUV</fullName>
+                <default>false</default>
+                <label>2022 Mid Size SUV</label>
+            </value>
+            <value>
+                <fullName>2022 Pick Up Truck</fullName>
+                <default>false</default>
+                <label>2022 Pick Up Truck</label>
+            </value>
+            <value>
+                <fullName>2022 Ford 250</fullName>
+                <default>false</default>
+                <label>2022 Ford 250</label>
+            </value>
+            <value>
+                <fullName>2022 Ford Edge</fullName>
+                <default>false</default>
+                <label>2022 Ford Edge</label>
+            </value>
+            <value>
+                <fullName>2022 Ford Escape</fullName>
+                <default>false</default>
+                <label>2022 Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2022 Full Size Sedan</fullName>
+                <default>false</default>
+                <label>2022 Full Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2022 Full Size SUV</fullName>
+                <default>false</default>
+                <label>2022 Full Size SUV</label>
+            </value>
+            <value>
+                <fullName>2022 Full Size SUV 2</fullName>
+                <default>false</default>
+                <label>2022 Full Size SUV 2</label>
+            </value>
+            <value>
+                <fullName>2022 Mileage Rate</fullName>
+                <default>false</default>
+                <label>2022 Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2022 AWD Ford Escape</fullName>
+                <default>false</default>
+                <label>2022 AWD Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2022 IRS Mileage Rate</fullName>
+                <default>false</default>
+                <label>2022 IRS Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2022 SUV</fullName>
+                <default>false</default>
+                <label>2022 SUV</label>
+            </value>
+            <value>
+                <fullName>2022 Mid Size Sedan</fullName>
+                <default>false</default>
+                <label>2022 Mid Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2022 4x4 V6 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2022 4x4 V6 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2022 4x4 V8 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2022 4x4 V8 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2022 P/U Truck</fullName>
+                <default>false</default>
+                <label>2022 P/U Truck</label>
+            </value>
+            <value>
+                <fullName>2022 Compact SUV</fullName>
+                <default>false</default>
+                <label>2022 Compact SUV</label>
+            </value>
+            <value>
+                <fullName>2022 Midsize SUV 1</fullName>
+                <default>false</default>
+                <label>2022 Midsize SUV 1</label>
+            </value>
+            <value>
+                <fullName>2022 Midsize SUV 2</fullName>
+                <default>false</default>
+                <label>2022 Midsize SUV 2</label>
+            </value>
+            <value>
+                <fullName>2022 Ford F-150</fullName>
+                <default>false</default>
+                <label>2022 Ford F-150</label>
+            </value>
+            <value>
+                <fullName>2022 Ford Explorer</fullName>
+                <default>false</default>
+                <label>2022 Ford Explorer</label>
+            </value>
+            <value>
+                <fullName>2022 Chevrolet Impala</fullName>
+                <default>false</default>
+                <label>2022 Chevrolet Impala</label>
+            </value>
+            <value>
+                <fullName>2022 Dodge Journey</fullName>
+                <default>false</default>
+                <label>2022 Dodge Journey</label>
+            </value>
+            <value>
+                <fullName>2022 CRA Rate</fullName>
+                <default>false</default>
+                <label>2022 CRA Rate</label>
+            </value>
+            <value>
+                <fullName>2022 Chevrolet Malibu</fullName>
+                <default>false</default>
+                <label>2022 Chevrolet Malibu</label>
+            </value>
+            <value>
+                <fullName>2022 Full-Size SUV</fullName>
+                <default>false</default>
+                <label>2022 Full-Size SUV</label>
+            </value>
+            <value>
+                <fullName>2022 Compact Sedan</fullName>
+                <default>false</default>
+                <label>2022 Compact Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 Mid-Size Sedan</fullName>
+                <default>false</default>
+                <label>2023 Mid-Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2023 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2023 Midsize SUV</fullName>
+                <default>false</default>
+                <label>2023 Midsize SUV</label>
+            </value>
+            <value>
+                <fullName>2023 Full-Size Sedan</fullName>
+                <default>false</default>
+                <label>2023 Full-Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 Mid-Size SUV</fullName>
+                <default>false</default>
+                <label>2023 Mid-Size SUV</label>
+            </value>
+            <value>
+                <fullName>2023 SUV</fullName>
+                <default>false</default>
+                <label>2023 SUV</label>
+            </value>
+            <value>
+                <fullName>2023 Full-Size SUV</fullName>
+                <default>false</default>
+                <label>2023 Full-Size SUV</label>
+            </value>
+            <value>
+                <fullName>2023 IRS Mileage Rate</fullName>
+                <default>false</default>
+                <label>2023 IRS Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2023 Compact Sedan</fullName>
+                <default>false</default>
+                <label>2023 Compact Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 P/U Truck</fullName>
+                <default>false</default>
+                <label>2023 P/U Truck</label>
+            </value>
+            <value>
+                <fullName>2024 4x4 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2024 4x4 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 Full Size 4x4 V8 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2024 Full Size 4x4 V8 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 4x4 V8 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2024 4x4 V8 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 4x4 V6 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2024 4x4 V6 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 Premium SUV</fullName>
+                <default>false</default>
+                <label>2024 Premium SUV</label>
+            </value>
+            <value>
+                <fullName>2024 Full Size SUV</fullName>
+                <default>false</default>
+                <label>2024 Full Size SUV</label>
+            </value>
+            <value>
+                <fullName>2023 Pickup Truck 4</fullName>
+                <default>false</default>
+                <label>2023 Pickup Truck 4</label>
+            </value>
+            <value>
+                <fullName>2023 Pickup Truck 3</fullName>
+                <default>false</default>
+                <label>2023 Pickup Truck 3</label>
+            </value>
+            <value>
+                <fullName>2023 Pickup Truck 2</fullName>
+                <default>false</default>
+                <label>2023 Pickup Truck 2</label>
+            </value>
+            <value>
+                <fullName>2023 Pickup Truck 1</fullName>
+                <default>false</default>
+                <label>2023 Pickup Truck 1</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size Sedan</fullName>
+                <default>false</default>
+                <label>2024 Full-Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 Compact SUV</fullName>
+                <default>false</default>
+                <label>2023 Compact SUV</label>
+            </value>
+            <value>
+                <fullName>2023 4x4 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2023 4x4 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2023 Dodge Charger</fullName>
+                <default>false</default>
+                <label>2023 Dodge Charger</label>
+            </value>
+            <value>
+                <fullName>2023 Full-Size SUV 2</fullName>
+                <default>false</default>
+                <label>2023 Full-Size SUV 2</label>
+            </value>
+            <value>
+                <fullName>2023 4x4 V8 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2023 4x4 V8 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 Mileage Rate</fullName>
+                <default>false</default>
+                <label>2024 Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2024 Mid-Size Sedan</fullName>
+                <default>false</default>
+                <label>2024 Mid-Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2023 XL SUV</fullName>
+                <default>false</default>
+                <label>2023 XL SUV</label>
+            </value>
+            <value>
+                <fullName>2023 Large SUV</fullName>
+                <default>false</default>
+                <label>2023 Large SUV</label>
+            </value>
+            <value>
+                <fullName>2024 Pickup Truck</fullName>
+                <default>false</default>
+                <label>2024 Pickup Truck</label>
+            </value>
+            <value>
+                <fullName>2024 Mid-Size SUV</fullName>
+                <default>false</default>
+                <label>2024 Mid-Size SUV</label>
+            </value>
+            <value>
+                <fullName>2024 IRS Mileage Rate</fullName>
+                <default>false</default>
+                <label>2024 IRS Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size SUV</fullName>
+                <default>false</default>
+                <label>2024 Full-Size SUV</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size SUV 2</fullName>
+                <default>false</default>
+                <label>2024 Full-Size SUV 2</label>
+            </value>
+            <value>
+                <fullName>2023 Mileage Rate</fullName>
+                <default>false</default>
+                <label>2023 Mileage Rate</label>
+            </value>
+            <value>
+                <fullName>2024 Compact SUV</fullName>
+                <default>false</default>
+                <label>2024 Compact SUV</label>
+            </value>
+            <value>
+                <fullName>2024 XL SUV</fullName>
+                <default>false</default>
+                <label>2024 XL SUV</label>
+            </value>
+            <value>
+                <fullName>2024 Large SUV</fullName>
+                <default>false</default>
+                <label>2024 Large SUV</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size SUV 3</fullName>
+                <default>false</default>
+                <label>2024 Full-Size SUV 3</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size SUV 4</fullName>
+                <default>false</default>
+                <label>2024 Full-Size SUV 4</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size Sedan 2</fullName>
+                <default>false</default>
+                <label>2024 Full-Size Sedan 2</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size Sedan 3</fullName>
+                <default>false</default>
+                <label>2024 Full-Size Sedan 3</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size Sedan 4</fullName>
+                <default>false</default>
+                <label>2024 Full-Size Sedan 4</label>
+            </value>
+            <value>
+                <fullName>2024 Full-Size Sedan 5</fullName>
+                <default>false</default>
+                <label>2024 Full-Size Sedan 5</label>
+            </value>
+            <value>
+                <fullName>2016 Chevrolet Malibu</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2016 Chevrolet Malibu</label>
+            </value>
+            <value>
+                <fullName>2016 Dodge Charger</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2016 Dodge Charger</label>
+            </value>
+            <value>
+                <fullName>2016 Dodge Journey</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2016 Dodge Journey</label>
+            </value>
+            <value>
+                <fullName>2017 Toyota Camry</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2017 Toyota Camry</label>
+            </value>
+            <value>
+                <fullName>2019 Chevrolet Malibu</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Chevrolet Malibu</label>
+            </value>
+            <value>
+                <fullName>2019 Dodge Durango</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Dodge Durango</label>
+            </value>
+            <value>
+                <fullName>2019 Dodge Journey</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Dodge Journey</label>
+            </value>
+            <value>
+                <fullName>2019 Ford Escape</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford Escape</label>
+            </value>
+            <value>
+                <fullName>2019 Ford Explorer</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford Explorer</label>
+            </value>
+            <value>
+                <fullName>2019 Ford F-150</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford F-150</label>
+            </value>
+            <value>
+                <fullName>2019 Ford F-250</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford F-250</label>
+            </value>
+            <value>
+                <fullName>2019 Ford Fusion</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford Fusion</label>
+            </value>
+            <value>
+                <fullName>2019 Ford Taurus</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Ford Taurus</label>
+            </value>
+            <value>
+                <fullName>2019 Full Size Sedan</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Full Size Sedan</label>
+            </value>
+            <value>
+                <fullName>2019 Full Size Sedan 2</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Full Size Sedan 2</label>
+            </value>
+            <value>
+                <fullName>2019 Full Size Sedan 3</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Full Size Sedan 3</label>
+            </value>
+            <value>
+                <fullName>2019 Honda Civic</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Honda Civic</label>
+            </value>
+            <value>
+                <fullName>2019 Mid Size Sedan 4</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Mid Size Sedan 4</label>
+            </value>
+            <value>
+                <fullName>2019 SUV 1</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 SUV 1</label>
+            </value>
+            <value>
+                <fullName>2019 Toyota Camry</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>2019 Toyota Camry</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+    <visibleLines>7</visibleLines>
+</CustomField>

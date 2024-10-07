@@ -1,0 +1,6 @@
+<template>
+    <input class="content-input" type="text" data-input-type="input" pattern="\d{1,5}"  value={zipCode} onfocusout={handleToast} oninput={handleInput}  placeholder="Enter..."/>
+    <template lwc:if={isValidZip}>
+        <c-dropdown-select data-input-type="select" class="content-drop-down"  options={cityList} onchange={handleInput} main-class="default-box-input slds-truncate" selected-value={city}></c-dropdown-select>
+    </template>
+</template>

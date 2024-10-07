@@ -1,0 +1,124 @@
+<apex:page controller="LookupFinderController" lightningStylesheets="true" standardStylesheets="false" sidebar="false" showHeader="false">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+        <head>
+            <!-- Required meta tags -->
+            <meta charset="utf-8"/>
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            <title>Lookup Finder</title>
+            <apex:slds />
+            <script src="https://kit.fontawesome.com/a2f714f289.js" crossorigin="anonymous"></script>
+        </head>
+        <body class="slds-scope">
+            <div class="slds-container slds-m-around_large">
+                <apex:form >
+                    <div class="slds-grid slds-wrap">
+                        <div class="slds-col slds-size_1-of-5">
+                            <apex:inputText value="{!searchString}" styleClass="slds-input" style="display:inline-flex"/>
+                        </div>
+                        <div class="slds-col slds-size_4-of-5">
+                            <button class="slds-button_brand slds-button" onclick="doSearch();return false;">
+                                
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                                &nbsp;Search
+                            </button>
+                            <input type="button" value="Insert Selected" onclick="InsertSelected()" class="slds-button_brand slds-button"/>
+                        </div>
+                    </div>
+                    
+                    <div class="slds-grid slds-m-top_large">
+                        <apex:outputPanel id="thePanel">
+                            <apex:variable value="{!0}" var="rowNum"/>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered slds-border_right slds-border_left">
+                                <thead>
+                                    <tr>
+                                        <th>&nbsp;</th>
+                                        <th>Name</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <apex:repeat value="{!records}" var="r"> 
+                                        <tr>
+                                            <td>
+                                                <apex:outputPanel rendered="{!fType == 'Reference'}">
+                                                    <input type="radio" name="radioSelect" onclick="PushSelected('{!rowNum}', this.checked, '{!r.rValue}=>{!r.rLabel}')" />
+                                                </apex:outputPanel>
+                                                <apex:outputPanel rendered="{!fType == 'Picklist'}">
+                                                    <input type="radio" name="radioSelect" onclick="PushSelected('{!rowNum}', this.checked, '{!r.rValue}')" />
+                                                </apex:outputPanel>                                                
+                                                <apex:outputPanel rendered="{!fType == 'MultiPicklist'}">
+                                                    <input type="checkbox" name="radioSelect" onclick="PushSelected('{!rowNum}', this.checked, '{!r.rValue}')" />
+                                                </apex:outputPanel>
+                                            </td>
+                                            <td>
+                                                {!r.rLabel}
+                                            </td>
+                                        </tr>
+                                        
+                                        <apex:variable value="{!rowNum+1}" var="rowNum"/> 
+                                    </apex:repeat>
+                                    <tr>
+                                        <td colspan="2">
+                                            <apex:commandLink action="{!LoadMore}" reRender="thePanel" value="Load More" status="status"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+
+        
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+                    <!-- Spinner Start-->
+                    <apex:actionStatus id="status" >
+                        <apex:facet name="start" >
+                            <div class="slds-spinner_container">
+                                <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                                    <span class="slds-assistive-text">Loading</span>
+                                    <div class="slds-spinner__dot-a"></div>
+                                    <div class="slds-spinner__dot-b"></div>
+                                </div>
+                            </div>            
+                        </apex:facet>
+                    </apex:actionStatus>
+                    <!-- Spinner End-->
+                    <apex:actionFunction action="{!performSearch}" name="doSearch" status="status" reRender="thePanel" />
+ 
+                </apex:form>
+            </div>
+
+            <script type="text/javascript">
+                var arrValue  = new Array();
+                var fType = '{!fType}';
+                       
+                function PushSelected(id, isChecked, value) {
+                    
+                    if(isChecked){
+                        arrValue[arrValue.length] = value;
+                    } else {
+                        var index = arrValue.indexOf(value);
+                        arrValue.splice(index,1);
+                    }  
+
+                    if(fType != 'MultiPicklist' ) {
+                        arrValue  = new Array();
+                        arrValue[arrValue.length] = value;
+                    }
+                    
+                }
+                   
+                function InsertSelected(){
+                    var win = window.parent.opener;
+                    var dataStr= '';
+                    
+                    for(var k=0; k < arrValue.length; k++){
+                        if( k == 0 ) dataStr = arrValue[k];
+                        else dataStr += ',' + arrValue[k];
+                    } 
+                    win.postMessage('{!$CurrentPage.parameters.idx}:'+ dataStr, window.parent.opener.location.href); 
+                    window.parent.close();
+                }
+            </script> 
+        </body>
+
+    </html>
+</apex:page>

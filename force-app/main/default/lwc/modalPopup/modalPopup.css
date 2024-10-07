@@ -1,0 +1,22 @@
+.pad-1 {
+    padding-top: 1rem;
+}
+.font-size{
+    font-size: 16px;
+    text-align: center;
+}
+.slds-p-around_medium {
+    padding: 0rem !important;
+}
+
+.width-modal {
+    width: 37% !important;
+}
+
+.ml-11 {
+    margin-left: 11rem !important;
+}
+
+.slds-p_large {
+    padding: 1rem;
+}

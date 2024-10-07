@@ -1,0 +1,256 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.slds-grid {
+    align-items: center;
+}
+
+.map_component {
+    overflow: hidden;
+    /* overflow-y: auto; */
+    display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
+    height: 100%;
+}
+
+/* .card_header{
+
+} */
+
+.input-border {
+    position: relative;
+}
+
+.input-border-error {
+    border: 0.5px solid #FA7800;
+    border-radius: 10px;
+}
+
+label {
+    font-family: 'Proxima Nova Bold';
+    font-size: 14px;
+    color: #1d1d1d;
+}
+
+.asterisk {
+    top: -13px;
+    position: absolute;
+    color: #FA7800;
+    font-weight: bold;
+    right: 5px;
+}
+
+.content-input {
+    border: 1px solid #e4e4e4 !important;
+    padding: 9px 9px !important;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 12px !important;
+    font-family: 'Proxima Nova' !important;
+}
+
+.content-input:focus-visible {
+    outline-color: rgba(108, 108, 108, 0.43) !important;
+}
+
+/* .sync_dropdown{
+    position: relative;
+    bottom: 11px;
+    left: 53px;
+    display: block;
+    width: 67%;
+} */
+
+.menu-icon {
+    color: #7ABB4A;
+    height: 40px;
+    font-size: 28px;
+    text-align: center;
+    line-height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.mileage-input {
+    border: 0;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px 9px !important;
+    font-family: 'Proxima Nova';
+}
+.mileage-input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.mileage_mi {
+    font-family: 'Proxima Nova Bold';
+    font-size: 15px;
+    color: #1D1D1D;
+}
+
+.auto_number_button {
+    display: flex;
+    flex-flow: column;
+    border: 1px solid #e4e4e4;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    background-color: #e4e4e4;
+    width: 20%;
+    align-items: center;
+    justify-content: center;
+}
+
+.number_inpt {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #e4e4e4 !important;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 12px !important;
+    font-family: 'Proxima Nova' !important;
+}
+
+.textarea-input {
+    border: 1px solid #e4e4e4 !important;
+    width: 190%;
+    border-radius: 10px;
+    font-size: 12px !important;
+    font-family: 'Proxima Nova' !important;
+    padding: 10px 9px !important;
+}
+.textarea-input:focus-visible {
+    outline-color: rgba(108, 108, 108, 0.43) !important;
+}
+.textarea-input::placeholder {
+    font-family: 'Proxima Nova' !important;
+}
+
+.green_color {
+    color: #7ABB4A;
+    line-height: 3.5px !important;
+}
+
+.date-time-input {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.start-time,
+.end-time,
+.notes_input {
+    display: flex;
+    align-items: center;
+}
+
+.main_time {
+    padding-left: 20px;
+}
+
+.up-down-button {
+    outline: none;
+    border: none;
+    background-color: #e4e4e4;
+}
+
+.linked {
+    text-decoration: underline;
+    color: var(--green-color);
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 14px;
+}
+
+.linked:hover {
+  color: #7abb4a !important;
+}
+
+.button_class{
+    position: relative;
+    left: 11px;
+    padding: 15px 0px;
+}
+
+.slds-btn{
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+}
+
+.slds-button:focus {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.slds-button:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+.slds-button:focus-visible {
+    outline: none !important;
+}
+
+.slds-btn-sm {
+  margin: 0 0.4em;
+  padding: 6px 20px;
+  height: 30px;
+  font-size: 12px;
+}
+
+.waves-effect:focus {
+    outline: none !important;
+}
+
+.bc-green {
+    background: none !important;
+    background-color: #7ABB4A!important;
+    font-family: 'Proxima Nova Bold' !important;
+    /* font-weight: 700; */
+    color: #FFFFFF;
+}
+
+.bc-red {
+    background: none !important;
+    background-color: #FA7800 !important;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #FFFFFF;
+}
+
+.bc-black {
+    background: none !important;
+    background-color: #404B5B!important;
+    font-family: 'Proxima Nova Bold' !important;
+    /* font-weight: 700; */
+    color: #FFFFFF;
+}
+
+.btn-trip {
+    border-radius: 6px;
+    text-decoration: none !important;
+    color: #FFFFFF !important;
+}
+
+.modal_position {
+    position: fixed;
+}
+
+.vf-iframe {
+    visibility: hidden;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .card_header .slds-size_7-of-12,
+    .card_header .slds-size_5-of-12 {
+        width: 100%;
+    }
+}
+/* Responsive */

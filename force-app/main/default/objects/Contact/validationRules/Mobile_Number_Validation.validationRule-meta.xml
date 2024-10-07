@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Mobile_Number_Validation</fullName>
+    <active>true</active>
+    <description>This rule will apply only when Account is TrueDialog Field is Checked</description>
+    <errorConditionFormula>AND(Account.True_Dialog__c=true, LEN(MobilePhone)&lt;10)</errorConditionFormula>
+    <errorDisplayField>MobilePhone</errorDisplayField>
+    <errorMessage>The Mobile Number field should have a minimum 10-digit number.</errorMessage>
+</ValidationRule>

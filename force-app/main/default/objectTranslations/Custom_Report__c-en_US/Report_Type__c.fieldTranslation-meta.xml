@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Report Type --></label>
+    <name>Report_Type__c</name>
+    <picklistValues>
+        <masterLabel>BiWeek Reimbursement Start and EndDate</masterLabel>
+        <translation><!-- BiWeek Reimbursement Start and EndDate --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Contact Activation Between 2 Dates</masterLabel>
+        <translation><!-- Contact Activation Between 2 Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Contact Created Between 2 Dates</masterLabel>
+        <translation><!-- Contact Created Between 2 Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Contact Deactivation Between 2 Dates</masterLabel>
+        <translation><!-- Contact Deactivation Between 2 Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mileages Between 2 Dates for Month Range</masterLabel>
+        <translation><!-- Mileages Between 2 Dates for Month Range --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mileages Between 2 Deactivation Dates</masterLabel>
+        <translation><!-- Mileages Between 2 Deactivation Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mileages Between 2 Trip Dates</masterLabel>
+        <translation><!-- Mileages Between 2 Trip Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Mileages Created Between 2 Dates</masterLabel>
+        <translation><!-- Mileages Created Between 2 Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Others</masterLabel>
+        <translation><!-- Others --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reimbursement Month</masterLabel>
+        <translation><!-- Reimbursement Month --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reimbursements Between 2 Dates For Month Range</masterLabel>
+        <translation><!-- Reimbursements Between 2 Dates For Month Range --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reimbursements Between 2 Deactivation Dates</masterLabel>
+        <translation><!-- Reimbursements Between 2 Deactivation Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Reimbursements Created Between 2 Dates</masterLabel>
+        <translation><!-- Reimbursements Created Between 2 Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Without Date Range</masterLabel>
+        <translation><!-- Without Date Range --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

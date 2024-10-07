@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Origin_Equal_Destination__c</fullName>
+    <formula>IF(Trip_Origin__c &lt;&gt; null &amp;&amp; Trip_Destination__c &lt;&gt; null, IF( Trip_Origin__c == Trip_Destination__c , true, false), false)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Origin Equal Destination</label>
+    <trackHistory>false</trackHistory>
+    <trackTrending>false</trackTrending>
+    <type>Checkbox</type>
+</CustomField>

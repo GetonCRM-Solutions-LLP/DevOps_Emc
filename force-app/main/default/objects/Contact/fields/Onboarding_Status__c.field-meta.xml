@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Onboarding_Status__c</fullName>
+    <externalId>false</externalId>
+    <formula>IF(ISPICKVAL(Insurance__c, &quot;Yes&quot;)  &amp;&amp;  Hello_Sign_Status__c = &apos;signed&apos; &amp;&amp;  Hello_Sign_Admin_Status__c	= &apos;signed&apos; &amp;&amp;  Schedule_Driver_Meeting__c = True , &apos;Yes&apos;, 
+ IF(ISPICKVAL(Insurance__c, &quot;Yes&quot;) &amp;&amp; Hello_Sign_Status__c != &apos;signed&apos; &amp;&amp;  Hello_Sign_Admin_Status__c	= &apos;awaiting_signature&apos; &amp;&amp;  Schedule_Driver_Meeting__c = True, &apos;No&apos;,
+ IF(ISPICKVAL(Insurance__c, &quot;Yes&quot;) &amp;&amp; Hello_Sign_Status__c = &apos;signed&apos; &amp;&amp;  Hello_Sign_Admin_Status__c	= &apos;signed&apos;  &amp;&amp; Schedule_Driver_Meeting__c = True , &apos;Yes&apos;, &apos;No&apos;) 				) 						)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+    <label>Onboarding Status</label>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <type>Text</type>
+    <unique>false</unique>
+</CustomField>

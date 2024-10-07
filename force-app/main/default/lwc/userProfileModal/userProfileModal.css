@@ -1,0 +1,290 @@
+:host{
+    --grey-color: #D7D7D7;
+    --white-color: #FFFFFF; 
+    --mburse-color: #7ABB4A;
+}
+
+*{
+    font-family: 'Proxima Nova' !important;
+}
+
+table tr td {
+    font-family: 'Proxima Nova' !important;
+}
+
+.animated{
+    transition: all 0.3s ease-in-out;
+    transform-style: preserve-3d;
+    transform: rotateY(-60deg);
+}
+
+.slds-modal__header:focus-visible{
+    outline: 0 !important;
+}
+
+.slds-modal__content:focus-visible{
+    outline: 0 !important;
+}
+
+.resource-header{
+    background: transparent !important;
+    border: 0 !important;
+    color: #7abb4a !important;
+    font-size: 16px !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.welcome-header{
+    background: transparent !important;
+    border: 0 !important;
+    color: var(--white-color) !important;
+    font-size: 32px !important;
+}
+
+.welcome-header h2{
+    font-family: 'Proxima Nova Semibold' !important;
+}
+
+.no-center{
+    justify-content: normal !important;
+}
+
+.message-header{
+    border-bottom: 0 !important;
+    font-family: 'Proxima Nova';
+}
+
+.header-preview{
+    background: var(--white-color) !important;
+    border: 1px solid var(--grey-color) !important;
+    font-family: 'Proxima Nova';
+}
+
+.padding-preview{
+    padding-left: 37px;
+}
+
+.slds-modal__header{
+    border-bottom: 0 !important;
+    border-top-right-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-modal__content{
+    border-bottom-right-radius: 20px !important;
+    border-bottom-left-radius: 20px !important;
+    box-shadow: none !important;
+    /* border: 1px solid var(--grey-color) !important; */
+    border-top: 0 !important;
+    font-family: 'Proxima Nova';
+}
+
+.overflow-inherit{
+    overflow: inherit !important;
+}
+
+h2{
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.overflow-none{
+    overflow: visible !important;
+    overflow-y: visible !important;
+}
+
+.content{
+    border-top-right-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+}
+
+.transparent_content{
+    border-top-right-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+    border: none !important;
+    background: transparent !important;
+}
+
+button.close {
+    appearance: none;
+    padding: 0;
+    background-color: transparent;
+    border: 0;
+}
+
+.close{
+    font-family: 'Proxima Nova Bold' !important;
+    position: relative;
+    float: right;
+}
+
+.modal-file{
+    width: 90% !important;
+    max-width: 90% !important;
+}
+
+.popup-close-btn span {
+    background: none !important;
+    font-size: 2.75rem;
+    color: var(--mburse-color);
+    position: absolute;
+    /* right: -50px;
+    top: -23px; */
+    z-index: 1;
+    opacity: 1;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    line-height: 30px;
+    padding-left: 1px;
+}
+
+.close-paginated{
+    right: -13px;
+    top: -38px;
+}
+
+.close-modal-paginated{
+    right: -35px;
+    top: -18px;
+}
+
+.close-aligned{
+    right: 15px;
+    top: 20px;
+}
+
+.close-notify{
+    right: -4px;
+    top: -5px;
+}
+
+.close-message{
+    right: -4px;
+    top: 32px;
+}
+
+.close-notify-video {
+    right: -35px;
+    top: 4px;
+}
+
+.close-report{
+    right: 10px;
+    top: -5px;
+}
+
+.hidden-close{
+    display: none;
+}
+
+.light-background{
+    background: rgba(0, 0, 0, 0.85) !important;
+}
+
+.dark-background{
+    background: rgba(0, 0, 0, 1) !important;
+}
+
+.slds-text-heading_medium{
+    font-size: 25px;
+    line-height: 39px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: var(--mburse-color);
+}
+
+.header-v1{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 16px;
+}
+
+sub {
+    bottom: 0.1em !important;
+    font-size: 25px !important;
+    padding-left: 7px !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+
+.slds-text-heading{
+    font-size: 26px;
+    line-height: 39px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1d1d1d;
+}
+
+.modal_header{
+    border-top-right-radius: 20px !important;
+    border-top-left-radius: 20px !important;
+    font-family: 'Proxima Nova';
+}
+
+.modal_info .slds-modal__container{
+    width: 50% !important;
+    max-width: 27.0625rem !important;
+    min-width: 24rem !important;
+    border: 0 !important;
+    font-family: 'Proxima Nova';
+}
+
+.slds-modal__container:focus-visible{
+    outline: 0 !important;
+}
+
+.slds-heading_small{
+    font-size: 20px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: var(--mburse-color);
+}
+
+.slds-modal-figma_small{
+    width: 628px !important;
+}
+
+.overflow-visible{
+    overflow: visible !important;
+}
+
+.close-btn-employee {
+    right: 14px;
+    top: 8px;
+    margin-top: 26px;
+    margin-right: 60px;
+ }
+
+ .employee-modal-width {
+    width: 420px !important;
+ }
+
+ .add-employee-modal-width {
+     width: 70% !important;
+ }
+ 
+ .modal-width-sync{
+    width: 36% !important;
+ }
+
+ .deavtivate-modal-width {
+    width: 50% !important;
+ }
+
+ .modal-inside-modal .slds-backdrop_open{
+    background: rgba(0,0,0,0.07) !important;
+ }
+
+ .hidden-content{
+    overflow-y: hidden !important;
+ }
+
+ .header_sV1{
+    padding-bottom: 0 !important;
+}
+
+
+.container_sV1 {
+    width: 414px !important;
+}
+
+.header-style_v1{
+    padding: 20px 0px 0px 0px !important;
+}

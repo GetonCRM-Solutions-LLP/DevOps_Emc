@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <description>Date Settings :- Example yyyy-mm-dd  2018-07-31 and Last N days If Current month is Aug and you want july data then you can have last 30 days for deactivation date.
+if Current month is Aug and you want to Get June reimbersment then you need to put 60</description>
+    <enableFeeds>false</enableFeeds>
+    <label>Get Trip Date Settings</label>
+    <visibility>Public</visibility>
+</CustomObject>

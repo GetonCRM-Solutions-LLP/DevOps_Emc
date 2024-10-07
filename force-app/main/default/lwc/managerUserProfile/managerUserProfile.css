@@ -1,0 +1,281 @@
+*{
+    font-family: 'Proxima Nova' !important;
+}
+
+:host{
+    --grey-color: #D7D7D7;
+    --green-color: #7ABB4A;
+    --link-color: #1D1D1D;
+    --text-color: #6C6C6C;
+    --even-row-color: #FFFFFF;
+    --odd-row-color: #F7F7F7;
+    --scroll-color: #F6F6F6;
+    --active-color: #404B5B;
+    --step-bg: #F1F8EC;
+    --blue-color: #00AFE8;
+}
+
+/*Media Queries */
+@media (max-width : 1366px) {
+    /* CSS rules here */
+    .flex-container-view{
+        grid-template-columns: repeat(auto-fill, minmax(375px, 1fr)) !important;
+    }
+}
+
+.fa,
+.fas,
+.fa-solid,
+.fa-light,
+.fa-regular {
+    font-family: "Font Awesome 6 Free" !important
+}
+
+.flex-container-view{
+    display: grid;
+    /* grid-template-columns: repeat(auto-fill, minmax(375px, 1fr)); */
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-column-gap: 33px;
+    grid-row-gap: 33px;
+}
+
+.list-view{
+    display: grid;
+    grid-column: 2;
+    grid-template-columns: 1fr 1fr;
+}
+
+.view-link{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.view-map{
+    position: absolute;
+    bottom: 0;
+}
+
+.close{
+    font-family: 'Proxima Nova Bold' !important;
+    position: relative;
+    float: right;
+}
+
+.popup-close-btn span {
+    background: none !important;
+    font-size: 2.75rem;
+    color: #7ABB4A;
+    position: fixed;
+    top: 10px;
+    cursor: pointer;
+    z-index: 10000;
+    right: 2.5rem;
+    opacity: 1;
+    height: 35px;
+    width: 35px;
+    text-align: center;
+    line-height: 30px;
+    padding-left: 1px;
+}
+
+.parent{
+    position: fixed;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: hsl(0deg 0% 100%);
+    transform: translateY(-100%);
+}
+
+.notify-container{
+    /*height: 190px 206px;*/
+    /* padding-left: 0.6em;
+    margin-right: 0.6em; */
+}
+
+.overlay-slide-down {
+    transition: all .4s ease-in-out;
+    transform: translateY(0)
+}
+
+.overlay-slide-up {
+    transition: all .8s ease-in-out;
+    transform: translateY(-100%)
+}
+
+.flex-view-1{
+    border: 1px solid #D7D7D7;
+    flex: 30%;
+    height: 335px;
+    /* height: 46vh;
+    max-height: calc(50% - 1rem); */
+    border-radius: 20px;
+    position: relative;
+}
+
+
+.flex-view-2{
+    border: 1px solid #D7D7D7;
+    flex: 30%;
+    height: 335px;
+    /* height: 46vh;
+    max-height: calc(50% - 1rem); */
+    border-radius: 20px;
+    position: relative;
+}
+
+.flex-view-3{
+    border: 1px solid #D7D7D7;
+    flex: 30%;
+    height: 335px;
+    /* height: 46vh;
+    max-height: calc(50% - 1rem); */
+    border-radius: 20px;
+    position: relative;
+}
+
+.no-data-message{
+    font-size: 15px;
+    line-height: 29px;
+    text-align: center;
+    font-family: 'Proxima Nova Semibold' !important;
+    color: var(--link-color);
+}
+
+.opaque{
+    opacity: 0.4;
+}
+
+.close-notify{
+    cursor: pointer;
+}
+
+.name-eh{
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+}
+
+.name{
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+    color: var(--blue-color);
+    text-decoration: none;
+}
+
+.name:hover{
+    color: var(--blue-color) !important;
+    text-decoration: none !important;
+}
+
+.mileage{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 14px;
+    color: var(--link-color);
+}
+
+.mileage>*{
+    font-family: 'Proxima Nova Bold' !important;
+    font-size: 14px;
+    color: var(--link-color);
+}
+
+
+.driver-top td:first-child{
+    padding-left: 0.6rem !important;
+}
+
+.driver-top tr td{
+    padding-bottom: 0 !important;
+}
+
+.download-btn{
+    position: absolute;
+    left: 23px;
+    bottom: 18px;
+    cursor: pointer;
+}
+
+.slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container .slds-checkbox_faux{
+    --slds-c-checkbox-toggle-color-border: var(--active-color) !important;
+    --slds-c-checkbox-toggle-color-background: var(--active-color) !important;
+}
+
+.slds-checkbox_toggle .slds-checkbox_faux.toogle-input{
+    border-color: var(--active-color) !important;
+    background-color: var(--active-color) !important;
+}
+
+.map-label{
+    font-size: 14px;
+    line-height: 136.8%;
+}
+
+.slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container+.input-label .map--canada{
+    color: #1D1D1D;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container+.input-label .map--us{
+    color: rgba(29, 29, 29, 0.50);
+    font-family: 'Proxima Nova' !important;
+}
+
+.slds-checkbox_toggle [type=checkbox]+.slds-checkbox_faux_container+.input-label .map--canada{
+    color: rgba(29, 29, 29, 0.50);
+    font-family: 'Proxima Nova' !important;
+}
+
+.slds-checkbox_toggle [type=checkbox]+.slds-checkbox_faux_container+.input-label .map--us{
+    color: #1D1D1D;
+    font-family: 'Proxima Nova Bold' !important;
+}
+
+.slds-checkbox_toggle .slds-checkbox_faux{
+    box-shadow: none;
+}
+
+.view-all{
+    /* width: 100%; */
+    text-align: right;
+    color: var(--green-color);
+    text-decoration: underline;
+    font-size: 12px;
+    font-family: 'Proxima Nova Bold' !important;
+    cursor: pointer;
+}
+
+.slds-checkbox_toggle .slds-checkbox_faux::before{
+    content: 'USA';
+    font-size: 14px;
+    color: #FFFFFF;
+    font-family: 'Proxima Nova' !important;
+    position: absolute;
+    top: 0px;
+    right: 17px;
+}
+
+.slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container .slds-checkbox_faux:after{
+    border-bottom-style: none !important;
+    border-right-style: none !important;
+    content: 'Canada';
+    color: #FFFFFF;
+    font-family: 'Proxima Nova' !important;
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    left: 14px;
+    width: 0 !important;
+    height: 0 !important;
+    transform: none !important;
+}
+
+.slds-checkbox_toggle [type=checkbox]:checked+.slds-checkbox_faux_container .slds-checkbox_faux{
+    width: 92px;
+}
+
+.slds-checkbox_toggle .slds-checkbox_faux_container .slds-checkbox_faux{
+    width: 77px;
+}

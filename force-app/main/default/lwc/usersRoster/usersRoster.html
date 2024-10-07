@@ -1,0 +1,236 @@
+<template>
+    <template lwc:if={frequency}>
+        <c-manage-employee-field accid={accid} frequency={frequency} cellphone={cellphone} ontablefield={handleTableField} onformfield={handleFormField}></c-manage-employee-field>
+    </template>
+    <div lwc:if={isFieldDataLoaded}>
+        <div class="tab-wrapper">
+                <div class="flex-row">
+                    <button style="border-color:  var(--green-color) !important;" 
+                    class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0 employee  btn-toggle is-active" data-id="employee" onclick={handleTab}>
+                        View All Employee's
+                    </button>
+                    <button style="border-color:  var(--green-color) !important;" 
+                    class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0  add-employee btn-toggle" data-id="add" onclick={handleTab}>
+                        Add
+                    </button>
+                    <button style="border-color:  var(--green-color) !important;" 
+                    class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0  import btn-toggle" data-id="import" onclick={handleTab}>
+                        Import
+                    </button>
+                </div>
+                <div>
+                    <template lwc:if={isAddEmployeeTab}>
+                        <template lwc:if={isLoginAsVisible}>
+                            <button style="border-color:  var(--green-color) !important;" 
+                                class="slds-btn slds-btn-primary tab-btn slds-btn-sm waves-effect bc-white waves-light mleft-0  login-as btn-toggle is-active" formtarget="_blank" data-id="loginAs" onclick={handleLoginAs}>
+                                Login As
+                            </button>
+                        </template>
+                    </template>
+                </div>
+        </div>
+        <template lwc:if={isListEmployeetab}>
+            <template lwc:if={isFieldTypeLoaded}>
+                <template lwc:if={isdataLoaded}>
+                    <div class="employee-container">
+                        <c-user-preview-table view-name="User"  head-th="header-title--v1" sort-th="sort-container p-top-v1" main-class={classToTable} model-data={employeeList} 
+                        columns={employeeColumn} options={empKeyFields} is-sortable={sortable} oneditmode={editMode} onupdate={handleUpdateList}
+                        colname="name" coltype="String" onremovetag={handleRemoveTag} norecord-message={noMessage} inline-checkbox={isCheckbox} oniconclick={handleModal} 
+                        is-paginate={paginated} sortorder="asc" editable-view={editableView} scrollable={isScrollable} 
+                        onenablesubmit={enableSubmit} ondisablecheckbox={disableCheckbox} ontoast={showToast} onedit={editEmployee}>
+                        <div slot="filter"  class="slds-p-left_small slds-p-bottom_small row">
+                
+                                <button  onclick={downloadAllEmployee}
+                                            class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 download-btn"><svg class="download-svg" xmlns="http://www.w3.org/2000/svg" width="13" height="12"
+                                            viewBox="0 0 13 12" fill="none" >
+                                            <path
+                                                d="M3.42685 5.66718L3.42684 5.66717C3.1633 5.40363 3.1633 4.97864 3.42685 4.71511C3.69039 4.45156 4.11538 4.45156 4.37891 4.71511L6.28511 6.62131V0.816062C6.28511 0.444945 6.5864 0.143652 6.95752 0.143652C7.32864 0.143652 7.62993 0.444945 7.62993 0.816062V6.62131L9.53613 4.71511C9.79967 4.45156 10.2247 4.45156 10.4882 4.71511C10.7517 4.97865 10.7517 5.40364 10.4882 5.66717L7.43365 8.72173C7.40101 8.75436 7.36607 8.78115 7.33186 8.80475L7.33131 8.80512C7.32183 8.8114 7.31252 8.81605 7.3052 8.81971L7.30461 8.82001C7.29674 8.82394 7.29103 8.82684 7.28549 8.83051L7.28471 8.83103L7.28471 8.83102L7.28383 8.83156C7.26428 8.84381 7.241 8.85839 7.21403 8.86748C7.21383 8.86755 7.21362 8.86762 7.21342 8.86769L7.20202 8.8335C7.18994 8.83802 7.17792 8.84167 7.16537 8.84547C7.15671 8.8481 7.1478 8.8508 7.13845 8.85392L3.42685 5.66718ZM3.42685 5.66718L6.48211 8.72173L6.48219 8.72181C6.51154 8.75097 6.54645 8.78071 6.58467 8.80527M3.42685 5.66718L6.58467 8.80527M6.58467 8.80527C6.58459 8.80522 6.58452 8.80517 6.58445 8.80512L6.60436 8.77508M6.58467 8.80527C6.58474 8.80531 6.58482 8.80536 6.58489 8.80541L6.60436 8.77508M6.60436 8.77508C6.56867 8.75218 6.53564 8.72412 6.50759 8.69625L6.69829 8.86607C6.69799 8.86592 6.69769 8.86577 6.69739 8.86562L6.71373 8.8335C6.69974 8.82732 6.68667 8.82014 6.67401 8.81318C6.66594 8.80875 6.65804 8.80441 6.65017 8.80047C6.63489 8.79283 6.61962 8.7852 6.60436 8.77508ZM7.28849 8.78778C7.29612 8.78396 7.30376 8.78014 7.31139 8.77508L7.28849 8.78778ZM7.28849 8.78778C7.28085 8.7916 7.27322 8.79541 7.26559 8.80047L7.28849 8.78778ZM12.9508 11.1841V11.184C12.9506 10.8128 12.6497 10.5117 12.2784 10.5117H1.63637C1.26526 10.5117 0.963965 10.8129 0.963965 11.1841C0.963965 11.5552 1.26526 11.8565 1.63637 11.8565H12.2784C12.6495 11.8565 12.9508 11.5552 12.9508 11.1841Z"
+                                                fill="white" stroke="white" stroke-width="0.0720703"></path>
+                                        </svg>Export
+                                </button>   
+                                <c-activity-actions onstart={startSpinner} ontoast={showToast} onstop={stopSpinner} onreset={disableCheckbox} activity-list={activities} ></c-activity-actions>
+                                <template lwc:if={isSubmitVisible}>
+                                    <button  onclick={submitActivity} class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 submit-activity btn-no-icon">{currentActivity}</button>
+                                </template>
+                                <template lwc:else>
+                                    <c-dropdown-select class="activity-dropdown" options={activityList} 
+                                            onchange={handleActivity}
+                                            selected-value={currentActivity}
+                                            main-class="default-box-input slds-truncate"> </c-dropdown-select>
+                                </template>  
+                        </div> 
+                        <div slot="header">
+                            <div class="slds-float_right">
+                                <div class="slds-input-has-icon slds-input-has-icon_right search-holder">
+                                    <div class="search-icon-block">
+                                        <img class="search-icon" src={searchIcon} />
+                                    </div>
+                                    <div class="close-btn" lwc:if={isClearIconEnable} onclick={handleClearInput}>
+                                        <svg class="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4.815 14.46 14.458 4.818m-9.643 0.011 9.643 9.642" stroke="#929497" stroke-width="2" stroke-linecap="round"/></svg>
+                                    </div>
+                                    <input class="slds-input filter-input" type="text" placeholder="Search"
+                                    onkeyup={handleChange}/>
+                                </div>
+                            </div>
+                            <div lwc:if={isSubmitVisible} class="slds-float_right">
+                                <button  onclick={disableCheckbox} class="slds-btn slds-btn-primary slds-btn-sm waves-effect slds-cancelBtn waves-light mleft-0 submit-activity"> 
+                                    <svg class="cancel_icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M1.5 13.334 13.167 1.665M1.5 1.666l11.667 11.669" stroke="white" stroke-width="1.7999999999999998" stroke-linecap="round"/></svg> Cancel</button>
+                            </div>
+                        </div> 
+                        </c-user-preview-table>
+                        <div class="slds-align_absolute-center" lwc:if={isEditMode}>
+                            <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={updateEmployee}>
+                                Update
+                            </button>
+                            <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={cancelEditMode}>
+                            Cancel
+                            </button>
+                        </div>
+                        <div class="employee-filter">
+                            <lightning-icon class="back_button back-to-dashboard" icon-name="utility:back" size="xx-small" onclick={handleBackToDashboard} ></lightning-icon>
+                            <c-dropdown-select class="emp-dropdown" options={employeeFilterOption}
+                            onchange={handleEmployeeFilter}
+                            main-class="default-box-input slds-truncate"
+                            selected-value={currentFilter} ></c-dropdown-select>
+                        </div>
+                    </div>
+                </template>
+            </template>
+        </template>
+        <template lwc:if={isAddEmployeeTab}>
+            <div class="employee-container employee-container-border">
+                    <c-add-employee accid={accid} 
+                                    form-field={addEmpFormField}  
+                                    contactid={contactid}  
+                                    record={currentRecord} 
+                                    ontoast={showToast} 
+                                    onshow={startSpinner} 
+                                    onhide={stopSpinner}  
+                                    onresetuser={resetRedirectUser}
+                                    onaddemployee={AddEmployee}>
+                    </c-add-employee>
+                    <lightning-icon class="back_button" icon-name="utility:back" size="xx-small" onclick={handleBack} ></lightning-icon>
+            </div>
+        </template>
+        <template lwc:if={isImportTab}>
+            <div class="employee-container employee-container-border">
+                <c-import-employee acc-id={accid} ontoast={showToast} con-id={contactid}></c-import-employee>
+                <lightning-icon class="back_button" icon-name="utility:back" size="xx-small" onclick={handleBack} ></lightning-icon>
+            </div>
+        </template>
+        
+        <c-user-profile-modal header="" modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open animate__animated animate__slideInUp animate__fast"
+        modal-content-style={contentText}
+        header-class="slds-modal__header resource-header slds-clearfix"
+        style-header="slds-modal__container slds-m-top_medium"
+        close-btn-class="close-btn-employee" onclosedialog={handleCloseModal} >
+
+                <!-- do not remove below code it's for adding new state list -->
+                <div class="modal-content">
+                    <div class="tag-input tag-h-medium">
+                        <template lwc:if={isDrivingStateModal}>
+                            <h3 class="drive-state-label">Driving States
+                                <span onmouseenter={showTooltip} onmouseleave={hideTooltip}><svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.5944 1.95441C18.0947 1.95441 22.5426 6.44578 22.5426 12.0001C22.5426 17.5545 18.0949 22.0458 12.5944 22.0458C7.09401 22.0458 2.64625 17.5545 2.64625 12.0001C2.64625 6.44578 7.09401 1.95441 12.5944 1.95441ZM12.5944 0C6.04153 0 0.710938 5.38298 0.710938 12C0.710938 18.617 6.04165 24 12.5944 24C19.1472 24 24.4779 18.617 24.4779 12C24.4779 5.38298 19.1472 0 12.5944 0Z" fill="#7ABB4A"/>
+                                    <path d="M14.0178 17.2092C14.0178 17.9286 13.4402 18.5118 12.7275 18.5118C12.0151 18.5118 11.4375 17.9285 11.4375 17.2092C11.4375 16.4895 12.0151 15.9062 12.7275 15.9062C13.4402 15.9062 14.0178 16.4896 14.0178 17.2092Z" fill="#7ABB4A"/>
+                                    <path d="M9.8125 9.53407C9.8125 7.88843 11.1705 6.5513 12.8004 6.6197C14.3283 6.6539 15.5847 7.92262 15.6185 9.46543C15.6524 10.6997 14.9054 11.7967 13.8529 12.2425C13.1739 12.551 12.6986 13.1683 12.6986 13.9226" stroke="#7ABB4A" stroke-width="1.74938" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </span>
+                                <div class="slds-popover slds-popover_tooltip slds-nubbin_bottom-left state-popover" role="tooltip" id="help">
+                                    <div class="slds-popover__body">
+                                        <b>Use State Abbreviations:</b><br/>
+                                        <div class="state-content">{validStateList}</div>
+                                    </div>
+                                </div>
+                            </h3>
+                            <c-tag-state-list class="state-list" modal-class="tag-input-container" tags={tags} onremove={handleRemoveTag} >
+                                <input type="text" placeholder="Enter a state" value={newTag} onkeydown={handleTagInput} onblur={handleTagInput} />
+                            </c-tag-state-list>
+                        </template>
+                        <template lwc:if={isDeactivateDateModal}>
+                            <div>
+                                <div class="slds-grid slds-wrap slds-p-top_large">
+                                    <div class="slds-col slds-size_2-of-4 slds-p-top_x-small modal-input">Deactivation Date:</div>
+                                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_medium">
+                                        <c-date-picker date={deactivaedDate} date-format={dateFormat} is-selected-date={isSelectedTermDate} min-date={minDate} max-date={maxDate}  ondateselect={handledate}></c-date-picker>
+                                    </div>
+                                </div>
+                                <div class="date-modal-btn slds-p-top_medium">
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={updateDeactivationDate}>
+                                        Select
+                                    </button>
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <template lwc:if={isMileageLockDateModal} >
+                            <div>
+                                <div class="slds-grid slds-wrap slds-p-top_large">
+                                    <div class="slds-col slds-size_2-of-4  modal-input">Lock Date :</div>
+                                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_medium">
+                                        <c-date-picker date={lockDate} date-format={dateFormat} min-date='' max-date='' ondateselect={handleMileageLockDate}></c-date-picker>
+                                    </div>
+                                    <div class="slds-col slds-size_2-of-4  modal-input">Reimbursement:</div>
+                                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_small"> 
+                                            <c-dropdown-select class="activity-dropdown" options={lockDateList} 
+                                            onchange={handleLockMonth}
+                                            main-class="default-box-input slds-truncate" ></c-dropdown-select>
+                                    </div>
+                                </div>
+                                <div class="date-modal-btn slds-p-top_medium">
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={handleLockDate}>
+                                        Submit
+                                    </button>
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <template lwc:if={isMassDeactivationModal}>
+                            <div class="deactivate-modal"> 
+                                <div class="slds-grid slds-wrap slds-p-top_large">
+                                    <div class="slds-col slds-size_2-of-4 modal-input">Deactivation Date :</div>
+                                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_medium">
+                                        <c-date-picker date={massDeactivationDate} date-format={dateFormat} min-date={minDate} max-date={maxDate} ondateselect={handleMassDeactivationDate}></c-date-picker>
+                                    </div>
+                                </div>
+                                <div class="date-modal-btn slds-p-top_xx-large">
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={handleMassDeactivation}>
+                                        Submit
+                                    </button>
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                        <template lwc:if={isSyncAllModal}>
+                            <div class="sync-modal">
+                                <div class="slds-grid slds-wrap slds-p-top_large">
+                                    <div class="slds-col slds-size_2-of-4  modal-input">Sync Month:</div>
+                                    <div class="slds-col slds-size_2-of-4 slds-m-bottom_small"> 
+                                            <c-dropdown-select class="activity-dropdown" options={lockDateList} 
+                                            onchange={handleSyncAllMonth}
+                                            main-class="default-box-input slds-truncate" ></c-dropdown-select>
+                                    </div>
+                                </div>
+                                <div class="date-modal-btn slds-p-top_medium">
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-green waves-light" onclick={handleUnSubscribe}>
+                                        Submit
+                                    </button>
+                                    <button class="slds-btn slds-btn-primary slds-btn-md waves-effect bc-black waves-light" onclick={handleCloseModal}>
+                                        Cancel
+                                    </button>
+                                </div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            
+        </c-user-profile-modal>
+        <c-export-excel></c-export-excel>
+    </div>
+</template>

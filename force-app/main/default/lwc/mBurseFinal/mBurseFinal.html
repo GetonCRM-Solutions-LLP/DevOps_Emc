@@ -1,0 +1,33 @@
+<template>
+    <div class="transition">
+        <div>
+            <c-m-burse-header-text head-text="mBurse Plan Preview"></c-m-burse-header-text>
+        </div>
+        <div class="slds-text-heading_small slds-text-align_center slds-p-bottom_large font-style emcFont p_bottom">Take a moment to
+            watch this video to learn more about the program.
+        </div>
+        <div class="slds-align_absolute-center video-container">
+            <video id="video-source"  class="video-frame" width={videoWidth} height={videoHeight}  controls="controls" controlslist="noplaybackrate  nodownload" style="object-fit: cover;">
+                <source  type="video/mp4" src={mburseVideoUrl}/>
+            </video>
+        </div>
+        <div class="slds-clearfix slds-p-top_large m-left m-right">
+            <div class="footer-text slds-float_left font-style p_top">
+                <div><strong>Key Takeaways:</strong>
+                    <ul class="slds-list_dotted slds-p-top_x-small">
+                        <li>Your reimbursement is based on a reasonable size job appropriate vehicle.</li>
+                        <li>Your compliance status is based on the premium vehicle on your insurance documentation.</li>
+                        <li>The program is 100% tax free if you are following all of the program guidelines.</li>
+                        <li>If you are not following all of the guidelines there may be the posibility of some end of the year taxation.</li>
+                        <li>Still have questions or need help? Contact Driver Services (driverservices@mburse.com)</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-button slds-float_right mright-7 mleft-0 p_top" if:true={allowRedirect}>
+                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-blue waves-light" onclick={loginToSystem}>
+                    Go to my dashboard
+                </button>
+            </div>
+        </div>
+    </div>
+</template>

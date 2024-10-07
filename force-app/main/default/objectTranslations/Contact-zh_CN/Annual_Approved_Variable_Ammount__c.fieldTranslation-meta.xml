@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Annual Approved Variable Ammount --></label>
+    <name>Annual_Approved_Variable_Ammount__c</name>
+</CustomFieldTranslation>

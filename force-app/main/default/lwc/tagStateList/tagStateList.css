@@ -1,0 +1,47 @@
+.tag-wraper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.tag-input-container {
+  height: 100px;
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    width: 100%;
+    padding: 5px 20px 20px 5px;
+    margin-top: 15px;
+}
+
+.tag-input-container-add-employee {
+    border: 1px solid #e4e4e4;
+    border-radius: 10px;
+    padding: 9px 0 9px 9px !important;
+}
+
+.tag {
+    display: flex;
+    align-items: center;
+    background-color: #404b5b;
+    color: #fff;
+    padding: 1px 8px;
+    margin: 2px;
+    border-radius: 6px;
+    width: max-content;
+  }
+
+  .tag:last-child {
+    padding-right: 5px;
+  }
+  
+  .tag span {
+    margin-right: 4px;
+  }
+  
+  .tag-remove {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }

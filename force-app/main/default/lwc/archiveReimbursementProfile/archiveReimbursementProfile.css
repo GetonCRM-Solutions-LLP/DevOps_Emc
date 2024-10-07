@@ -1,0 +1,53 @@
+:host{
+    --color-white: #ffffff;
+    --color-light: #ededed;
+    --color-dark: #454545;
+    --color-blue: #1a9de1;
+    ---color-green: #7ABB4A;
+}
+
+.fa,
+.fas,
+.fa-regular {
+    font-family: "Font Awesome 6 Free" !important
+}
+
+.btn-back{
+    outline: none;
+    border: 1px solid #d7d7d7 !important;
+    background: var(--color-white) !important;
+    border-radius: 10px !important;
+    justify-content: space-between;
+    padding: 1rem 1rem;
+    margin: 1em 0;
+}
+
+.fa-arrow-left{
+    color: var(---color-green) !important;
+}
+
+.slds-btn {
+    /* margin: .375rem; */
+    word-wrap: break-word;
+    white-space: normal;
+    cursor: pointer;
+    border: 0;
+    border-radius: .125rem;
+}
+
+.waves-effect:focus {
+    outline: none !important;
+}
+
+.waves-effect:hover {
+     opacity: 1;
+}
+
+.btn-trip{
+    border-radius: 6px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 14px;
+}

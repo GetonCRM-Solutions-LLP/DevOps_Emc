@@ -1,0 +1,21 @@
+<template>
+        <template lwc:if={showModal}>
+          <div class="parent overlay-slide-down index animate__animated animate__slideInDown">
+            <slot></slot>
+          </div>
+          <button type="button" class="close popup-close-btn" onclick={exitFullscreen}><span aria-hidden="true"
+              title="Exit fullscreen">×</span></button>
+          <c-user-profile-modal header={modalText}
+            modal-class="slds-modal slds-modal_x-small slds-is-fixed slds-fade-in-open animate__animated animate__slideInUp animate__fast"
+            modal-content-style={contentText} header-class="slds-modal__header resource-header slds-clearfix"
+            style-header={modalContainer} close-btn-class="close-notify-video" onclosedialog={closePopup}>
+            <video id="video-source-2" width={videoWidth} height={videoHeight} autoplay controls="controls"
+              controlslist="noplaybackrate  nodownload" style="object-fit: cover;border-bottom-right-radius: 20px;
+                      border-bottom-left-radius: 20px;
+                      border-top-right-radius: 20px;
+                      border-top-left-radius: 20px;">
+              <source type="video/mp4" src={videoPlayUrl} />
+            </video>
+          </c-user-profile-modal>
+        </template>
+</template>

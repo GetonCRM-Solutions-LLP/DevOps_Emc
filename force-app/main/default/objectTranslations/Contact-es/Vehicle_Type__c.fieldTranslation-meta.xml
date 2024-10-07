@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <help>
+        <!-- Format should be like this: Year Vehicle Name 
+Ex. 2019 Ford Sedan -->
+    </help>
+    <label><!-- Standard Vehicle Make Model and Year --></label>
+    <name>Vehicle_Type__c</name>
+</CustomFieldTranslation>

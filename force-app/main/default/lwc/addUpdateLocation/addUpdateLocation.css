@@ -1,0 +1,255 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.location_title {
+  font-size: 25px;
+  font-family: 'Proxima Nova Bold';
+  color: #7ABB4A !important;
+  margin-bottom: 15px;
+  margin-left: 10px;
+}
+
+.usage_note {
+  font-size: 11px;
+  /* font-family: 'Poxima Nova Bold'; */
+  color: #FA7800 !important;
+  margin-left: 10px;
+}
+
+.slds-grid {
+  align-items: center;
+}
+
+.map_component {
+  overflow: hidden;
+  overflow-y: scroll;
+  display: grid;
+  grid-template-columns: auto;
+  grid-template-rows: auto;
+  /* height: auto; */
+  max-height: calc(100vh - 318px) !important;
+}
+
+.card_header{
+  margin: 15px 0px;
+}
+
+.input-border {
+  position: relative;
+  /* width: 55%; */
+}
+
+.right-input-border {
+  position: relative;
+}
+
+.input-border-error {
+  border: 0.5px solid #FA7800;
+  border-radius: 10px;
+}
+
+label {
+  font-family: 'Proxima Nova Bold';
+  font-size: 14px;
+  color: #1d1d1d;
+}
+
+.asterisk,
+.asterisk_textarea {
+  top: -13px;
+  position: absolute;
+  color: #FA7800;
+  font-weight: bold;
+  right: 5px;
+}
+
+.content-input {
+  border: 1px solid #e4e4e4 !important;
+  padding: 8.8px 9px !important;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 12px !important;
+  font-family: 'Proxima Nova' !important;
+}
+.content-input:focus-visible {
+  outline-color: rgba(108, 108, 108, 0.43) !important;
+}
+.content-input::placeholder {
+  font-family: 'Proxima Nova' !important;
+}
+
+.mileage-input {
+  border: 0;
+  border-radius: 10px;
+  width: 100%;
+  padding: 9.45px 9px !important;
+  font-family: 'Proxima Nova';
+}
+.mileage-input:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+.mileage-input::placeholder {
+  font-family: 'Proxima Nova' !important;
+}
+
+.auto_number_button {
+  display: flex;
+  flex-flow: column;
+  border: 1px solid #e4e4e4;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  background-color: #e4e4e4;
+  width: 20%;
+  align-items: center;
+  justify-content: center;
+}
+
+.number_inpt {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid #e4e4e4 !important;
+  width: 100%;
+  border-radius: 10px;
+  font-size: 12px !important;
+  font-family: 'Proxima Nova' !important;
+}
+
+.green_color {
+  color: #7ABB4A;
+  line-height: 3.5px !important;
+}
+
+.up-down-button {
+  outline: none;
+  border: none;
+  background-color: #e4e4e4;
+}
+
+.textarea-input {
+  border: 1px solid #e4e4e4 !important;
+  border-radius: 10px;
+  font-size: 12px !important;
+  font-family: 'Proxima Nova' !important;
+  padding: 5px 9px !important;
+  height: 32.8px;
+  width: 100%;
+}
+.textarea-input:focus-visible {
+  outline-color: rgba(108, 108, 108, 0.43) !important;
+}
+
+.range_ft {
+  font-family: 'Proxima Nova Bold';
+  font-size: 15px;
+  color: #1D1D1D;
+}
+
+.range_info {
+  font-family: 'Poxima Nova Bold';
+  font-size: 15px;
+  color: #909090;
+}
+
+.disabled-input {
+  pointer-events: none;
+  background-color: #f1f1f1;
+  color: #808080;
+}
+
+.button_class{
+  position: relative;
+  left: 11px;
+  padding: 15px 0px;
+}
+
+.slds-btn{
+  word-wrap: break-word;
+  white-space: normal;
+  cursor: pointer;
+  border: 0;
+  border-radius: .125rem;
+}
+
+.slds-btn-sm {
+margin: 0 0.4em;
+padding: 6px 20px;
+height: 30px;
+font-size: 12px;
+}
+
+.waves-effect:focus {
+  outline: none !important;
+}
+
+.bc-green {
+  background: none !important;
+  background-color: #7ABB4A!important;
+  font-family: 'Proxima Nova Bold' !important;
+  /* font-weight: 700; */
+  color: #FFFFFF;
+}
+
+.bc-black {
+  background: none !important;
+  background-color: #404B5B!important;
+  font-family: 'Proxima Nova Bold' !important;
+  /* font-weight: 700; */
+  color: #FFFFFF;
+}
+
+.btn-trip {
+  border-radius: 6px;
+  text-decoration: none !important;
+  color: #FFFFFF !important;
+}
+
+.fas {
+  font-family: "Font Awesome 6 Free" !important
+}
+
+.toggle {
+  height: 22px;
+  width: 22px;
+  background-color: #7ABB4A;
+  color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .card_header .slds-size_6-of-12,
+  .card_header .slds-size_12-of-12 {
+      width: 100%;
+  }
+  .range_content .slds-size_4-of-12 {
+    width: 30%;
+  }
+  .range_content .slds-size_6-of-12 {
+    width: 52%;
+  }
+}
+@media (max-width: 820px) {
+  .range_content .slds-size_4-of-12 {
+    width: 38%;
+  }
+  .range_content .slds-size_6-of-12 {
+    width: 45%;
+  }
+}
+@media (max-width: 768px) {
+  .range_content .slds-size_4-of-12 {
+    width: 42%;
+  }
+  .range_content .slds-size_6-of-12 {
+    width: 40%;
+  }
+}
+/* Responsive */

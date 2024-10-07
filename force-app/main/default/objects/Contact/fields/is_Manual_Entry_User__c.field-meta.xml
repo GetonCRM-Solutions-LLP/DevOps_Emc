@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>is_Manual_Entry_User__c</fullName>
+    <defaultValue>false</defaultValue>
+    <description>This field suggest that &quot;Manual Entry&quot; module will be visible in driver related profiles or not.</description>
+    <label>is Manual Entry User</label>
+    <trackFeedHistory>false</trackFeedHistory>
+    <trackHistory>false</trackHistory>
+    <type>Checkbox</type>
+</CustomField>

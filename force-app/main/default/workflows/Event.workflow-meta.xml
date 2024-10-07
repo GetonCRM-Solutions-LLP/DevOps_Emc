@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>joinme__Join_Me_Set_Event_Subject</fullName>
+        <description>Sets a Join.me Subject on the Subject Field</description>
+        <field>Subject</field>
+        <formula>&quot;join.me Meeting&quot;</formula>
+        <name>Join.Me Set Event Subject</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>joinme__Join_Me_Set_Event_Type</fullName>
+        <description>Sets the join.me Event to &quot;join.me Meeting&quot;</description>
+        <field>Type</field>
+        <literalValue>Join.me Meeting</literalValue>
+        <name>Join.Me Set Event Type</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Literal</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>joinme__Join_Me_Set_Presenter_Email</fullName>
+        <description>Sets the Presenter Email as the User Email</description>
+        <field>joinme__Presenter_Email__c</field>
+        <formula>$User.Email</formula>
+        <name>Join.Me Set Presenter Email</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>joinme__Join_Me_Set_Presenter_Name</fullName>
+        <description>Sets the Presenter Name as the User&apos;s Name</description>
+        <field>joinme__Presenter_Name__c</field>
+        <formula>$User.FirstName + &apos; &apos; +  $User.LastName</formula>
+        <name>Join.Me Set Presenter Name</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>joinme__Join%2EMe Event Creation</fullName>
+        <actions>
+            <name>joinme__Join_Me_Set_Event_Subject</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>joinme__Join_Me_Set_Event_Type</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>joinme__Join_Me_Set_Presenter_Email</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>joinme__Join_Me_Set_Presenter_Name</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Event.RecordTypeId</field>
+            <operation>equals</operation>
+            <value>Join.me Meeting</value>
+        </criteriaItems>
+        <description>Join.Me Event Creation</description>
+        <triggerType>onCreateOnly</triggerType>
+    </rules>
+</Workflow>

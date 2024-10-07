@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <layouts>
+        <layout>Account Layout</layout>
+        <sections>
+            <label><!-- GoToWebinar Information --></label>
+            <section>GoToWebinar Information</section>
+        </sections>
+        <sections>
+            <label><!-- Insurance --></label>
+            <section>Insurance</section>
+        </sections>
+        <sections>
+            <label><!-- Other Configurations --></label>
+            <section>Other Configurations</section>
+        </sections>
+        <sections>
+            <label><!-- Plan Parameter --></label>
+            <section>Plan Parameter</section>
+        </sections>
+        <sections>
+            <label><!-- Reimbursement Details --></label>
+            <section>Reimbursement Details</section>
+        </sections>
+        <sections>
+            <label><!-- Triplog Configurations --></label>
+            <section>Triplog Configurations</section>
+        </sections>
+        <sections>
+            <label><!-- mBurse Dashboard --></label>
+            <section>mBurse Dashboard</section>
+        </sections>
+        <sections>
+            <label><!-- resync trips --></label>
+            <section>resync trips</section>
+        </sections>
+    </layouts>
+    <quickActions>
+        <label><!-- Case --></label>
+        <name>Case</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Child Account --></label>
+        <name>Child_Account</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Contact --></label>
+        <name>Contact</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Opportunity --></label>
+        <name>Opportunity</name>
+    </quickActions>
+    <quickActions>
+        <label><!-- Task --></label>
+        <name>Task</name>
+    </quickActions>
+    <webLinks>
+        <label><!-- Invite_to_GoToMeeting --></label>
+        <name>CRMG_GTM__Invite_to_GoToMeeting</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Invite_to_GoToMeeting_list --></label>
+        <name>CRMG_GTM__Invite_to_GoToMeeting_list</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Meet_Now --></label>
+        <name>CRMG_GTM__Meet_Now</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Schedule_Meeting --></label>
+        <name>CRMG_GTM__Schedule_Meeting</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Schedule_a_Rep --></label>
+        <name>CRMG_GTM__Schedule_a_Rep</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Calculate_Imputed_Amount --></label>
+        <name>Calculate_Imputed_Amount</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- DeactiveAccount --></label>
+        <name>DeactiveAccount</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Delete_Trips --></label>
+        <name>Delete_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GET_Trips --></label>
+        <name>GET_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Get_Drivers_by_Milaege --></label>
+        <name>Get_Drivers_by_Milaege</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Get_Trips_VF --></label>
+        <name>Get_Trips_VF</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoToWebinar --></label>
+        <name>GoToWebinar</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleMaps --></label>
+        <name>GoogleMaps</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleNews --></label>
+        <name>GoogleNews</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- GoogleSearch --></label>
+        <name>GoogleSearch</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- HSignAccountAction --></label>
+        <name>HelloSign__HSignAccountAction</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Insurance_Page --></label>
+        <name>Insurance_Page</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Send_Reimbursement_Email --></label>
+        <name>Send_Reimbursement_Email</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Sync_Trips --></label>
+        <name>Sync_Trips</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- TrueDialog --></label>
+        <name>TrueDialog</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Fuel_Prices --></label>
+        <name>Update_Fuel_Prices</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Mileage_Fuel_Price --></label>
+        <name>Update_Mileage_Fuel_Price</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Update_Triplod_Id --></label>
+        <name>Update_Triplod_Id</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Send_with_DocuSign --></label>
+        <name>dsfs__Send_with_DocuSign</name>
+    </webLinks>
+    <webLinks>
+        <label><!-- Verify_with_DNB --></label>
+        <name>dsfs__Verify_with_DNB</name>
+    </webLinks>
+</CustomObjectTranslation>

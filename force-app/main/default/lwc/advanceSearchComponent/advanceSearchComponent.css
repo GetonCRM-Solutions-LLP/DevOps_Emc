@@ -1,0 +1,320 @@
+*{
+  font-family: 'Proxima Nova' !important;
+  }
+.search_buttons{
+    display: flex;
+    margin-top: 25px;
+  }
+  .slds-reset_icon{
+    --sds-c-icon-color-foreground-default: #7ABB4A;
+    position: relative;
+      left: 8px;
+  }
+  .slds-resetall{
+    color: #7ABB4A !important;
+    font-weight: bold !important;
+    border-radius: 9px !important;
+    width: 105px;
+  }
+  .slds-resetall:focus{
+    box-shadow: none;
+    border: none;
+    outline: none;
+  }
+  
+  .cancel_button{
+    left: -25px;
+  }
+  .bc-green {
+    background: none !important;
+    background-color: #7ABB4A!important;
+    font-family: 'Proxima Nova Bold' !important;
+    /* font-weight: 700; */
+    color: #FFFFFF;
+  }
+  .btn-trip{
+    border-radius: 10px;
+    border: none;
+    font-size: 14px;
+    padding: 9px 18px;
+    text-decoration: none !important;
+    color: #FFFFFF !important;
+  }
+  .slds_driver_label{
+    font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    /* text-align: left;
+    width: 65px; */
+    font-size: 12px;
+  }
+  .slds_chaeckbox_label{
+    font-size: 13px;
+    padding-left: 100px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    /* margin-top: 15px; */
+  }
+  /* .checkbox_input{
+    position: absolute;
+    top: 49px;
+    left: 79px;
+    height: 34px !important;
+    width: 16px !important;
+  } */
+  .slds_driver_label_left{
+    /* margin-left: -63px; */
+    font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    /* width: 64px;
+    text-align: left; */
+    font-size: 12px;
+  }
+  .td_status{
+    width: 185px;
+    padding-top:12px
+  }
+  .td_tags{
+    width: 185px;
+  }
+  .td_tracking_method , .td_activity{
+    width: 185px;
+    padding-top: 12px;
+  }
+  .table_2 , .td_tags{
+    margin-top: 12px;
+  }
+  .td_driver{
+    width: 69px;
+    position: relative;
+    left: 2px;
+  }
+  .slds_fromlist{
+    width: 184px;
+    /* position: relative; */
+    /* left: 29px; */
+    /* top: 40px; */
+    margin: 22px 0px 0px 26px;
+  }
+  .slds_tolist{
+    width: 183px;
+    /* position: relative; */
+    /* top: 52px; */
+    /* left: 45px; */
+    margin: 15px 0px 0px 43px;
+  }
+  .slds_driverList{
+    padding-left: 9px;
+    width: 192px;
+  }
+  .tr_status{
+    /* margin: 2px 0px 0px 63px; */
+  }
+  .tr_tracking{
+    /* margin: 14px 0px 0px 64px; */
+  }
+  .tr_from{
+    margin: 24px 0px 0px 2px;
+  }
+  .tr_to{
+    margin: 17px 0px 0px 0px;
+  }
+  .td_mileges{
+    display: flex;
+    padding-left: 7px;
+  }
+  .milege_from {
+    width: 80px;
+    bottom: 36px;
+    left: 7px;
+    position: relative;
+    border-radius: 8px !important;
+    height: 35px;
+    border: 1px solid #E4E4E4;
+    padding-left: 12px;
+  }
+  .milege_from:focus-visible{
+    outline: 0 !important;
+    outline-color: #FFFFFF!important;
+  }
+   .milege_to{
+    width: 80px;
+    bottom: 36px;
+    left: 24px;
+    position: relative;
+    border-radius: 8px !important;
+    height: 35px;
+    /* border-color: #ddd9d9; */
+    border: 1px solid #E4E4E4;
+    padding-left: 12px;
+  }
+  .milege_to:focus-visible{
+    outline: 0 !important;
+    outline-color: #FFFFFF!important;
+  }
+  .milege_to_label{
+    position: relative;
+    left: 22px;
+    bottom: 37px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    font-size: 12px;
+  }
+  .mileges_label{
+    position: relative;
+    left: 2px;
+    bottom: 37px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    font-size: 12px;
+  }
+  .unitStyle{
+    position: relative;
+    bottom: 63px;
+    left: 260px;
+    font-size: 12px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1D1D1D;
+  }
+  
+.flat-container{
+  display: flex;
+    border: 1px solid #E4E4E4 !important;
+    padding: 0px 0 0px 9px !important;
+    width: 217px;
+    border-radius: 8px;
+    /* position: relative; */
+    /* bottom: 27px; */
+    /* left: 130px; */
+}
+.flat-input{
+  padding: 8px 0 8px 9px !important;
+  color: #1D1D1D !important;
+  width: 100%;
+  border: none;
+  border: 0;
+  padding-left: 0;
+  border-radius: 8px;
+  font-family: 'Proxima Nova' !important;
+  font-size: 12px !important;
+}
+.flat-input:focus-visible{
+  outline: 0 !important;
+  outline-color: #FFFFFF!important;
+}
+.input-button{
+  width: 50px;
+  height: 34px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.date_label{
+  font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    /* width: 74px;
+    text-align: right; */
+    font-size: 12px;
+   
+}
+.width-small{
+  margin: 11px 0px 0px 58px;
+}
+.date_label_01{
+  position: relative;
+    bottom: 11px;
+    right: 23px;
+}
+.date_label_02{
+  margin-top: 3px;
+}
+
+.table_1{
+  margin-bottom: -34px;
+}
+input[type=checkbox]:checked  + label > span{
+  --sds-c-checkbox-color-background : #7ABB4A !important ;
+  --sds-c-checkbox-mark-color-foreground: white !important;
+  --sds-c-checkbox-color-border-checked: white !important;
+  --slds-c-checkbox-color-border: lightgray !important;
+  --slds-c-checkbox-shadow : white !important; 
+} 
+input[type=checkbox]  + label > span{
+  --slds-c-checkbox-color-border: lightgray !important;
+  --slds-c-checkbox-shadow : white !important;
+} 
+.green_checkbox{
+  border-radius: 4px !important;
+  margin: 25px 0px 0px 69px;
+  /* position: relative !important;
+    top: 25px;
+    left: 78px; */
+}
+.main_class{
+  /* display: flex; */
+  margin-right: 100px;
+}
+.cancle_btn{
+  color: #FA7800 !important;
+}
+.slds-close_icon{
+  --sds-c-icon-color-foreground-default: #FA7800;
+}
+.row1{
+  display: flex;
+}
+.parent_div{
+  display: flex;
+  /* justify-content: space-between; */
+}
+.div_tags{
+  width: 150px;
+    /* position: relative; */
+    /* left: 394px; */
+    /* top: 15px; */
+    /* margin: 13px 0px 0px 42px; */
+}
+.tag_label{
+  font-family: 'Proxima Nova Bold' !important;
+    color: black;
+    font-size: 12px;
+    /* position: relative; */
+    /* left: 347px; */
+    /* top: 23px; */
+    /* margin: 20px 0px 0px 63px; */
+}
+.driver_label{
+  margin-top: 2px;
+}
+.div_status{
+  width: 150px;
+    /* top: 2px; */
+    /* margin-left: 25px; */
+}
+.div_mileges{
+  width: 287px;
+    /* left: 128px; */
+    /* top: 58px; */
+    margin-top: 48px;
+}
+.checkbox{
+  position: relative;
+    left: -3px;
+    bottom: 5px;
+}
+.label_of_checkbox{
+    margin: 19px 0px 0px 20px;
+    width: 142px;
+    font-family: 'Proxima Nova Bold' !important;
+    color: #1D1D1D;
+    font-size: 12px;
+}
+.div_tracking_method{
+  width: 150px;
+    /* margin: 11px 0px 0px 12px; */
+}
+.row3{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}

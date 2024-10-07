@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fieldUpdates>
+        <fullName>Count_error_check_not_null</fullName>
+        <field>Count_Error_Check__c</field>
+        <formula>IF(Contact__r.AccountId = &apos;0010Z00001ygUen&apos;, 0, Count_Error_Check__c)</formula>
+        <name>Count error check not null</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>EmpIdEmailStartdateEnddate</fullName>
+        <field>EmpIdEmailStartdateEnddate__c</field>
+        <formula>IF(Contact__r.Account.Name != &apos;Test Account&apos;, Contact_Id_Employee_ID__c &amp; &apos;#&apos; &amp; TRIM(Contact_Id_External_Email__c) &amp; &apos;#&apos; &amp; TEXT(Start_Date__c) &amp; &apos;#&apos; &amp; TEXT(End_Date__c) , null)</formula>
+        <name>EmpIdEmailStartdateEnddate</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
+    </fieldUpdates>
+    <rules>
+        <fullName>EmpIdEmailStartdateEnddate</fullName>
+        <actions>
+            <name>EmpIdEmailStartdateEnddate</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <formula>true</formula>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Update Count error check as 0</fullName>
+        <actions>
+            <name>Count_error_check_not_null</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Bi_Weekly_Reimbursement__c.Count_Error_Check__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <description>everytime biweekly reimbursement is create or update at that time check count error check field if this field is null than it is updated as 0 else it is remaining same as count error check. this is only for ermi account.</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+</Workflow>

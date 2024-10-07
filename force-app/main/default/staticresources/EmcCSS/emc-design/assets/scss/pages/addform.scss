@@ -1,0 +1,60 @@
+.validate-div{
+  position: relative;
+}
+.span-validation{
+  float: right;
+  color: red;
+  position: absolute;
+  right: 15px;
+  top: -15px;
+}
+.form-lable{
+  font-family: 'Proxima Nova Bold';
+  color:$primary-color;
+  font-size: 18px;
+}
+.form-divider{
+  border-top: 2px solid $primary-color;
+  margin-top: 40px;
+  margin-bottom: 30px;
+}
+.form-group-theme {
+  margin-bottom: 35px;
+  @media screen and (min-width:320px) and (max-width: 767px) {
+    margin-bottom: 0px;
+  }
+}
+.form-heading{
+  font-size: 27px;
+  font-weight: 600;
+  color: $secondary-color;
+}
+.bootstrap-tagsinput .badge {
+  margin-right: 2px;
+  color: white;
+  background-color: $secondary-color !important;
+  padding: 5px 8px;
+  border-radius: 0px;
+  border: 1px solid $secondary-color !important;
+}
+.bootstrap-tagsinput {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  display: inline-block;
+  color: #555;
+  vertical-align: middle;
+  border-radius: 0px !important;
+  width: 100%;
+  cursor: text;
+  height: calc(2.25rem + 2px) !important;
+  padding: .375rem .75rem;
+  box-shadow:none !important;
+  line-height: 30px !important;
+  height: auto !important;
+}
+.toasticon-padding{
+  padding-right:5px;
+}
+.toast-text{
+  
+}

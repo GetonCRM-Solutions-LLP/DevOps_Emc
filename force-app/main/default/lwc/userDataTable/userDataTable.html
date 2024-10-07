@@ -1,0 +1,549 @@
+<template>
+    <template lwc:if={scrollable}>
+        <div class={mainClass}> <!-- height: calc(100vh - 244px); -->
+            <div class={className}>
+                <table class="slds-table slds-table_cell-buffer slds-table_striped fixed-table" id="tableSel" >
+                    <thead class="">
+                        <tr class="slds-line-height_reset">
+                            <template lwc:if={columns}>
+                                <template for:each={columns} for:item="head">
+                                    <th class="header-title" scope="col" key={head.id}>
+                                        <template lwc:if={isSortable}>
+                                            <div class="" onclick={sort} title={head.name} data-name={head.colName} data-type={head.colType}>
+                                                <a  data-name={head.colName} data-type={head.colType} class="head-sort">
+                                                    {head.name}
+                                                    <template lwc:if={norecord}>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <span class="sort-container">
+                                                            <i class="fa-solid fa-sort-up green_icon" data-name={head.colName} data-type={head.colType} ></i>
+                                                            <i class="fa-solid fa-sort-down green_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                            <template lwc:if={head.arrUp}>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <i class="fa-solid fa-sort-up sort_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                            </template>
+                                                            <template lwc:if={head.arrDown}>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <i class="fa-solid fa-sort-down sort_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                            </template>
+                                                        </span>
+                                                    </template>
+                                                </a>
+                                            </div>
+                                        </template>
+                                        <template lwc:else>
+                                            <div class=""  title={head.name} >
+                                                <a   class="head-sort">
+                                                    {head.name}
+                                                </a>
+                                            </div>
+                                        </template>
+                                       
+                                    </th>
+                                </template>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody class="content-body">
+                        <template lwc:if={pagedData}>
+                            <template for:each={pagedData} for:item="trip">
+                                    <tr  key={trip.id} class={trip.rejectedClass}>
+                                        <template for:each={trip.keyFields} for:item="mapKey">
+                                            <template lwc:if={mapKey.onlyLink}>
+                                                <template lwc:if={mapKey.isLink}>
+                                                    <td class="modal-content" key={mapKey.key}>
+                                                        <a class="linked" onclick={linkHandler} data-id={mapKey.id}>{mapKey.value}</a>
+                                                    </td>
+                                                </template>
+                                            </template>
+                                            <template lwc:else>
+                                                <template lwc:if={mapKey.istwoDecimalCurrency}>
+                                                    <template lwc:if={mapKey.hasLeadingZero}>
+                                                        <template lwc:if={mapKey.bold}>
+                                                            <td class="modal-content bold-text" key={mapKey.key}>
+                                                                ${mapKey.hasLeadingZero}
+                                                            </td>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <td class="modal-content" key={mapKey.key}>
+                                                                ${mapKey.hasLeadingZero}
+                                                            </td>
+                                                        </template>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <td class="modal-content" key={mapKey.key}><lightning-formatted-number
+                                                            value={mapKey.value}
+                                                            format-style="currency"
+                                                            currency-code="USD"
+                                                            maximum-fraction-digits="2">
+                                                        </lightning-formatted-number></td>
+                                                    </template>
+                                                </template>
+                                                <template lwc:else>
+                                                    <template lwc:if={mapKey.isfourDecimalCurrency}>
+                                                        <template lwc:if={mapKey.hasLeadingZero}>
+                                                            <template lwc:if={mapKey.bold}>
+                                                                <td class="modal-content bold-text" key={mapKey.key}>
+                                                                    ${mapKey.hasLeadingZero}
+                                                                </td>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <td class="modal-content" key={mapKey.key}>
+                                                                    ${mapKey.hasLeadingZero}
+                                                                </td>
+                                                            </template>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <td class="modal-content" key={mapKey.key}><lightning-formatted-number
+                                                                value={mapKey.value}
+                                                                format-style="currency"
+                                                                currency-code="USD"
+                                                                maximum-fraction-digits="4">
+                                                            </lightning-formatted-number></td>
+                                                        </template>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <template lwc:if={mapKey.twoDecimal}>
+                                                            <template lwc:if={mapKey.hasLeadingZero}>
+                                                                <template lwc:if={mapKey.bold}>
+                                                                    <td class="modal-content bold-text" key={mapKey.key}>
+                                                                        {mapKey.hasLeadingZero}
+                                                                    </td>
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <td class="modal-content" key={mapKey.key}>
+                                                                        {mapKey.hasLeadingZero}
+                                                                    </td>
+                                                                </template>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <td class="modal-content" key={mapKey.key}><lightning-formatted-number
+                                                                    value={mapKey.value}
+                                                                    maximum-fraction-digits="2">
+                                                                </lightning-formatted-number></td>
+                                                            </template>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <template lwc:if={mapKey.icon}>
+                                                                <td  class="modal-content flex-row" key={mapKey.key}  data-name={mapKey.value}><div class="slds-m-top_xx-small slds-m-right_small icon-holder"><i  class="fas fa-xs fa-chevron-right navigate"></i></div>{mapKey.value}</td>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <template lwc:if={mapKey.tooltip}>
+                                                                    <template lwc:if={mapKey.truncate}>
+                                                                        <td  class="modal-content tooltipText" key={mapKey.key}><div class="slds-truncate" style="width: 10rem;">{mapKey.value}</div><span class="tooltipValue">{mapKey.tooltipText}</span></td>
+                                                                    </template>
+                                                                    <template lwc:else>
+                                                                        <td  class="modal-content tooltipText" key={mapKey.key}>{mapKey.value}<span class="tooltipValue">{mapKey.tooltipText}</span></td>
+                                                                    </template>
+                                                                </template>
+                                                                <template lwc:else>
+                                                                    <td  class="modal-content" key={mapKey.key}>{mapKey.value}</td>
+                                                                </template>
+                                                            </template>
+                                                        </template>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </tr>
+                            </template>
+                        </template>
+                        <template lwc:if={norecord}>
+                            <!-- <tr><td colspan="100%"></td></tr> -->
+                            <tr>
+                                <template for:each={columns} for:item="head">
+                                    <td key={head.id}>----</td>
+                                </template>
+                            </tr>
+                            <tr>
+                                <td colspan="100%">
+                                    <div class="slds-align_absolute-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 30 30" fill="none">
+                                            <g clip-path="url(#clip0_1230_6276)">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5.00298 2C4.38433 2 3.88281 2.50151 3.88281 3.12016V3.77839H4.09168H4.50943H4.7183V3.12016C4.7183 2.96294 4.84575 2.83549 5.00298 2.83549H5.67615V2.62662V2.20887V2H5.00298ZM8.36882 2H7.02249V2.20887V2.62662V2.83549H8.36882V2.62662V2.20887V2ZM11.0615 2H9.71516V2.20887V2.62662V2.83549H11.0615V2.62662V2.20887V2ZM13.7542 2H12.4078V2.20887V2.62662V2.83549H13.7542V2.62662V2.20887V2ZM16.4469 2H15.1005V2.20887V2.62662V2.83549H16.4469V2.62662V2.20887V2ZM18.4664 2H17.7932V2.20887V2.62662V2.83549H18.4664V2.62662V2.20887V2ZM3.88281 5.09483V6.41127H4.09168H4.50943H4.7183V5.09483H4.50943H4.09168H3.88281ZM3.88281 7.72772V9.04416H4.09168H4.50943H4.7183V7.72772H4.50943H4.09168H3.88281ZM25.5942 9.51994V8.87934H25.3854H24.9676H24.7587V9.51994H24.9676H25.3854H25.5942ZM3.88281 10.3606V11.677H4.09168H4.50943H4.7183V10.3606H4.50943H4.09168H3.88281ZM25.5942 12.0823V10.8011H25.3854H24.9676H24.7587V12.0823H24.9676H25.3854H25.5942ZM3.88281 12.9935V14.3099H4.09168H4.50943H4.7183V12.9935H4.50943H4.09168H3.88281ZM25.5942 14.6447V13.3635H25.3854H24.9676H24.7587V14.6447H24.9676H25.3854H25.5942ZM3.88281 15.6264V16.9428H4.09168H4.50943H4.7183V15.6264H4.50943H4.09168H3.88281ZM25.5942 17.2071V15.9259H25.3854H24.9676H24.7587V17.2071H24.9676H25.3854H25.5942ZM3.88281 18.2593V19.5757H4.09168H4.50943H4.7183V18.2593H4.50943H4.09168H3.88281ZM25.5942 19.7695V18.4883H25.3854H24.9676H24.7587V19.7695H24.9676H25.3854H25.5942ZM3.88281 20.8922V22.2086H4.09168H4.50943H4.7183V20.8922H4.50943H4.09168H3.88281ZM25.5942 22.3319V21.0507H25.3854H24.9676H24.7587V22.3319H24.9676H25.3854H25.5942ZM3.88281 23.525V24.8415H4.09168H4.50943H4.7183V23.525H4.50943H4.09168H3.88281ZM25.5942 24.8943V23.6131H25.3854H24.9676H24.7587V24.8943H24.9676H25.3854H25.5942ZM3.88281 26.1579V26.8161C3.88281 27.4348 4.38433 27.9363 5.00298 27.9363H5.61145V27.7274V27.3097V27.1008H5.00298C4.84575 27.1008 4.7183 26.9734 4.7183 26.8161V26.1579H4.50943H4.09168H3.88281ZM25.5942 26.298V26.1755H25.4883L25.5942 26.298ZM24.2917 27.9363L23.8656 27.4438V27.7274V27.9363H24.2917ZM6.82839 27.9363H8.04534V27.7274V27.3097V27.1008H6.82839V27.3097V27.7274V27.9363ZM9.26228 27.9363H10.4792V27.7274V27.3097V27.1008H9.26228V27.3097V27.7274V27.9363ZM11.6962 27.9363H12.9131V27.7274V27.3097V27.1008H11.6962V27.3097V27.7274V27.9363ZM14.1301 27.9363H15.347V27.7274V27.3097V27.1008H14.1301V27.3097V27.7274V27.9363ZM16.5639 27.9363H17.7809V27.7274V27.3097V27.1008H16.5639V27.3097V27.7274V27.9363ZM18.9978 27.9363H20.2148V27.7274V27.3097V27.1008H18.9978V27.3097V27.7274V27.9363ZM21.4317 27.9363H22.6487V27.7274V27.3097V27.1008H21.4317V27.3097V27.7274V27.9363Z"
+                                                    fill="#7ABB4A" />
+                                                <path
+                                                    d="M18.0823 3.75447H18.5V5.09605H18.0823V6.43762H18.5V7.7792H18.0823V8.44998C18.0823 8.91141 18.4563 9.28547 18.9177 9.28547H19.635V8.86773H21.0695V9.28547H22.504V8.86773H23.9385V9.28547H24.6557C25.2238 9.28547 25.4987 8.59023 25.0843 8.20171L24.5887 7.73712L24.303 8.04188L23.3119 7.11268L23.5976 6.80792L22.6064 5.87873L22.3207 6.18349L21.3296 5.25429L21.6153 4.94953L20.6242 4.02034L20.3384 4.3251L19.3473 3.39591L19.633 3.09115L19.1374 2.62655C18.7372 2.25136 18.0823 2.53512 18.0823 3.08369V3.75447Z"
+                                                    stroke="#7ABB4A" stroke-width="0.835488" stroke-dasharray="1.3 1.3" />
+                                                <circle cx="18.3181" cy="19.3394" r="4.84877" transform="rotate(49.1347 18.3181 19.3394)" stroke="#7ABB4A"
+                                                    stroke-width="1.12791" />
+                                                <rect x="23.3359" y="23.6875" width="5.68178" height="2.05694" rx="1.02847"
+                                                    transform="rotate(49.1347 23.3359 23.6875)" stroke="#7ABB4A" stroke-width="1.12791" />
+                                                <path d="M21.1172 22.625L22.807 24.5781" stroke="#7ABB4A" stroke-width="0.960812" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_1230_6276">
+                                                    <rect width="30" height="30" fill="white" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                     </div>
+                                    <div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">There is no data available</div>
+                                </td>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table> 
+            </div>
+        </div>
+    </template>
+    <template lwc:else>
+        <table class="slds-table  slds-table_cell-buffer slds-table_striped">
+            <thead class="">
+                <tr class="slds-line-height_reset">
+                    <template lwc:if={columns}>
+                        <template for:each={columns} for:item="head">
+                            <th class="header-title" scope="col" key={head.id}>
+                                <template lwc:if={isSortable}>
+                                    <div class="head-title" onclick={sort} title={head.name} data-name={head.colName} data-type={head.colType}>
+                                        <a  data-name={head.colName} data-type={head.colType} class="head-sort">
+                                            {head.name}
+                                            <template lwc:if={norecord}>
+                                            </template>
+                                            <template lwc:else>
+                                                <span class="sort-container">
+                                                    <i class="fa-solid fa-sort-up green_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                    <i class="fa-solid fa-sort-down green_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                    <template lwc:if={head.arrUp}>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <i class="fa-solid fa-sort-up sort_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                    </template>
+                                                    <template lwc:if={head.arrDown}>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <i class="fa-solid fa-sort-down sort_icon" data-name={head.colName} data-type={head.colType}></i>
+                                                    </template>
+                                                </span>
+                                            </template>
+                                        </a>
+                                    </div>
+                                </template>
+                                <template lwc:else>
+                                    <div class="head-title"  title={head.name} >
+                                        <a   class="head-sort">
+                                            {head.name}
+                                        </a>
+                                    </div>
+                                </template>
+                            </th>
+                        </template>
+                        <template lwc:if={rowDownload}>
+                            <th class="download-th"></th>
+                        </template>
+                    </template>
+                </tr>
+            </thead>
+            <tbody class="content-body">
+                <template lwc:if={pagedData}>
+                    <template for:each={pagedData} for:item="trip">
+                            <tr key={trip.id}>
+                                <template for:each={trip.keyFields} for:item="mapKey">
+                                    <template lwc:if={mapKey.istwoDecimalCurrency}>
+                                        <template lwc:if={mapKey.hasLeadingZero}>
+                                            <template lwc:if={mapKey.bold}>
+                                                <td class="modal-content bold-text" key={mapKey.key} >
+                                                    ${mapKey.hasLeadingZero}
+                                                </td>
+                                            </template>
+                                            <template lwc:else>
+                                                <td class="modal-content" key={mapKey.key}>
+                                                    ${mapKey.hasLeadingZero}
+                                                </td>
+                                            </template>
+                                        </template>
+                                        <template lwc:else>
+                                            <template lwc:if={mapKey.bold}>
+                                                <td class="modal-content bold-text" key={mapKey.key}>
+                                                    <lightning-formatted-number value={mapKey.value} format-style="currency"
+                                                        currency-code="USD" maximum-fraction-digits="2">
+                                                    </lightning-formatted-number>
+                                                </td>
+                                            </template>
+                                            <template lwc:else>
+                                                <td class="modal-content" key={mapKey.key}>
+                                                    <lightning-formatted-number value={mapKey.value} format-style="currency"
+                                                        currency-code="USD" maximum-fraction-digits="2">
+                                                    </lightning-formatted-number>
+                                                </td>    
+                                            </template>
+                                        </template>
+                                    </template>
+                                    <template lwc:else>
+                                        <template lwc:if={mapKey.isfourDecimalCurrency}>
+                                            <template lwc:if={mapKey.hasLeadingZero}>
+                                                <template lwc:if={mapKey.bold}>
+                                                    <td class="modal-content bold-text" key={mapKey.key}>
+                                                        ${mapKey.hasLeadingZero}
+                                                    </td>
+                                                </template>
+                                                <template lwc:else>
+                                                    <td class="modal-content" key={mapKey.key}>
+                                                        ${mapKey.hasLeadingZero}
+                                                    </td>
+                                                </template>
+                                            </template>
+                                            <template lwc:else>
+                                                <td class="modal-content" key={mapKey.key}>
+                                                    <lightning-formatted-number value={mapKey.value} format-style="currency"
+                                                        currency-code="USD" maximum-fraction-digits="4">
+                                                    </lightning-formatted-number>
+                                                </td>
+                                            </template>
+                                        </template>
+                                        <template lwc:else>
+                                            <template lwc:if={mapKey.twoDecimal}>
+                                                <template lwc:if={mapKey.hasLeadingZero}>
+                                                    <template lwc:if={mapKey.bold}>
+                                                        <td class="modal-content bold-text" key={mapKey.key}>
+                                                            {mapKey.hasLeadingZero}
+                                                        </td>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <td class="modal-content" key={mapKey.key}>
+                                                            {mapKey.hasLeadingZero}
+                                                        </td>
+                                                    </template>
+                                                </template>
+                                                <template lwc:else>
+                                                    <td class="modal-content" key={mapKey.key}>
+                                                        <lightning-formatted-number value={mapKey.value}
+                                                            maximum-fraction-digits="2">
+                                                        </lightning-formatted-number>
+                                                    </td>
+                                                </template>
+                                            </template>
+                                            <template lwc:else>
+                                                <template lwc:if={mapKey.isDate}>
+                                                    <td class="modal-content" key={mapKey.key}>
+                                                        <template lwc:if={mapKey.icon}>
+                                                            <div  class="flex-row">
+                                                                <div class="slds-m-top_xx-small slds-m-right_small icon-holder">
+                                                                    <i class="fas fa-xs fa-chevron-right navigate" data-id={mapKey.id} data-st={mapKey.sDate} data-ed={mapKey.eDate} data-name={mapKey.value}></i>
+                                                                </div>
+                                                               <div>
+                                                                <lightning-formatted-date-time value={mapKey.value} year="2-digit"
+                                                                    month="numeric" day="numeric">
+                                                                </lightning-formatted-date-time>
+                                                                </div>
+                                                            </div>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <lightning-formatted-date-time value={mapKey.value} year="2-digit"
+                                                                    month="numeric" day="numeric">
+                                                            </lightning-formatted-date-time>
+                                                        </template>
+                                                    </td>
+                                                </template>
+                                                <template lwc:else>
+                                                    <template lwc:if={mapKey.icon}>
+                                                        <td class="modal-content flex-row" key={mapKey.key}>
+                                                            <div
+                                                                class="slds-m-top_xx-small slds-m-right_small icon-holder"><i
+                                                                    class="fas fa-xs fa-chevron-right navigate"  data-name={mapKey.value}></i></div>
+                                                            {mapKey.value}
+                                                        </td>
+                                                    </template>
+                                                    <template lwc:else>
+                                                        <template lwc:if={mapKey.bold}>
+                                                            <td class="modal-content bold-text" key={mapKey.key} >{mapKey.value}</td>
+                                                        </template>
+                                                        <template lwc:else>
+                                                            <td class="modal-content" key={mapKey.key}>{mapKey.value}</td>
+                                                        </template>
+                                                    </template>
+                                                </template>
+                                            </template>
+                                        </template>
+                                    </template>
+                                </template>
+                                <template lwc:if={rowDownload}>
+                                    <td class="model-content download-td">
+                                        <svg class="download-icon" data-key={trip.id} xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" onclick={handleDownload}><path d="m5.453 7.609 0.034 -0.034 -0.034 0.034 3.219 3.219 0.082 0.082V1.152a0.994 0.994 0 0 1 1.988 0V10.909l0.081 -0.081 3.22 -3.219c0.39 -0.39 1.018 -0.39 1.408 0 0.39 0.39 0.39 1.017 0 1.407l-4.998 4.998a1.067 1.067 0 0 1 -0.152 0.124l-0.031 0.017c-0.012 0.006 -0.027 0.013 -0.042 0.023a0.444 0.444 0 0 1 -0.093 0.05h-0.002l-0.054 0.019 -0.048 0.014a0.851 0.851 0 0 0 -0.038 0.012l-0.007 0.002a0.497 0.497 0 0 1 -0.042 0.013c-0.065 0.012 -0.131 0.019 -0.194 0.019a1.086 1.086 0 0 1 -0.193 -0.019 0.544 0.544 0 0 1 -0.083 -0.026v-0.001l-0.008 -0.002 -0.011 -0.003a0.39 0.39 0 0 1 -0.083 -0.027l-0.002 -0.001a0.659 0.659 0 0 1 -0.05 -0.026l-0.01 -0.006a1.124 1.124 0 0 0 -0.042 -0.022 0.657 0.657 0 0 1 -0.07 -0.038v-0.001a0.93 0.93 0 0 1 -0.15 -0.123l-5 -4.998a0.993 0.993 0 0 1 0 -1.407c0.39 -0.39 1.019 -0.39 1.408 0ZM1.041 17.124h17.413a0.994 0.994 0 0 1 0 1.988H1.041a0.994 0.994 0 0 1 0 -1.988Z" fill="#7ABB4A" stroke="white" stroke-width="0.09523809523809523"/></svg>
+                                    </td>
+                                </template>
+                            </tr>
+                    </template>
+                    <template lwc:if={isYtd}>
+                        <tr lwc:if={isYtdBiweek}>
+                            <td class="bold-text">YTD</td>
+                            <td></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.mileageCalc}  maximum-fraction-digits="2">
+                            </lightning-formatted-number></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.varibleAmountCalc} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number></td>
+                            <td class="no-bold">{footerList.fixed1Calc}</td>
+                            <td class="no-bold">{footerList.fixed2Calc}</td>
+                            <td class="no-bold">{footerList.fixed3Calc}</td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.totalReim} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number></td>
+                            <td class="no-bold"><!--<lightning-formatted-number value={footerList.totalAVGCalc} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number>--></td>
+                        </tr>
+                        <tr lwc:else>
+                            <td class="bold-text">YTD</td>
+                            <td></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.mileageCalc}  maximum-fraction-digits="2">
+                            </lightning-formatted-number></td>
+                            <td></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.varibleAmountCalc} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.totalMonthlyFixedCalc} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number></td>
+                            <td class="no-bold"><lightning-formatted-number value={footerList.totalReim} format-style="currency"
+                                currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number></td>
+                            <td class="no-bold"><!--<lightning-formatted-number value={footerList.totalAVGCalc} format-style="currency"
+                                    currency-code="USD" maximum-fraction-digits="2"></lightning-formatted-number>--></td>
+                        </tr>
+                    </template>
+                </template>
+                <template lwc:if={norecord}>
+                    <template lwc:if={columns}>
+                            <tr>
+                                <template for:each={columns} for:item="head">
+                                    <td key={head.id}>--</td>
+                                </template>
+                            </tr>
+                            <tr>
+                                <td colspan="100%">
+                                    <div class="slds-align_absolute-center">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 30 30" fill="none">
+                                            <g clip-path="url(#clip0_1230_6275)">
+                                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                                    d="M5.00298 2C4.38433 2 3.88281 2.50151 3.88281 3.12016V3.77839H4.09168H4.50943H4.7183V3.12016C4.7183 2.96294 4.84575 2.83549 5.00298 2.83549H5.67615V2.62662V2.20887V2H5.00298ZM8.36882 2H7.02249V2.20887V2.62662V2.83549H8.36882V2.62662V2.20887V2ZM11.0615 2H9.71516V2.20887V2.62662V2.83549H11.0615V2.62662V2.20887V2ZM13.7542 2H12.4078V2.20887V2.62662V2.83549H13.7542V2.62662V2.20887V2ZM16.4469 2H15.1005V2.20887V2.62662V2.83549H16.4469V2.62662V2.20887V2ZM18.4664 2H17.7932V2.20887V2.62662V2.83549H18.4664V2.62662V2.20887V2ZM3.88281 5.09483V6.41127H4.09168H4.50943H4.7183V5.09483H4.50943H4.09168H3.88281ZM3.88281 7.72772V9.04416H4.09168H4.50943H4.7183V7.72772H4.50943H4.09168H3.88281ZM25.5942 9.51994V8.87934H25.3854H24.9676H24.7587V9.51994H24.9676H25.3854H25.5942ZM3.88281 10.3606V11.677H4.09168H4.50943H4.7183V10.3606H4.50943H4.09168H3.88281ZM25.5942 12.0823V10.8011H25.3854H24.9676H24.7587V12.0823H24.9676H25.3854H25.5942ZM3.88281 12.9935V14.3099H4.09168H4.50943H4.7183V12.9935H4.50943H4.09168H3.88281ZM25.5942 14.6447V13.3635H25.3854H24.9676H24.7587V14.6447H24.9676H25.3854H25.5942ZM3.88281 15.6264V16.9428H4.09168H4.50943H4.7183V15.6264H4.50943H4.09168H3.88281ZM25.5942 17.2071V15.9259H25.3854H24.9676H24.7587V17.2071H24.9676H25.3854H25.5942ZM3.88281 18.2593V19.5757H4.09168H4.50943H4.7183V18.2593H4.50943H4.09168H3.88281ZM25.5942 19.7695V18.4883H25.3854H24.9676H24.7587V19.7695H24.9676H25.3854H25.5942ZM3.88281 20.8922V22.2086H4.09168H4.50943H4.7183V20.8922H4.50943H4.09168H3.88281ZM25.5942 22.3319V21.0507H25.3854H24.9676H24.7587V22.3319H24.9676H25.3854H25.5942ZM3.88281 23.525V24.8415H4.09168H4.50943H4.7183V23.525H4.50943H4.09168H3.88281ZM25.5942 24.8943V23.6131H25.3854H24.9676H24.7587V24.8943H24.9676H25.3854H25.5942ZM3.88281 26.1579V26.8161C3.88281 27.4348 4.38433 27.9363 5.00298 27.9363H5.61145V27.7274V27.3097V27.1008H5.00298C4.84575 27.1008 4.7183 26.9734 4.7183 26.8161V26.1579H4.50943H4.09168H3.88281ZM25.5942 26.298V26.1755H25.4883L25.5942 26.298ZM24.2917 27.9363L23.8656 27.4438V27.7274V27.9363H24.2917ZM6.82839 27.9363H8.04534V27.7274V27.3097V27.1008H6.82839V27.3097V27.7274V27.9363ZM9.26228 27.9363H10.4792V27.7274V27.3097V27.1008H9.26228V27.3097V27.7274V27.9363ZM11.6962 27.9363H12.9131V27.7274V27.3097V27.1008H11.6962V27.3097V27.7274V27.9363ZM14.1301 27.9363H15.347V27.7274V27.3097V27.1008H14.1301V27.3097V27.7274V27.9363ZM16.5639 27.9363H17.7809V27.7274V27.3097V27.1008H16.5639V27.3097V27.7274V27.9363ZM18.9978 27.9363H20.2148V27.7274V27.3097V27.1008H18.9978V27.3097V27.7274V27.9363ZM21.4317 27.9363H22.6487V27.7274V27.3097V27.1008H21.4317V27.3097V27.7274V27.9363Z"
+                                                    fill="#7ABB4A" />
+                                                <path
+                                                    d="M18.0823 3.75447H18.5V5.09605H18.0823V6.43762H18.5V7.7792H18.0823V8.44998C18.0823 8.91141 18.4563 9.28547 18.9177 9.28547H19.635V8.86773H21.0695V9.28547H22.504V8.86773H23.9385V9.28547H24.6557C25.2238 9.28547 25.4987 8.59023 25.0843 8.20171L24.5887 7.73712L24.303 8.04188L23.3119 7.11268L23.5976 6.80792L22.6064 5.87873L22.3207 6.18349L21.3296 5.25429L21.6153 4.94953L20.6242 4.02034L20.3384 4.3251L19.3473 3.39591L19.633 3.09115L19.1374 2.62655C18.7372 2.25136 18.0823 2.53512 18.0823 3.08369V3.75447Z"
+                                                    stroke="#7ABB4A" stroke-width="0.835488" stroke-dasharray="1.3 1.3" />
+                                                <circle cx="18.3181" cy="19.3394" r="4.84877" transform="rotate(49.1347 18.3181 19.3394)" stroke="#7ABB4A"
+                                                    stroke-width="1.12791" />
+                                                <rect x="23.3359" y="23.6875" width="5.68178" height="2.05694" rx="1.02847"
+                                                    transform="rotate(49.1347 23.3359 23.6875)" stroke="#7ABB4A" stroke-width="1.12791" />
+                                                <path d="M21.1172 22.625L22.807 24.5781" stroke="#7ABB4A" stroke-width="0.960812" />
+                                            </g>
+                                            <defs>
+                                                <clipPath id="clip0_1230_6275">
+                                                    <rect width="30" height="30" fill="white" />
+                                                </clipPath>
+                                            </defs>
+                                        </svg>
+                                     </div>
+                                    <div class="slds-align_absolute-center slds-p-top_medium slds-p-bottom_x-large no-data-message">There is no data available</div>
+                                </td>
+                            </tr>
+                    </template>
+                </template>
+            </tbody>
+        </table>
+        <template lwc:if={norecord}>
+        </template>
+        <template lwc:else>
+            <div class="slds-p-top_medium slds-p-bottom_small">
+                <div class="slds-float_right">
+                    <svg class="download-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" onclick={handleAllDownload}><path d="m5.453 7.609 0.034 -0.034 -0.034 0.034 3.219 3.219 0.082 0.082V1.152a0.994 0.994 0 0 1 1.988 0V10.909l0.081 -0.081 3.22 -3.219c0.39 -0.39 1.018 -0.39 1.408 0 0.39 0.39 0.39 1.017 0 1.407l-4.998 4.998a1.067 1.067 0 0 1 -0.152 0.124l-0.031 0.017c-0.012 0.006 -0.027 0.013 -0.042 0.023a0.444 0.444 0 0 1 -0.093 0.05h-0.002l-0.054 0.019 -0.048 0.014a0.851 0.851 0 0 0 -0.038 0.012l-0.007 0.002a0.497 0.497 0 0 1 -0.042 0.013c-0.065 0.012 -0.131 0.019 -0.194 0.019a1.086 1.086 0 0 1 -0.193 -0.019 0.544 0.544 0 0 1 -0.083 -0.026v-0.001l-0.008 -0.002 -0.011 -0.003a0.39 0.39 0 0 1 -0.083 -0.027l-0.002 -0.001a0.659 0.659 0 0 1 -0.05 -0.026l-0.01 -0.006a1.124 1.124 0 0 0 -0.042 -0.022 0.657 0.657 0 0 1 -0.07 -0.038v-0.001a0.93 0.93 0 0 1 -0.15 -0.123l-5 -4.998a0.993 0.993 0 0 1 0 -1.407c0.39 -0.39 1.019 -0.39 1.408 0ZM1.041 17.124h17.413a0.994 0.994 0 0 1 0 1.988H1.041a0.994 0.994 0 0 1 0 -1.988Z" fill="#7ABB4A" stroke="white" stroke-width="0.09523809523809523"/></svg>
+                </div>
+            </div>
+        </template>
+    </template>
+
+    <template lwc:if={isPaginate}>
+        <template lwc:if={norecord}>
+        </template>
+        <template lwc:else>
+            <div class="slds-p-top_medium slds-p-bottom_small footer-container">
+                <template lwc:if={filter}>
+                    <slot></slot>
+                </template>
+                <template lwc:else>
+                    <div class="slds-float_left">
+                        <table>
+                            <tr>
+                                <td class="footer-heading slds-p-left_small slds-p-top_x-small">Total: </td>
+                                <td class="sub-value"><span class="sub-value-1">{perPageMileage}</span><span class="sub-value-2">/{totalMileage}</span></td>
+                                <td class="sub-value" lwc:if={isVariable}><span class="sub-value-1">${perPageVariable}</span><span class="sub-value-2">/${totalVarAmount}</span></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="sub-text">Mileage</td>
+                                <td class="sub-text" lwc:if={isVariable}>Variable Amount</td>
+                            </tr>
+                        </table>
+                    </div>
+                </template>
+            
+                <template lwc:if={pagedData}>
+                    <div class="slds-clearfix">
+                        <span class="slds-float_right slds-p-top_small">
+                            <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item">
+                                    <a 
+                                    name="buttonBackwards"
+                                    label="Previous" 
+                                    title="" 
+                                    onclick={handleButtonPrevious}  
+                                    class={cssPreviousText}
+                                    disabled={disabledPreviousButton}>
+                                    <i class="fa-solid fa-chevron-left fa-lg slds-p-horizontal_x-small slds-p-vertical_x-small navigate-icon"></i>
+                                    </a>
+                                </li>
+                                <li class="slds-item">
+                                    <div class="slds-p-horizontal_medium pageEdit">
+                                        {currentPage}
+                                    </div>
+                                </li>
+                                <li class="slds-item">
+                                    <a 
+                                    name="buttonForwards" 
+                                    label="Next" 
+                                    title="" 
+                                    onclick={handleButtonNext} 
+                                    class={cssText}
+                                    disabled={disabledNextButton}>
+                                        <i class="fa-solid fa-chevron-right fa-lg slds-p-horizontal_x-small slds-p-vertical_x-small navigate-icon"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <!-- <ul class="slds-list_horizontal  slds-has-block-links_space border-radius">
+                                <li class="slds-item navigate">
+                                    <a name="buttonBackwards"  label="Previous" title=""
+                                        onclick={onPrev} class={cssPreviousText}
+                                        disabled={disabledPreviousButton}>
+                                        <i class="fa-solid fa-arrow-left fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                                <li class="slds-item">
+                                    <div class="slds-p-horizontal_x-small slds-p-vertical_x-small pageEdit">
+                                        <template for:each={pages} for:item="page">
+                                            <div class="flow-block" key={page}>
+                                                <a data-id={page} class="page-num-block" onclick={onPageClick}>{page}</a>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </li>
+                                <li class="slds-item navigate">
+                                    <a name="buttonForwards" label="Next" title=""
+                                        onclick={onNext} class={cssText}
+                                        disabled={disabledNextButton}>
+                                        <i class="fa-solid fa-arrow-right fa-lg navigate-icon"></i>
+                                    </a>
+                                </li>
+                             </ul> -->
+                        </span>
+                        <template lwc:if={isAllDownload}>
+                            <div class="slds-float_right slds-p-top_small slds-p-right_small">
+                                <button class="slds-btn slds-btn-primary slds-btn-sm waves-effect bc-green waves-light mleft-0 btn-trip"
+                                    onclick={downloadAllTrips}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23" fill="none" style="margin-right:3px"><path d="m6.956 10.697.029-.029-.029.029 3.931 3.931a.861.861 0 0 0 .132.109.575.575 0 0 0 .063.033h.001l.029.017.008.006.044.023a.328.328 0 0 0 .082.026l.006.002a.512.512 0 0 0 .075.023l.002.001a.866.866 0 0 0 .339 0h.002a.462.462 0 0 0 .048-.017.48.48 0 0 1 .025-.006l.002-.002.029-.008.052-.017a.485.485 0 0 0 .09-.046l.001-.001.002-.001a.213.213 0 0 1 .025-.015l.033-.02a.876.876 0 0 0 .132-.109l3.931-3.931a.866.866 0 0 0 0-1.225.866.866 0 0 0-1.225 0l-2.455 2.455V4.456a.868.868 0 0 0-1.731 0v7.472L8.18 9.473a.866.866 0 0 0-1.225 0 .866.866 0 0 0 0 1.225Zm12.257 7.101a.867.867 0 0 0-.868-.866H4.652a.868.868 0 0 0 0 1.731h13.695a.868.868 0 0 0 .867-.867Z" fill="#fff" stroke="#fff" stroke-width=".093"/></svg>
+                                    Download
+                                </button>
+                            </div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+        </template>
+    </template>
+</template>

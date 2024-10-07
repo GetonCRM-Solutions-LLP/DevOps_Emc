@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomFieldTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label><!-- Filter By --></label>
+    <name>Filter_By__c</name>
+    <picklistValues>
+        <masterLabel>Biweek Reimbursement</masterLabel>
+        <translation><!-- Biweek Reimbursement --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Dates</masterLabel>
+        <translation><!-- Dates --></translation>
+    </picklistValues>
+    <picklistValues>
+        <masterLabel>Monthly Reimbursement</masterLabel>
+        <translation><!-- Monthly Reimbursement --></translation>
+    </picklistValues>
+</CustomFieldTranslation>

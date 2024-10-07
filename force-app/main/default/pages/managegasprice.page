@@ -1,0 +1,421 @@
+<apex:page sidebar="false" action="{!ValidateUser}" showHeader="false" lightningStylesheets="true" controller="ManageGasPriceController">
+    <html xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" lang="en">
+        <head>
+            <!-- Required meta tags -->
+            <meta charset="utf-8"/>
+            <meta http-equiv="x-ua-compatible" content="ie=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1"/>
+            
+            <!-- EMC Common Head -->
+            <apex:include pageName="EMC_Common_Head"/>
+
+            <!-- Title of the page -->
+            <title>Manage Gas Price</title>
+            <apex:slds />
+            <style>
+                .slds-scope .slds-spinner_container {
+                    position: fixed !important;
+                }
+                .float{
+                    position:fixed !important;
+                    z-index: 1;
+                    bottom:40px;
+                    right:40px;
+                    /* background-color:#78bc42 !important; */
+                    color:#FFF;
+                    text-align:center;
+                    box-shadow: 2px 2px 3px #999 !important;
+                }
+                .slds-scope .slds-dropdown {
+                    padding: 0px;
+                    margin: 0px;
+                    min-width: 150px;
+                    position: relative;
+                }
+                .slds-scope .slds-table thead th {
+                    background: #78bc42 !important;
+                    color: rgb(250, 250, 250);
+                }
+                .slds-button--neutral {
+                    background: #78bc42 !important;
+                    border-color: #78bc42 !important;
+                }
+                .slds-button:disabled {
+                    background: rgb(221, 219, 218) !important;
+                    border-color: rgb(221, 219, 218) !important;
+                }
+                .input-invalid {
+                    border-color: rgb(194, 57, 52) !important;
+                    box-shadow: none;
+                }
+                .slds-required {
+                    color: rgb(194, 57, 52) !important;
+                }
+                .disabled {
+                    box-shadow: none;
+                    background-color: rgb(236, 235, 234) !important;
+                    border-color: rgb(201, 199, 197) !important;
+                    cursor: not-allowed;
+                    user-select: none;
+                }
+                header {
+                    margin-bottom: 0;
+                }
+                .slds-scope select {
+                    background-color: #fff;
+                    border: 1px solid #dddbda;
+                    border-radius: .25rem;
+                    width: 49%;
+                    transition: border .1s linear,background-color .1s linear;
+                    /* -webkit-appearance: none; */
+                    padding-left: .5rem;
+                    padding-right: 1.5rem;
+                    padding-top: .3rem;
+                    padding-bottom: 0.3rem;
+                }
+                table select {
+                    border-radius: 0.2rem;
+                    padding: 0.275rem 1.2rem;
+                }
+                .select2-drop {
+                    width: 150px !important;
+                }
+                .filter-td {
+                    width: 10px;
+                }
+                .slds-container{
+                    font-size: 1em;
+                    font-family: 'Proxima Nova' !important;
+                }
+
+                .slds-button{
+                    font-family: 'Proxima Nova' !important;
+                    cursor: pointer;
+                }
+                .slds-context-bar__item{
+                    font-family: 'Proxima Nova SemiBold' !important;
+                }
+                .img-fluid{
+                    height: 40px !important;
+                }
+                .slds-context-bar{
+                    height: 4.5rem !important;
+                    background: #78bc42 !important;
+                    border-bottom: none !important;
+                
+                }
+                .slds-context-bar__label-action{
+                    color: #ffffff !important;
+                    font-size: 1rem !important;
+                }
+                .slds-context-bar__label-action:hover{
+                    color: #ffffff !important;
+                }
+                .slds-context-bar__item:not(.slds-no-hover):hover:after{
+                    background:rgba(0, 209, 0, 1) !important;
+                }
+                .slds-context-bar__item.slds-is-active:before{
+                    background:rgba(34, 255, 0, 0.877) !important;
+                }
+                .slds-context-bar__secondary{
+                    flex-direction: row-reverse !important;
+                }
+                .img-fluid{
+                    height: 40px !important;
+                }
+                .slds-theme_shade{
+                    background-color: none;
+                    border: none;
+                }
+
+                .nav_bar_wrap{
+                    height: 78px;
+                }
+            </style>
+
+            <script src="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/js/angular.min.js')}" />
+            <!-- Stylesheet & jqueries for searchable picklist -->
+            <apex:stylesheet value="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/css/select2.css')}"/>
+            <script src="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/js/jquery-1.10.2.min.js')}"></script>
+            <script src="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/js/select2.js')}" />
+
+            <!-- Font-awsome -->
+            <script src="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/font/a2f714f289.js')}" crossorigin="anonymous"></script>
+
+            <!--Toaster -->
+            <script src="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/js/toastr.min.js')}"></script>
+            <link rel="stylesheet" href="{!URLFOR($Resource.ManageGasPriceFiles,'ManageGasPriceFiles/assets/css/toastr.min.css')}"/>
+            
+            <!-- Custom scripts -->
+            <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.searchSelect').select2();
+                });
+                Visualforce.remoting.timeout = 120000;
+                
+                var app = angular.module('appModule',[]);
+                app.controller('appController', ['$scope', 
+                    function($scope) {
+                        var today = new Date(); 
+                        var mm = today.getMonth() + 1; 
+                        var yyyy = today.getFullYear(); 
+                        if (mm < 10) { 
+                            mm = '0' + mm; 
+                        } 
+                        var today = mm + '-' + yyyy; 
+                        $scope.master = {
+                            monthsOptions : JSON.parse('{!GasPriceOptions}'),
+                            states : JSON.parse('{!MailingStates}'),
+                            waiting : true,
+                            weekswisedata : []
+                        }
+                        console.table($scope.master.states);
+                        $scope.selectedInfo = {
+                            selectedMonth : today,
+                            selectedState : 'none'
+                        }
+                        
+                        /** LOAD  FUELS **/
+                        $scope.DoSearch = function() {
+                            $scope.master.waiting = true;
+                            Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ManageGasPriceController.GetWeeksOfMonth}', JSON.stringify($scope.selectedInfo),
+                                function(result, event) {
+                                    if(event.status) {
+                                        $scope.master.weekswisedata = JSON.parse(result);
+                                    }
+                                    console.table($scope.master.weekswisedata );
+                                    $scope.master.waiting = false;
+                                    $scope.$apply();
+                                }, { buffer: true, escape: false }
+
+                            );
+                        }
+
+                        /** sAVE GAS PRICES **/
+                        $scope.SaveGasPrices = function() {
+                            var gasPrices = [];
+                            var collapseObject = {};
+                            angular.forEach($scope.master.weekswisedata, function (value, key) {
+                                collapseObject[value.weekCount] = value.collapse;
+                                angular.forEach(value.gasPrices, function (value2, key2) {
+                                    if(value2.Fuel_Price__c > 0) {
+                                        gasPrices.push(value2);
+                                    }
+                                });
+                            });
+
+                            if(gasPrices > 0) {
+                                toastr.error('Enter valid fuel price(s).'); 
+                            } else {
+                                $scope.master.waiting = true;
+                                Visualforce.remoting.Manager.invokeAction('{!$RemoteAction.ManageGasPriceController.SaveAllGasPrice}', JSON.stringify(gasPrices), JSON.stringify($scope.selectedInfo), 
+                                    function(result, event) {
+
+                                        if(!event.status) {
+                                            toastr.error('Server error occured.'); 
+                                        } else {
+                                            $scope.master.weekswisedata = JSON.parse(result);
+                                            angular.forEach($scope.master.weekswisedata, function (value, key) {
+                                                value.collapse = collapseObject[value.weekCount];
+                                            });
+                                        }
+                                        $scope.master.waiting = false;
+                                        $scope.$apply();
+                                        
+                                    }, { buffer: true, escape: false }
+
+                                );
+                            }
+                        }
+
+                        /** VALIDATE SELECTED FILTERS **/
+                        $scope.dovalidatefilter = function() {
+                            $scope.master.invalidfilter = false;
+                            if( !$scope.selectedInfo.selectedMonth ||  $scope.selectedInfo.selectedMonth == 'none'
+                                || !$scope.selectedInfo.selectedState ||  $scope.selectedInfo.selectedState == 'none') {
+                                $scope.master.invalidfilter = true;
+                            }
+                            else {
+                                $scope.DoSearch();
+                            }
+                        }
+
+                        /* Toaster Option */
+                        this.setOptions = function() {
+                            toastr.options.positionClass = "toast-bottom-right";
+                            toastr.options.closeButton = true;
+                            toastr.options.progressBar = true;
+                        };
+
+                        this.setOptions();
+                        this.clear = function() {
+                            toastr.clear();
+                        };
+                        /* Toaster Option Complete with clear funtion */
+
+                        /** GET AVERAGE PRICE **/
+                        $scope.AveragePrice = function(){
+                            if($scope.master.gaslines.length == 0) return 0;
+                            var total = 0;
+                            angular.forEach($scope.master.gaslines, function (value, key) {
+                                total += value.Fuel_Price__c;
+                            });
+
+                            return (total/ $scope.master.gaslines.length);
+                            
+                        }
+
+                        /** COUNT OF MISSING PRICE FOR WEEK **/
+                        $scope.MissingPriceCount = function(items) {
+                            let count = 0;
+                            angular.forEach(items, function (value, key) {
+                                if(value.Fuel_Price__c <= 0 )
+                                    count++;
+                            });
+
+                            return count;
+                        }
+
+                        /** CHECK VALID FILTERS **/
+                        $scope.validateFilters = function() {
+                            if($scope.selectedInfo.selectedMonth != 'none' && 
+                               $scope.selectedInfo.selectedState != 'none')
+                                return true;
+                            return false;
+                        }
+                        $scope.master.waiting = false;
+
+                    }
+                ]);
+            </script> 
+        </head>
+        <body class="slds-scope" ng-app="appModule" ng-controller="appController" ng-cloak="true">
+           
+            <div class="slds-container">
+                <div class="slds-context-bar slds-context-bar_tab">
+                    <div class="slds-context-bar__primary">
+                        <div class="slds-context-bar__item slds-context-bar__dropdown-trigger slds-dropdown-trigger slds-dropdown-trigger_click slds-no-hover">
+                            <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                                <!-- <img alt="logo" class="img-fluid"
+                                    src="{!URlFOR($Resource.EmcCSS, '/emc-design/assets/images/logo/mBurse-logo_rev.png')}"/> -->
+                            </span>
+                        </div>
+                        <span class="slds-context-bar__label-action slds-context-bar__app-name">
+                            <span class="slds-truncate" title="Manage Gas Price">Manage Gas Price</span>
+                        </span>
+                    </div>
+                    <!-- <nav class="slds-context-bar__secondary" role="navigation">
+                        <ul class="slds-grid">
+                            <li class="slds-context-bar__item slds-is-active">
+                                <a href="javascript:void(0);" class="slds-context-bar__label-action" title="Home">
+                                    <span class="slds-assistive-text"></span>
+                                    <span class="slds-truncate" title="Home">Dashboard</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <nav class="slds-context-bar__tertiary" role="navigation">
+                        <ul class="slds-grid">
+                            <li class="slds-context-bar__item">
+                                <a href="/app/secur/logout.jsp" class="slds-context-bar__label-action" title="Logout">
+                                    <span class="slds-truncate" title="Logout">Logout</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav> -->
+                </div>  
+                <div class="slds-box slds-grid">
+                    <div class="slds-form" style="width: 100%;">
+                        <form style="width: 100%;">
+                            <div class="slds-grid">
+                                <div class="slds-col">
+                                    <label>Month:<span class="slds-required">*</span></label>
+                                    <select ng-model="selectedInfo.selectedMonth" class="searchSelect2" ng-change="dovalidatefilter();">
+                                        <option ng-repeat="option in master.monthsOptions" value="{{option}}" ng-selected="option == selectedInfo.selectedMonth">{{option}}</option>
+                                    </select>
+                                </div>
+                               
+                                <div class="slds-col">
+                                    <label>State:<span class="slds-required">*</span> </label>
+                                    <select ng-model="selectedInfo.selectedState" class="searchSelect2" ng-change="dovalidatefilter();">
+                                        <option value="none" ng-selected="'none' == selectedInfo.selectedState">-- Select State --</option>
+                                        <option ng-repeat="option in master.states" value="{{option}}" ng-selected="option == selectedInfo.selectedState">{{option}}</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <button ng-disabled="!validateFilters();" aria-controls="expando-unique-id" aria-expanded="true" class="slds-button float slds-button_neutral slds-button_dual-stateful slds-is-pressed" ng-click="SaveGasPrices();">
+                    <svg class="slds-button__icon slds-button__icon_left" aria-hidden="true">
+                        <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#save')}"></use>
+                    </svg>
+                    <span class="slds-truncate" title="Save Gas Price(s)">Save</span>
+                </button>
+                
+                <div class="slds-box slds-text-heading_small slds-scoped-notification slds-scoped-notification_light slds-m-bottom_large site" role="status"  ng-hide="validateFilters()">
+                    <div class="slds-media">
+                        <div class="slds-media__figure" ng-hide="validateFilters()">
+                            <span class="slds-icon_container slds-icon-utility-info" title="information">
+                                <svg class="slds-icon slds-icon_small slds-icon-text-default" aria-hidden="true">
+                                    <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#info')}"></use>
+                                </svg>
+                                <span class="slds-assistive-text">information</span>
+                            </span>
+                        </div>
+                        <div class="slds-media__body">
+                            <p ng-hide="validateFilters()">Please select filters.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Collpasible Week divs -->
+                <div class="slds-section slds-p-left_large slds-p-right_large" ng-class="{'slds-is-open': w.collapse == false, 'slds-p-bottom_large slds-m-bottom_xx-large': w.weekCount == master.weekswisedata.length}" ng-repeat="w in master.weekswisedata">
+                    <h3 class="slds-section__title">
+                        <button aria-controls="expando-unique-id" aria-expanded="true" class="slds-button slds-section__title-action" ng-click="w.collapse = !w.collapse">
+                            <svg class="slds-section__title-action-icon slds-button__icon slds-button__icon_left" aria-hidden="true">
+                                <use xlink:href="{!URLFOR($Asset.SLDS, '/assets/icons/utility-sprite/svg/symbols.svg#switch')}"></use>
+                            </svg>
+                            <span class="slds-truncate" title="{{w.title}}">{{w.title}} </span>
+                            <span class="slds-badge slds-m-left_large slds-theme_error"><abbr title="Missing Fuel Prices">{{MissingPriceCount(w.gasPrices)}}</abbr></span>
+                        </button>
+                    </h3>
+                    <div aria-hidden="false" class="slds-section__content slds-p-left_large slds-p-right_large" id="expando-unique-id">
+                        <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped slds-table_col-bordered slds-border_right slds-border_left" style="width: 50%">
+                            
+                            <thead>
+                                <tr class="slds-line-height_reset">
+                                    <th style="width: 200px;">City</th>
+                                    <th style="width: 250px;">Fuel Price</th> 
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="line in w.gasPrices">
+                                    <td>{{line.City__c}}</td>
+                                    <td>
+                                        <input ng-class="{'input-invalid' : line.Fuel_Price__c <= 0}"  step="0.05" min="0.0" type="number" class="slds-input" ng-model="line.Fuel_Price__c" ng-change="validateAllPrice()" ng-disabled="!w.enableEdit"/>
+                                    </td> 
+                                </tr>
+                                
+                            </tbody>
+
+                            
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Spinner Start-->
+                <div class="slds-spinner_container" ng-show="master.waiting">
+                    <div role="status" class="slds-spinner slds-spinner_medium slds-spinner_brand">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+                <!-- Spinner End-->
+
+            </div>
+        </body>
+    </html>
+</apex:page>

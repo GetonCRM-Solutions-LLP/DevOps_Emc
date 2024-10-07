@@ -1,0 +1,436 @@
+body{
+    font-family: 'Proxima Nova' !important;
+    font-style: normal !important;
+    // min-height: calc(100vh - 90px);
+}
+body, td {
+    font-family: 'Proxima Nova' !important;
+}
+.container-fluid {
+    width: 100% !important;
+    padding-right: 40px !important;
+    padding-left: 40px !important;
+}
+.btn-green{
+    background: $primary-color  !important;
+    color: $white-color  !important;
+    border-radius: 0px  !important;
+    font-weight: 600  !important;
+}
+.btn-cancel{
+    background: $maro-color !important;
+    color: $primary-color !important;
+    border-radius: 0px !important;
+    font-weight: 600 !important;
+}
+
+.form-gray-divider{
+    border-top: 2px solid #d8d8d8;
+    margin-top: 40px;
+    margin-bottom: 30px;
+    @media only screen and (min-width:320px) and (max-width:767px) {
+      margin-top: 20px;
+      margin-bottom: 10px;   
+   }   
+}
+.modal-divider{
+    border-top: 2px solid #d8d8d8;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.mb-30{
+    margin-bottom: 30px !important;
+}
+.mr-15{
+    margin-right: 15px !important;
+}
+.mt-50{
+    margin-top:50px !important;
+}
+.ml-16
+{
+	 margin-left: -16px !important;
+} 
+@media only screen and (min-width:320px) and (max-width:767px) {
+ .pl-sm-0{
+    padding-left: 0 !important;
+ }
+}
+.navbar-toggler:focus, .navbar-toggler:hover{
+  text-decoration: none !important;
+  border-bottom-color: transparent !important;
+  outline: none !important;
+  border-color: transparent;
+}
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #212529;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: transparent;
+    border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.btn-primary {
+  color: #fff !important;
+    background: $primary-color !important;
+    border-color:$primary-color !important;
+    font-size: 18px !important;
+    font-family: 'Proxima Nova Bold' !important;
+    border-radius: 0px !important;
+}
+.btn-primary:hover{
+    color: $primary-color !important;
+    background: $secondary-color !important;
+    border-color:$secondary-color !important;
+}
+.btn-secondary{
+    color: #fff !important;
+    background: $secondary-color !important;
+    border-color:$secondary-color !important;
+    font-size: 18px !important;
+    font-family: 'Proxima Nova Bold' !important;
+    border-radius: 0px !important;
+}
+.btn-secondary:hover{
+    color: #fff !important;
+    background: $second-btn-hover !important;
+    border-color:$second-btn-hover !important;
+}
+.btn-third {
+    color: #fff !important;
+    background: $third-btn-bg !important;
+    border-color:$third-btn-bg !important;
+    font-size: 18px !important;
+    font-family: 'Proxima Nova Bold' !important;
+    border-radius: 0px !important;
+}
+.btn-third:hover{
+    color: $primary-color !important;
+    background: $secondary-color !important;
+    border-color:$secondary-color !important;
+    }
+// tab comman css
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link{
+	background: $primary-color !important;
+    border-radius: 0px !important;
+}
+.nav .nav-link.active,.nav .show > .nav-link{
+    color: $white-color !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+.nav .nav-item{
+    margin-right: 5px !important;
+    background: $maro-color !important;
+}
+.nav .nav-item a{
+    color: $primary-color !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+#adminroster-pills-tab.nav-pills .nav-link.active,#adminroster-pills-tab.nav-pills .show > .nav-link{
+    color: $white-color !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+#adminroster-pills-tab .nav-item{
+    margin-right: 5px !important;
+    background: $maro-color !important;
+}
+#adminroster-pills-tab .nav-item a{
+    color: $primary-color !important;
+    font-family: 'Proxima Nova Bold' !important;
+}
+.table-a-link a{
+    color: $primary-color !important;
+    text-decoration: underline !important;
+	cursor:pointer;
+}
+.table-a-link a:hover,.table-a-link a:active{
+    color: $primary-color !important;
+    font-family: 'Proxima Nova SemiBold' !important;
+	cursor:pointer;
+}
+.modal-body .dataTable th {
+    color: $primary-color !important;
+    border-bottom: 1px solid $primary-color;
+}
+
+// Data table css comman css
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: $secondary-color !important;
+    border: 1px solid $secondary-color !important;
+    background-color: $maro-color !important;
+    background: $maro-color !important;
+    border-radius: 0px !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{
+    background-color: $disable-color !important;
+}
+.dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate{
+    margin-top: 20px !important;
+}
+table.dataTable tbody tr.selected {
+    font-weight: 600;
+    color: $secondary-color;
+}
+table.dataTable.no-footer{
+    border-bottom: 0px;
+}
+table.dataTable thead th, table.dataTable thead td {
+    padding: 10px 18px;
+    border-bottom: 2px solid $primary-color;
+    border-top: 0px;
+    color: $primary-color;
+}
+table input[type="text"],table select{
+    display: block;
+    width: 100%;
+    height: calc(1.9rem + 2px);
+    padding: .275rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #495057;
+    background-color: $white-color;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0rem;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+.model-datatble {
+    padding: 10px 18px;
+    border-bottom: 2px solid $secondary-color !important;
+    border-top: 0px;
+    color: $secondary-color !important;
+}
+/* .modal_dataTables_scroll{
+    overflow: auto;
+    width: 100%;
+    display: block;
+}
+.tab_dataTables_scroll,.dataTables_scroll{
+    overflow: auto;
+    width: 100%;
+    display: block;
+} */
+.dataTables_scrollHeadInner,table.table.table-striped.dt-responsive.nowrap.dataTable.no-footer,table.dataTable.no-footer{
+    width: 100% !important;
+}
+.adminroster-driverstatus{
+    background: $secondary-color;
+    color:$white-color;
+    width: fit-content;
+    padding: 3px 5px;
+    margin-right: 5px;
+    float: left;
+}
+.adminroster-driverstatus i{
+    opacity: 0.5;
+}
+
+// Drag and Drop Upload css
+.inputDnD {
+    .form-control-file {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 11em;
+      outline: none;
+      visibility: hidden;
+      cursor: pointer;
+      background-color: #c61c23;
+      box-shadow: 0 0 5px solid currentColor;
+      &:before {
+        content: attr(data-title);
+        position: absolute;
+        top: 0.5em;
+        left: 0;
+        width: 100%;
+        min-height: 10em;
+        line-height: 6em;
+        padding-top: 2.9em;
+        opacity: 1;
+        visibility: visible;
+        text-align: center;
+        border: 2px dashed $primary-color;
+        overflow: hidden;
+      }
+      &:hover {
+        &:before {
+          border-color: $primary-color;
+        }
+      }
+      &:after {
+        content: "\f093";
+        font-family: "Font Awesome 5 Free";
+        position: absolute;
+        top: 40px;
+        left: 50%;
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%,0%);
+        font-size: 30px;
+        color: $primary-color;
+      }
+    }
+}
+.fileupload-title{
+    color: $primary-color;
+    margin-bottom: 5px;
+    font-size: 20px;
+}
+
+.box{
+    font-size: 1.25rem; /* 20 */
+    position: relative;
+    padding: 25px 20px !important;
+}
+.box.has-advanced-upload{
+    outline: 2px dashed $primary-color;
+    outline-offset: -10px;
+    -webkit-transition: outline-offset .15s ease-in-out, background-color .15s linear;
+    transition: outline-offset .15s ease-in-out, background-color .15s linear;
+}
+.box__input{
+    width:100%;
+    overflow-x: hidden;
+}
+.box.is-dragover{
+    outline-offset: -20px;
+    outline-color: #c8dadf;
+    background-color: #fff;
+}
+.box__dragndrop,.box__icon {
+    display: none;
+}
+.box.has-advanced-upload .box__dragndrop{
+    display: inline;
+}
+.box.has-advanced-upload .box__icon{
+    width: 100%;
+    height: 50px;
+    fill:  $primary-color;
+    display: block;
+    margin-bottom: 0px;
+}
+.box.is-uploading .box__input, .box.is-success .box__input, .box.is-error .box__input {
+    visibility: hidden;
+}
+.box__uploading, .box__success, .box__error {
+    display: none;
+}
+.box.is-uploading .box__uploading,.box.is-success .box__success,.box.is-error .box__error{
+    display: block;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    left: 0;
+    -webkit-transform: translateY( -50% );
+    transform: translateY( -50% );
+}
+.box__uploading{
+    font-style: italic;
+}
+.box__success{
+    -webkit-animation: appear-from-inside .25s ease-in-out;
+    animation: appear-from-inside .25s ease-in-out;
+}
+@-webkit-keyframes appear-from-inside{
+    from	{ -webkit-transform: translateY( -50% ) scale( 0 ); }
+    75%		{ -webkit-transform: translateY( -50% ) scale( 1.1 ); }
+    to		{ -webkit-transform: translateY( -50% ) scale( 1 ); }
+}
+@keyframes appear-from-inside{
+    from	{ transform: translateY( -50% ) scale( 0 ); }
+    75%		{ transform: translateY( -50% ) scale( 1.1 ); }
+    to		{ transform: translateY( -50% ) scale( 1 ); }
+}
+.box__restart{
+    font-weight: 700;
+}
+.box__restart:focus,.box__restart:hover{
+    color: #39bfd3;
+}
+.js .box__file {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 1;
+    overflow: visible;
+    position: absolute;
+    z-index: 1;
+}
+.js .box__file + label{
+    max-width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+    display: inline-block;
+    overflow: hidden;
+}
+.js .box__file + label:hover strong,.box__file:focus + label strong,.box__file.has-focus + label strong{
+    color: #39bfd3;
+}
+.js .box__file:focus + label,.js .box__file.has-focus + label{
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+.js .box__file + label
+ *{
+        /* pointer-events: none; */ /* in case of FastClick lib use */
+}
+.no-js .box__file + label{
+    display: none;
+}
+.no-js .box__button{
+    display: block;
+}
+.box__button{
+    font-weight: 700;
+    display: block;
+    padding: 8px 16px !important;
+    margin: 40px auto 0 !important;
+    display: block !important;
+}
+.box__button:hover,.box__button:focus {
+    background-color: #0f3c4b;
+}
+.box__file {
+    visibility: hidden;
+}
+
+// Data table admin roster page css
+#example_length{
+    display: none;
+}
+.admin-roster-tab-section{
+    position: relative;
+}
+#example_wrapper{
+    position: unset;
+}
+#example_filter {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+#example_filter input{
+    border: none;
+    background: $maro-color;
+    padding: 7px 16px;
+    color: $secondary-color;
+}
+#example a {
+    color: unset;
+    text-decoration: none;
+}
+#alldrivers-update-btn{
+    display: none;
+}

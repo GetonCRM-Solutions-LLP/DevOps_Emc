@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>GoTo_Session__c</fullName>
+    <label>GoTo Session</label>
+    <referenceTo>GoTo_Session__c</referenceTo>
+    <relationshipLabel>GoTo Session Questions</relationshipLabel>
+    <relationshipName>GoTo_Session_Questions</relationshipName>
+    <relationshipOrder>0</relationshipOrder>
+    <reparentableMasterDetail>false</reparentableMasterDetail>
+    <trackTrending>false</trackTrending>
+    <type>MasterDetail</type>
+    <writeRequiresMasterRead>false</writeRequiresMasterRead>
+</CustomField>

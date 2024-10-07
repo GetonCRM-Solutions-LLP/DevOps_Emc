@@ -1,0 +1,56 @@
+.slds_link {
+    color: #666;
+    display: inline-block;
+    margin: 0 .1em;
+    text-decoration: none;
+    border-radius: 1.3em;
+    font-size: 12px !important;
+    width: 30px;
+    height: 30px;
+    padding: 5px 0 0 0 !important;
+    text-align: center;
+}
+.disable{
+    pointer-events: none;
+    cursor: none;
+}
+.slds_link:hover,
+.slds_link:focus {
+    text-decoration: none !important;
+    outline: 0;
+    border-radius: 100px !important;
+    /* font-weight: 700 !important; */
+    /* color: #fff !important; */
+    width: 30px !important;
+    height: 30px !important;
+    font-family: 'Proxima Nova Bold' !important;
+    color: var(--link-color) !important;
+}
+
+.slds-align_absolute-center {
+    margin-left: 407px;
+}
+
+.next_button{
+    position: relative;
+    top: -7px;
+    padding-top: 20px;
+    padding-left: 13px;
+    /* border: 1px solid #D7D7D7 !important; */
+    /* background: #FFFFFF !important; */
+    /* border-radius: 10px !important; */
+    /* width: 40px; */
+    /* height: 40px; */
+    color: #7ABB4A !important;
+} 
+.nevigate-icon-left{
+    position: absolute;
+    margin-left: -41px !important;
+    /* left: 426px; */
+}
+.fa,
+.fas,
+.fa-solid,
+.fa-regular {
+    font-family: "Font Awesome 6 Free" !important
+}

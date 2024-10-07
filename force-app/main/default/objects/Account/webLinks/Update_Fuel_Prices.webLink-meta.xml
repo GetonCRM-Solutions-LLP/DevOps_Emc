@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Update_Fuel_Prices</fullName>
+    <availability>online</availability>
+    <description>Update Fuel Prices</description>
+    <displayType>button</displayType>
+    <height>600</height>
+    <linkType>page</linkType>
+    <masterLabel>Update Fuel Prices</masterLabel>
+    <openType>sidebar</openType>
+    <page>updatefuelprice</page>
+    <protected>false</protected>
+</WebLink>

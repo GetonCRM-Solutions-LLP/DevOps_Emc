@@ -1,0 +1,594 @@
+<apex:page showHeader="true" docType="html-5.0" controller="UpdateMileageWithReimController"  id="page" sidebar="false" standardStylesheets="true">
+    <html style="height:100%; width:100%;">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <!--<apex:includeScript value="{!URLFOR($Resource.Static_Resource_Main, 'Static_Resource_Main/js/jquery.min.js' )}" /> -->
+        <apex:includeScript value="{!URLFOR($Resource.Static_Resource_Main, 'Static_Resource_Main/js/jquery-1.11.0.js' )}" />
+        <apex:includeScript value="{!URLFOR($Resource.Static_Resource_Main, 'Static_Resource_Main/js/bootstrap.min.js' )}" />
+        <apex:stylesheet value="{!URLFOR($Resource.Static_Resource_Main, 'Static_Resource_Main/css/bootstrap-iso.css')}" />
+        <apex:stylesheet value="{!URLFOR($Resource.SLDS100, 'assets/styles/salesforce-lightning-design-system-vf.css')}" />
+        <script src="/soap/ajax/42.0/connection.js" type="text/javascript"></script>
+        <script src="/soap/ajax/42.0/apex.js" type="text/javascript"></script>
+    </head>
+    
+        <apex:outputPanel id="stylepanel">
+            <style type="text/css">
+                #filter { 
+                    display:none;
+                    background-image:url({!URLFOR($Resource.SLDS100, '/assets/images/spinners/slds_spinner.gif')});
+/*{!URLFOR($Resource.Static_Resource_Main,'Static_Resource_Main/loading32.gif')}*/
+                    z-index:10000;
+                    position:fixed;
+                    top:0%;left:0%;
+                    width:100%;
+                    height:100%;
+                    background-repeat:no-repeat;
+                    background-position:center;
+                    background-color: rgba(100, 100, 100, 0.5);
+                    filter:alpha(opacity=50);
+                }
+
+
+            </style>
+        </apex:outputPanel>
+        <apex:outputPanel id="JsPanel">
+                
+                <script type="text/javascript">
+                    var count= 1;
+                    $( document ).ready(function() {
+                        /*console.log('{!$Component.issueinterest}');
+                        
+                        console.log('reddy');
+                        $('.InlineEditDialog').hide();
+                        $(".InlineEditDialog").css("display","none !important");
+                        
+                        
+                        $( ".inlineEditWrite" ).dblclick(function() {
+                            
+                            if(count == 1){
+                                if(sfdcPage.getInlineEditData().resetCurrentField())sfdcPage.getDialogById('InlineEditDialog').hide();
+                            }
+                            count += 1;
+                            console.log('Called');
+                        });
+                        
+                        $( ".inlineEditWrite" ).dblclick(function()
+                        {
+                            $( ".inlineEditUndoLink" ).trigger( "click" );
+                            $( ".inlineEditUndo" ).trigger( "click" );
+                            console.log('inline Edit on');
+                            console.log($(this).attr("class"));
+                            var contactID = $( this ).closest('td').attr('alt');
+                            var contactAPIname = $( this ).closest('td').attr('altapiname');
+                            console.log('--contactAPIname --'+contactAPIname );
+                            if(contactAPIname == 'Engagement_Assessment__c')
+                            {
+                                console.log('--in IF contactAPIname --'+contactAPIname );
+                                startProcess();
+                                assignSingleContactForAssesment(contactID);
+                            }
+                            else
+                            {   
+                                console.log('--in else contactAPIname --'+contactAPIname );
+                                console.log('id:'+contactID);
+                                console.log('contactAPIname-->'+contactAPIname);
+                                $('.InlineEditDialog').hide();
+                                $(".InlineEditDialog").css("display","none !important");
+                                startProcess();
+                                assignSingleContact(contactID);
+                            }   
+                        });
+                        
+                        $('input:checkbox').click(function() {
+                            $("input:checkbox").each(function(){
+                                var $this = $(this);
+                                if($this.is(":checked"))
+                                    $this.parent().parent().addClass('rowonselect');
+                                else
+                                    $this.parent().parent().removeClass('rowonselect');
+                            });
+                        });
+                        
+                        $('.Issue_Interest__c span span span').each(function(i){
+                            var cellvals = $(this).text();
+                            console.log('---cellvals---'+cellvals);
+                            
+                            if(cellvals != undefined && cellvals != ''){
+                                if(cellvals.length > 20)
+                                    $(this).text(cellvals.substring(0,20) + '...'); 
+                            }
+                        });*/
+                        
+                    });
+                    
+                   /* function clickPrev(){
+                        $('.menucls').trigger("click");
+                    }*/
+                    
+                    function open_pop_up(idx, field, sObj)
+                    {
+                        console.log('==> idx: ' + idx);
+                        console.log('==> field: ' + field);
+                        console.log('==> sObj: ' + sObj);
+                        var child = window.open('/apex/picklistLookup?idx='+idx+'&field='+field+'&sObj='+sObj+'', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400')
+                        console.log('==> Child: ' + child);
+                    }
+                    
+                    /*var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+                    var eventer = window[eventMethod];
+                    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+                
+                    //Listen to message from child window
+                    eventer(messageEvent,function(e) {
+                        console.log('parent received message!: ',e.data);
+                        var dataArr = e.data.split(':'); 
+                        var elmtId = e.data.substring(0, e.data.lastIndexOf(':'));
+                        var datavalue = e.data.substring(e.data.lastIndexOf(':') + 1,e.data.length);
+                        console.log('==> elmtId: ' + elmtId);
+                        elmtId 
+                        document.getElementById(elmtId).value = datavalue;
+                    },false);        */
+                    
+                    /*function cancelAll(){
+                        console.log('triggered');
+                        $( ".inlineEditUndoLink" ).trigger( "click" );
+                        $( ".inlineEditUndo" ).trigger( "click" );
+                        hideEditButtons();
+                        console.log('trigger');
+                    }*/
+                    
+                    function StartSerachIV(){
+                        SearchForAssignPr();
+                    }
+                    function addFilterCriteria()
+                    {
+                        var i = parseInt('{!advcriteriaRows.size}');
+                        console.log(i);
+                        console.log('{!advcriteriaRows.size}');
+                        if(i > 1){
+                            document.getElementById('filterInput').style.display='inline-block';
+                        }else{
+                            alert('Invalid Search Criteria!');
+                        }
+                    }
+                    
+                    /*function ShowChangeOwnerDialog()
+                    {    
+                        $('.ChangeOwnerDialog').modal({
+                            show:true,
+                            backdrop:true,  
+                            keyboard:true
+                        });
+                    }*/
+                    
+                    /*var criteria = '';
+                    
+                    function openAssignModal(val){
+                        criteria = val;
+                        $(".AssignModalcls").html(val);
+                        $('.ChangeOwnerDialog').modal({
+                            show:true,
+                            backdrop:true,  
+                            keyboard:true
+                        });
+                    }*/
+                    
+                    /*function CriteriaSavefunc(){
+                        console.log(criteria);
+                        
+                        if(criteria == 'Assign Current, New Contacts who Meet Criteria'){
+                            startProcess();
+                            saveCriteria('AssignSelected');
+                        }else if(criteria == 'Assign Selected Contacts'){
+                            startProcess();
+                            saveCriteria('AssignOwner');
+                        }
+                    }*/
+
+                    /*function closeChangeOwnerDialog(){
+                        $('.ChangeOwnerDialog').modal('hide');
+                    }*/
+                    
+                    function startProcess()
+                    {
+                        $('#filter').show();
+                    }
+                    
+                    function endProcess ()
+                    {
+                        $('#filter').hide();
+                    }
+                    
+                    function SortTogglefunc(apiname)
+                    {
+                        if(apiname != 'Issue_Interest__c')
+                        {
+                            startProcess();
+                            console.log('----apiname--'+apiname);
+                            SortTogglecall(apiname);
+                        }
+                    }
+                    
+                    function cvCheckAllOrNone(allOrNoneCheckbox) {
+                        // Find parent table
+                        var container = allOrNoneCheckbox;
+                        while (container.tagName != "TABLE") {
+                            container = container.parentNode;
+                        }
+                        // Switch all checkboxes
+                        var inputs = container.getElementsByTagName("input");
+                        var checked = allOrNoneCheckbox.checked;
+                        for (var i = 0; i < inputs.length; i++) { 
+                            var input = inputs.item(i);
+                            if (input.type == "checkbox") {
+                                if (input != allOrNoneCheckbox) {
+                                    input.checked = checked;
+                                }
+                            }
+                        }
+                    }
+                    
+                    /*function validateCriteria()
+                    {
+                        var selecteduser = $('.selUsercls').val();
+                        console.log('----selecteduser--'+selecteduser);
+                        if(selecteduser != undefined && selecteduser != '')
+                        {
+                            if($('.selectorcls').val()==''){
+                                    alert('Please select a criteria');return false;
+                            }
+                            if($('.opselectorcls').val()==''){
+                                    alert('Please select a criteria');return false;
+                            }
+                            return true;
+                        }
+                        else
+                        {
+                            alert('Please select a User');
+                            return false;
+                        }
+                    }*/
+                    
+                    /*function showEditModal(){
+                        $('.inlineEditModal').modal({
+                            show:true,
+                            backdrop:true,  
+                            keyboard:true
+                        });
+                    }
+                    
+                    function closeEditModal(){
+                        $('.inlineEditModal').modal('hide');
+                    }
+                    
+                    function ShowAssesmentEditModal(){
+                        $('.EditMemberAssesmentModal').modal({
+                            show:true,
+                            backdrop:true,  
+                            keyboard:true
+                        });
+                    }
+                    
+                    function closeAssesmentEditModal(){
+                        $('.EditMemberAssesmentModal').modal('hide');
+                    }*/
+                    
+                    /*function SendbulkSMS()
+                    {
+                        function loadJqueryDynamically(){ 
+
+                            var newscript = document.createElement('script'); 
+                            newscript.type = 'text/javascript'; 
+                            newscript.async = false; 
+                            newscript.src = '{!URLFOR('/resource/smagicinteract__smJQuery/js/jquery-1.10.2.js')}'; 
+                            (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(newscript); 
+
+                            var newscript1 = document.createElement('script'); 
+                            newscript1.type = 'text/javascript'; 
+                            newscript1.async = false; 
+                            newscript1.src = '{!URLFOR('/resource/smagicinteract__smJQuery/js/jquery-ui-1.10.4.custom.min.js')} '; 
+                            (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(newscript1); 
+
+                            var newscript2 = document.createElement('script'); 
+                            newscript2.type = 'text/javascript'; 
+                            newscript2.async = false; 
+                            newscript2.src = '{!URLFOR('/resource/smagicinteract__sendSMSJS')}'; 
+                            (document.getElementsByTagName('head')[0]||document.getElementsByTagName('body')[0]).appendChild(newscript2); 
+                            newscript2.onload = showPage; 
+
+                        } 
+
+                        loadJqueryDynamically(); 
+
+                        function showPage() { 
+
+                            var records = []; 
+                            $("input:checkbox").each(function(){
+                                var $this = $(this);
+                                if($this.is(":checked"))
+                                {
+                                    if($this.attr("alt") != 'headeralt'){
+                                        records.push($this.attr("alt"));
+                                    }
+                                }
+                            });
+                            console.log('---records--'+records);
+                            if (records.length <= 0)
+                            { 
+                                alert("Please select at least one contact") 
+                            } 
+                            else{ 
+                                var packagePrefix = "smagicinteract__"; 
+                                var recordType = "Person_Relation__c"; 
+                                var recordIds = ""; 
+                                var nameField = 'Name'; 
+                                var mobileField = 'Mobile__c'; 
+                                var optOutField = 'Cell_Text__c'; 
+                                var optOutDefaultValue = 'yes'; 
+                                var smsType = 'popup'; 
+                                var userId = '{!$User.Id}'; 
+                                var elementIdVar = ''; 
+                                var showUserDropDown = false; 
+                                var dialogTitle = ''; 
+                                var queryString = ''; 
+                                console.log('---records--'+records);
+                                for (var n in records) { 
+                                    if(n == 'remove' || n == 'indexOf') continue; 
+                                    recordIds = recordIds + records[n]; 
+
+                                    if (n != records.length-1) { 
+                                        recordIds = recordIds + ","; 
+                                    } 
+                                } 
+
+                                var cssUrl = '{!URLFOR('/resource/smagicinteract__smJQuery/css/sm-theme/jquery-ui-1.10.4.custom.min.css')}'; 
+
+                                sendSMS(recordType, recordIds, userId, nameField, mobileField, optOutField, optOutDefaultValue, smsType, elementIdVar, packagePrefix, showUserDropDown, dialogTitle, cssUrl); 
+
+                            }
+                        }
+                    }*/
+                    
+                    /*function open_pop_up(idx, field, sObj)
+                    {
+                        console.log('==> idx: ' + idx);
+                        console.log('==> field: ' + field);
+                        console.log('==> sObj: ' + sObj);
+                        var child = window.open('/apex/picklistLookup?idx='+idx+'&field='+field+'&sObj='+sObj+'', '_blank', 'toolbar=yes,scrollbars=yes,resizable=yes,top=500,left=500,width=400,height=400')
+                        console.log('==> Child: ' + child);
+                    }
+                    
+                    var eventMethod = window.addEventListener ? "addEventListener" : "attachEvent";
+                    var eventer = window[eventMethod];
+                    var messageEvent = eventMethod == "attachEvent" ? "onmessage" : "message";
+                
+                    //Listen to message from child window
+                    eventer(messageEvent,function(e) {
+                        console.log('parent received message!: ',e.data);
+                        var dataArr = e.data.split(':'); 
+                        var elmtId = e.data.substring(0, e.data.lastIndexOf(':'));
+                        var datavalue = e.data.substring(e.data.lastIndexOf(':') + 1,e.data.length);
+                        console.log('==> elmtId: ' + elmtId);
+                        elmtId 
+                        document.getElementById(elmtId).value = datavalue;
+                    },false);
+
+                    function ShowNotesDialog()
+                    {    
+                        
+                        $('.NotesDialog').modal({
+                            show:true,
+                            backdrop:true,
+                            keyboard:true
+                        });
+                    }
+
+                    function closeNoteDialog(){
+                        $('.NotesDialog').modal('hide');
+                    } 
+                    
+                    function clearOnLoadNotes(){
+                        $('.notestextareacls').val('');
+                    }*/
+                </script>
+            </apex:outputPanel>
+
+        <body>
+            <center>
+                <div id="filter"></div>
+            </center>
+
+            <apex:form id="mainform">
+
+                <div class="bootstrap-iso slds">
+                <!-- Advanced Search Dialog Box Start -->
+                    <div class="adv_search_div">
+                        <div class="slds" >
+                            <div class="slds-grid slds-wrap">
+                                <div class="slds-col slds-size--1-of-1">
+                                    <div class="Errodiv" style="background-color:red;font-size:12px;color:white;">
+                                        <apex:pageMessages id="searchmsg"/>
+                                    </div>
+        
+                                    <apex:actionFunction action="{!removeAdvCriteriaRow}" name="removeAdvCriteriaRow" status="wait" oncomplete="endProcess();" reRender="searchspanpopup,searchCriteriatbl,scrollhandlePanel,JsPanel">
+                                        <apex:param name="rowNum" assignTo="{!rowNumToRemove}" id="rowNum" value=""/>
+                                    </apex:actionFunction>
+
+                                    <apex:actionFunction action="{!addAdvCriteriaRow}" name="addAdvCriteriaRow" status="wait" oncomplete="endProcess();" reRender="searchspanpopup,searchCriteriatbl,scrollhandlePanel,JsPanel"/>
+                                    <apex:actionFunction name="SearchForAssignPr" oncomplete="endProcess(); showSearchTable();" reRender="searchmsg,JsPanel,searchedPageBlock,emptyPageBlock,updateBlock" action="{!BuildQuery}"/>
+
+                                    <apex:actionFunction action="{!findFieldType}" name="findFieldType" oncomplete="endProcess();" status="wait" reRender="searchspanpopup,searchCriteriatbl,scrollhandlePanel">
+                                        <apex:param name="fieldName" id="advfieldName" value=""/>
+                                        <apex:param name="idx" id="advidx" value=""/>
+                                    </apex:actionFunction>    
+
+                                    <apex:actionFunction name="updateMileageAction" action="{!updateMileage}" status="wait" oncomplete="endProcess();" reRender="searchedPageBlock,emptyPageBlock,searchmsg"/>
+
+                                    <apex:outputPanel id="eventSearch">
+                                        <table id="tableData1" class=" table adv_search_tbl table-bordered table-striped" >
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center;padding: 10px;">
+                                                    <apex:outputPanel id="searchCriteriatbl">
+                                                        <table class="w3-table w3-hoverable w3-striped  w3-small" id="criteria-tbl" style="width:100% !important;border-spacing: 5px;border-collapse: inherit;">
+                                                            <thead>    
+                                                                <tr class="w3-red">
+                                                                    <th>#</th><th>Field</th> <th>Operator</th> <th>Value</th><th></th> 
+                                                                </tr>
+                                                            </thead>
+                                                            <apex:repeat id="insiderepeat" value="{!advcriteriaRows}" var="arow">
+                                                                <tr id="arow-{!arow.idx}" style="text-align: start;">
+                                                                    <td style="width:20px;">#{!arow.idx}</td>
+                                                                    <td style="width:160px;">
+                                                                        <apex:selectList style="width: 50%;" styleClass="selectorcls setDays slds-input slds-size-1-of-12" id="fieldSelectorId" size="1" multiselect="false" value="{!arow.name}" onchange="startProcess(); findFieldType(this.value, '{!arow.idx}');" >
+                                                                            <apex:selectOptions value="{!availableFields[cObj]}"></apex:selectOptions>
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                    <td style="width:100px;">
+                                                                        <apex:selectList style="width: 50%;" styleClass="opselectorcls setDays slds-input slds-size-1-of-12" id="operatorSelectorId" size="1" multiselect="false" value="{!arow.operator}">
+                                                                            <apex:selectOptions value="{!availableOperators[arow.dataType]}"></apex:selectOptions>
+                                                                        </apex:selectList>
+                                                                    </td>
+                                                                   <!-- <td style="width:100px;">
+                                                                        <apex:inputText id="criteriaValId" value="{!arow.value}" style="width:150px; height:21px;" StyleClass="setDays slds-input slds-size-1-of-12 criteriaVal-{!arow.idx}"/>
+                                                                        <a href="#" onclick="open_pop_up('{!$Component.criteriaValId}', '{!arow.name}','{!cObj}');" style="display:{!IF(arow.fieldType =='Picklist' || arow.fieldType =='MultiPicklist','','none')}">
+                                                                        <img src="/s.gif" alt="??" class="lookupIcon" onblur="this.className = 'lookupIcon';" onfocus="this.className = 'lookupIconOn';" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';"/>
+                                                                        </a>
+                                                                    </td> -->
+                                                                    <td style="width:160px;">
+                                                                        <apex:outputPanel rendered="{!IF(arow.fieldType =='Picklist' || arow.fieldType =='MultiPicklist','true','false')}">
+                                                                            <apex:selectList style="width: 50%;" styleClass="opselectorcls setDays slds-input slds-size-1-of-12" id="value" size="1" multiselect="false" value="{!arow.value}">
+                                                                                <apex:selectOptions value="{!ripstatus}"></apex:selectOptions>
+                                                                            </apex:selectList>
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!IF(arow.fieldType =='Date' || arow.fieldType =='DATETIME' || arow.fieldType =='DateTime','true','false')}">
+                                                                            <apex:input type="date" styleClass="datepicker" value="{!arow.value}"/>
+                                                                            <!--<input class="datepicker" type="date" value="{!arow.value}" onchange="alert(this.value);alert('{!arow.value}');" />-->
+                                                                        </apex:outputPanel>
+                                                                        <apex:outputPanel rendered="{!IF(arow.fieldType =='EMAIL' || arow.fieldType =='Email' || arow.fieldType =='Double' || arow.fieldType =='DOUBLE' || arow.fieldType =='CURRENCY' || arow.fieldType =='Currency' || arow.fieldType =='String','true','false')}">
+                                                                            <apex:inputText id="criteriaValId" value="{!arow.value}" style="width:150px; height:21px;" StyleClass="setDays slds-input slds-size-1-of-12 criteriaVal-{!arow.idx}"/>
+                                                                        </apex:outputPanel>                                                                        
+                                                                    </td>
+                                                                    <td style="width:10px;">
+                                                                        <a href="#" class="action" id="advrm-{!arow.idx}" onclick="startProcess();removeAdvCriteriaRow('{!arow.idx}')">X</a>
+                                                                    </td>
+                                                                </tr>
+                                                            </apex:repeat>
+                                                        </table>
+                                                    </apex:outputPanel>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tbody style="border: 0px;">
+                                            <tr >
+                                                <td>
+                                                    <a href="#" class="hyperlinkaddrow" onclick="startProcess();addAdvCriteriaRow();" style="margin-right:8px;font-size: 12px !important;padding: 5px 0px;">Add Row</a>             
+                                                    <a href="#" onclick="addFilterCriteria();" style="margin-right:8px;font-size: 12px !important;padding: 5px 0px;">Add Filter Criteria</a> 
+
+                                                    <!--apex:inputText styleClass="searchtextcls" id="serachinputText" required="true" html-autocomplete="off" html-placeholder="Search Keywords"/-->
+                                                    <div id="filterInput" style="display:none;padding:5px;font-size: 12px !important;">
+                                                        <apex:inputText value="{!filterCriteria}" id="searchTerm" HTML-placeholder="e.g. 1 AND (2 OR 3)"/> 
+                                                        <a href="#" onclick="document.getElementById('page:mainform:searchTerm').value=''"> Clear </a> &nbsp;
+                                                        <a href="#" onclick="document.getElementById('page:mainform:searchTerm').value='';document.getElementById('filterInput').style.display='none';"> Hide </a>
+                                                    </div>
+                                                    <apex:commandButton styleClass="slds-button slds-button--brand slds-button--neutral slds-not-selected" reRender="searchspanpopup,searchmsg" value="Search" onclick="startProcess();StartSerachIV();return false;"  style="padding: 0px 10px 0px 10px;margin-right:10px;float:right;font-size: 12px;"/>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                            <tbody style="border: 0px;">
+                                                <tr>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </apex:outputPanel>
+                                    <apex:pageBlock mode="maindetail" id="updateBlock">
+                                        <apex:outputPanel rendered="{!IF(maintableDataList.size > 0,true,false)}">
+                                            <apex:pageBlock mode="maindetail" title="Mileage Transfer to Month">
+                                                <center>
+                                                    <apex:selectList styleClass="slds-input slds-size-1-of-12" value="{!selectedMonth}" multiselect="false" size="1" style="width: 20%;margin-right: 1%;">
+                                                        <apex:selectOptions value="{!month}"/>
+                                                    </apex:selectList>
+                                                    <apex:commandButton value="Update"  onclick="startProcess();updateMileageAction();return false;" styleClass="slds-button slds-button--brand slds-button--neutral slds-not-selected updateButton"/>
+                                                </center>
+                                            </apex:pageBlock>       
+                                        </apex:outputPanel>
+                                    </apex:pageBlock>
+                                    <apex:pageBlock mode="maindetail" id="searchedPageBlock">
+                                        <apex:outputPanel rendered="{!IF(maintableDataList.size > 0,true,false)}">
+                                            <div style="margin-top: 5px; text-align: center;">
+                                                <div style="margin-top: 5px;">
+                                                    <span class="page-buttons" style="float:right;"> 
+                                                        <apex:commandButton disabled="{!!StdSetControllerPR.hasprevious}" onclick="startProcess();" oncomplete="endProcess();" styleClass="btn_primary" style="display:inline-block; margin:5px;border: 1px solid transparent !Important; background:#fff !important;" value="Previous" action="{!previous}" reRender="searchedPageBlock,JsPanel" /> 
+                                                        <div style=" display:inline-block;border: 1px solid #ddd;background-image: -webkit-linear-gradient(top, #FFFFFF, #CFCFCF);color:#000;"  class="link_button">{!StdSetControllerPR.PageNumber}</div>
+                                                        <apex:commandButton disabled="{!!StdSetControllerPR.hasnext}" onclick="startProcess();" oncomplete="endProcess();" styleClass="btn_primary" style="display:inline-block; margin:5px;background:#fff !important; border: 1px solid transparent !Important;" value="Next" action="{!next}" reRender="resultPanel,searchedPageBlock,JsPanel" />
+                                                    </span>  
+                                                </div> 
+                                            </div>
+                                            <apex:pageBlockSection id="searchedSection" columns="1">
+                                                <apex:pageBlockTable styleClass="floatingHeaderTable" value="{!maintableDataList}" var="mainList">
+                                                    <apex:column id="checkboxcolumn" styleClass="checkboxclmn" width="2%" style="text-align:left;" >
+                                                    <apex:facet name="header"> <input type="checkbox" alt="headeralt" onclick="cvCheckAllOrNone(this);"/> </apex:facet>
+                                                    <apex:inputCheckbox value="{!mainList.isPRSelected}" html-alt="{!mainList.mileage.id}" styleClass="{!mainList.mileage.id}"  />
+                                                </apex:column>
+                                                <apex:repeat id="repeaterTbl" value="{!PRfieldWrapperList}" var="fv">
+                                                
+                                                    <apex:column rendered="{! If(fv.fieldAPIName =='Issue_Interest__c' ,false,true) }" styleclass="{!fv.fieldAPIName}" html-alt="{!mainList.mileage.id}" html-altapiname="{!fv.fieldAPIName}" width="10%">
+                                                    
+                                                        <apex:facet name="header">
+                                                            
+                                                            <apex:commandLink onclick="SortTogglefunc('{!fv.fieldAPIName}');" rerender="JsPanel,JsPanelMenu" styleClass="{!fv.fieldAPIName}" status="TableUpdateStatus">
+                                                                <apex:param name="SortField" value="{!fv.fieldAPIName}" assignTo="{!SortField}" />
+                                                                <apex:outputText rendered="{! If(fv.fieldLabel=='Owner ID' ,false,true) }" value="{!fv.fieldLabel}" />
+                                                                <apex:outputText id="sortingid" rendered="{!fv.isToogleArrow}" value="{!IF(fv.fieldsortorder='asc','▲','▼')}" />
+                                                            </apex:commandLink>
+                                                            
+                                                        </apex:facet>
+                                                        
+                                                        <apex:outputLink id="fnamelnameLinkID" rendered="{! If(fv.fieldAPIName=='Firstname__c' || fv.fieldAPIName=='Lastname__c' ,true,false) }" styleClass="customlinks {!mainList.mileage.id}" value="/{!mainList.mileage.Id}">{!mainList.mileage[fv.fieldAPIName]}</apex:outputlink>
+                                                        
+                                                        <apex:outputField rendered="{! If(fv.fieldAPIName=='Firstname__c' || fv.fieldAPIName=='Lastname__c',false,true) }" value="{!mainList.mileage[fv.fieldAPIName]}" styleClass="{!fv.fieldAPIName}" >
+                                                            <apex:inlineEditSupport changedStyleClass="{!mainList.mileage.id}" event="ondblClick" showOnEdit="saveButtonUpper,saveButtonLower,cancelButtonUpper,cancelButtonLower" hideOnEdit="editButton" />
+                                                        </apex:outputField>
+
+                                                    </apex:column>                                                    
+                                                    <apex:column rendered="{! If(fv.fieldAPIName =='Issue_Interest__c' ,true,false) }"  styleclass="{!fv.fieldAPIName}" html-alt="{!mainList.mileage.id}" html-altapiname="{!fv.fieldAPIName}" width="10%">
+                                                    
+                                                        <apex:facet name="header">
+                                                            <apex:outputText value="{!fv.fieldAPIName}" />
+                                                        </apex:facet>                                                        
+                                                        <apex:outputField value="{!mainList.mileage[fv.fieldAPIName]}" styleClass="{!fv.fieldAPIName}" >
+                                                            <apex:inlineEditSupport changedStyleClass="{!mainList.mileage.id}" event="ondblClick" showOnEdit="saveButtonUpper,saveButtonLower,cancelButtonUpper,cancelButtonLower" hideOnEdit="editButton" />
+                                                        </apex:outputField>
+                                                    </apex:column>                                                    
+                                                </apex:repeat>
+                                                </apex:pageBlockTable>
+                                            </apex:pageBlockSection>
+                                            <div style="margin-top: 5px; text-align: center;">
+                                                <div style="margin-top: 5px;">
+                                                    <apex:outputPanel style="text-align:center;width:100%;" id="textPanel">
+                                                        <apex:outputText id="DecsText" value="{!PageMsg}"/>
+                                                    </apex:outputPanel>
+                                                    <span class="page-buttons" style="float:right;"> 
+                                                        <apex:commandButton disabled="{!!StdSetControllerPR.hasprevious}" onclick="startProcess();" oncomplete="endProcess();" styleClass="btn_primary" style="display:inline-block; margin:5px;border: 1px solid transparent !Important; background:#fff !important;" value="Previous" action="{!previous}" reRender="searchedPageBlock,JsPanel" /> 
+                                                        <div style=" display:inline-block;border: 1px solid #ddd;background-image: -webkit-linear-gradient(top, #FFFFFF, #CFCFCF);color:#000;"  class="link_button">{!StdSetControllerPR.PageNumber}</div>
+                                                        <apex:commandButton disabled="{!!StdSetControllerPR.hasnext}" onclick="startProcess();" oncomplete="endProcess();" styleClass="btn_primary" style="display:inline-block; margin:5px;background:#fff !important; border: 1px solid transparent !Important;" value="Next" action="{!next}" reRender="resultPanel,searchedPageBlock,JsPanel" />
+                                                    </span>  
+                                                </div> 
+                                            </div>
+                                        </apex:outputPanel>        
+                                    </apex:pageBlock>
+                                    <apex:pageBlock id="emptyPageBlock" mode="maindetail">
+                                        <center><apex:outputText rendered="{!IF(maintableDataList.size == 0,true,false)}" styleClass="slds-checkbox__label" value="Sorry No Data Available"/></center>
+                                    </apex:pageBlock>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </apex:form>
+        </body>
+    </html>
+</apex:page>

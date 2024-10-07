@@ -1,0 +1,282 @@
+<apex:component >
+    <style>
+        @media (min-width: 400px) and (max-width: 775px){
+            .p-23{
+                padding: 25px !important;
+            }
+        }
+        @media (min-width: 320px) and (max-width: 767px) {
+            .taxtable{
+                margin-left: -12px;
+            }
+            .p-0{
+                padding: 0.75rem !important;
+            }
+            .pd-3{
+                padding: 0.75rem !important;
+            }
+
+        }
+        @media (min-width: 1024px) and (max-width: 1366px) {
+                .taxtable{
+                     width: 118% !important;
+                }
+                .p-0{
+                    padding: 3px !important;
+                }
+                .p-10{
+                    padding: 10px !important;
+                }
+                .p-23{
+                    padding: 24px !important;
+                }
+        }
+        @media (min-width: 768px) and (max-width: 1024px){
+            .taxtable{
+                width: 118%;
+            }
+            .pd-3{
+                padding: 3px !important;
+                vertical-align: middle !important;
+            }
+            .p-10{
+                padding: 2px !important;
+                vertical-align: middle !important;
+            }
+            .p-0{
+                padding: 0px !important;
+            }
+          
+        }
+       .ml-16{
+	        margin-left: -16px !important;
+        }  
+        .mt-35{
+            margin-top: 35px;
+        }
+        .pd-0{
+            padding: 3px !important;
+        }
+        .p-10{
+            padding: 10px;
+        }
+        .p-23{
+            padding: 10px !important;
+        }
+    </style>
+    <script>
+         app.filter('ordinal', function() {
+                return function(number){
+                    if (isNaN(number) || number < 1){
+                        return '';
+                    } else if (number % 100 == 11 || number % 100 == 12) {
+                        return 'th';
+                    } else {
+                    var lastDigit = number % 10;
+                    if (lastDigit === 1) {
+                        return 'st';
+                    } else if (lastDigit === 2) {
+                        return 'nd';
+                    } else if (lastDigit === 3) {
+                        return 'rd';
+                    } else if (lastDigit > 3) {
+                        return 'th';
+                    }
+                }
+            } 
+        });
+
+
+        app.filter('currencyFormat', ["$filter",  function($filter){
+            return function(amount, currencySymbol){
+                var currency = $filter('currency');
+                if(amount < 0){
+                    return currency(amount, currencySymbol).replace("(", "-").replace(")", "");
+                }
+
+                return currency(amount, currencySymbol);
+            }
+        }]);
+        
+        app.directive('excelExportFile',function () {
+            return {
+                restrict: 'A',
+                scope: {
+                    fileName: "@", 
+                    data: "&exportData"
+                },
+                replace: true,
+                template: '<button class="btn btn-primary float-right" ng-click="download()">Download </button>',
+                link: function (scope, element) {
+                    scope.download = function() {
+
+                        function datenum(v, date1904) {
+                            if(date1904) v+=1462;
+                            var epoch = Date.parse(v);
+                            return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
+                        };
+                        
+                        function getSheet(data, opts) {
+                            var ws = {};
+                            var range = {s: {c:10000000, r:10000000}, e: {c:0, r:0 }};
+                            for(var R = 0; R != data.length; ++R) {
+                                for(var C = 0; C != data[R].length; ++C) {
+                                    if(range.s.r > R) range.s.r = R;
+                                    if(range.s.c > C) range.s.c = C;
+                                    if(range.e.r < R) range.e.r = R;
+                                    if(range.e.c < C) range.e.c = C;
+                                    var cell = {v: data[R][C] };
+                                    if(cell.v == null) continue;
+                                    var cell_ref = XLSX.utils.encode_cell({c:C,r:R});
+                                    
+                                    if(typeof cell.v === 'number') cell.t = 'n';
+                                    else if(typeof cell.v === 'boolean') cell.t = 'b';
+                                    else if(cell.v instanceof Date) {
+                                        cell.t = 'n'; cell.z = XLSX.SSF._table[14];
+                                        cell.v = datenum(cell.v);
+                                    }
+                                    else cell.t = 's';
+                                    ws[cell_ref] = cell;
+                                }
+                            }
+                            if(range.s.c < 10000000) ws['!ref'] = XLSX.utils.encode_range(range);
+                            return ws;
+                        };
+                        
+                        function Workbook() {
+                            if(!(this instanceof Workbook)) return new Workbook();
+                            this.SheetNames = [];
+                            this.Sheets = {};
+                        }
+                         
+                        var wb = new Workbook(), ws = getSheet(scope.data());
+                        /* add worksheet to workbook */
+                        wb.SheetNames.push(scope.fileName);
+                        wb.Sheets[scope.fileName] = ws;
+                        var wbout = XLSX.write(wb, {bookType:'xlsx', bookSST:true, type: 'binary'});
+
+                        function s2ab(s) {
+                            var buf = new ArrayBuffer(s.length);
+                            var view = new Uint8Array(buf);
+                            for (var i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+                            return buf;
+                        }
+                        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), scope.fileName+'.xlsx');
+                    };
+                }
+            };
+        });
+
+        app.directive('excelExportCustomFile',function () {
+            return {
+                restrict: 'A',
+                scope: {
+                },
+                replace: true,
+                template: '<button class="btn btn-primary float-right" ng-click="download()">Download </button>',
+                link: function (scope, element) {
+                    var url_string = $(location).attr("href");
+                    var url = new URL(url_string);
+                    var host = url.host;
+                    scope.accid = url.searchParams.get("accid");
+                    scope.id = url.searchParams.get("id");
+                    scope.download = function() {
+                        var window_url;
+                        window_url = 'https://' + host + '/app/BiWeeklyComplianceReport?id=' + scope.id;
+                        window.open(window_url, '_blank');
+                    }
+                }
+            };
+        });
+    </script>
+    <div class="col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12 ml-16 mt-35">
+        <div class="row">
+            <div class="col-12 col-lg-6 col-xl-3 col-md-6 col-sm-12 mb-lg-4 mb-4" ng-repeat="compliance in compliancedata">
+                <table class="table table-striped">
+                    <tbody >
+                        <tr>
+                            <td colspan="2">
+                                <h5 class="font-weight-bold">{{compliance.quarterno}}{{compliance.quarterno | ordinal}} Quarter Tax Analysis</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Mileage</td>
+                            <td>{{compliance.Mileages | currency:"":2 }}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Total Reimbursements</td>
+                            <td>{{compliance.Reimbursements| currency:"$":2}}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Max IRS Amount</td>
+                            <td>{{compliance.MaxIRSrate| currency:"$":2}}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Q{{compliance.quarterno}} Tax Liability</td>
+                            <td>{{compliance.ImputedAmount | currencyFormat: "$":2}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12" ng-if="summrylenth > 1" >
+        <div class="row">
+            <div class="col-12 col-lg-6 col-xl-3 col-md-6 col-sm-12 mb-lg-4 mb-4 ml-16">
+                <table class="table table-striped">
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <h5 class="font-weight-bold">Annual Tax Analysis</h5>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Total Reimbursements</td>
+                            <td>{{Reimbursements| currency:"$":2}}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Maximum Allowable</td>
+                            <td>{{maxallow| currency:"$":2}}</td>
+                        </tr>
+                        <tr>
+                            <td class="font-weight-bold">Annual Tax Liability</td>
+                            <td>{{taxliablity| currencyFormat:"$":2}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-12 col-lg-6 col-xl-4 col-md-6 col-sm-12 mb-lg-4 mb-4" ng-if="summrylenth > 1" >
+                <table class="table table-striped taxtable">
+                    <tbody>
+                        <tr style="height:48px">
+                            <td class="font-weight-bold pd-3">Annual Tax Liability Detail Report</td>
+                            <td class="p-0">
+                            <div excel-export-file="true" export-data="detailreportfordownload" file-name="{{filenamefordetail}}"/> </td>
+                        </tr>
+                        <tr>
+                            <td class="p-23"></td>
+                            <td class="pd-0"></td>
+                        </tr>
+                       
+                        <tr style="height:49px">
+                            <td class="font-weight-bold p-10">Annual Tax Liability Summary Report</td>
+                            <td class="p-0">
+                            <div excel-export-file="true" export-data="summaryreportfordownload" file-name="{{fileNameforsummary}}"/> </td>
+                        </tr>
+
+                        <tr ng-if="accid === PLMarketing">
+                            <td class="p-23"></td>
+                            <td class="pd-0"></td>
+                        </tr>
+                        <!-- Biweekly Report For Pl Marketing -->
+                        <tr style="height:49px" ng-if="accid === PLMarketing">
+                            <td class="font-weight-bold p-10">Bi-Weekly Tax Liability Detail Report</td>
+                            <td class="p-0">
+                            <div excel-export-custom-file="true" /> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</apex:component>

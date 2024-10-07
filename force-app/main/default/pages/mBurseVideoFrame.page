@@ -1,0 +1,41 @@
+<apex:page showHeader="false" lightningStylesheets="false" sidebar="false" docType="html-5.0">
+    <style type="text/css">
+    #video-source{
+        width: 100%;
+        height: auto;
+    }
+    video{
+        object-fit: cover !important;
+    }
+    </style>
+    <body oncontextmenu="return false;">
+        <video id="video-source"  controls="controls" controlsList="noplaybackrate  nodownload">
+            <source  type="video/mp4" />
+        </video>
+    </body>
+    <script>
+        // Obtaining LEX origin URL from Apex to fire to parent & match the source upon receiving message
+        var lexOrigin, videoTemplate, jsonText, receivedfromLWC
+        lexOrigin = location.origin;
+
+        /*** EventListener to GET response from LWC  ***/
+        window.addEventListener('message', function (event) {
+            if (event.origin !== lexOrigin) {
+                console.log("Received error message", event)
+                // Not the expected origin: reject message!
+                return;
+            } else {
+                videoTemplate = document.getElementById('video-source');
+                jsonText = event.data;
+                receivedfromLWC = JSON.parse(jsonText);
+                console.log("receivedfrom", receivedfromLWC);
+                if(receivedfromLWC.vfSource != undefined) {
+                    videoTemplate.getElementsByTagName('source')[0].setAttribute("src", receivedfromLWC.vfSource);
+                }
+                videoTemplate.style = (receivedfromLWC.cellType === 'Company Provide') ? ('object-fit: cover !important') : '';
+                videoTemplate.pause();
+                videoTemplate.load();
+            }
+        }, false);
+    </script>
+</apex:page>

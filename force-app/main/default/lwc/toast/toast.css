@@ -1,0 +1,8 @@
+.slds-show .slds-notify_container {
+    animation: 0.5s forwards enter
+}
+
+@keyframes enter {
+    from { top: 0rem; opacity: 0 }
+    to { top: 1rem; opacity: 1}
+}
