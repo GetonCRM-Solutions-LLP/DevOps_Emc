@@ -23,6 +23,7 @@ export default class DriverDashboardFrame extends LightningElement {
     @track notificationList;
     @api chartData;
     @api profile;
+    @api roleId;
     @api customSetting;
     @api driverMeeting;
     @api last2Year;
@@ -159,13 +160,6 @@ export default class DriverDashboardFrame extends LightningElement {
         "label": "Help & info",
         "menuItem": [{
             "menuId": 301,
-            "menu": "Notifications",
-            "menuLabel" : "Notifications",
-            "menuClass": "tooltipText",
-            "logo": logo + '/emc-design/assets/images/Icons/SVG/Green/Notifications.svg#notification',
-            "logoHov": logo + '/emc-design/assets/images/Icons/SVG/White/Notifications.svg#notification'
-        },{
-            "menuId": 302,
             "menu": "Videos",
             "menuLabel" : "Videos/Training",
             "menuClass": "tooltipText",
@@ -500,7 +494,6 @@ export default class DriverDashboardFrame extends LightningElement {
 
         this.notifyList = messageList;
         this.notificationList = this.notifyList.slice(0, 2);
-        console.log("notifications--", this.notifyList, JSON.stringify(this.notifyList), this.notifyList.length)
         this.isNotify = (this.notifyList.length > 0) ? true : false;
         // }
     }
@@ -534,7 +527,6 @@ export default class DriverDashboardFrame extends LightningElement {
             notification = this.proxyToObject(result);
             notification = this.sortByDesc(notification, "modifiedDate", "Date");
             notification = this.sortByDesc(notification, "unread", "Boolean");
-            console.log("Result", notification)
             this.userNotification = notification;
             this.updateNotifyList = notification;
             this.notifyList = notification;
@@ -590,7 +582,6 @@ export default class DriverDashboardFrame extends LightningElement {
             notification = this.proxyToObject(result);
             // notification = this.sortByDesc(notification, "modifiedDate", "Date");
             // notification = this.sortByDesc(notification, "unread", "Boolean");
-            console.log("Result", notification)
            // this.userNotification = notification;
          }).catch((err)=>{console.log(err.message)})
             /*for (let i = 0; i < this.unnotifyList.length; i++) {
@@ -625,7 +616,6 @@ export default class DriverDashboardFrame extends LightningElement {
         // eslint-disable-next-line radix
         var eId = event.currentTarget.dataset.id, notification;
         notification = this.userNotification;
-        console.log("MEssage id", eId, this.notifyList);
       //  this.unreadCount = 0
        for (let i = 0; i < notification.length; i++) {
             if (notification[i].id === eId) {
@@ -652,7 +642,6 @@ export default class DriverDashboardFrame extends LightningElement {
             notification = this.proxyToObject(result);
             // notification = this.sortByDesc(notification, "modifiedDate", "Date");
             // notification = this.sortByDesc(notification, "unread", "Boolean");
-            console.log("Result", notification)
             //this.userNotification = notification;
         }).catch((err)=>{console.log(err.message)})
        /* updateNotificationMessage({msgId: eId, year: this.defaultYear, month: this.defaultMonth}).then((data) => { 
@@ -710,7 +699,6 @@ export default class DriverDashboardFrame extends LightningElement {
     }
 
     handleSidebarToggle(event) {
-        console.log("From navigation", event.detail)
         this.section = (event.detail === 'sidebar open') ? 'sidebar-open' : 'main';
         this.contentCss = (event.detail === 'sidebar open') ? "slds-align_absolute-center content-flex content-open" : "slds-align_absolute-center content-padding2-close content-flex";
         this.videoCss = (event.detail === 'sidebar open') ?   "slds-align_absolute-center video-container video-padding" : "slds-align_absolute-center video-container video-padding-close"
@@ -809,7 +797,6 @@ export default class DriverDashboardFrame extends LightningElement {
         this.isTripType = event.detail;
         this.isTrip = (this.isTripType === 'MyTrip') ? true : false;
         this.isAttendance = (this.isTripType === 'timeAttendance') ? true : false;
-        console.log("revert", this.isTripType)
         this.dispatchEvent(
             new CustomEvent("profile", {
                 detail: 'isHide'
@@ -961,7 +948,6 @@ export default class DriverDashboardFrame extends LightningElement {
             this.template.querySelector('c-user-profile-modal').hide();
         }
         updateContactDetail({contactId: this._contactId}).then((data) => { 
-            console.log("Data--", data);
         }).catch((err)=>{
             console.log("Error--", err);
         })
@@ -1035,7 +1021,6 @@ export default class DriverDashboardFrame extends LightningElement {
         setTimeout(()=>{
             const url = new URL(document.location);
             let address = url.hash;
-            // console.log("window.history", address);
             if(address === undefined || address === '')
                   redirectionURL({ contactId: this._contactId })
                   .then((result) => {
@@ -1424,14 +1409,12 @@ export default class DriverDashboardFrame extends LightningElement {
     handleYearChange(event){
         this.defaultYear = event.detail.value;
         this.getContactNotification();
-        console.log("Year change-", this.defaultYear);
     }
 
     
     handleMonthChange(event){
         this.defaultMonth = event.detail.value;
         this.getContactNotification();
-        console.log("month change-",  this.defaultMonth);
     }
 
     emailSent(event){
@@ -1456,7 +1439,6 @@ export default class DriverDashboardFrame extends LightningElement {
                         })
                     );
                 }
-                console.log(result);
             })
         }else{
             this.dispatchEvent(
@@ -1468,7 +1450,6 @@ export default class DriverDashboardFrame extends LightningElement {
     }
 
     reimburseEvent(event){
-        console.log("From Reimbursement", event?.detail?.lastMonthMiles, event?.detail?.thisMonthMiles);
         this.monthMilesThis = event?.detail?.thisMonthMiles;
         this.monthMilesLast = event?.detail?.lastMonthMiles;
     }
@@ -1675,7 +1656,6 @@ export default class DriverDashboardFrame extends LightningElement {
                                 this.debounce(() => {   this.popStateMessage(); }, 0)();
                             }
                         }
-                        console.log("getAllReimbursement", result)
                     })
                     .catch((error) => {
                         console.log("getAllReimbursements error", error);

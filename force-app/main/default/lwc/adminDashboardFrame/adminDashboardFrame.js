@@ -300,6 +300,7 @@ export default class AdminDashboardFrame extends LightningElement {
   @api driverMeeting;
   @api profile;
   @api userRole;
+	@api roleId;
   @api customSetting;
   @api addEmpFormField = [];
   @api redirectUserId;
@@ -309,6 +310,20 @@ export default class AdminDashboardFrame extends LightningElement {
  
  
   @track adminProfileMenu = [
+    {
+      id: 0,
+      label: "Bookmark",
+      menuItem: [
+        {
+          menuId: 1,
+          menuLabel: "Bookmarks",
+          menuClass: "tooltipText hasItem",
+          logo: logo + "/emc-design/assets/images/Icons/SVG/Green/Bookmark.svg#bookmarks",
+          logoHov: logo + "/emc-design/assets/images/Icons/SVG/White/Bookmark.svg#bookmarks",
+          subMenuItem: []
+        }
+      ],
+    },
     {
       id: 1,
       label: "Mileage",
@@ -330,18 +345,21 @@ export default class AdminDashboardFrame extends LightningElement {
               menu: "Mileage-Approval",
               menuLabel: "Unapproved",
               menuClass: "active",
+              pinBookmark: false 
             },
             {
               menuId: 1012,
               menu: "Mileage-Preview",
               menuLabel: "Preview",
               menuClass: "",
+              pinBookmark: false 
             },
             {
               menuId: 1013,
               menu: "Mileage-Summary",
               menuLabel: "Summary",
               menuClass: "",
+              pinBookmark: false 
             }
           ]
         },
@@ -415,6 +433,7 @@ export default class AdminDashboardFrame extends LightningElement {
               menuId: 2022,
               menu: "Reports",
               menuLabel: "All Reports",
+              pinBookmark: false, 
               menuClass: "",
             },
           ],
@@ -445,20 +464,20 @@ export default class AdminDashboardFrame extends LightningElement {
       id: 3,
       label: "Help & info",
       menuItem: [
+        // {
+        //   menuId: 301,
+        //   menu: "Notifications",
+        //   menuLabel: "Notifications",
+        //   menuClass: "tooltipText",
+        //   logo:
+        //     logo +
+        //     "/emc-design/assets/images/Icons/SVG/Green/Notifications.svg#notification",
+        //   logoHov:
+        //     logo +
+        //     "/emc-design/assets/images/Icons/SVG/White/Notifications.svg#notification",
+        // },
         {
           menuId: 301,
-          menu: "Notifications",
-          menuLabel: "Notifications",
-          menuClass: "tooltipText",
-          logo:
-            logo +
-            "/emc-design/assets/images/Icons/SVG/Green/Notifications.svg#notification",
-          logoHov:
-            logo +
-            "/emc-design/assets/images/Icons/SVG/White/Notifications.svg#notification",
-        },
-        {
-          menuId: 302,
           menu: "Videos",
           menuLabel: "Videos/Training",
           menuClass: "tooltipText",
@@ -616,7 +635,6 @@ export default class AdminDashboardFrame extends LightningElement {
 
   /* sidebar open/close arrow navigation event*/
   handleSidebarToggle(event) {
-    console.log("From navigation new", event.detail);
     this.section =
       event.detail === "sidebar open"
         ? "sidebar-open"
@@ -642,7 +660,6 @@ export default class AdminDashboardFrame extends LightningElement {
         this.userName = contact[0].Name;
         this.firstName = contact[0].FirstName;
         this.biweekAccount = contact[0].Account.Bi_Weekly_Pay_Period__c;
-        console.log("getDriverDetails###", JSON.parse(data))
       }else if(error){
           console.log("getDriverDetails error", error.message)
       }
@@ -653,7 +670,6 @@ export default class AdminDashboardFrame extends LightningElement {
   })vehicleValue({data,error}) {
       if (data) {
         this.contactVehicle = data;
-        console.log("vehicleValue###", data)
       }else if(error){
           console.log("vehicleValue error", error.message)
       }
@@ -743,7 +759,7 @@ export default class AdminDashboardFrame extends LightningElement {
   }
 
   getReportLabel(reportName) {  
-    if (reportName === 'Terminated Drivers Final Variable') return 'Terminated Drivers';  
+    if (reportName === 'Final Variable Report for Terminated Drivers') return 'Terminated Drivers';  
     const lastIndex = reportName.lastIndexOf(' ');  
     const name = reportName.trim().split(/\s+/);
     const lastWord = name[name.length - 1];
@@ -763,14 +779,11 @@ export default class AdminDashboardFrame extends LightningElement {
   getAllReport() {
     getCustomReportSettings()
     .then(res => {
-				console.log("Reports" , JSON.stringify(res))
         let result = res ? JSON.parse(JSON.stringify(res)) : '';
-        let isReport = false, report;
+        let isReport = false;
         result.forEach(res => {
           if(res && res?.Account_Id__c && res?.Account_Id__c?.split(',').includes(this._accountId)) {
-						console.log("Reports" , JSON.stringify(res))
             this.basicReport = [...this.basicReport, ...res?.Reports__c.split(',')];
-						console.log("Reports 2" , JSON.stringify(this.basicReport))
             isReport = true;
           }
         });
@@ -778,43 +791,42 @@ export default class AdminDashboardFrame extends LightningElement {
           this.basicReport = BasicReport
         }
         getAllReports({ contactId: this._contactId })
-        .then((result) => {
-          this.reportList = result;
-          if(this.reportList){
-            const reportArray = this.proxyToObject(this.reportList);  
-            const newObject = {  currentReports: [  
-                  { reportName: "Annual Tax Liability Report", reportId: "ANNUAL_TAX" },  
-                  { reportName: "Tax Liability Report", reportId: "TAX123" },  
-              ],  categoryName: 'Tax Liability Reports',  
-            };  
-            reportArray.push(newObject); 
-        
-            const actualReport = reportArray.map((v) => ({  
-              ...v,  
-              class: "verticalSecondaryItem hasItem",  
-              categoryLabel: v.categoryName === 'My Custom Reports' ? v.categoryName.split('My ')[1] : v.categoryName,  
-              currentReports: this.getUniqueReport(v.currentReports.filter(r => this.basicReport.includes(r.reportName)), 'reportName').map((child) => ({  
-              ...child,  
-              reportLabel: this.getReportLabel(child.reportName),  
-              })),  
-            }));  
-            console.log("Actual Report", JSON.stringify(actualReport));
-            const menuPItem = this.adminProfileMenu  
-            .flatMap((parent) => parent.menuItem.filter((child) => child.subMenuItem))  
-            .find((e) => e.menu === "Reports");  
-            
-            if (menuPItem) {  
-              const childElement = menuPItem.subMenuItem.find((child) => child.menuLabel == "All Reports");  
-              childElement.itemList = childElement? actualReport : [];  
-            }  
-          }
-        
-        })
-        .catch((error) => {
-          console.log(error.message);
-        });
-      })
-      
+          .then((result) => {
+            this.reportList = result;
+            if(this.reportList){
+              const reportArray = this.proxyToObject(this.reportList);  
+              const newObject = {  currentReports: [  
+                    { reportName: "Annual Tax Liability Report", reportId: "ANNUAL_TAX" },  
+                    { reportName: "Tax Liability Report", reportId: "TAX123" },  
+                ],  categoryName: 'Tax Liability Reports',  
+              };  
+              reportArray.push(newObject); 
+          
+              const actualReport = reportArray.map((v) => ({  
+                ...v,  
+                class: "verticalSecondaryItem hasItem",  
+                categoryLabel: v.categoryName === 'My Custom Reports' ? v.categoryName.split('My ')[1] : v.categoryName,  
+                currentReports: this.getUniqueReport(v.currentReports.filter(r => this.basicReport.includes(r.reportName)), 'reportName').map((child) => ({  
+                ...child,  
+                reportLabel: this.getReportLabel(child.reportName),
+                pinBookmark: false  
+                })),  
+              }));  
+              const menuPItem = this.adminProfileMenu  
+              .flatMap((parent) => parent.menuItem.filter((child) => child.subMenuItem))  
+              .find((e) => e.menu === "Reports");  
+              
+              if (menuPItem) {  
+                const childElement = menuPItem.subMenuItem.find((child) => child.menuLabel == "All Reports");  
+                childElement.itemList = childElement? actualReport : [];  
+              }  
+            }
+          
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+    })
   }
 
   sortByDesc(data, colName, colType) {
@@ -959,8 +971,7 @@ export default class AdminDashboardFrame extends LightningElement {
         let detailList = event.detail;
         this.reportId = detailList.reportID;
         this.reportMonthList = detailList.monthList ? detailList.monthList : this.monthOption;
-    }
-    else{
+    }else{
       if(event.detail?.message === 'navigation'){
         location.hash = "";
         history.replaceState("", "", location.pathname + location.search);
@@ -2750,7 +2761,6 @@ export default class AdminDashboardFrame extends LightningElement {
                       })
                   );
               }
-              console.log(result);
           })
       }else{
           this.dispatchEvent(
@@ -2992,6 +3002,7 @@ export default class AdminDashboardFrame extends LightningElement {
           this.autoCount = (notification.filter(e => e.createdBy === 'Tom Honkus' && e.unread === true)).length;
           this.isNotify = (this.notifyList.length > 0) ? true : false;
   }
+
 
   refreshEmpData(){
     this.getEmployeeList();

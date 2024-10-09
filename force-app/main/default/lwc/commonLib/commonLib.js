@@ -354,7 +354,7 @@ const dateString = (dt) =>{
       return [year, month, day].join('-');
   }
 
-    const formatList = (reList) => {
+  const formatList = (reList) => {
       if (reList.length > 0) {
         const newData = [...new Set(reList.map(d => d.Date))].map(Dt => {
           return {
@@ -370,7 +370,12 @@ const dateString = (dt) =>{
         }
         return newData
       }
-    }
+  }
+
+
+  const sessionRemoval = () => {
+    sessionStorage.clear();
+  }
 
 export 
 {
@@ -385,5 +390,6 @@ export
     yearMonthDate,
     typeOfTrip,
     formatList,
-    toDate
+    toDate,
+    sessionRemoval
 }

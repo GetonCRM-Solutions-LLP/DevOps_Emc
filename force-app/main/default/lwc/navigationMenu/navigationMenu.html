@@ -52,7 +52,7 @@
                 <ul class="nav-list">
                   <template for:each={driverMenuItem} for:item="menu">
                             <template for:each={menu.menuItem} for:item="item">
-                                <li key={menu.id}>
+                                <li key={menu.id} data-name={item.menuLabel}>
                                     <a class={item.menuClass} aria-expanded="false" href="javascript:void(0)"  oncontextmenu={handleContextMenu}
                                         onclick={handleRedirect} onmouseover={mouseOverLink}  name={item.menuLabel} data-id={item.menuId} data-name={item.menu}>
                                         <div class="menu-icon icon-no-hover" data-name={item.menu}>
@@ -70,34 +70,104 @@
                                     <template lwc:if={item.subMenuItem}>
                                         <div class="secondary-menu" data-id={item.menuId} onmouseleave={sideMenuOut}>
                                             <ul role="menu" aria-hidden="false" aria-labelledby="rm-toggle">
-                                                <template for:each={item.subMenuItem} for:item="subitem">
-                                                    <li role="none"  key={subitem.menuId}>
-                                                        <a class="secondaryMenuItem" role="menuitem" onclick={handleSubMenuRedirect} oncontextmenu={handleContextMenu}
-                                                        name={subitem.menuLabel}  data-id={item.menuId} data-name={subitem.menu} data-menu-item-level="secondary" data-menu-item-group="rm"><span
-                                                                class="label">{subitem.menuLabel}</span>
-                                                        </a>
-                                                        <template lwc:if={subitem.itemList}>
-                                                                <template for:each={subitem.itemList} for:item="childItem">
-                                                                    <div key={childItem.categoryName} class={childItem.class}  aria-expanded="false">
-                                                                        <span class="label">{childItem.categoryLabel}</span>
-                                                                    </div>
-                                                                    <template lwc:if={childItem.currentReports}>
-                                                                        <div class="secondary-menuCategory" key={childItem.categoryName}>
-                                                                                <ul>
-                                                                                    <template for:each={childItem.currentReports} for:item="grandchildItem">
-                                                                                        <li key={grandchildItem.reportId}>
-                                                                                            <a class="secondaryMenuItem childMenu"  onclick={handleChildRedirect} oncontextmenu={handleContextMenu}
-                                                                                                    name={grandchildItem.reportName} data-id={grandchildItem.reportId} data-date={grandchildItem.mileageLockDate} data-lock={grandchildItem.lockDate} data-name={grandchildItem.reportName}>
-                                                                                                <span class="childLabel">{grandchildItem.reportLabel}</span>
-                                                                                            </a>
-                                                                                        </li>
-                                                                                    </template>
-                                                                                </ul>
+                                                <template lwc:if={item.menu}>
+                                                    <template for:each={item.subMenuItem} for:item="subitem">
+                                                        <li role="none"  key={subitem.menuId}>
+                                                            <template lwc:if={subitem.isBookmark}>
+                                                                <template lwc:if={subitem.isNestedMenu}>
+                                                                    <a class="secondaryMenuItem childMenu"  onclick={handleChildRedirect} oncontextmenu={handleContextMenu}
+                                                                    name={subitem.menu} data-id={subitem.parentId} data-date={subitem.mileageLockDate} data-lock={subitem.lockDate} data-name={subitem.menu}>
+                                                                        <span class="label">{subitem.menuLabel}</span>
+                                                                        <div class="bookmarkLabel" >
+                                                                            <button class="bookmark-btn" onclick={removeBookmark} data-mark="Report" data-id={subitem.parentId} data-parentid={subitem.menuId}>
+                                                                                <template lwc:if={subitem.pinBookmark}>
+                                                                                    <svg aria-label="Bookmarks" class="marked-bookmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M26.5,2.51v26.99c0,.41-.24.77-.62.93-.12.05-.25.07-.38.07-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.28.29-.71.37-1.08.21-.38-.15-.62-.52-.62-.92V2.51c0-.56.45-1,1-1h19c.55,0,1,.44,1,1Z"></path></g></svg>
+                                                                                </template>
+                                                                                <template lwc:else>
+                                                                                    <svg aria-label="Bookmarks" class="icon-hollow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M25.5,30.5c-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.29.28-.72.37-1.09.21-.37-.16-.61-.52-.61-.92V2.5c0-.55.45-1,1-1h19c.55,0,1,.45,1,1v26.99c0,.41-.25.77-.62.93-.12.05-.25.07-.38.07ZM7.5,3.5v23.6l7.94-7.82c.39-.39,1.03-.38,1.41.01l7.65,7.76V3.5H7.5Z"></path></g></svg>
+                                                                                </template>
+                                                                            </button>
                                                                         </div>
-                                                                    </template>
+                                                                    </a>
                                                                 </template>
-                                                        </template>
-                                                    </li>
+                                                                <template lwc:else>
+                                                                    <a class="secondaryMenuItem childMenu" role="menuitem"  href="javascript:void(0)" onclick={handleSubMenuRedirect} oncontextmenu={handleContextMenu}
+                                                                    name={subitem.menuLabel}  data-id={subitem.parentId} data-name={subitem.menu} data-menu-item-level="secondary" data-menu-item-group="rm"><span
+                                                                            class="label">{subitem.menuLabel}</span>
+                                                                            <div class="bookmarkLabel" >
+                                                                                <button class="bookmark-btn" onclick={removeBookmark} data-mark="noReport" data-id={subitem.idOfMenu} data-parentid={subitem.menuId}>
+                                                                                    <template lwc:if={subitem.pinBookmark}>
+                                                                                        <svg aria-label="Bookmarks" class="marked-bookmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M26.5,2.51v26.99c0,.41-.24.77-.62.93-.12.05-.25.07-.38.07-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.28.29-.71.37-1.08.21-.38-.15-.62-.52-.62-.92V2.51c0-.56.45-1,1-1h19c.55,0,1,.44,1,1Z"></path></g></svg>
+                                                                                    </template>
+                                                                                    <template lwc:else>
+                                                                                        <svg aria-label="Bookmarks" class="icon-hollow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M25.5,30.5c-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.29.28-.72.37-1.09.21-.37-.16-.61-.52-.61-.92V2.5c0-.55.45-1,1-1h19c.55,0,1,.45,1,1v26.99c0,.41-.25.77-.62.93-.12.05-.25.07-.38.07ZM7.5,3.5v23.6l7.94-7.82c.39-.39,1.03-.38,1.41.01l7.65,7.76V3.5H7.5Z"></path></g></svg>
+                                                                                    </template>
+                                                                                </button>
+                                                                            </div>
+                                                                    </a>
+                                                                </template>
+                                                            </template>
+                                                            <template lwc:else>
+                                                                <a class="secondaryMenuItem childMenu" role="menuitem"  href="javascript:void(0)" onclick={handleSubMenuRedirect} oncontextmenu={handleContextMenu}
+                                                                name={subitem.menuLabel}  data-id={item.menuId} data-name={subitem.menu} data-menu-item-level="secondary" data-menu-item-group="rm"><span
+                                                                        class="label">{subitem.menuLabel}</span>
+                                                                        <div class="bookmarkLabel" >
+                                                                            <template lwc:if={subitem.pinBookmark}>
+                                                                                <button class="bookmark-btn" onclick={removeFromBookmark} data-mark="noReport" data-id={subitem.menuId} data-parentid={item.menuId}>
+                                                                                    <svg aria-label="Bookmarks" class="filled-bookmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M26.5,2.51v26.99c0,.41-.24.77-.62.93-.12.05-.25.07-.38.07-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.28.29-.71.37-1.08.21-.38-.15-.62-.52-.62-.92V2.51c0-.56.45-1,1-1h19c.55,0,1,.44,1,1Z"></path></g></svg>
+                                                                                </button>
+                                                                            </template>
+                                                                            <template lwc:else>
+                                                                                <button class="bookmark-btn" onclick={addToBookmark} data-type="normal" data-id={subitem.menuId} data-parentid={item.menuId}>
+                                                                                    <svg aria-label="Bookmarks" class="icon-hollow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M25.5,30.5c-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.29.28-.72.37-1.09.21-.37-.16-.61-.52-.61-.92V2.5c0-.55.45-1,1-1h19c.55,0,1,.45,1,1v26.99c0,.41-.25.77-.62.93-.12.05-.25.07-.38.07ZM7.5,3.5v23.6l7.94-7.82c.39-.39,1.03-.38,1.41.01l7.65,7.76V3.5H7.5Z"></path></g></svg>
+                                                                                </button>
+                                                                            </template>
+                                                                        </div>
+                                                                </a>
+                                                            </template>
+                                                        
+                                                            <template lwc:if={subitem.itemList}>
+                                                                    <template for:each={subitem.itemList} for:item="childItem">
+                                                                        <div key={childItem.categoryName} class={childItem.class}  aria-expanded="false">
+                                                                            <span class="label">{childItem.categoryLabel}</span>
+                                                                        </div>
+                                                                        <template lwc:if={childItem.currentReports}>
+                                                                            <div class="secondary-menuCategory" key={childItem.categoryName}>
+                                                                                    <ul>
+                                                                                        <template for:each={childItem.currentReports} for:item="grandchildItem">
+                                                                                            <li key={grandchildItem.reportId}>
+                                                                                                <a class="secondaryMenuItem childMenu"  onclick={handleChildRedirect} oncontextmenu={handleContextMenu}
+                                                                                                        name={grandchildItem.reportName}  data-id={grandchildItem.reportId} data-date={grandchildItem.mileageLockDate} data-lock={grandchildItem.lockDate} data-name={grandchildItem.reportName}>
+                                                                                                    <span class="childLabel">{grandchildItem.reportLabel}</span>
+                                                                                                    <div class="bookmarkLabel" >
+                                                                                                            <template lwc:if={grandchildItem.pinBookmark}>
+                                                                                                                <button class="bookmark-btn" onclick={removeFromBookmark} data-mark="Report" data-id={grandchildItem.reportId} data-parentid={subitem.menuId}>
+                                                                                                                    <svg aria-label="Bookmarks" class="filled-bookmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M26.5,2.51v26.99c0,.41-.24.77-.62.93-.12.05-.25.07-.38.07-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.28.29-.71.37-1.08.21-.38-.15-.62-.52-.62-.92V2.51c0-.56.45-1,1-1h19c.55,0,1,.44,1,1Z"></path></g></svg>
+                                                                                                                </button>
+                                                                                                            </template>
+                                                                                                            <template lwc:else>
+                                                                                                                <button class="bookmark-btn" onclick={addToBookmark} data-type="Reporting" data-id={grandchildItem.reportId} data-parentid={subitem.menuId}>
+                                                                                                                    <svg aria-label="Bookmarks" class="icon-hollow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><g><path d="M25.5,30.5c-.26,0-.52-.1-.71-.3l-8.66-8.78-8.93,8.79c-.29.28-.72.37-1.09.21-.37-.16-.61-.52-.61-.92V2.5c0-.55.45-1,1-1h19c.55,0,1,.45,1,1v26.99c0,.41-.25.77-.62.93-.12.05-.25.07-.38.07ZM7.5,3.5v23.6l7.94-7.82c.39-.39,1.03-.38,1.41.01l7.65,7.76V3.5H7.5Z"></path></g></svg>
+                                                                                                                </button>
+                                                                                                            </template>
+                                                                                                    </div>
+                                                                                                </a>
+                                                                                            </li>
+                                                                                        </template>
+                                                                                    </ul>
+                                                                            </div>
+                                                                        </template>
+                                                                    </template>
+                                                            </template>
+                                                        </li>
+                                                    </template>
+                                                </template>
+                                                <template lwc:else>
+                                                    <div class="secondary-empty">
+                                                        <p class="empty-str-one">Add your first bookmark for quick access.</p>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="favorites-empty" width="196.71" height="112" viewBox="0 0 196.71 112" fill="none"><path fill="#576E8D" d="M5.685 0h185.34A5.685 5.685 0 0 1 196.71 5.685V25.584a5.685 5.685 0 0 1 -5.685 5.685H5.685A5.685 5.685 0 0 1 0 25.584V5.685A5.685 5.685 0 0 1 5.685 0"/><path fill="#475A74" d="M20.467 9.665h98.355a5.685 5.685 0 0 1 5.685 5.685 5.685 5.685 0 0 1 -5.685 5.685h-98.355a5.685 5.685 0 0 1 -5.685 -5.685 5.685 5.685 0 0 1 5.685 -5.685"/><path fill="#576E8D" d="M5.685 80.731h185.34A5.685 5.685 0 0 1 196.71 86.416v19.899a5.685 5.685 0 0 1 -5.685 5.685H5.685A5.685 5.685 0 0 1 0 106.315V86.416a5.685 5.685 0 0 1 5.685 -5.685"/><path fill="#475A74" d="M20.467 90.395h98.355a5.685 5.685 0 0 1 5.685 5.686 5.685 5.685 0 0 1 -5.685 5.685h-98.355a5.685 5.685 0 0 1 -5.685 -5.685 5.685 5.685 0 0 1 5.685 -5.686"/><path fill="#8297B3" d="M5.685 40.365h185.34A5.685 5.685 0 0 1 196.71 46.051v19.898a5.685 5.685 0 0 1 -5.685 5.686H5.685A5.685 5.685 0 0 1 0 65.949V46.051a5.685 5.685 0 0 1 5.685 -5.686"/><path fill="#576E8D" d="M20.467 50.03h72.203A5.685 5.685 0 0 1 98.355 55.715a5.685 5.685 0 0 1 -5.685 5.686H20.467a5.685 5.685 0 0 1 -5.685 -5.686 5.685 5.685 0 0 1 5.685 -5.685"/><path d="M169.34 48.893a0.463 0.463 0 0 0 -0.345 0.15 0.521 0.521 0 0 0 -0.142 0.361v12.621a0.532 0.532 0 0 0 0.06 0.246 0.509 0.509 0 0 0 0.165 0.185 0.474 0.474 0 0 0 0.469 0.032l3.854 -1.892 3.854 1.892a0.463 0.463 0 0 0 0.469 -0.032 0.509 0.509 0 0 0 0.165 -0.185 0.509 0.509 0 0 0 0.06 -0.246V49.405a0.521 0.521 0 0 0 -0.142 -0.361 0.463 0.463 0 0 0 -0.345 -0.15z" fill="#fff"/></svg>
+                                                        <p class="empty-str-two">Select the bookmark icon next to any item in the navigation to add it here.</p>
+                                                    </div>
                                                 </template>
                                             </ul>
                                         </div>
@@ -108,6 +178,10 @@
                 </ul>
               </div>
         </div>
+        <span class="btooltip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="128.857" height="41" viewBox="0 0 128.857 41" fill="none"><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#BDC0C6"></path><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#404B5A"></path></svg>
+            <span class="tooltipLabel labelPosition">{label}</span>
+        </span>
         <div class="navContainer__Footer">
               <template lwc:if={isNotLocked}>
                 <button class="pinButton" data-click-action="expanded vertical nav" onclick={lockMenu}>
@@ -115,7 +189,7 @@
                 </button>
                 <span class="tooltip">
                   <svg xmlns="http://www.w3.org/2000/svg" width="128.857" height="41" viewBox="0 0 128.857 41" fill="none"><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#BDC0C6"></path><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#404B5A"></path></svg>
-                  <span class="tooltipLabel">Keep navigation open</span>
+                  <span class="tooltipLabel sideBarLabel">Keep navigation open</span>
                 </span>
               </template>
               <template lwc:else>
@@ -125,7 +199,7 @@
                 </button>
                 <span class="tooltip">
                     <svg xmlns="http://www.w3.org/2000/svg" width="128.857" height="41" viewBox="0 0 128.857 41" fill="none"><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#BDC0C6"></path><path d="M9.408 5.217A11.715 11.715 0 0 1 19.155 0h97.988C123.613 0 128.857 5.244 128.857 11.714v17.572c0 6.47 -5.244 11.714 -11.714 11.714H19.549c-4.131 0 -7.957 -2.177 -10.068 -5.728L1.509 21.866a4.682 4.682 0 0 1 0.129 -4.994z" fill="#404B5A"></path></svg>
-                    <span class="tooltipLabel">Collapse navigation</span>
+                    <span class="tooltipLabel sideBarLabel">Collapse navigation</span>
                   </span>
               </template>
         </div>

@@ -134,6 +134,7 @@
                             const componentAttributes = {
                                     showTeam: team,
                                     profile: ProfileId,
+                                    roleId: profileRecordId,
                                     userRole: Role,
                                     loginCount: userLogin,
                                     managerId : idParamValue,
