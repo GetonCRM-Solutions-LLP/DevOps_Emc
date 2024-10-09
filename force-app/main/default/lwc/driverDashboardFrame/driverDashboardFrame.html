@@ -1,5 +1,5 @@
 <template>
-		<c-navigation-menu driver-menu-item={driverProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} onlogout={handleLogout} profile-id={profile}></c-navigation-menu>
+		<c-navigation-menu driver-menu-item={driverProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} onlogout={handleLogout} profile-id={profile} role-id={roleId}></c-navigation-menu>
 		<c-dashboard-profile-header user-name={firstName} full-name={userName} unread={unreadCount} driver-menu={menu} page-source={isHomePage} onredirect={navigateToInsurance}  onresourcenavigate={navigateToResource} onnotify={viewAllNotification} company-logo={companyLogoUrl} expiration-date={dateOfExpiration} 
 			onlogout={handleLogout} is-navigate="true"></c-dashboard-profile-header>
 		<section class={section} id="default">

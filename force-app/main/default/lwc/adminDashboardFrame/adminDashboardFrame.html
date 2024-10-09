@@ -1,5 +1,5 @@
 <template >
-    <c-navigation-menu driver-menu-item={adminProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} profile-id={profile} onlogout={handleLogout} ongetreport={redirectToReportDetail}></c-navigation-menu>
+    <c-navigation-menu driver-menu-item={adminProfileMenu} onsidebar={handleSidebarToggle} driver-name={userName} driver-email={userEmail} profile-id={profile} role-id={roleId} onlogout={handleLogout} ongetreport={redirectToReportDetail}></c-navigation-menu>
 	<c-dashboard-profile-header user-name={firstName} full-name={contactTitle} unread={unreadCount} page-source={isHomePage} onnotify={viewAllNotification} onlogout={handleLogout} driver-menu={menu} is-navigate="true">
 		<template lwc:if={isProfile}>
 			<div slot="buttons">
