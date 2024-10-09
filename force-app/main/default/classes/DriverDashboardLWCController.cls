@@ -15,6 +15,7 @@ global class DriverDashboardLWCController {
     public static Date activationDate {get;set;}
     public static String activationDateForBatch {get;set;}
     public static String systemNotification {get;set;}
+    public static String profileID {get;set;}
     global static String last2Month {get;set;}
 
     // Constructor to initialize properties
@@ -30,6 +31,7 @@ global class DriverDashboardLWCController {
             activationDateForBatch = conList[0].Activation_Date__c != null ? DateTime.newInstance(conList[0].Activation_Date__c.year(), conList[0].Activation_Date__c.month(), conList[0].Activation_Date__c.day()).format('MM/dd/yyyy') : null;
             System.debug('Activation date assigned -->'+activationDateForBatch);
             systemNotification = conList[0].System_Notification__c;
+            profileID = conList[0].Role__c;
         }
         userLoginCount = countUserLogin(getContactid());
         
