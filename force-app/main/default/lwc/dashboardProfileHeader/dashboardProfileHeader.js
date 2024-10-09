@@ -19,6 +19,10 @@ export default class DashboardProfileHeader extends LightningElement {
         console.log("source", this.pageSource)
     }
 
+		 getUrlParamValue(url, key) {
+        return new URL(url).searchParams.get(key);
+    }
+
     get expirationToggle(){
         var expirationDate, monthOfExpiration, yearOfExpiration,currentYear, currentMonth, date;
         date = new Date();
@@ -109,6 +113,12 @@ export default class DashboardProfileHeader extends LightningElement {
     }
 
     logOut(){
+		    const id = this.getUrlParamValue(location.href, "id"), userId = sessionStorage.getItem("idUser");
+        if(id !== userId){
+            // sessionStorage.removeItem("bookmark");
+            // sessionStorage.removeItem("idUser");
+        }
+				localStorage.removeItem("driver");
         const logoutEvent = new CustomEvent('logout', {detail: 'logout'});
         this.dispatchEvent(logoutEvent);
     }

@@ -61,7 +61,7 @@
         <c:mBurseChatBot />
     </body>
     <script>
-          var nameOfUser, ProfileId, videoWrapper, performanceProfile, url , path, meeting, userLogin, activationDate, systemNotification, chartDetail,
+          var nameOfUser, ProfileId, profileRecordId, videoWrapper, performanceProfile, url , path, meeting, userLogin, activationDate, systemNotification, chartDetail,
                    chartlabels = [], chartDataValue = [{"Mileagechart": {}, "Reimbursementchart": {}}], activationDate = "", mileage = [], reimbursement = [],
                    averageReimbursement = [], averageMileage = [], reimb, mil, avgReimb, avgMileage, midMonth = [];
             url = location;
@@ -74,6 +74,7 @@
             activationDate = '{!activationDate}';
             updatedDate = '{!activationDateForBatch}';
             systemNotification = '{!systemNotification}';
+            profileRecordId = "{!profileID}";
             meeting = '{!ScheduleGotoMeeting}';
             last2Year = '{!last2Month}';
             const idParamValue = new URL(url).searchParams.get('id');
@@ -193,6 +194,7 @@
                 const componentAttributes = {
                     chartData: chartDataValue,
                     profile: ProfileId,
+                    roleId: profileRecordId,
                     driverMeeting: meeting,
                     loginCount: userLogin,
                     last2Year: last2Year,
