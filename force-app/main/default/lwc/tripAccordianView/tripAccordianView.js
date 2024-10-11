@@ -19,6 +19,7 @@ export default class TripAccordianView extends LightningElement {
     @api isAddTrip;
     @api selectedMonth;
     @api monthDifference;
+    @api activationDate;
     tripStartTime;
     tripOrigin;
     tripDestination;
@@ -110,10 +111,19 @@ export default class TripAccordianView extends LightningElement {
     }
 
     connectedCallback() {
+        let actDate = new Date(this.activationDate);
         let currentDate = new Date();
         let tempDate = new Date();
         this.eDate = this.monthDifference == 0 ? currentDate : new Date(tempDate.setMonth(currentDate.getMonth() - (this.monthDifference - 1), 0));
-        this.sDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1);
+        if(actDate.getFullYear() < currentDate.getFullYear()) {
+            this.sDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1);
+        } else {
+            if(actDate.getMonth() <= (currentDate.getMonth() - 2)) {
+                this.sDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 2, 1);
+            } else {
+                this.sDate = new Date(currentDate.getFullYear(), actDate.getMonth(), actDate.getDate());
+            }
+        }
         getLocations({ contactId: this.contactId, driverCountry: this.mapCountry })
             .then(result => {
                 let convRes = JSON.parse(result);
