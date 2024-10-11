@@ -64,7 +64,6 @@ public with sharing class AnnualTaxliabilityReport {
     }
     public List<TaxLiabilityWrapper> taxLiabilityWrapperLst{get;set;}
     public string accName {get; set;}
-    //public string currentYear {get; set;}
     public string preYear {get; set;}
     public String xlsHeader{
         get{
@@ -105,9 +104,9 @@ public with sharing class AnnualTaxliabilityReport {
         
         String strAccountId = currentPageAccountId;
         Account objAccount;
-        List<String> monthList = getReimbursementMonths(currentYear);
+        List<String> lstMonths = getReimbursementMonths(currentYear);
         taxLiabilityWrapperLst = new List<TaxLiabilityWrapper>();
-        Map<String, Double> mapOfReimTax = new Map<String, Double>();
+        Map<String, Double> mapImputedAmtByReimName = new Map<String, Double>();
 
         if (strAccountId != null) {
             objAccount = [SELECT Id, Name 
@@ -126,18 +125,16 @@ public with sharing class AnnualTaxliabilityReport {
         preYear = String.valueOf(Integer.valueOf(currentYear) - 1);
         DateTime startDateOfReport = DateTime.newInstance(Integer.valueOf(preYear), 12, 1, 0, 0, 0);
 
-        List<Employee_Reimbursement__c> lstEmpReim = [SELECT Name, Imputed_Amount_for_Year__c 
+        // Map the reimbursement data to the respective months
+        for (Employee_Reimbursement__c empReim : [SELECT Name, Imputed_Amount_for_Year__c 
                                                                 FROM Employee_Reimbursement__c 
                                                                 WHERE Contact_Id__r.AccountId = :strAccountId
-                                                                    AND Month__c IN :monthList
+                                                                    AND Month__c IN :lstMonths
                                                                     AND Contact_Id__r.Account.isUsingTriplog__c = true
                                                                     AND (Contact_Id__r.Deactivated_Date__c = null OR Contact_Id__r.Deactivated_Date__c > :startDateOfReport)
                                                                     AND Contact_Id__r.Role__c NOT IN ('Admin', 'Manager')
-                                                                    WITH SECURITY_ENFORCED];
-
-        // Map the reimbursement data to the respective months
-        for (Employee_Reimbursement__c empReim : lstEmpReim) {
-            mapOfReimTax.put(empReim.Name, empReim.Imputed_Amount_for_Year__c);
+                                                                    WITH SECURITY_ENFORCED]) {
+            mapImputedAmtByReimName.put(empReim.Name, empReim.Imputed_Amount_for_Year__c);
         }
         
         for(contact objContact: [SELECT Name, Email, Employee_ID__c, Activation_Date__c
@@ -173,167 +170,167 @@ public with sharing class AnnualTaxliabilityReport {
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(preYear), 12, 1)){
                 
-                taxliabilityrecord.December = Date.newInstance(Integer.ValueOf(currentYear), 12, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameDec) ? String.valueOf(mapOfReimTax.get(nameDec)) : '0';
+                taxliabilityrecord.December = Date.newInstance(Integer.ValueOf(currentYear), 12, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameDec) ? String.valueOf(mapImputedAmtByReimName.get(nameDec)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 12, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameDec) ? mapOfReimTax.get(nameDec) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 12, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameDec) ? mapImputedAmtByReimName.get(nameDec) : 0;
 
             }else{
                 
-                taxliabilityrecord.December = ' ';
+                taxliabilityrecord.December = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 1, 1)){
                 
-                taxliabilityrecord.January = Date.newInstance(Integer.ValueOf(currentYear), 1, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameJan) ? String.valueOf(mapOfReimTax.get(nameJan)) : '0';
+                taxliabilityrecord.January = Date.newInstance(Integer.ValueOf(currentYear), 1, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameJan) ? String.valueOf(mapImputedAmtByReimName.get(nameJan)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 1, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameJan) ? mapOfReimTax.get(nameJan) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 1, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameJan) ? mapImputedAmtByReimName.get(nameJan) : 0;
 
             }else{
                 
-                taxliabilityrecord.January = ' ';
+                taxliabilityrecord.January = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 2, 1)){
                 
-                taxliabilityrecord.February = Date.newInstance(Integer.ValueOf(currentYear), 2, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameFeb) ? String.valueOf(mapOfReimTax.get(nameFeb)) : '0';
+                taxliabilityrecord.February = Date.newInstance(Integer.ValueOf(currentYear), 2, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameFeb) ? String.valueOf(mapImputedAmtByReimName.get(nameFeb)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 2, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameFeb) ? mapOfReimTax.get(nameFeb) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 2, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameFeb) ? mapImputedAmtByReimName.get(nameFeb) : 0;
 
             }else{
                 
-                taxliabilityrecord.February = ' ';
+                taxliabilityrecord.February = null;
 
             }
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 3, 1)){
                 
-                taxliabilityrecord.March = Date.newInstance(Integer.ValueOf(currentYear), 3, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey(nameMar) ? 
-                String.valueOf(mapOfReimTax.get(nameMar)) : '0';
+                taxliabilityrecord.March = Date.newInstance(Integer.ValueOf(currentYear), 3, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey(nameMar) ? 
+                String.valueOf(mapImputedAmtByReimName.get(nameMar)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 3, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameMar) ? mapOfReimTax.get(nameMar) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 3, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameMar) ? mapImputedAmtByReimName.get(nameMar) : 0;
 
             }else{
                 
-                taxliabilityrecord.March = ' ';
+                taxliabilityrecord.March = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 4, 1)){
                 
-                taxliabilityrecord.April = Date.newInstance(Integer.ValueOf(currentYear), 4, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey(nameApr) ? 
-                String.valueOf(mapOfReimTax.get(nameApr)) : '0';
+                taxliabilityrecord.April = Date.newInstance(Integer.ValueOf(currentYear), 4, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey(nameApr) ? 
+                String.valueOf(mapImputedAmtByReimName.get(nameApr)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 4, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameApr) ? mapOfReimTax.get(nameApr) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 4, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameApr) ? mapImputedAmtByReimName.get(nameApr) : 0;
 
             }else{
                 
-                taxliabilityrecord.April = ' ';
+                taxliabilityrecord.April = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 5, 1)){
                 
-                taxliabilityrecord.May = Date.newInstance(Integer.ValueOf(currentYear), 5, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey(nameMay) ? 
-                String.valueOf(mapOfReimTax.get(nameMay)) : '0';
+                taxliabilityrecord.May = Date.newInstance(Integer.ValueOf(currentYear), 5, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey(nameMay) ? 
+                String.valueOf(mapImputedAmtByReimName.get(nameMay)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 5, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameMay) ? mapOfReimTax.get(nameMay) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 5, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameMay) ? mapImputedAmtByReimName.get(nameMay) : 0;
 
             }else{
                 
-                taxliabilityrecord.May = ' ';
+                taxliabilityrecord.May = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 6, 1)){
                 
-                taxliabilityrecord.June = Date.newInstance(Integer.ValueOf(currentYear), 6, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey(nameJun) ? 
-                String.valueOf(mapOfReimTax.get(nameJun)) : '0';
+                taxliabilityrecord.June = Date.newInstance(Integer.ValueOf(currentYear), 6, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey(nameJun) ? 
+                String.valueOf(mapImputedAmtByReimName.get(nameJun)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 6, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameJun) ? mapOfReimTax.get(nameJun) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 6, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameJun) ? mapImputedAmtByReimName.get(nameJun) : 0;
 
             }else{
                 
-                taxliabilityrecord.June = ' ';
+                taxliabilityrecord.June = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 7, 1)){
                 
-                taxliabilityrecord.July = Date.newInstance(Integer.ValueOf(currentYear), 7, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey(nameJul) ? 
-                String.valueOf(mapOfReimTax.get(nameJul)) : '0';
+                taxliabilityrecord.July = Date.newInstance(Integer.ValueOf(currentYear), 7, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey(nameJul) ? 
+                String.valueOf(mapImputedAmtByReimName.get(nameJul)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 7, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameJul) ? mapOfReimTax.get(nameJul) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 7, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameJul) ? mapImputedAmtByReimName.get(nameJul) : 0;
 
             }else{
                 
-                taxliabilityrecord.July = ' ';
+                taxliabilityrecord.July = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 8, 1)){
                 
-                taxliabilityrecord.August = Date.newInstance(Integer.ValueOf(currentYear), 8, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameAug) ? String.valueOf(mapOfReimTax.get(nameAug)) : '0';
+                taxliabilityrecord.August = Date.newInstance(Integer.ValueOf(currentYear), 8, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameAug) ? String.valueOf(mapImputedAmtByReimName.get(nameAug)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 8, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameAug) ? mapOfReimTax.get(nameAug) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 8, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameAug) ? mapImputedAmtByReimName.get(nameAug) : 0;
 
             }else{
                 
-                taxliabilityrecord.August = ' ';
+                taxliabilityrecord.August = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 9, 1)){
                 
-                taxliabilityrecord.September = Date.newInstance(Integer.ValueOf(currentYear), 9, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameSept) ? String.valueOf(mapOfReimTax.get(nameSept)) : '0';
+                taxliabilityrecord.September = Date.newInstance(Integer.ValueOf(currentYear), 9, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameSept) ? String.valueOf(mapImputedAmtByReimName.get(nameSept)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 9, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameSept) ? mapOfReimTax.get(nameSept) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 9, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameSept) ? mapImputedAmtByReimName.get(nameSept) : 0;
 
             }else{
                 
-                taxliabilityrecord.September = ' ';
+                taxliabilityrecord.September = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 10, 1)){
                 
-                taxliabilityrecord.October = Date.newInstance(Integer.ValueOf(currentYear), 10, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameOct) ? String.valueOf(mapOfReimTax.get(nameOct)) : '0';
+                taxliabilityrecord.October = Date.newInstance(Integer.ValueOf(currentYear), 10, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameOct) ? String.valueOf(mapImputedAmtByReimName.get(nameOct)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 10, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameOct) ? mapOfReimTax.get(nameOct) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 10, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameOct) ? mapImputedAmtByReimName.get(nameOct) : 0;
 
             }else{
                 
-                taxliabilityrecord.October = ' ';
+                taxliabilityrecord.October = null;
 
             }
 
 
             if(objContact.Activation_Date__c.toStartOfMonth()<=Date.newInstance(Integer.ValueOf(currentYear), 11, 1)){
                 
-                taxliabilityrecord.November = Date.newInstance(Integer.ValueOf(currentYear), 11, 1) == System.today().toStartOfMonth() ? '0' : mapOfReimTax.containsKey
-                (nameNov) ? String.valueOf(mapOfReimTax.get(nameNov)) : '0';
+                taxliabilityrecord.November = Date.newInstance(Integer.ValueOf(currentYear), 11, 1) == System.today().toStartOfMonth() ? '0' : mapImputedAmtByReimName.containsKey
+                (nameNov) ? String.valueOf(mapImputedAmtByReimName.get(nameNov)) : '0';
 
-                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 11, 1) == System.today().toStartOfMonth() ? 0 : mapOfReimTax.containsKey(nameNov) ? mapOfReimTax.get(nameNov) : 0;
+                taxtotal += Date.newInstance(Integer.ValueOf(currentYear), 11, 1) == System.today().toStartOfMonth() ? 0 : mapImputedAmtByReimName.containsKey(nameNov) ? mapImputedAmtByReimName.get(nameNov) : 0;
 
             }else{
                 
-                taxliabilityrecord.November = ' ';
+                taxliabilityrecord.November = null;
 
             }
             
