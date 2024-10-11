@@ -9,6 +9,7 @@ export default class DriverManualEntry extends LightningElement {
     @api accountId;
     @api userTriplogId;
     @api mapCountry;
+    @api activationDate;
     modalclass = 'slds-modal slds-is-fixed slds-fade-in-open animate__animated animate__fadeInTopLeft';
     headerclass = 'slds-modal__header header-preview hedear-style_class header_style';
     modalcontentstyle = 'slds-modal__content slds-p-left_medium slds-p-right_medium slds-p-bottom_medium slds-p-top_small content_div_scroll , slds-modal__content slds-p-left_medium slds-p-right_medium slds-p-bottom_medium slds-p-top_small overflow-visible';
@@ -267,19 +268,40 @@ export default class DriverManualEntry extends LightningElement {
     }
 
     createMonthList() {
-        for (let i = 0; i < 3; i++) {
-            const today = new Date();
-            today.setDate(1);
-            today.setMonth(today.getMonth() - i);
-            const month = today.getMonth() + 1;
-            const year = today.getFullYear();
-            const monthName = today.toLocaleString('default', { month: 'long' });
-            let temp = {
-                id: monthName,
-				label: monthName,
-				value: (month < 10 ? '0' : '') + month + '-' + year
+        let actDate = new Date(this.activationDate);
+        let currDate = new Date();
+        if(actDate.getFullYear() < currDate.getFullYear()) {
+            for (let i = 0; i < 3; i++) {
+                const today = new Date();
+                today.setDate(1);
+                today.setMonth(today.getMonth() - i);
+                const month = today.getMonth() + 1;
+                const year = today.getFullYear();
+                const monthName = today.toLocaleString('default', { month: 'long' });
+                let temp = {
+                    id: monthName,
+                    label: monthName,
+                    value: (month < 10 ? '0' : '') + month + '-' + year
+                }
+                this.monthList.push(temp);
             }
-            this.monthList.push(temp);
+        } else {
+            for (let i = 0; i < 3; i++) {
+                const today = new Date();
+                today.setDate(1);
+                today.setMonth(today.getMonth() - i);
+                const month = today.getMonth() + 1;
+                const year = today.getFullYear();
+                const monthName = today.toLocaleString('default', { month: 'long' });
+                let temp = {
+                    id: monthName,
+                    label: monthName,
+                    value: (month < 10 ? '0' : '') + month + '-' + year
+                }
+                if(month >= (actDate.getMonth() + 1)) {
+                    this.monthList.push(temp);
+                }
+            }
         }
         this.selectedMonth = this.monthList[0];
     }
@@ -807,6 +829,10 @@ export default class DriverManualEntry extends LightningElement {
     }
 
     handleTripAccordian(event) {
+        let d = new Date();
+        let selectedDate = new Date(`${this.selectedMonth.label} 1, 2000`);
+        this.monthDifference = d.getMonth() - selectedDate.getMonth();
+
         let tripId = event.currentTarget.dataset.id;
         console.log('tripId : ' + tripId);
         this._tripsToDisplay = this._tripsToDisplay.map(record => {
