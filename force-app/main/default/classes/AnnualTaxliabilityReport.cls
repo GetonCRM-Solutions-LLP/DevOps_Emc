@@ -91,7 +91,6 @@ public with sharing class AnnualTaxliabilityReport {
             String monthStr = (currentMonth < 10 ? '0' : '') + String.valueOf(currentMonth);
             empReimMonthsList.add(monthStr + '-' + passYear);
         }
-        //System.debug('empReimMonthsList ==> '+empReimMonthsList);
         return empReimMonthsList;
     }
 
@@ -103,7 +102,6 @@ public with sharing class AnnualTaxliabilityReport {
     * @author Vatsal Bhalani | 10-10-2024 
     **/
     public void annualTax(){
-        //System.debug('inside annual tax method ');
         
         String strAccountId = currentPageAccountId;
         Account objAccount;
@@ -111,35 +109,22 @@ public with sharing class AnnualTaxliabilityReport {
         taxLiabilityWrapperLst = new List<TaxLiabilityWrapper>();
         Map<String, Double> mapOfReimTax = new Map<String, Double>();
 
-        if (Test.isRunningTest()) {
-            currentYear = String.valueOf(System.today().year());
-            objAccount = [SELECT Id, Name 
-                            FROM Account
-                            WITH SECURITY_ENFORCED
-                            LIMIT 1];
-            strAccountId = objAccount.Id;
-        } else if (strAccountId != null) {
+        if (strAccountId != null) {
             objAccount = [SELECT Id, Name 
                             FROM Account 
                             WHERE Id = :strAccountId 
                             WITH SECURITY_ENFORCED
                             LIMIT 1];
         }
-        System.debug('strAccountId-----'+strAccountId);
-        System.debug('objAccount-----'+objAccount);
+        
         // Exit if account is not found
         if (objAccount == null) {
-            // System.debug('Inside objAccount == null')
             return;
         }
 
         accName = objAccount.Name;
         preYear = String.valueOf(Integer.valueOf(currentYear) - 1);
         DateTime startDateOfReport = DateTime.newInstance(Integer.valueOf(preYear), 12, 1, 0, 0, 0);
-
-        System.debug('currentYear -->' + currentYear);
-        System.debug('Previous Year -->' + preYear);
-        System.debug('Month -->' + monthList);
 
         List<Employee_Reimbursement__c> lstEmpReim = [SELECT Name, Imputed_Amount_for_Year__c 
                                                                 FROM Employee_Reimbursement__c 
@@ -155,8 +140,6 @@ public with sharing class AnnualTaxliabilityReport {
             mapOfReimTax.put(empReim.Name, empReim.Imputed_Amount_for_Year__c);
         }
         
-
-
         for(contact objContact: [SELECT Name, Email, Employee_ID__c, Activation_Date__c
                             FROM Contact
                             WHERE AccountId = :strAccountId
@@ -167,11 +150,7 @@ public with sharing class AnnualTaxliabilityReport {
                                 WITH SECURITY_ENFORCED
                                 ORDER BY Email ASC
                                 ]){
-            //System.debug('===>>>'+objContact.Name);
-            
-            // if(objContact.Activation_Date__c==null){
-            //     continue;
-            // }
+
             TaxLiabilityWrapper taxliabilityrecord =new TaxLiabilityWrapper();
             String nameDec=objContact.Name+':12-'+preYear;
             String nameJan=objContact.Name+':01-'+currentYear;
@@ -361,9 +340,6 @@ public with sharing class AnnualTaxliabilityReport {
             taxliabilityrecord.TotalAnnualTax = taxtotal > 0 ? taxtotal:0;
             taxLiabilityWrapperLst.add(taxliabilityrecord);
         }
-        //preYear = 'Dec-'+preYear.substring(2, 4);
-        System.debug('tax liability data '+taxLiabilityWrapperLst);
-        
     }
 
     /*
