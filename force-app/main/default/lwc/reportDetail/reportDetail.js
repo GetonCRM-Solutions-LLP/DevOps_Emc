@@ -1249,12 +1249,12 @@ export default class ReportDetail extends LightningElement {
     if(this.searchdata.length > 0) {
       record = this.searchdata.find(entry => entry.Id === recordId);
       email = record["E-mail"];
-      totalReimbursement = record["Total Reimbursement"];
+      totalReimbursement = varReimC.includes(this._accid) ? record["Monthly Approved Variable Amount"] : record["Total Reimbursement"];
       month = record["Month"];
     } else {
       record = this.finaldata.find(entry => entry.Id === recordId);
       email = record["E-mail"];
-      totalReimbursement = record["Total Reimbursement"];
+      totalReimbursement = varReimC.includes(this._accid) ? record["Monthly Approved Variable Amount"] : record["Total Reimbursement"];
       month = record["Month"];
     }
     console.log("Concur : " + email + totalReimbursement + ',' + month);
