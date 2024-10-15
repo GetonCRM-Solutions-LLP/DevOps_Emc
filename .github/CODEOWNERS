@@ -24,10 +24,10 @@ force-app/main/default/components/*               @MeghaS-mobio
 force-app/main/default/lwc/*               @MeghaS-mobio
 
 # Any changes in the `/flow` directory will require approval from lwc-dev-team.
-force-app/main/default/flow/*               @MeghaS-mobio @harsitagetoncrm
+force-app/main/default/flow/*               @harsitagetoncrm
 
 # Any changes in the `/classes` directory will require approval from lwc-dev-team.
-force-app/main/default/classes/*               @MeghaS-mobio @harsitagetoncrm
+force-app/main/default/classes/*               @harsitagetoncrm
 
 # Any changes in the `/objects` directory will require approval.
 force-app/main/default/objects/*               @harsitagetoncrm
