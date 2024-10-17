@@ -53,7 +53,8 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
         }
         system.debug('contactIdOfReimbursement**'+contactIdOfReimbursement);
         if(!contactIdOfReimbursement.isEmpty()) {
-            OrgWideEmailAddress[] owea = [select Id ,Address from OrgWideEmailAddress where Address = 'driverservices@mburse.com'];
+            String OWEEmail= System.Label.Driver_Service_OWE;
+            OrgWideEmailAddress[] owea = [select Id ,Address from OrgWideEmailAddress where Address =:OWEEmail];
             List<Messaging.SingleEmailMessage> mails = new List<Messaging.SingleEmailMessage>();
             EmailTemplate emailTemplate = [SELECT Id,HtmlValue,Name,Subject FROM EmailTemplate WHERE DeveloperName =:'Exceeding_Threshold_Template'];            
            // Added by paras on 31-10-2023 for change request by client 

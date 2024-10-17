@@ -23,7 +23,9 @@ Global with sharing  class WeeklyTimeSheetNotConfirmController implements Schedu
          temp = new List<EmailTemplate>([SELECT id, Subject, body, HTMLValue 
                                          FROM EmailTemplate 
                                             WHERE DeveloperName = 'Weekly_Time_Sheet_for_Not_Confirm_by_Driver']);
-         owea = [select Id from OrgWideEmailAddress where Address =:'driverservices@mburse.com'];
+        String OWEEmail= System.Label.Driver_Service_OWE;
+        owea = [select Id ,Address from OrgWideEmailAddress where Address =:OWEEmail];
+      
     } 
 
     global void execute(SchedulableContext sc) {
