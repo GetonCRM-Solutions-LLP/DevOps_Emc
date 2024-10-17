@@ -10,7 +10,8 @@ Public class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
         
     if(System.Label.BatchAccountName!=null && System.Label.BatchAccountName.contains(','))
    	{
-     	lstAccountNames= System.Label.BatchAccountName.split(',');               
+     	lstAccountNames= System.Label.BatchAccountName.split(',');
+                     
     }
         objContactList = new List<Contact>();
         Set<Id> conIds = new Set<Id>();
@@ -85,7 +86,7 @@ Public class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
                 List<String> address = new List<String>();
                 if(objSendEmailToMe.Send_email_to_me__c == true)
                 {
-                    address.add('driverservices@mburse.com');
+                    address.add('minkeshp@mburse.com');
                     mail.setBCCAddresses(new string[]{strOWEEmail});                    
                 }
                 else
