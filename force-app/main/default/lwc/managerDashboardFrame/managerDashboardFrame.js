@@ -250,6 +250,7 @@ export default class ManagerDashboardFrame extends LightningElement {
   @api loginCount;
   @api userRole;
   @api managerId;
+  @api roleId;
   @api profile;
   @api mileageRecord;
   @api customSetting;
@@ -259,13 +260,27 @@ export default class ManagerDashboardFrame extends LightningElement {
  
   @track managerProfileMenu = [
     {
+      id: 0,
+      label: "Bookmark",
+      menuItem: [
+        {
+          menuId: 1,
+          menuLabel: "Bookmarks",
+          menuClass: "tooltipText hasItem",
+          logo: logo + "/emc-design/assets/images/Icons/SVG/Green/Bookmark.svg#bookmarks",
+          logoHov: logo + "/emc-design/assets/images/Icons/SVG/White/Bookmark.svg#bookmarks",
+          subMenuItem: []
+        }
+      ],
+    },
+    {
       id: 1,
       label: "Mileage",
       menuItem: [
         {
           menuId: 101,
           menu: "Mileage-Approval",
-          menuLabel: "Approvals",
+          menuLabel: "Mileage",
           menuClass: "tooltipText hasItem",
           logo:
             logo +
@@ -279,18 +294,21 @@ export default class ManagerDashboardFrame extends LightningElement {
               menu: "Mileage-Approval",
               menuLabel: "Unapproved",
               menuClass: "active",
+							pinBookmark: false 
             },
             {
               menuId: 1012,
               menu: "Mileage-Preview",
               menuLabel: "Preview",
               menuClass: "",
+							pinBookmark: false 
             },
             {
               menuId: 1013,
               menu: "Mileage-Summary",
               menuLabel: "Summary",
               menuClass: "",
+							pinBookmark: false 
             }
           ],
         },
@@ -344,17 +362,6 @@ export default class ManagerDashboardFrame extends LightningElement {
       menuItem: [
         {
           menuId: 301,
-          menu: "Notifications",
-          menuLabel: "Notifications",
-          menuClass: "tooltipText",
-          logo:
-            logo +
-            "/emc-design/assets/images/Icons/SVG/Green/Notifications.svg#notification",
-          logoHov:
-            logo + "/emc-design/assets/images/Icons/SVG/White/Notifications.svg#notification"
-        },
-        {
-          menuId: 302,
           menu: "Videos",
           menuLabel: "Videos/Training",
           menuClass: "tooltipText",
@@ -534,7 +541,6 @@ export default class ManagerDashboardFrame extends LightningElement {
         this.userName = contact[0].Name;
         this.firstName = contact[0].FirstName;
         this.biweekAccount = contact[0].Account.Bi_Weekly_Pay_Period__c;
-        console.log("getDriverDetails###", JSON.parse(data))
       }else if(error){
           console.log("getDriverDetails error", error.message)
       }

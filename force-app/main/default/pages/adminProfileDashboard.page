@@ -220,6 +220,7 @@
                             showTeam: team,
                             profile: ProfileId,
                             userRole: Role,
+                            roleId: profileRecordId,
                             loginCount: userLogin,
                             managerId : idParamValue,
                             customSetting: videoWrapper,

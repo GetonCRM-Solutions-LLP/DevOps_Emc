@@ -391,18 +391,19 @@ public with sharing class ManualEntryController {
                     }
                 }
                 else if(lstContact[0].Reimbursement_Frequency__c == 'Bi-Weekly Reimbursement') {
+                    String reimMonth = month + '-' + year;
+                    List<Employee_Reimbursement__c> lstEmpReim = [SELECT Id, Name, Month__c, MPG__c, Fuel_Price__c, Maintenance_and_Tires__c, Contact_Id__r.Time_Zone__c FROM Employee_Reimbursement__c WHERE Contact_Id__c =: contactId AND Month__c =: reimMonth];
+                    if(lstEmpReim.size() > 0) {
+                        reimId = lstEmpReim[0].Id;
+                    } else {
+                        result = 'Monthly reimbursement not present that have date: ' + convTripDate;
+                    }
                     List<Bi_Weekly_Reimbursement__c> lstBiWeekReim = [SELECT Id, Name, Employee_Reimbursement__c FROM Bi_Weekly_Reimbursement__c WHERE Contact__c =: contactId AND Start_Date__c <=: convTripDate AND End_Date__c >=: convTripDate];
                     if(lstBiWeekReim.size() > 0) {
                         System.debug('In Bi-week');
                         biWeekReimId = lstBiWeekReim[0].Id;
                     } else {
                         result = 'Bi-week reimbursement not present that have date: ' + convTripDate;
-                    }
-                    List<Employee_Reimbursement__c> lstEmpReim = [SELECT Id, Name, Month__c, MPG__c, Fuel_Price__c, Maintenance_and_Tires__c, Contact_Id__r.Time_Zone__c FROM Employee_Reimbursement__c WHERE Contact_Id__c =: contactId AND Id =: lstBiWeekReim[0].Employee_Reimbursement__c];
-                    if(lstEmpReim.size() > 0) {
-                        reimId = lstEmpReim[0].Id;
-                    } else {
-                        result = 'Monthly reimbursement not present that have date: ' + convTripDate;
                     }
                     if(reimId != null && biWeekReimId != null) {
                         if(lstEmpReim[0].MPG__c == null || lstEmpReim[0].Fuel_Price__c == null || lstEmpReim[0].Maintenance_and_Tires__c == null) {
@@ -509,7 +510,8 @@ public with sharing class ManualEntryController {
             System.debug('startTime : ' + sTime);
             System.debug('endTime : ' + eTime);
 
-            List<Employee_Mileage__c> lstEmpMileage = [SELECT Id, Tag__c, Notes__c, Trip_Date__c, Trip_Status__c, StartTime__c, EndTime__c, EMP_Mileage__c, Trip_Origin__c, Original_Origin_Name__c, Origin_Name__c, Trip_Destination__c, Original_Destination_Name__c, Destination_Name__c, CreatedDate, Tracing_Style__c, Approved_Date__c, Approval_Name__c, From_Location__Latitude__s, From_Location__Longitude__s, To_Location__Latitude__s, To_Location__Longitude__s, TimeZone__c, Way_Points__c FROM Employee_Mileage__c WHERE Id =: objTripResponse.id];
+            List<Contact> lstContact = [SELECT Id, Reimbursement_Frequency__c FROM Contact WHERE Id =: contactId];
+            List<Employee_Mileage__c> lstEmpMileage = [SELECT Id, Tag__c, Notes__c, Trip_Date__c, Trip_Status__c, StartTime__c, EndTime__c, EMP_Mileage__c, Trip_Origin__c, Original_Origin_Name__c, Origin_Name__c, Trip_Destination__c, Original_Destination_Name__c, Destination_Name__c, CreatedDate, Tracing_Style__c, Approved_Date__c, Approval_Name__c, From_Location__Latitude__s, From_Location__Longitude__s, To_Location__Latitude__s, To_Location__Longitude__s, TimeZone__c, Way_Points__c, Bi_Weekly_Reimbursement__r.Start_Date__c, Bi_Weekly_Reimbursement__r.End_Date__c FROM Employee_Mileage__c WHERE Id =: objTripResponse.id];
             if(lstEmpMileage.size() > 0) {
                 Double fLat = lstEmpMileage[0].From_Location__Latitude__s;
                 Double fLong = lstEmpMileage[0].From_Location__Longitude__s;
@@ -537,6 +539,14 @@ public with sharing class ManualEntryController {
                 // lstEmpMileage[0].TimeZone__c = tZone;
                 // lstEmpMileage[0].Way_Points__c = wayPt;
                 /* For map component */
+                if(lstContact[0].Reimbursement_Frequency__c == 'Bi-Weekly Reimbursement') {
+                    Date tripSdate = lstEmpMileage[0].Bi_Weekly_Reimbursement__r.Start_Date__c;
+                    Date tripEdate = lstEmpMileage[0].Bi_Weekly_Reimbursement__r.End_Date__c;
+                    if(convTripDate < tripSdate || convTripDate > tripEdate) {
+                        List<Bi_Weekly_Reimbursement__c> lstBiWeekReim = [SELECT Id, Name FROM Bi_Weekly_Reimbursement__c WHERE Contact__c =: contactId AND Start_Date__c <=: convTripDate AND End_Date__c >=: convTripDate];
+                        lstEmpMileage[0].Bi_Weekly_Reimbursement__c = lstBiWeekReim[0].Id;
+                    }
+                }
                 update lstEmpMileage;
                 result = JSON.serialize(lstEmpMileage[0]);
             } else {
