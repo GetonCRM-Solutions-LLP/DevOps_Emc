@@ -47,7 +47,7 @@ public class updateTenthMsgBatch implements Database.Batchable<sObject> {
 
             Message__c objMsg = new Message__c(
                 Unread__c = true,
-                Notification_Message__c = 'Your ' + lastMonthString + ' Mileage Was ' + updatedTotalMileage + ' .',
+                Notification_Message__c = 'Your ' + lastMonthString + ' Mileage Was ' + updatedTotalMileage ,
                 Contacts__c = objContactId
             );
 

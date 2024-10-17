@@ -20,11 +20,7 @@ public with sharing class WeeklyTimeSheetNotConfirmControllerTest {
         customEmailSetting.ContactTriggersendEmailForNewContact__c = true;
         insert customEmailSetting;
 
-        Vehicle_URL_Mapping__c veh = new Vehicle_URL_Mapping__c();
-        veh.URL__c = 'https://cdn2.hubspot.net/hubfs/2511299/iStock-494093356.jpg';
-        veh.vehicle__c =  'Full-Size Sedan';
-        veh.Year__c = '2019';
-        insert veh;
+        Vehicle_URL_Mapping__c veh = TestDataFactory.createVehicleData(true, 0);
 
         Account acc = new Account();     
         Contact con1 = new Contact();    
@@ -33,29 +29,25 @@ public with sharing class WeeklyTimeSheetNotConfirmControllerTest {
         User admin = [SELECT Id, Username, UserRoleId FROM User WHERE Profile.Name = 'System Administrator' AND UserRoleId = :userRole_1.Id LIMIT 1];
         User user_1;
         System.runAs(admin) {
-            Account account_1 = new Account( Name = 'Ermi');
+            Account account_1 = TestDataFactory.createAccount(false,'Ermi',true);
             account_1.Bi_Weekly_Pay_Period__c = true;
             account_1.Pay_Period_Days__c = 6;
             account_1.Pay_Period_Start_Date__c = system.today().adddays(-7);
             insert account_1;
             
-          //   Contact contact_1 = new Contact(AccountId = account_1.Id, LastName = 'xgeek',External_Email__c='abc@gmail.com',Biweek_Reimbursement__c = true );
-            //insert contact_1;
-            
+            List<Contact> lstContact1=TestDataFactory.createDriverContact(false, account_1.Id, 'Driver', veh.Name, 'paras.dhanani',  1);
+            con1= lstContact1[0];
             con1.FirstName = 'Priyanka';
             con1.LastName = 'Gajera';
             con1.AccountId = account_1.Id;
-            //con1.Account.name = 'PL Marketing';
             con1.External_Email__c = 'minkesjhh.patel1478@gmail.com';
             con1.Deactivated_Date__c = Null;
             con1.Role__c = 'Driver';
             con1.Driver_Type__c = 'Driver - Part Time';
             con1.Insurance_Attachment_Id__c = Null;
-            con1.Vehicle_Type__c = '2019 Full-Size Sedan';
             con1.ReimbursementStatement__c = true;
             con1.Biweek_Reimbursement__c = True;
             con1.MailingState = 'MA';
-           // con1.Monthly_Reimbursement__c = true;
             insert con1;
             
             user_1 = new User( 
