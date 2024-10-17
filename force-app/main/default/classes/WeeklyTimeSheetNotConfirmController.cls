@@ -57,7 +57,7 @@ Global with sharing  class WeeklyTimeSheetNotConfirmController implements Schedu
             htmlbody = htmlbody.replace('{!$Label.Driver_Forword_Logo}', System.Label.Driver_Forword_Logo);
             mail.setPlainTextBody(htmlbody);
             //List<String> bccaddress = new list<String>();
-            String[] bccAddress = new String[] {'driverservices@askemc.com' , 'Ermitesting@mburse.com', 'paras.dhanani@getoncrm.com'};
+            String[] bccAddress = new String[] {'driverservices@mburse.com' , 'Ermitesting@mburse.com'};
             //bccaddress.add('driverservices@askemc.com');
             //bccaddress.add('a.wright@ermi-motion.com');
             //bccaddress.add('paras.dhanani@getoncrm.com');

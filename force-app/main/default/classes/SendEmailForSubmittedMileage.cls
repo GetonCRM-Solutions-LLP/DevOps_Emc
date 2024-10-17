@@ -92,12 +92,12 @@ global class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
                 if(objSendEmailToMe.Send_email_to_me__c == true)
                 {
                     address.add('minkeshp@askemc.com');
-                    mail.setBCCAddresses(new string[]{'driverservices@askemc.com'});                    
+                    mail.setBCCAddresses(new string[]{'driverservices@mburse.com'});                    
                 }
                 else
                 {
                     address.add(c.External_Email__c);
-                    mail.setBCCAddresses(new string[]{'driverservices@askemc.com'});
+                    mail.setBCCAddresses(new string[]{'driverservices@mburse.com'});
                 }                
                 
                 mail.setToAddresses(address);
