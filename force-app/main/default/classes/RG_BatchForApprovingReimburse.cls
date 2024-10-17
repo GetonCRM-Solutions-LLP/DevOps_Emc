@@ -99,10 +99,10 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
                 mail.setSubject(newSubject);
                 mail.setHtmlBody(newBody);
                 if(customSettings != null && String.isNotBlank(customSettings.BCCEmailaddresses__c) && customSettings.BCCEmailaddresses__c.contains(',')) {
-                    emailsToSend.add('driverservices@askemc.com');
+                    emailsToSend.add('driverservices@mburse.com');
                     //emailsToSend = customSettings.BCCEmailaddresses__c.split(',');
                 } else if(customSettings!=null && String.isNotBlank(customSettings.BCCEmailaddresses__c) && (!customSettings.BCCEmailaddresses__c.contains(','))) {
-                    emailsToSend.add('driverservices@askemc.com');
+                    emailsToSend.add('driverservices@mburse.com');
                     //emailsToSend.add(customSettings.BCCEmailaddresses__c);
                 }
                 if(emailsToSend.size() > 0) {
