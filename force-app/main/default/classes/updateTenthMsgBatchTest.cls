@@ -54,6 +54,8 @@ public class updateTenthMsgBatchTest {
 		Test.startTest();
         List<Contact> lstContact = [SELECT Id FROM Contact WHERE role__c = 'Driver/Admin' LIMIT 1];
         updateTenthMsgBatch job = new updateTenthMsgBatch ( );
+        List<String> stringList = new List<String>{'TestAccount'};
+         updateTenthMsgBatch job1 = new updateTenthMsgBatch (stringList);
        	Database.executeBatch( job );
         System.assertEquals(1, lstContact.size(), 'Assert Error');
         Test.stopTest();

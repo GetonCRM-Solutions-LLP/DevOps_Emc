@@ -1,20 +1,20 @@
-global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject> 
+public class RG_BatchForApprovingReimburse implements Database.Batchable<sObject> 
 {
     List<Employee_Reimbursement__c> updateReimbursement = new List<Employee_Reimbursement__c>();
     Map<String, List<String>> contactIdToReimbursements = new Map<String, List<String>>();
     public SendEmailonDeactivation__c customSettings;   
-    global Database.QueryLocator start(Database.BatchableContext BC) 
+    String strOWEEmail;
+    public Database.QueryLocator start(Database.BatchableContext bc) 
     {
         customSettings = SendEmailonDeactivation__c.getValues('RG_BatchForApprovingReimburse'); 
-        List<String> obj_accountnames = new List<String>();
-        List<String> obj_accountnames1 = new List<String>();
+        List<String> lstAccountName = new List<String>();
         String querybuilding ='';
         if(System.Label.BatchAccountName != null) {
             if(System.Label.BatchAccountName.contains(',')) {
-                obj_accountnames= System.Label.BatchAccountName.split(',');
+                lstAccountName= System.Label.BatchAccountName.split(',');
             }
             Integer i=0;    
-            for(String s:obj_accountnames) {
+            for(String s:lstAccountName) {
                 s = s.trim();
                 if(s.contains(',')) {
                     s = s.replace(',','');
@@ -41,7 +41,7 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
         system.debug('query ==' + query );  
         return Database.getQueryLocator(query);
     }
-    global void execute(Database.BatchableContext BC, List<Employee_Reimbursement__c> empReimList) 
+    public void execute(Database.BatchableContext bc, List<Employee_Reimbursement__c> empReimList) 
     {        
         Map<String, List<String>> contactIdOfReimbursement = new Map<String, List<String>>();
         for(Employee_Reimbursement__c singleReimbursement : empReimList) {
@@ -53,7 +53,8 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
         }
         system.debug('contactIdOfReimbursement**'+contactIdOfReimbursement);
         if(!contactIdOfReimbursement.isEmpty()) {
-            OrgWideEmailAddress[] owea = [select Id ,Address from OrgWideEmailAddress where Address = 'driverservices@mburse.com'];
+             strOWEEmail= System.Label.Driver_Service_OWE;
+            OrgWideEmailAddress[] owea = [select Id ,Address from OrgWideEmailAddress where Address =:strOWEEmail];
             List<Messaging.SingleEmailMessage> mails = new List<Messaging.SingleEmailMessage>();
             EmailTemplate emailTemplate = [SELECT Id,HtmlValue,Name,Subject FROM EmailTemplate WHERE DeveloperName =:'Exceeding_Threshold_Template'];            
            // Added by paras on 31-10-2023 for change request by client 
@@ -99,10 +100,10 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
                 mail.setSubject(newSubject);
                 mail.setHtmlBody(newBody);
                 if(customSettings != null && String.isNotBlank(customSettings.BCCEmailaddresses__c) && customSettings.BCCEmailaddresses__c.contains(',')) {
-                    emailsToSend.add('driverservices@askemc.com');
+                    emailsToSend.add(strOWEEmail);
                     //emailsToSend = customSettings.BCCEmailaddresses__c.split(',');
                 } else if(customSettings!=null && String.isNotBlank(customSettings.BCCEmailaddresses__c) && (!customSettings.BCCEmailaddresses__c.contains(','))) {
-                    emailsToSend.add('driverservices@askemc.com');
+                    emailsToSend.add(strOWEEmail);
                     //emailsToSend.add(customSettings.BCCEmailaddresses__c);
                 }
                 if(emailsToSend.size() > 0) {
@@ -115,5 +116,7 @@ global class RG_BatchForApprovingReimburse implements Database.Batchable<sObject
             }
         }  
     }
-    global void finish(Database.BatchableContext BC) {}
+    public void finish(Database.BatchableContext bc) {
+        system.debug('RG_BatchForApprovingReimburse batch  completed ');
+    }
 }

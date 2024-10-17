@@ -42,7 +42,7 @@ public class SendEmailForSubmittedMileageTest {
         er[0].Approved_Date__c = system.today()-4;
         er[0].Month__c = lastMonth;
         er[0].Status__c = 'Approved';
-        Insert er[0];        
+        Insert er;        
 
         List<Bi_Weekly_Reimbursement__c> br = TestDataFactory.createBiweeklyReim (true, conList, System.today().addDays(-26),System.today().addDays(-13), 1, createIRSRate.Id);
              
