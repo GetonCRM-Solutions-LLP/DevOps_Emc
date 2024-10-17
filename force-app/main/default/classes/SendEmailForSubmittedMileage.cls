@@ -20,7 +20,8 @@ global class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
         Set<Id> conIds = new Set<Id>();
         contactToEmpReimMap = new Map<Id, Employee_Reimbursement__c>();
         emailTemplate = [SELECT Id, Body, Subject, HTMLValue FROM EmailTemplate WHERE DeveloperName = 'Notification_for_total_mileage'];
-        owea = [SELECT Id FROM OrgWideEmailAddress WHERE Address =:'driverservices@mburse.com'];
+        String OWEEmail= System.Label.Driver_Service_OWE;
+        owea = [select Id ,Address from OrgWideEmailAddress where Address =:OWEEmail];
         Date todayDate = System.today();
         if(!Test.isRunningTest()) {
             obj_contact_list = [SELECT Id, Role__c, Deactivated_Date__c,
