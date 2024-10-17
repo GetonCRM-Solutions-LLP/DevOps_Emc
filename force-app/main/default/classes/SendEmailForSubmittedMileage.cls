@@ -4,43 +4,35 @@ Public class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
     public List<Contact> objContactList;
     public Map<Id, Employee_Reimbursement__c> contactToEmpReimMap;
     public OrgWideEmailAddress[] owea;
-
+    public String strOWEEmail;
     public SendEmailForSubmittedMileage() {
-        List<String> lstAccountNames = new List<String>();
+    List<String> lstAccountNames = new List<String>();
         
-        
-        if(System.Label.BatchAccountName!=null)
-        {
-            if(System.Label.BatchAccountName.contains(','))
-            {
-                lstAccountNames= System.Label.BatchAccountName.split(',');
-            }              
-        }
+    if(System.Label.BatchAccountName!=null && System.Label.BatchAccountName.contains(','))
+   	{
+     	lstAccountNames= System.Label.BatchAccountName.split(',');               
+    }
         objContactList = new List<Contact>();
         Set<Id> conIds = new Set<Id>();
         contactToEmpReimMap = new Map<Id, Employee_Reimbursement__c>();
         emailTemplate = [SELECT Id, Body, Subject, HTMLValue FROM EmailTemplate WHERE DeveloperName = 'Notification_for_total_mileage'];
-        String strOWEEmail= System.Label.Driver_Service_OWE;
+        strOWEEmail= System.Label.Driver_Service_OWE;
         owea = [select Id ,Address from OrgWideEmailAddress where Address =:strOWEEmail];
         Date todayDate = System.today();
         if(!Test.isRunningTest()) {
-            objContactList = [SELECT Id, Role__c, Deactivated_Date__c,
-                                        External_Email__c, FirstName 
+            objContactList = [SELECT Id, Role__c, Deactivated_Date__c,External_Email__c, FirstName 
                                     FROM Contact 
                                     WHERE (Role__c ='Driver' 
-                                            OR Role__c = 'Driver/Manager' 
-                                            OR Role__c =: StaticValues.roleAdminDriver) 
-                                        AND ( Deactivated_Date__c >:todayDate 
-                                            OR Deactivated_Date__c =:Null) 
-                                        AND (Account.name IN: lstAccountNames) 
-                                        AND Send_Email_For_Submitted_Mileage__c=:true 
-                                        AND (Driver_Type__c !='Driver - Full Time' 
-                                        OR Driver_Type__c != 'Driver - Part Time') ];
+                                    OR Role__c = 'Driver/Manager' 
+                                    OR Role__c =: StaticValues.roleAdminDriver) 
+                                    AND ( Deactivated_Date__c >:todayDate OR Deactivated_Date__c =:Null) 
+                                    AND (Account.name IN: lstAccountNames) 
+                                    AND Send_Email_For_Submitted_Mileage__c=:true 
+                                    AND (Driver_Type__c !='Driver - Full Time' 
+                                   	OR Driver_Type__c != 'Driver - Part Time') ];
         } else {
-            objContactList = [SELECT Id, Role__c, Deactivated_Date__c,
-                                        External_Email__c, FirstName 
-                                    FROM Contact WHERE Role__c ='Driver'                                  
-                                        /*AND (Account.name IN: lstAccountNames)*/ LIMIT 1];
+            objContactList = [SELECT Id, Role__c, Deactivated_Date__c,External_Email__c, FirstName 
+                              FROM Contact WHERE Role__c ='Driver'LIMIT 1];
         }
         for(Contact c : objContactList) {
             conIds.add(c.Id);
@@ -50,8 +42,8 @@ Public class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
         List<Employee_Reimbursement__c> empReimList;
         if(!Test.isRunningTest()) {
         empReimList = [SELECT Id, Name, Month__c, Contact_Id__c, Total_Mileage__c 
-                                                            FROM Employee_Reimbursement__c 
-                                                            WHERE Month__c =: lastMonth AND Contact_Id__c IN: conIds AND Total_Mileage__c > 0];
+                       FROM Employee_Reimbursement__c 
+                       WHERE Month__c =: lastMonth AND Contact_Id__c IN: conIds AND Total_Mileage__c > 0];
         } else {
             empReimList = [SELECT Id, Name, Month__c, Contact_Id__c, Total_Mileage__c 
                                                             FROM Employee_Reimbursement__c ];
@@ -93,13 +85,13 @@ Public class SendEmailForSubmittedMileage implements Database.Batchable<sObject>
                 List<String> address = new List<String>();
                 if(objSendEmailToMe.Send_email_to_me__c == true)
                 {
-                    address.add('minkeshp@askemc.com');
-                    mail.setBCCAddresses(new string[]{'driverservices@mburse.com'});                    
+                    address.add('driverservices@mburse.com');
+                    mail.setBCCAddresses(new string[]{strOWEEmail});                    
                 }
                 else
                 {
                     address.add(c.External_Email__c);
-                    mail.setBCCAddresses(new string[]{'driverservices@mburse.com'});
+                    mail.setBCCAddresses(new string[]{strOWEEmail});
                 }                
                 
                 mail.setToAddresses(address);

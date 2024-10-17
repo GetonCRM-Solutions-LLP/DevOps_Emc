@@ -14,16 +14,15 @@
     Public  List<EmailTemplate> temp;
     Public  OrgWideEmailAddress[] owea;
     date reimEndDate = system.today().adddays(-2);
-    
+    String strOWEEmail;
    
  
     Public WeeklyTimeSheetNotConfirmController() {
     system.debug('reimEndDate ==' + reimEndDate );
     
-         temp = new List<EmailTemplate>([SELECT id, Subject, body, HTMLValue 
-                                         FROM EmailTemplate 
-                                        WHERE DeveloperName = 'Weekly_Time_Sheet_for_Not_Confirm_by_Driver']);
-        String strOWEEmail= System.Label.Driver_Service_OWE;
+         temp = new List<EmailTemplate>([SELECT id, Subject, body, HTMLValue  FROM EmailTemplate 
+                                         WHERE DeveloperName = 'Weekly_Time_Sheet_for_Not_Confirm_by_Driver']);
+        strOWEEmail= System.Label.Driver_Service_OWE;
         owea = [select Id ,Address from OrgWideEmailAddress where Address =:strOWEEmail WITH SECURITY_ENFORCED];
       
     } 
@@ -56,7 +55,7 @@
             htmlbody = htmlbody.replace('{!Bi_Weekly_Reimbursement__c.Name}', biweeklyReim.name ); 
             htmlbody = htmlbody.replace('{!$Label.Driver_Forword_Logo}', System.Label.Driver_Forword_Logo);
             mail.setPlainTextBody(htmlbody);
-            String[] bccAddress = new String[] {'driverservices@mburse.com' , 'Ermitesting@mburse.com'};            
+            String[] bccAddress = new String[] {strOWEEmail , 'Ermitesting@mburse.com'};            
             mail.setBccAddresses(bccAddress);
             mail.setHtmlBody(htmlbody);
             mailList.add(mail);
