@@ -74,6 +74,17 @@ public without sharing class ManageNotificationController {
         return result;            
     }    
 
+    
+    /**
+     * @description 
+     * This method sends an image to multiple contacts via the TrueDialog API, stores the image in Salesforce as a content version and document, links it to the messages, and updates each message with the image URL.
+     * @author Vatsal Bhalani | 10-21-2024 
+     * @param trueDialogContactIdList 
+     * @param attachmentBody 
+     * @param attachmentName 
+     * @param message 
+     * @return String 
+     **/
     @AuraEnabled
     public static String sendImageToMultipleContacts(String trueDialogContactIdList,String attachmentBody, String attachmentName,String message){
       
@@ -157,6 +168,15 @@ public without sharing class ManageNotificationController {
            
     }  
     
+    // Not in use
+    // public static String getUnreadMessageCount(){} 
+
+
+    // Not in use
+    // public static String UpdateUnreadMessageStatus(String contactId){}
+
+
+    // This method manages notifications by checking if an account has a TrueDialog setup, and retrieves employee data using the account and admin ID.
     @AuraEnabled
     public static String manageNotificationController(String accId,String adminId) {    
         if(accId != null){
@@ -168,6 +188,57 @@ public without sharing class ManageNotificationController {
         return conWrapper;
     }
 
+    // Not in use
+    // public static String NewConData(String accountId){}
+
+    // This method retrieves and constructs a list of `ContactWrapper` objects for contacts associated with a given account ID, based on the role of the provided admin contact ID. It returns the serialized list of contact wrappers, excluding admin contacts and considering the admin's managerial hierarchy if applicable.
+    @RemoteAction
+    public static string NewEmployeeData(String accountId, String adminId) {
+        List<Contact> lstContacts = [
+            SELECT Role__c
+            FROM Contact
+            WHERE Id = :adminId
+        ];
+
+        // Early exit if no contact is found
+        if (lstContacts.isEmpty()) {
+            return JSON.serialize(new List<ContactWrapper>());
+        }
+
+        String role = lstContacts[0].Role__c;
+
+        List<ContactWrapper> lstContactWrap = new List<ContactWrapper>();
+        Boolean isAdmin = (role == StaticValues.ROLE_ADMIN || role == StaticValues.roleAdminDriver);
+
+        // Build the query for contacts
+        String query = 'SELECT Id, FirstName, LastName, toLabel(Insurance__c), Expiration_Date__c, '
+                    + 'Notification_Message__c, External_Email__c, Triplog_UserID__c, TrueDialog_Contact_Id__c, '
+                    + 'Insurance_Attachment_Id__c, Notification_Date__c, Unread_Message_Count__c, Contact_Picture__c, Role__c '
+                    + 'FROM Contact WHERE AccountId = :accountId AND Role__c != \'Admin\' AND Deactivated_Date__c = null ';
+        
+        // Add additional conditions based on the role
+        if (!isAdmin) {
+            query += 'AND (Manager__c = :adminId OR Manager__r.Manager__c = :adminId OR Manager__r.Manager__r.Manager__c = :adminId OR Manager__r.Manager__r.Manager__r.Manager__c = :adminId) ';
+        }
+
+        query += 'ORDER BY FirstName';
+
+        // Execute the query
+        List<Contact> contacts = Database.query(query);
+
+        // Process each contact and create a wrapper
+        for (Contact con : contacts) {
+            ContactWrapper conWrap = createContactWrapper(con);
+            lstContactWrap.add(conWrap);
+        }
+
+        return JSON.serialize(lstContactWrap);
+    }
+
+
+    // * @description 
+    // * This method updates employee notification details, logs messages, and sends emails based on the input employee data. 
+    // * It uses OrgWideEmailAddress and EmailTemplate, handles bulk updates for contacts, and sends notification emails.
     @AuraEnabled
     public static string editInlineNewEmployee(String listofemployee, String adminId) {
         //System.debug('listofemployee=' + listofemployee);
@@ -249,7 +320,7 @@ public without sharing class ManageNotificationController {
         return 'Success';
     }
 
-
+    //This method sends insurance declaration emails to a list of employees. It retrieves an email template, sets up email details, and sends mass emails through the OrgWideEmailAddress.
     @AuraEnabled
     public static string sendAllInsuranceEmail(String listofemployee,String adminId) {
         
@@ -312,11 +383,17 @@ public without sharing class ManageNotificationController {
         } 
         return 'Success';
     }
+
+
     @AuraEnabled(cacheable=false)
     public static String readFromFileInchunk(String attachmentBody, String attachmentName, String attachmentId,String did,String accid,String contactattachementid){
         return  WrapperUtils.readFromFileInchunk(attachmentBody,attachmentName,attachmentId,did,accid,contactattachementid);   
     }
 
+    // Not in use
+    // public static string getdriverInsurance(string attachmentid){}
+
+    //This method uploads location data in chunks of 100 records to an external Triplog or MLOG API based on the account's Triplog API token. It handles up to 2000 location records and divides them into manageable parts for upload.
     @AuraEnabled
     public static String UploadLocation(string location,string  accId) { 
         //System.debug('UploadLocation@@--');  
@@ -377,12 +454,24 @@ public without sharing class ManageNotificationController {
         }        
     }
 
+    // Not in use
+    // public static String UploadMileage(string mileage,string  accId,String adminId,String startdate,String enddate) { }
+
+    // Not in use
+    // public static String UploadLOA(string LOAData,string  accId,String startdate,String enddate) { }
+
+    // Not in use
+    // public static String DeleteTrips(string  conId) { }
+
+    // Not in use
+    // public static String TrueDialogContact (String accountId,String adminId) {}
+
     @AuraEnabled(cacheable=true)
     public static void sendInsuranceEmail (String Id,String Name,String email){
         BiWeeklyWrapperUtils.sendInsuranceEmail(Id, Name, email);
     }
 
-
+    //This method retrieves mileage reimbursement data for a given account and the current month, wraps it into a list of MileageWrapper objects, and returns the serialized JSON.
     @AuraEnabled(cacheable=true)
     public static String ImportMileage(String accountId) {
         String currentMonth = Utils.fetchMonths(1, 0)[0];
@@ -411,6 +500,7 @@ public without sharing class ManageNotificationController {
         return wrapjson;
     }
 
+    //This method processes mileage data from the provided JSON response, deletes existing mileage records, and inserts new ones based on the data. It ensures valid reimbursements and biweekly mappings before creating new Employee Mileage records.
     @AuraEnabled
     public static String UpdateImportMileage(String responseData) {
         if (responseData == null) {
@@ -501,6 +591,8 @@ public without sharing class ManageNotificationController {
         return String.isBlank(param1);
     }
 
+    //This method clears notification messages and dates for active contacts associated with a given account ID. 
+    //It updates the contacts by setting their notification fields to null if they are not already deactivated.
     @AuraEnabled
     public static void clearMassNotification(String accID) {
         // Query contacts that have notifications to clear and are not deactivated
@@ -523,6 +615,7 @@ public without sharing class ManageNotificationController {
         }
     }
 
+    //This method clears notification messages and dates for a specific active contact identified by the contact ID, updating the contact by setting its notification fields to null if they are not already deactivated.
     @AuraEnabled
     public static String clearNotification(String contactID) {
         // Query the contact with notification details
@@ -541,49 +634,6 @@ public without sharing class ManageNotificationController {
         }
     
         return 'Success';
-    }
-
-    @RemoteAction
-    public static string NewEmployeeData(String accountId, String adminId) {
-        List<Contact> lstContacts = [
-            SELECT Role__c
-            FROM Contact
-            WHERE Id = :adminId
-        ];
-
-        // Early exit if no contact is found
-        if (lstContacts.isEmpty()) {
-            return JSON.serialize(new List<ContactWrapper>());
-        }
-
-        String role = lstContacts[0].Role__c;
-
-        List<ContactWrapper> lstContactWrap = new List<ContactWrapper>();
-        Boolean isAdmin = (role == StaticValues.ROLE_ADMIN || role == StaticValues.roleAdminDriver);
-
-        // Build the query for contacts
-        String query = 'SELECT Id, FirstName, LastName, toLabel(Insurance__c), Expiration_Date__c, '
-                    + 'Notification_Message__c, External_Email__c, Triplog_UserID__c, TrueDialog_Contact_Id__c, '
-                    + 'Insurance_Attachment_Id__c, Notification_Date__c, Unread_Message_Count__c, Contact_Picture__c, Role__c '
-                    + 'FROM Contact WHERE AccountId = :accountId AND Role__c != \'Admin\' AND Deactivated_Date__c = null ';
-        
-        // Add additional conditions based on the role
-        if (!isAdmin) {
-            query += 'AND (Manager__c = :adminId OR Manager__r.Manager__c = :adminId OR Manager__r.Manager__r.Manager__c = :adminId OR Manager__r.Manager__r.Manager__r.Manager__c = :adminId) ';
-        }
-
-        query += 'ORDER BY FirstName';
-
-        // Execute the query
-        List<Contact> contacts = Database.query(query);
-
-        // Process each contact and create a wrapper
-        for (Contact con : contacts) {
-            ContactWrapper conWrap = createContactWrapper(con);
-            lstContactWrap.add(conWrap);
-        }
-
-        return JSON.serialize(lstContactWrap);
     }
 
     // Helper method to create a ContactWrapper from a Contact
