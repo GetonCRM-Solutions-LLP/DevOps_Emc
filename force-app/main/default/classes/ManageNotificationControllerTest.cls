@@ -43,10 +43,10 @@ public class ManageNotificationControllerTest {
         List<Bi_Weekly_Reimbursement__c> lstBiWeeklyReimbursements = TestDataFactory.createBiweeklyReim(true, lstContactDrivers, system.today().adddays(-14), system.today().addDays(-1), 10, objIrsMileageRate.id);
         
         List<Employee_Mileage__c> lstEmpMil = TestDataFactory.getEmpMileage(true, 10, lstEmployeeReimbursements, lstBiWeeklyReimbursements);
-
+        
         Attachment objAttachment = TestDataFactory.createAttachment(true, lstContactDrivers[0].id);
         List<Address__c> lstaddresses = TestDataFactory.createAddress(true, 10,0986);
-
+        
         Message__c objMsg = new Message__c();
         objMsg.Message__c = 'test contact id';
         objMsg.Contacts__c = lstContactDrivers[0].Id;
@@ -96,7 +96,7 @@ public class ManageNotificationControllerTest {
     
     @isTest
     static void uploadLocation(){
-         Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
+        Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
         
         Account objAccount = [Select id,Name from Account where Name = 'Test'];
         System.assertEquals('Test',objAccount.Name, 'Account is not proper');
@@ -106,7 +106,7 @@ public class ManageNotificationControllerTest {
         
         Contact objContactDriver = [Select id from Contact where Role__c = 'Driver'];
         User objUser = [Select id from User where ContactId =: objContactDriver.id ];
-
+        
         Test.startTest();
         System.runAs(objUser) {
             ManageNotificationController mc = new ManageNotificationController();
@@ -132,13 +132,13 @@ public class ManageNotificationControllerTest {
         }
         Test.stopTest();
     }
-
+    
     @isTest
     static void clearMassNotification(){
         
         Account objAccount = [Select id, True_Dialog__c, Name from Account where Name = 'Test'];
         System.assertEquals('Test',objAccount.Name, 'Account is not proper');
-
+        
         Contact objContactDriver = [Select id from Contact where Role__c = 'Driver'];
         User objUser = [Select id from User where ContactId =: objContactDriver.id ];
         
@@ -149,10 +149,10 @@ public class ManageNotificationControllerTest {
         }
         Test.stopTest();
     }
-
+    
     @isTest
     static void clearNotification(){
-               
+        
         Contact objContactDriver = [Select id,Role__c,Notification_Message__c,Notification_Date__c from Contact where Role__c = 'Driver'];       
         System.assertEquals('Driver',objContactDriver.Role__c, 'Contact is not correct');
         User objUser = [Select id from User where ContactId =: objContactDriver.id ];
@@ -164,13 +164,13 @@ public class ManageNotificationControllerTest {
         }
         Test.stopTest();
     }
-
+    
     @isTest
     static void importMileage(){
-               
+        
         Account objAccount = [Select id, True_Dialog__c, Name from Account where Name = 'Test'];
         System.assertEquals('Test',objAccount.Name, 'Account is not proper');
-
+        
         Contact objContactDriver = [Select id from Contact where Role__c = 'Driver'];
         User objUser = [Select id from User where ContactId =: objContactDriver.id ];
         
@@ -181,7 +181,7 @@ public class ManageNotificationControllerTest {
         }
         Test.stopTest();
     }
-   
+    
     @isTest
     static void sendAllInsuranceEmailTest(){
         
@@ -192,17 +192,17 @@ public class ManageNotificationControllerTest {
         Contact objContactDriver = [Select id from Contact where Role__c = 'Driver'];
         Attachment objAttachment = [select id from Attachment where parentId =: objContactDriver.id];
         User objUser = [Select id from User where ContactId =: objContactDriver.id ];
-
+        
         // Set mock callout class
         Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
         
         String json2 = '[{\"name\":\"The White House\",\"Trip_Date\":\"08/31/2021\",\"Trip_Origin\":\"6810 Chimney Hill Rd, Crestwood, KY  40014\",\"Trip_Destination\":\"1610 Deer Run Dr, Burlington, KY 41005\",\"Trip_Status\":\"rejected\",\"Approved_Date\":\"09/30/2021\",\"Actual_Mileage\":\"33\",\"Activity\":\"Business\",\"Contact_Email\":\"jayshah3796@gmail.com\",\"EmployeeId\":\"223344\"},{\"name\":\"The White House\",\"Trip_Date\":\"08/30/2021\",\"Trip_Origin\":\"6810 Chimney Hill Rd, Crestwood, KY  40014\",\"Trip_Destination\":\"1610 Deer Run Dr, Burlington, KY 41005\",\"Trip_Status\":\"Approved\",\"Approved_Date\":\"09/30/2021\",\"Actual_Mileage\":\"22\",\"Activity\":\"Business\",\"Contact_Email\":\"jayshah3796@gmail.com\",\"EmployeeId\":\"223344\"},{\"name\":\"The White House\",\"Trip_Date\":\"08/30/2021\",\"Trip_Origin\":\"6810 Chimney Hill Rd, Crestwood, KY  40014\",\"Trip_Destination\":\"1610 Deer Run Dr, Burlington, KY 41005\",\"Approved_Date\":\"09/30/2021\",\"Actual_Mileage\":\"26\",\"Activity\":\"Business\",\"Contact_Email\":\"jayshah3796@gmail.com\",\"EmployeeId\":\"223344\"}]';
-
+        
         Test.startTest();
         System.runAs(objUser) {
             ManageNotificationController mc = new ManageNotificationController();
             //ManageNotificationController.isTestClass = true;
-                    
+            
             ManageNotificationController.sendAllInsuranceEmail(json2, objContactAdmin.Id);
         }
         System.assertEquals('Test', objAccount.Name, 'One Account Must be Created.');
@@ -221,15 +221,15 @@ public class ManageNotificationControllerTest {
         Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
         
         //String jsonStr = '[{\"triploguserid\":\"20000339\",\"role\":\"Driver/Admin\",\"notiMessage\":\"Test123gdd\",\"notificationDate\":\"2021-06-30\",\"name\":\"Jaytik\",\"massEmail\":false,\"lastname\":\"Luhar\",\"isEditable\":false,\"insuranceId\":\"00P6s0000077Rj9EAE\",\"insurance\":null,\"fullname\":\"Jaytik Luhar\",\"expirationDate\":null}]';        
-		String jsonStr = '[{"contactId":"'+objContactDriver.id+'","triploguserid":"20000649","name":"John","lastname":"Doe","role":"Manager","fullname":"John Doe","insurance":"Health Plan A","contactEmail":"johndoe@example.com","notiMessage":"You have a new message","insuranceId":"INS001","unReadMessageCount":"3","isEditable":true,"massEmail":true,"massText":false,"expirationDate":"2024-12-31","notificationDate":"2024-10-21","contactPicture":"/path/to/picture.jpg","trueDialogId":"TD001","massNotiText":true,"insuranceFile":false,"locationFile":true,"messageHolder":true}]';
-
+        String jsonStr = '[{"contactId":"'+objContactDriver.id+'","triploguserid":"20000649","name":"John","lastname":"Doe","role":"Manager","fullname":"John Doe","insurance":"Health Plan A","contactEmail":"johndoe@example.com","notiMessage":"You have a new message","insuranceId":"INS001","unReadMessageCount":"3","isEditable":true,"massEmail":true,"massText":false,"expirationDate":"2024-12-31","notificationDate":"2024-10-21","contactPicture":"/path/to/picture.jpg","trueDialogId":"TD001","massNotiText":true,"insuranceFile":false,"locationFile":true,"messageHolder":true}]';
+        
         Test.startTest();
         System.runAs(objUser) {
             ManageNotificationController mc = new ManageNotificationController();
             //ManageNotificationController.isTestClass = true;
-                    
+            
             ManageNotificationController.editInlineNewEmployee(jsonStr ,objContactAdmin.Id);
-
+            
         }
         System.assertEquals('Test', objAccount.Name, 'One Account Must be Created.');
     }    
@@ -248,24 +248,24 @@ public class ManageNotificationControllerTest {
         Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
         
         // String json5 = '[{"totalMileage":"0.00","reimbursementId":\''+lstEmpMil[0].Id+'\',"mpg":null,"maintaincetyre":null,"iseditable":false,"fuelprice":null,"driverName":\''+lstDriverContact[0].Name+'\''+',"contactId":\''+lstDriverContact[0].Id+'\''+',"contactEmail":\''+lstDriverContact[0].Email+'\''+'}]';
-
+        
         String json5 = '[{"totalMileage":"0.00",'
-        + '"reimbursementId":"' + lstEmployeeReimbursements[0].Id + '",'
-        + '"mpg":null,'
-        + '"maintaincetyre":null,'
-        + '"iseditable":false,'
-        + '"fuelprice":null,'
-        + '"driverName":"' + lstDriverContact[0].Name + '",'
-        + '"contactId":"' + lstDriverContact[0].Id + '",'
-        + '"contactEmail":"' + lstDriverContact[0].Email + '"}]';
-    
+            + '"reimbursementId":"' + lstEmployeeReimbursements[0].Id + '",'
+            + '"mpg":null,'
+            + '"maintaincetyre":null,'
+            + '"iseditable":false,'
+            + '"fuelprice":null,'
+            + '"driverName":"' + lstDriverContact[0].Name + '",'
+            + '"contactId":"' + lstDriverContact[0].Id + '",'
+            + '"contactEmail":"' + lstDriverContact[0].Email + '"}]';
+        
         // Output the JSON string
         System.debug(json5);
-    
-
+        
+        
         Test.startTest();
         System.runAs(objUser) {
-             System.debug('JSON string ==> '+json5);
+            System.debug('JSON string ==> '+json5);
             ManageNotificationController mc = new ManageNotificationController();
             //ManageNotificationController.isTestClass = true;                
             ManageNotificationController.UpdateImportMileage(json5);
@@ -291,83 +291,83 @@ public class ManageNotificationControllerTest {
         }
         System.assertEquals('Test', objAccount.Name, 'One Account Must be Created.');
     }    
-   
+    
     @isTest
     static void getAllMessageByContactTest(){
-
+        
         List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Test' LIMIT 1];
         List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
         List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
-
+        
         Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
         Test.startTest();
         TrueDialogSendMessageAPI.getAllMessageByContact(lstDriverContact[0].id);
         Test.stopTest();
-
+        
         System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
-
+        
     }
     @isTest
     static void sendMessageToMultipleContactsTest(){
-
+        
         List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Test' LIMIT 1];
         List<Contact> lstDriverContact = [SELECT Id,TrueDialog_Contact_Id__c FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
         List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
-
-
+        
+        
         List<String> lstTDContactId = new List<String>();
         lstTDContactId.add(lstDriverContact[0].TrueDialog_Contact_Id__c);
         
         String lstTDContactIdJson = JSON.serialize(lstTDContactId);
-
+        
         Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
         Test.startTest();
         ManageNotificationController.sendMessageToMultipleContacts(lstTDContactIdJson,'Hello');
         Test.stopTest();
-
+        
         System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
-
+        
     }
     @isTest
     static void sendImageToMultipleContactsTest(){
-
+        
         List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Test' LIMIT 1];
         List<Contact> lstDriverContact = [SELECT Id,TrueDialog_Contact_Id__c FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
         List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
-
-
+        
+        
         List<String> lstTDContactId = new List<String>();
         lstTDContactId.add(lstDriverContact[0].TrueDialog_Contact_Id__c);
         
         String lstTDContactIdJson = JSON.serialize(lstTDContactId);
-
+        
         Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
         Test.startTest();
         ManageNotificationController.sendImageToMultipleContacts(lstTDContactIdJson,'Unit Test Attachment','att1.jpg','Test  Message');
         Test.stopTest();
-
+        
         System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
-
+        
     }
-        @isTest
+    @isTest
     static void sendInsuranceEmailTest(){
-
+        
         List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Test' LIMIT 1];
         List<Contact> lstDriverContact = [SELECT Id,Email,Name,TrueDialog_Contact_Id__c FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
         List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
-
-
+        
+        
         List<String> lstTDContactId = new List<String>();
         lstTDContactId.add(lstDriverContact[0].TrueDialog_Contact_Id__c);
         
         String lstTDContactIdJson = JSON.serialize(lstTDContactId);
-
+        
         Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
         Test.startTest();
         ManageNotificationController.sendInsuranceEmail(lstDriverContact[0].Id,lstDriverContact[0].Name,lstDriverContact[0].Email);
         Test.stopTest();
-
+        
         System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
-
+        
     }
 }
