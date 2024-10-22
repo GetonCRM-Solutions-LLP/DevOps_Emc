@@ -211,55 +211,55 @@ public class ChangeTripStatusinTripLog implements Database.Batchable<sObject>, D
       
      //Finish Method
     public void finish(Database.BatchableContext bc) {
-        List<EmailTemplate> emailTemplateList = [SELECT Id,  Subject, HtmlValue,  body 
+        List<EmailTemplate> lstEmailTemplate = [SELECT Id,  Subject, HtmlValue,  body 
                                                  FROM EmailTemplate 
                                                  WHERE developerName = 'mileageprocess']; 
-        List<Messaging.SingleEmailMessage> emails = new List<Messaging.SingleEmailMessage>();
-        List<Email_Log__c> emailLogs = new List<Email_Log__c>(); 
-        String newBody = emailTemplateList[0].HtmlValue;
+        List<Messaging.SingleEmailMessage> lstEmails = new List<Messaging.SingleEmailMessage>();
+        List<Email_Log__c> lstEmailLogs = new List<Email_Log__c>(); 
+        String newBody = lstEmailTemplate[0].HtmlValue;
         SendEmailonDeactivation__c sendEmailConfig = SendEmailonDeactivation__c.getValues('mileageprocess');       
-        List<String> bccAddresses = new List<String>();
-        List<String> toAddresses = new List<String>();
+        List<String> lstBccAddresses = new List<String>();
+        List<String> lstToAddresses = new List<String>();
         
         
         if(sendEmailConfig !=null && Utils.CheckNulls(sendEmailConfig.BCCEmailaddresses__c) && sendEmailConfig.Send_to_me__c ) {
-            bccAddresses = Utils.SplitStringToList(sendEmailConfig.BCCEmailaddresses__c, ',');  
+            lstBccAddresses = Utils.SplitStringToList(sendEmailConfig.BCCEmailaddresses__c, ',');  
         }
         if(sendEmailConfig !=null &&( sendEmailConfig.Send_to_Admin__c || sendEmailConfig.Send_to_Manager__c)) {
-            toAddresses.add(emailAddressOfManager);
+            lstToAddresses.add(emailAddressOfManager);
         }
         
-        if(sendEmailConfig !=null && (!toAddresses.isEmpty() || !bccAddresses.isEmpty())) {
+        if(sendEmailConfig !=null && (!lstToAddresses.isEmpty() || !lstBccAddresses.isEmpty())) {
             newBody = newBody.replace('{Contact.Name}', nameofmanager );    
             newBody = newBody.replace('{!$Label.Driver_Forword_Logo}', System.Label.Driver_Forword_Logo);
             
             Messaging.SingleEmailMessage email = Utils.CreateEmail(
-                emailTemplateList[0].Subject, 
+                lstEmailTemplate[0].Subject, 
                 newBody, 
-                !toAddresses.isEmpty() ? toAddresses : bccAddresses, 
+                !lstToAddresses.isEmpty() ? lstToAddresses : lstBccAddresses, 
                 null, 
-                !toAddresses.isEmpty() ? bccAddresses : null, 
+                !lstToAddresses.isEmpty() ? lstBccAddresses : null, 
                 null
             );           
             email.setOrgWideEmailAddressId(owea.get(0).Id);
             
-            emailLogs.add(
+            lstEmailLogs.add(
                 Utils.CreateEmailLog( 
-                    emailTemplateList[0].Subject, 
+                    lstEmailTemplate[0].Subject, 
                     newBody, 
-                    !toAddresses.isEmpty() ? toAddresses : bccAddresses, 
+                    !lstToAddresses.isEmpty() ? lstToAddresses : lstBccAddresses, 
                     null, 
-                    !toAddresses.isEmpty() ? bccAddresses : null, 
+                    !lstToAddresses.isEmpty() ? lstBccAddresses : null, 
                     null,
                     'ChangeTripStatusinTripLog'
                 )
             );
-            emails.add(email);
+            lstEmails.add(email);
         }
         
-        if(sendEmailConfig !=null && (!emails.isEmpty() && !Test.IsRunningTest())) {                        
-            Messaging.SendEmailResult [] result = Messaging.sendEmail(emails, false);
-            Utils.SaveEmailLogs(emailLogs, result); 
+        if(sendEmailConfig !=null && (!lstEmails.isEmpty() && !Test.IsRunningTest())) {                        
+            Messaging.SendEmailResult [] result = Messaging.sendEmail(lstEmails, false);
+            Utils.SaveEmailLogs(lstEmailLogs, result); 
         }
     
         // Send an email to Loggedin User that your request is Proccesed Successfully.
@@ -283,7 +283,7 @@ public class ChangeTripStatusinTripLog implements Database.Batchable<sObject>, D
         }
         return mileages;
     }   
-    
+   /* 
     public Tripslog__c callPutApi(String apiKey, String bodyOfReq, String contactId, String reimbursementId, Integer totalTrips) {
         String baseURL = !MLOGACCOUNT.Contains(apiKey) ? StaticValues.TRIPLOG_BASEURL : StaticValues.MLOG_BASEURL;
         Http putHTTP = new Http(); 
@@ -295,9 +295,9 @@ public class ChangeTripStatusinTripLog implements Database.Batchable<sObject>, D
         putReq.setTimeout(120000);
         putReq.setHeader('Authorization', 'apiKey ' + apiKey);
         
-        if(!Test.IsRunningTest()) {
+        //if(!Test.IsRunningTest()) {
             putRes = putHTTP.send(putReq);
-        }
+        //}
         
         Tripslog__c triplogobj = new Tripslog__c();
         triplogobj.Body__c = bodyOfReq;
@@ -311,7 +311,7 @@ public class ChangeTripStatusinTripLog implements Database.Batchable<sObject>, D
         triplogobj.Total_Mileages__c = 0;
         triplogobj.Status__c = !Test.IsRunningTest() && putRes.getStatusCode() == 200 ? 'Success' :'Fail';
         return triplogobj;
-    }
+    }*/
      /*
     * Build Put call body
     */

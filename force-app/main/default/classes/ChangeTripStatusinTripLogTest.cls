@@ -96,7 +96,7 @@ public with sharing class ChangeTripStatusinTripLogTest {
         for(Employee_Mileage__c objEmp:ApprovedTrips){
                 approvedIdList.add(objEmp.id);
         }
-        
+        Test.setMock(HttpCalloutMock.class, new ChangeTripStatusinTripLogTestMock());
         Database.executeBatch(new ChangeTripStatusinTripLog(approvedIdList ,rejectedIdList,'test','test@gmail.com') );
     }
     
