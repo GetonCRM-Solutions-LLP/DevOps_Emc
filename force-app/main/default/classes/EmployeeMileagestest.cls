@@ -1,17 +1,17 @@
 /**
- * @description       : 
- * @author            : Harsita
- * @group             : 
- * @last modified on  : 23-10-2024
- * @last modified by  : Harsita
- * Modifications Log
- * Ver   Date         Author    Modification
- * 1.0   23-10-2024   Harsita   Initial Version
+* @description       : 
+* @author            : Harsita
+* @group             : 
+* @last modified on  : 23-10-2024
+* @last modified by  : Harsita
+* Modifications Log
+* Ver   Date         Author    Modification
+* 1.0   23-10-2024   Harsita   Initial Version
 **/
 @isTest
 public class EmployeeMileagestest {
-
-    public static testmethod void employeeMileagesTestMethod() {
+    @isTest
+    static void employeeMileagesTestMethod() {
         Test.startTest();
         
         // Initialize and assign values to the EmployeeMileages object
@@ -64,7 +64,7 @@ public class EmployeeMileagestest {
         em.originalDestinationName = ''; // String field
         em.isUnapprove = false;          // Boolean field, use false instead of ''
         em.fromLocation = '';			// String field
-
+        
         // Add system asserts to validate the values
         System.assertEquals(false, em.isSelected, 'isSelected should be false');
         System.assertEquals(false, em.isChecked, 'isChecked should be false');
@@ -113,7 +113,7 @@ public class EmployeeMileagestest {
         System.assertEquals('', em.originalDestinationName, 'originalDestinationName should be an empty string');
         System.assertEquals(false, em.isUnapprove, 'isUnapprove should be false');
         System.assertEquals('', em.fromLocation, 'fromLocation should be an empty string');
-
+        
         Test.stopTest();
     }
 }
