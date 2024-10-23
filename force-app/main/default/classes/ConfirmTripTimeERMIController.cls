@@ -284,7 +284,7 @@ public with sharing class ConfirmTripTimeERMIController {
     public static String reimMileages (String biweekReim){
         List<EmployeeMileages> mileages = new List<EmployeeMileages>();
         for(Employee_Mileage__c miles : [SELECT id,Name,Trip_Status__c,Original_Origin_Name__c,Original_Destination_Name__c,Trip_Date__c,Trip_Origin__c,
-                                                Trip_Destination__c,Bi_Weekly_Reimbursement__c,
+                                                Trip_Destination__c,Bi_Weekly_Reimbursement__c,Approved_Date__c,
                                                 Mileage__c,Variable__c,EmployeeReimbursement__c,TimeZone__c,Tag__c,
                                                 Bi_Weekly_Reimbursement__r.month__c,Bi_Weekly_Reimbursement__r.Total_Pending__c,Stay_Time__c,
                                                 Bi_Weekly_Reimbursement__r.Total_Mileage__c,Bi_Weekly_Reimbursement__r.Contact__c,Driving_Time__c,Total_Time__c,
