@@ -1,7 +1,5 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 /* eslint-disable no-useless-escape */
 /* eslint-disable no-restricted-globals */
-/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, api, track } from "lwc";
 import resourceImage from "@salesforce/resourceUrl/mBurseCss";
 import approveMileagesClone from "@salesforce/apex/ManagerDashboardController.approveMileagesClone";
@@ -1180,7 +1178,7 @@ export default class UserMileageGrid extends LightningElement {
   }
 
   approvalProcess() {
-    var toastMessage, message , toast, filterType;
+    var toastMessage, message, filterType;
     this.islockdate = false;
     this.modalOpen = true;
     this.headerModalText = "Processing Mileage Approvals";
