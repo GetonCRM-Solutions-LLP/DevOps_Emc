@@ -374,12 +374,11 @@ global class DriverDashboardLWCController {
         return BiweeklyPayPeriod.getBiweekMileages1(biweekId);
     }
     //aprroved mileage retreival
-    /* Harsita- method is not been used
     @AuraEnabled
     public static string ApproveBiweekMileages(string biweekId) {
         BiweeklyPayPeriod.ApproveBiWeekTrips(biweekId);
         return 'sucess';
-    }*/
+    }
     //all the mileage retirieved
     @AuraEnabled
     public static List<String> getAllMileages(String startdate,String enddate,String contactId) {
