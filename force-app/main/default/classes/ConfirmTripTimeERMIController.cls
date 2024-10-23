@@ -12,8 +12,6 @@ public with sharing class ConfirmTripTimeERMIController {
     public OrgWideEmailAddress[] owea;
     public ConfirmTripTimeERMIController (){
         contactId = ApexPages.currentPage().getParameters().get('id');
-        if(contactId != null){
-        }
         try {
             owea = [SELECT Id,Address from OrgWideEmailAddress where Address = 'driverservices@mburse.com' ];
         }  catch(System.QueryException qe) {
@@ -26,33 +24,35 @@ public with sharing class ConfirmTripTimeERMIController {
         List<MileageWrapper> mileageWrapList = new List<MileageWrapper >();
         try {
             for(Bi_Weekly_Reimbursement__c  biweek : [SELECT id, name, Confirm_Hours__c, Error_Hours__c,
-                                                      Total_Time__c, Total_Drive_Time__c,Count_Error_Check__c, 
-                                                      Total_Stay_Time__c, Total_Approved_Pending_Mileage__c,
-                                                      Contact__r.FirstName, Contact_Email__c, Contact__r.Role__c, Contact__r.Driver_Type__c 
-                                                      FROM Bi_Weekly_Reimbursement__c 
-                                                      WHERE Contact__c =: contactId 
-                                                      AND Start_Date__c != null 
-                                                      AND End_Date__c != null 
-                                                      AND End_Date__c <= TODAY 
-                                                      WITH SECURITY_ENFORCED
-                                                      order by End_Date__c desc limit 1 ]){
-                                                          MileageWrapper milWrap = new MileageWrapper(); 
-                                                          milWrap.biWeekId = biweek.Id;   
-                                                          milWrap.biWeekPayperiod = biweek.Name;  
-                                                          milWrap.driverName = biweek.Contact__r.FirstName;
-                                                          milWrap.driverEmail = biweek.Contact_Email__c ;    
-                                                          milWrap.mileage = biweek.Total_Approved_Pending_Mileage__c ;
-                                                          milWrap.confirmCheck = biweek.Confirm_Hours__c;
-                                                          milWrap.errorCheck = biweek.Error_Hours__c;
-                                                          milWrap.driverRole = biweek.Contact__r.Role__c;
-                                                          milWrap.driverType = biweek.Contact__r.Driver_Type__c;  /*Added by Megha */                               
-                                                          milWrap.driveTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Drive_Time__c));
-                                                          milWrap.stayTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Stay_Time__c));
-                                                          milWrap.totalTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Time__c));
-                                                          milWrap.countErrorCheck = biweek.Count_Error_Check__c != null ? Integer.valueOf(biweek.Count_Error_Check__c) : 0;
-                                                          mileageWrapList.add(milWrap);
-                                                      }
+                                                            Total_Time__c, Total_Drive_Time__c,Count_Error_Check__c, 
+                                                            Total_Stay_Time__c, Total_Approved_Pending_Mileage__c,
+                                                            Contact__r.FirstName, Contact_Email__c, Contact__r.Role__c, Contact__r.Driver_Type__c 
+                                                        FROM Bi_Weekly_Reimbursement__c 
+                                                        WHERE Contact__c =: contactId 
+                                                        AND Start_Date__c != null 
+                                                        AND End_Date__c != null 
+                                                        AND End_Date__c <= TODAY 
+                                                        WITH SECURITY_ENFORCED
+                                                        ORDER BY End_Date__c desc limit 1 ])
+            {
+                MileageWrapper milWrap = new MileageWrapper(); 
+                milWrap.biWeekId = biweek.Id;   
+                milWrap.biWeekPayperiod = biweek.Name;  
+                milWrap.driverName = biweek.Contact__r.FirstName;
+                milWrap.driverEmail = biweek.Contact_Email__c ;    
+                milWrap.mileage = biweek.Total_Approved_Pending_Mileage__c ;
+                milWrap.confirmCheck = biweek.Confirm_Hours__c;
+                milWrap.errorCheck = biweek.Error_Hours__c;
+                milWrap.driverRole = biweek.Contact__r.Role__c;
+                milWrap.driverType = biweek.Contact__r.Driver_Type__c;  /*Added by Megha */                               
+                milWrap.driveTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Drive_Time__c));
+                milWrap.stayTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Stay_Time__c));
+                milWrap.totalTime = Utils.ConvertMinuteToHours(Integer.valueOf(biweek.Total_Time__c));
+                milWrap.countErrorCheck = biweek.Count_Error_Check__c != null ? Integer.valueOf(biweek.Count_Error_Check__c) : 0;
+                mileageWrapList.add(milWrap);
+            }
         }  catch(System.QueryException qe) {
+            System.debug(qe.getMessage());
         }        
         String wrapjson = JSON.serialize(mileageWrapList);
         return wrapjson;
@@ -126,13 +126,14 @@ public with sharing class ConfirmTripTimeERMIController {
                     ccAddress.add(System.Label.ErmiAdminConnie);
                 }
                 bccAddress.add(System.Label.CountError1Ermi);            
-            } else if(countError == 4 ) {
+            } 
+            /*else if(countError == 4 ) {
                 /*templateId = [SELECT Id, Subject,HtmlValue, body FROM EmailTemplate WHERE developerName = 'Ermi_Error_Count_2' Limit 1];
                 bccAddress.add(System.Label.DriverServicesEmail);
                 bccAddress.add(System.Label.ErmibccAddress);
                 ccAddress.add(System.Label.ErmiAdminAlexis); 
-                ccAddress.add(System.Label.ErmiAdminConnie);*/
-            }
+                ccAddress.add(System.Label.ErmiAdminConnie);
+            }*/
         } catch(System.QueryException qe) {
             System.debug(qe.getMessage());
         }
@@ -237,6 +238,7 @@ public with sharing class ConfirmTripTimeERMIController {
                 templateId = [SELECT Id, Subject,HtmlValue, body FROM EmailTemplate WHERE developerName = 'SendDriverConfirmTA' Limit 1];
                 adminTemplateId = [SELECT Id, Subject,HtmlValue, body FROM EmailTemplate WHERE developerName = 'SendAdminConfirmTA' Limit 1];
             } catch(System.QueryException qe) {
+                System.debug(qe.getMessage());
             }
             if(templateId != null){
                 newemailBody = templateId.HtmlValue;
@@ -281,17 +283,22 @@ public with sharing class ConfirmTripTimeERMIController {
     @AuraEnabled
     public static String reimMileages (String biweekReim){
         List<EmployeeMileages> mileages = new List<EmployeeMileages>();
-        for(Employee_Mileage__c miles : [SELECT id,Name,Trip_Status__c,Original_Origin_Name__c,Original_Destination_Name__c,Trip_Date__c,Trip_Origin__c,Trip_Destination__c,Bi_Weekly_Reimbursement__c,
-                                         Approved_Date__c,Mileage__c,Variable__c,EmployeeReimbursement__c,TimeZone__c,Tag__c,
-                                         Bi_Weekly_Reimbursement__r.month__c,Bi_Weekly_Reimbursement__r.Total_Pending__c,Stay_Time__c,
-                                         Bi_Weekly_Reimbursement__r.Total_Mileage__c,Bi_Weekly_Reimbursement__r.Contact__c,Driving_Time__c,Total_Time__c,
-                                         CreatedDate,Rejected__c,Origin_Name__c,Tracing_Style__c,StartTime__c,EndTime__c,Mileage_Lock_Date__c,
-                                         Day_Of_Week__c,Destination_Name__c,Bi_Weekly_Reimbursement__r.Contact__r.External_Email__c,Bi_Weekly_Reimbursement__r.Half_Fixed_Amount__c, 
-                                         Maintenance_and_Tires__c,Fuel_price__c,Bi_Weekly_Reimbursement__r.Total_Variable_Rate__c,ConvertedStartTime__c,ConvertedEndTime__c, 
-                                         Bi_Weekly_Reimbursement__r.Total_Rejected__c,Notes__c,Bi_Weekly_Reimbursement__r.Mileage_Lock_Date__c,Activity__c,
-                                         EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c,High_Risk_Mileage__c
+        for(Employee_Mileage__c miles : [SELECT id,Name,Trip_Status__c,Original_Origin_Name__c,Original_Destination_Name__c,Trip_Date__c,Trip_Origin__c,
+                                                Trip_Destination__c,Bi_Weekly_Reimbursement__c,
+                                                Mileage__c,Variable__c,EmployeeReimbursement__c,TimeZone__c,Tag__c,
+                                                Bi_Weekly_Reimbursement__r.month__c,Bi_Weekly_Reimbursement__r.Total_Pending__c,Stay_Time__c,
+                                                Bi_Weekly_Reimbursement__r.Total_Mileage__c,Bi_Weekly_Reimbursement__r.Contact__c,Driving_Time__c,Total_Time__c,
+                                                CreatedDate,Rejected__c,Origin_Name__c,Tracing_Style__c,StartTime__c,EndTime__c,Mileage_Lock_Date__c,
+                                                Day_Of_Week__c,Destination_Name__c,Bi_Weekly_Reimbursement__r.Contact__r.External_Email__c,
+                                                Bi_Weekly_Reimbursement__r.Half_Fixed_Amount__c,Maintenance_and_Tires__c,Fuel_price__c,
+                                                Bi_Weekly_Reimbursement__r.Total_Variable_Rate__c,ConvertedStartTime__c,ConvertedEndTime__c, 
+                                                Bi_Weekly_Reimbursement__r.Total_Rejected__c,Notes__c,Bi_Weekly_Reimbursement__r.Mileage_Lock_Date__c,Activity__c,
+                                                EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c,High_Risk_Mileage__c,Approval_Name__c
                                          FROM Employee_Mileage__c 
-                                         WHERE Bi_Weekly_Reimbursement__c =: biweekReim order by ConvertedStartTime__c asc]){
+                                         WHERE Bi_Weekly_Reimbursement__c =: biweekReim 
+                                         WITH SECURITY_ENFORCED
+                                         ORDER BY ConvertedStartTime__c asc])
+                                         {
                                              mileages.add(BiWeeklyWrapperUtils.getMileagesOfReimbursement(miles));
                                          }
         System.debug(JSON.serialize(mileages));

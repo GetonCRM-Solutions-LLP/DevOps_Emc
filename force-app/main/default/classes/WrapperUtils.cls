@@ -1874,7 +1874,7 @@ public with sharing class WrapperUtils
         List<Employee_Reimbursement__c> employeeReimbursementList = new List<Employee_Reimbursement__c>();
         if(reimbursements!=null) {
             reimbursementList = (List<EmployeeReimbursements>)JSON.deserialize(reimbursements,List<EmployeeReimbursements>.Class);
-            fOR (EmployeeReimbursements obj_current_reimbursment : reimbursementList)  {
+            for(EmployeeReimbursements obj_current_reimbursment : reimbursementList)  {
                 employeeReimbursementList.add(WrapperUtils.approveReimbursementofDriver(obj_current_reimbursment));
             }
             if(employeeReimbursementList.size() > 0)  {
@@ -1987,7 +1987,7 @@ public with sharing class WrapperUtils
             } else if(showteam != null && showteam == false && (role == 'Manager' || role == 'Driver/Manager')) {
                 employeeReimbursementList = [SELECT ID,  Name,  Month__c,  Total_Rejected__c,  Approved_Date__c,  Contact_Id__c,  Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c,  Contact_Id__r.Manager__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c,  Status__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c, Reimbursement_Approval__c, Mileage_Approver__c,Contact_Id__r.Manager_External_Email__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Contact_Id__r.Deactivated_Date__c = null AND Month__c = :currentAccount.Last_Reimbursement_Created__c  AND (Contact_Id__r.Manager__c =:contactId)];
             }
-            fOR (Employee_Reimbursement__c currentReimbursement : employeeReimbursementList) {
+            for(Employee_Reimbursement__c currentReimbursement : employeeReimbursementList) {
                 reimbursementList.add(getEmployeeReimbursementDetails(currentReimbursement));
             }
         }
