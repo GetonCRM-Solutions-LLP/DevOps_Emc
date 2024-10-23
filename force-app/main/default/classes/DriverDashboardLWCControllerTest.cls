@@ -1,3 +1,13 @@
+/**
+* @description       : 
+* @author            : Harsita
+* @group             : 
+* @last modified on  : 18-10-2024
+* @last modified by  : Harsita
+* Modifications Log
+* Ver   Date         Author    Modification
+* 1.0   15-10-2024   Harsita   Initial Version
+**/
 @isTest
 public with sharing class DriverDashboardLWCControllerTest {
     @isTest
@@ -7,7 +17,7 @@ public with sharing class DriverDashboardLWCControllerTest {
         Vehicle_URL_Mapping__c veh = TestDataFactory.createVehicleData(true,0);
         List<IRS_Mileage_Rate__c> obj_IRS_Mileage_Rate =  RecordUtilityClass.insertIrsRate();
         IRS_Mileage_Rate__c irsRate = TestDataFactory.createIRSRate(true,2023);
-
+        
         Gas_Prices__c gasprice = new Gas_Prices__c();
         gasprice.City__c = 'Atlanta';
         gasprice.Fuel_Price__c = 3;
@@ -21,13 +31,13 @@ public with sharing class DriverDashboardLWCControllerTest {
         gasprice1.Month_Year__c = Date.today().adddays(-40);
         gasprice1.State__c = 'AK';
         insert gasprice1;
-
+        
         UserRole uRole = TestDataFactory.getUserRole();
         Profile profileObj = TestDataFactory.getUserProfile();
         User admin = TestDataFactory.getSystemAdminUser(uRole.Id);
         User userObj;
         User DriverUser;
-                
+        
         Account acc;
         Contact con1 = new Contact();
         
@@ -37,7 +47,7 @@ public with sharing class DriverDashboardLWCControllerTest {
             acc.Name = 'Test Accounts';
             acc.isUsingTriplog__c = true;
             insert acc;
-
+            
             con1.FirstName = 'Priyanka';
             con1.LastName = 'Gajera';
             con1.AccountId = acc.Id;
@@ -48,7 +58,7 @@ public with sharing class DriverDashboardLWCControllerTest {
             con1.Insurance_Attachment_Id__c = Null;
             con1.Vehicle_Type__c = '2024 Mileage Rate';
             con1.Employee_ID__c = '234343456';
-
+            
             con1.Time_Zone__c = 'US/Mountain';
             con1.Driver_Type__c = 'Driver - Full Time';
             con1.Deactivated_Date__c = null;
@@ -63,6 +73,7 @@ public with sharing class DriverDashboardLWCControllerTest {
             con1.Reimbursement_Frequency__c='Monthly Reimbursement';
             con1.Activation_Date__c=system.today();
             insert con1;
+            ApexPages.currentPage().getParameters().put('id',con1.id ); 
         }	
         list<contact> conList1=new list<contact>();
         conList1.add(con1);
@@ -73,14 +84,14 @@ public with sharing class DriverDashboardLWCControllerTest {
         biweek =TestDataFactory.createBiweeklyReim(true,conList1,system.today().addDays(-15),system.today(),1,irsRate.id);
         List<Employee_Mileage__c> emp =new List<Employee_Mileage__c>();
         emp=TestDataFactory.getEmpMileage(false,3,reim,biweek);
-            emp[0].EMP_Mileage__c=1500;
-            for(Employee_Mileage__c em :emp){
-                em.Approved_Date__c = System.today();
-				em.Trip_Status__c='Approved';
-            }
-            insert emp;
+        emp[0].EMP_Mileage__c=1500;
+        for(Employee_Mileage__c em :emp){
+            em.Approved_Date__c = System.today();
+            em.Trip_Status__c='Approved';
+        }
+        insert emp;
         DriverUser=  TestDataFactory.createUser(true,profileObj.id,con1.id);
-
+        
         List<Contact> conList = TestDataFactory.createDriverContact(true,acc.Id,'Driver',veh.Name,'niraj',2);
         List<Employee_Reimbursement__c> reimbursement = TestDataFactory.createPendingReimbursement(true,conList,1,irsRate.Id);
         List<Bi_Weekly_Reimbursement__c> biReim = TestDataFactory.createBiweeklyReim(true,conList,Date.valueOf('2022-12-25'),Date.valueOf('2023-01-07'),1,irsRate.Id);
@@ -88,6 +99,28 @@ public with sharing class DriverDashboardLWCControllerTest {
         mileages[0].Trip_Status__c = 'Approved';
         mileages[0].Approved_Date__c = system.today();
         insert mileages[0] ;
+        
+        Attachment attach = TestDataFactory.createAttachment(false, conList[0].id);
+        attach.name = 'MVR Signed Document';
+        insert attach;
+        
+        ContentVersion contentVersion = new ContentVersion(
+            Title          = 'Driver Agreement',
+            PathOnClient   = 'Driver Agreement.docx',
+            VersionData    = Blob.valueOf('Test Content'),
+            FirstPublishLocationId = acc.Id,
+            IsMajorVersion = true);
+        insert contentVersion;
+        
+        List<ContentDocument> documents = [SELECT Id, Title, LatestPublishedVersionId FROM ContentDocument WHERE Id =: acc.Id];
+        if(!documents.isEmpty()){
+            ContentDocumentLink cdl = new ContentDocumentLink();
+            cdl.LinkedEntityId = conList[0].ID;
+            cdl.ContentDocumentId = documents[0].Id;
+            cdl.ShareType = 'I';
+            cdl.Visibility = 'AllUsers';
+            insert cdl;
+        }
         Test.startTest();
         DriverDashboardLWCController.getContactid();
         DriverDashboardLWCController.getDriverDetails(conList[0].Id);
@@ -110,13 +143,14 @@ public with sharing class DriverDashboardLWCControllerTest {
         DriverDashboardLWCController.getPacketandMeeting(con1.id);
         DriverDashboardLWCController.getCustomSettings();
         DriverDashboardLWCController.getPlanParameter(conList[0].Id);
-        //DriverDashboardLWCController.getBiweekMileages(biReim[0].Id);
-        //DriverDashboardLWCController.ApproveBiweekMileages(biReim[0].Id);
+        DriverDashboardLWCController.getBiweekMileages(biReim[0].Id);
+        DriverDashboardLWCController.ApproveBiweekMileages(biReim[0].Id);
         DriverDashboardLWCController.countUserLogin(con1.id);
         DriverDashboardLWCController.getDrivingStates();
         DriverDashboardLWCController.sendDrivingStateEmail(String.valueOf(conList[0].Id),String.valueOf(conList[0].Driving_States__c));
         String drivingState=String.valueOf(conList[0].Driving_States__c);
         DriverDashboardLWCController.updateStateList(String.valueOf(conList[0].Id),String.valueOf(conList[0].Driving_States__c));
+        DriverDashboardLWCController.updateContactDetail(conList[0].Id);
         DriverDashboardLWCController DLC= new DriverDashboardLWCController();
         
         DriverDashboardLWCController.planParameterWrap wrapObj = new DriverDashboardLWCController.planParameterWrap ();

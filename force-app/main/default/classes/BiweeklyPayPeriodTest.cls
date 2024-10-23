@@ -1,80 +1,183 @@
 @isTest
 public class BiweeklyPayPeriodTest {
-    public BiweeklyPayPeriodTest() {
-    }
-    public static testmethod void test1(){
+    
+    @TestSetup
+    static void setupTestData() {
+        
+        UserRole objUserRole = TestDataFactory.getUserRole();
+        Profile objProfile = TestDataFactory.getUserProfile();
+        User objAdmin = TestDataFactory.getSystemAdminUser(objUserRole.Id);
+        User objGenUser;
+        
         TriggerConfig__c triggerCustomSetting = TestDataFactory.triggerConfigCustomSetting(true);
-        SendEmail__c sendEmailCustomSetting1 = TestDataFactory.sendEmailCustomSetting(true,'Send Email For Compliance');
+        SendEmail__c sendEmailCustomSetting1 = TestDataFactory.sendEmailCustomSetting(true, 'Send Email For Compliance');
+        SendEmail__c sendEmailCustomSetting2 = TestDataFactory.sendEmailCustomSetting(true, 'ChangeTripStatusinTripLogBatch');
         TrueDialog_Keys__c tdKeys = TestDataFactory.createTrueDialog(true);
-        Vehicle_URL_Mapping__c vehicleObj = TestDataFactory.createVehicleData(true,0);
         IRS_Mileage_Rate__c irsRateObj = TestDataFactory.createIRSRate(true,0);
+        List<Address__c> objAddress = TestDataFactory.createAddress(true, 10,12345);
         
-        Account acc = new Account();     
-        List<Contact> conList = new List<Contact>();
-        List<Contact> adminConList = new List<Contact>();
+        Vehicle_URL_Mapping__c objVehicleUrlMap = TestDataFactory.createVehicleData(false, 0);
+        objVehicleUrlMap.Name = String.valueof(System.today().year())+ ' Full-Size Sedan';
+        objVehicleUrlMap.vehicle__c = 'Full-Size Sedan';
+        Insert objVehicleUrlMap;
         
-        UserRole userRole = TestDataFactory.getUserRole();
-        Profile profileObj = TestDataFactory.getUserProfile();
-        User admin = TestDataFactory.getSystemAdminUser(userRole.Id);
-        User userObj;
-        Account accountObj;
-        System.runAs(admin) {
-            accountObj = TestDataFactory.createAccount(true,'Test',true);
-            Contact contactObj = TestDataFactory.createCICDContact(true,accountObj.Id);
-            acc = TestDataFactory.createAccount(true,'Test',true);
-            conList = TestDataFactory.createDriverContact(true, acc.Id, 'Driver', vehicleObj.Name, 'test.email', 1);
-            conList[0].Activation_Date__c = system.today();
-            conList[0].Fixed_Amount__c = 371.28;
-            conList[0].MailingCity = 'Abilene';
-            conList[0].MailingState = 'TX';
-            conList[0].Time_Zone__c = 'US/Mountain' ;
-            conList[0].Driving_States__c = 'TX';
-            conList[0].Fixed_Amount__c = 322.00;
-            conList[0].Maintenance_and_Tires__c = 1.2;
-            conList[0].MPG__c= 10.00;
-            conList[0].Monthly_Mileage_Limit__c = 100.00;
-
-            update conList;
-
-            adminConList = TestDataFactory.createDriverContact(true, acc.Id, 'Admin', vehicleObj.Name, 'test1.email', 1);
-            userObj = TestDataFactory.createUser(true, profileObj.Id, conList[0].Id);
+        Account objAccount1;
+        List<Vehicle_Value__c> lstVehicleValue;
+        List<Contact> lstContact1;
+        List<Contact> lstContact2;
+        List<Contact> lstContact3;
+        
+        Profile objUserProfile = [SELECT Id FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
+        
+        System.runAs(objAdmin) {
+            
+            objAccount1 = TestDataFactory.createAccount(true,'Delta account',true);
+            
+            lstVehicleValue = TestDataFactory.createVehicleValue(true, objAccount1.Id, objVehicleUrlMap.Id);
+            
+            lstContact1 = TestDataFactory.createDriverContact(true, objAccount1.Id, 'Driver', objVehicleUrlMap.Name, 'paras.dhanani',  1);
+            lstContact2 = TestDataFactory.createDriverContact(true, objAccount1.Id, 'Manager', objVehicleUrlMap.Name, 'paras.dhanani',  1);
+            lstContact3 = TestDataFactory.createDriverContact(true, objAccount1.Id, 'Admin', objVehicleUrlMap.Name, 'paras.dhanani',  1);
+            
+            objGenUser = TestDataFactory.createUser(true, objProfile.Id, lstContact1[0].Id);
+            
+            List<Employee_Reimbursement__c> lstEmpReim =TestDataFactory.createPendingReimbursement(true,lstContact1, 10, irsRateObj.Id);
+            List<Bi_Weekly_Reimbursement__c> lstBiWeeklyReim =TestDataFactory.createBiweeklyReim(true, lstContact1, date.valueof(system.today().adddays(-14)),date.valueof(system.today().addDays(-1)), 2, irsRateObj.Id);
+            List<Employee_Mileage__c> lstEmpMil = TestDataFactory.getEmpMileage(true, 10, lstEmpReim, lstBiWeeklyReim);
+            
         }
+    }
+    
+    @isTest
+    static void getTimeAndAttendanceTest(){
         
-        String lastMonth = Utils.fetchMonths(1, 0)[0];
-        List<Employee_Reimbursement__c> er = TestDataFactory.createPendingReimbursement(False, conList, 1, irsRateObj.Id);
-        er[0].Approved_Date__c = system.today()-4;
-        er[0].Month__c = lastMonth;
-        er[0].Status__c = 'Approved';
-        Insert er[0];        
-
-        List<Bi_Weekly_Reimbursement__c> br = TestDataFactory.createBiweeklyReim (true, conList, System.today().addDays(-26),System.today().addDays(-13), 1, irsRateObj.Id);
-        List<Employee_Mileage__c> emp1 = TestDataFactory.getEmpMileage (True, 0, er, br);
-        emp1[0].Trip_Date__c =  date.today().adddays(-1);
-        emp1[0].Trip_Status__c = 'Approved';
-        emp1[0].Approved_Date__c = system.today();
-        Update emp1;
-
-        /*List<Employee_Mileage__c> emp2 = TestDataFactory.getEmpMileage (True, 0, er, br);
-        emp2[0].Trip_Date__c = date.today().adddays(-1);
-        emp2[0].Trip_Status__c = 'Approved';
-        emp2[0].Approved_Date__c = system.today();
-        Update emp2;  */   
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        for(Bi_Weekly_Reimbursement__c objBiReim : lstBiReim){
+            objBiReim.Start_Date__c = Date.newInstance(2024, 08, 04);
+            objBiReim.End_Date__c = Date.newInstance(2024, 08, 10);
+        }
+        update lstBiReim;
         
         Test.startTest();
-        System.runAs(userObj) {
-            integer i = 0;
-        BiweeklyPayPeriod.getTimeAndAttendance(conList[0].Id, '2023');
-        BiweeklyPayPeriod.getPayPeriodDates(conList[0].Id, 2022);
-        BiweeklyPayPeriod.getBiweeklyMileage(conList[0].Id, 2022);
-        BiweeklyPayPeriod.getMileages1(system.today()-1, system.today(), conList[0].Id);
-        BiweeklyPayPeriod.getAllBiweekMileages1(system.today()-1, system.today(), conList[0].Id);
-        BiweeklyPayPeriod.ApproveTrips(system.today()-1, system.today(), conList[0].Id);
-        BiweeklyPayPeriod.calculateBiweekMil (String.valueof(system.today()-1),String.valueof(system.today()), conList[0].Id);
-        BiweeklyPayPeriod.getBiweeklyReimbursement(String.valueOf(conList[0].Id) ,2023);
-        BiweeklyPayPeriod.getBiweekMileages1(string.valueOf(br));
-        BiweeklyPayPeriod.ApproveBiWeekTrips(string.valueOf(br));
-        BiweeklyPayPeriod.payPeriodDateList(accountObj.Id);
-      }
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.getTimeAndAttendance(lstDriverContact[0].Id, String.valueOf(System.today().year()));
+        }
         Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
     }
+    @isTest
+    static void getPayPeriodDatesTest(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.getPayPeriodDates(lstDriverContact[0].Id, System.today().year());
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }
+    @isTest
+    static void getAllBiweekMileages1Test(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.getAllBiweekMileages1(system.today()-1, system.today(), lstDriverContact[0].Id);
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }
+    @isTest
+    static void getBiweeklyReimbursementTest(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.getBiweeklyReimbursement(String.valueOf(lstDriverContact[0].Id) , System.today().year());
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }
+    @isTest
+    static void getBiweekMileages1Test(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.getBiweekMileages1(string.valueOf(lstBiReim[0].Id));
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }
+    @isTest
+    static void ApproveBiWeekTripsTest(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.ApproveBiWeekTrips(string.valueOf(lstBiReim[0].Id));
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }
+    @isTest
+    static void payPeriodDateListTest(){
+        
+        List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
+        List<Contact> lstDriverContact = [SELECT Id FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstAdminContact = [SELECT Id FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];
+        List<Bi_Weekly_Reimbursement__c> lstBiReim = [SELECT Id FROM Bi_Weekly_Reimbursement__c];
+        User objUser = [SELECT id FROM User WHERE ContactId = :lstDriverContact[0].id];
+        
+        Test.startTest();
+        System.runAs(objUser) {
+            BiweeklyPayPeriod.payPeriodDateList(lstAccounts[0].Id);
+        }
+        Test.stopTest();
+        
+        System.assertEquals(1, lstAccounts.size(), 'One Account Must be Created.');
+        
+    }    
 }
