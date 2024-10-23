@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Harsita
  * @group             : 
- * @last modified on  : 22-10-2024
+ * @last modified on  : 23-10-2024
  * @last modified by  : Harsita
  * Modifications Log
  * Ver   Date         Author    Modification
@@ -476,7 +476,7 @@ public with sharing class BiweeklyPayPeriod
     }
     /* This method is used to approve biweekly reimbursement.
     Author : Sanket Goswami */
-    /* Code Commented by Harsita - Its not been used any where
+    
     public static string ApproveBiWeekTrips(String biWeekId){
         List<Bi_Weekly_Reimbursement__c> reimToApprove = new List<Bi_Weekly_Reimbursement__c>();
         for(Bi_Weekly_Reimbursement__c mileage : [SELECT id,Approved_Date__c,Status__c 
@@ -490,7 +490,7 @@ public with sharing class BiweeklyPayPeriod
             update reimToApprove;
         }
         return 'sucess';
-    } */
+    }
     /* This method is used to approve mileages.
     Author : Sanket Goswami */
 
