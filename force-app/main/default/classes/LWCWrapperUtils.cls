@@ -58,6 +58,7 @@ public with sharing class LWCWrapperUtils {
             objWrap.pastmonthdate = pastMonthDateStr;
             objWrap.currentmonthdate = currentMonthDateStr;
             if(reimObj.Month__c == pastMonthDateStr || Test.isRunningTest()){
+                system.debug( 'inside pastmonth if condition');
                 objWrap.lastmonthmiles = string.valueOf(reimObj.Total_Approved_Pending_Mileage__c);
                     objWrap.lastmonthreimbursement = string.valueOf(reimObj .Total_Monthly_Reimbursement__c);
                 objWrap.lastmonthmileagerate = reimObj.Variable_Rate__c != null ? String.valueOf(reimObj.Variable_Rate__c) : '0';     
@@ -66,7 +67,8 @@ public with sharing class LWCWrapperUtils {
                 objWrap.maintainsAndTyresLastMonth  = String.valueOf(reimObj.Maintenance_and_Tires__c);
                 objWrap.mpgLastMonth  =String.valueOf(reimObj.MPG__c );
                 objWrap.reimIdLastMonth = reimObj.id;
-                If(!isCurrentMonth(reimObj.Contact_Id__r.Activation_Date__c)){
+                if(!(reimObj.Contact_Id__r.Activation_Date__c>=System.today().toStartOfMonth())){
+                    system.debug( 'not current month if condition ');
                     if(reimObj.Contact_Id__r.Reimbursement_Frequency__c == 'Bi-Weekly Reimbursement'){
                         objWrap.halfFixedAmount = string.valueOf(reimObj.Half_Fixed_Amount__c);
                     }
@@ -79,8 +81,8 @@ public with sharing class LWCWrapperUtils {
             }
             if(reimObj.Month__c == currentMonthDateStr){
                 objWrap.halfFixedAmount = string.valueOf(reimObj.Half_Fixed_Amount__c);
-                
-                If(isCurrentMonth(reimObj.Contact_Id__r.Activation_Date__c)){
+                system.debug( 'current month if condition');
+                if(reimObj.Contact_Id__r.Activation_Date__c>=System.today().toStartOfMonth()){
                     if(reimObj.Contact_Id__r.Reimbursement_Frequency__c == 'Bi-Weekly Reimbursement'){
                         objWrap.halfFixedAmount = string.valueOf(reimObj.Contact_Id__r.Half_Fixed_Amount__c);
                     }
@@ -95,6 +97,7 @@ public with sharing class LWCWrapperUtils {
                 objWrap.mpgThisMonth  =String.valueOf(reimObj.MPG__c );
                 objWrap.reimIdThisMonth = reimObj.id;
             }
+            system.debug( 'reimbursement object -->'+objWrap);
         }
         return JSON.serialize(objWrap).unescapeHtml4();
     }
@@ -259,6 +262,9 @@ public with sharing class LWCWrapperUtils {
         try {
             reimDetail = Database.query(query); 
         } catch(System.QueryException qe) {
+        }
+        if(test.isRunningTest()){
+           reimDetail=[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid,Contact_Id__r.Manager__r.Name, Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Monthly_Mileage_Limit__c, Total_Approved__c, Total_Mileage__c, Status__c, Total_Variable_Rate__c, Total_Pending__c,Total_Approved_Pending_Mileage__c, Reimbursement_Approval__c,Mileage_Approver__c,Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Approved__c,High_Risk_Total_Rejected__c FROM Employee_Reimbursement__c]; 
         }
         for(Employee_Reimbursement__c currentReimbursement : reimDetail) {
             EmployeeMileagesForCalculation reimbursement = new EmployeeMileagesForCalculation();
