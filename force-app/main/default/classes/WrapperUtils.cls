@@ -1,38 +1,71 @@
 /**
-@author Natavar Ghodasara
+@authOR Natavar Ghodasara
 @date 26th Feb 2019
 @group Wrapper
 @group-content WrapperDetails.html
-@description WrapperUtils is used to show/edit Employee details and other Utility features.
+@description WrapperUtils is used to show/edit Employee details AND other Utility features.
 Before deploy to production uncomment this batch ChangeTripStatusinTripLog.
 */
 public with sharing class WrapperUtils 
 {
     /**
-@author Natavar Ghodasar
+@authOR Natavar Ghodasar
 @date 26th Feb 2019
 @description Default Constructor.
 */
-    public WrapperUtils() { }
+    public WrapperUtils() { 
+        system.debug('WrapperUtils class started');
+    }
     public static string getChartData(String contactId,boolean showTeamRecord,String accountId,String role) {
         List<Employee_Reimbursement__c> reimbursementList = new List<Employee_Reimbursement__c>();
         if(showTeamRecord == true && (role == 'Admin' || role == StaticValues.roleAdminDriver)) {
-            reimbursementList =[Select ID,Total_Mileage__c,Status__c,Month__c from Employee_Reimbursement__c where Contact_Id__r.Accountid =:accountId  and (Month__c=:WrapperUtils.getLastMonthValue(-1) OR Month__c=:WrapperUtils.getLastMonthValue(-2) OR Month__c=:WrapperUtils.getLastMonthValue(-3))];
+            reimbursementList =[SELECT ID,Total_Mileage__c,Status__c,Month__c 
+                                        FROM Employee_Reimbursement__c 
+                                        WHERE Contact_Id__r.Accountid =:accountId  
+                                            AND (Month__c=:WrapperUtils.getLastMonthValue(-1) 
+                                                    OR Month__c=:WrapperUtils.getLastMonthValue(-2) 
+                                                    OR Month__c=:WrapperUtils.getLastMonthValue(-3))
+                                        WITH SECURITY_ENFORCED];
         } else if(showTeamRecord == false && (role=='Admin' || role == StaticValues.roleAdminDriver)) {
-            reimbursementList =[Select ID,Total_Mileage__c,Status__c,Month__c from Employee_Reimbursement__c where (Contact_Id__r.Manager__c =:contactId OR (Contact_Id__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) and (Month__c=:WrapperUtils.getLastMonthValue(-1) OR Month__c=:WrapperUtils.getLastMonthValue(-2) OR Month__c=:WrapperUtils.getLastMonthValue(-3))];
+            reimbursementList =[SELECT ID,Total_Mileage__c,Status__c,Month__c 
+                                        FROM Employee_Reimbursement__c 
+                                        WHERE (Contact_Id__r.Manager__c =:contactId 
+                                                OR (Contact_Id__r.Manager__r.Manager__c =:contactId) 
+                                                OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId) 
+                                                OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId) 
+                                                OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) 
+                                            AND (Month__c=:WrapperUtils.getLastMonthValue(-1) 
+                                            OR Month__c=:WrapperUtils.getLastMonthValue(-2) 
+                                            OR Month__c=:WrapperUtils.getLastMonthValue(-3))
+                                        WITH SECURITY_ENFORCED];
         } else if(showTeamRecord == true && (role=='Manager' || role=='Driver/Manager')) {
-            reimbursementList =[Select ID,Total_Mileage__c,Status__c,Month__c from Employee_Reimbursement__c where (Contact_Id__r.Manager__c =:contactId OR (Contact_Id__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId) OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) and (Month__c=:WrapperUtils.getLastMonthValue(-1) OR Month__c=:WrapperUtils.getLastMonthValue(-2) OR Month__c=:WrapperUtils.getLastMonthValue(-3))];
+            reimbursementList =[SELECT ID,Total_Mileage__c,Status__c,Month__c 
+                                            FROM Employee_Reimbursement__c 
+                                            WHERE (Contact_Id__r.Manager__c =:contactId 
+                                                    OR (Contact_Id__r.Manager__r.Manager__c =:contactId) 
+                                                    OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId) 
+                                                    OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId) 
+                                                    OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) 
+                                                AND (Month__c=:WrapperUtils.getLastMonthValue(-1) OR Month__c=:WrapperUtils.getLastMonthValue(-2) 
+                                                    OR Month__c=:WrapperUtils.getLastMonthValue(-3))
+                                            WITH SECURITY_ENFORCED];
         } else if(showTeamRecord == false && (role=='Manager' || role=='Driver/Manager')) {
-            reimbursementList =[Select ID,Total_Mileage__c,Status__c,Month__c from Employee_Reimbursement__c where Contact_Id__r.Manager__c =:contactId and (Month__c=:WrapperUtils.getLastMonthValue(-1) OR Month__c=:WrapperUtils.getLastMonthValue(-2) OR Month__c=:WrapperUtils.getLastMonthValue(-3))];
+            reimbursementList =[SELECT ID,Total_Mileage__c,Status__c,Month__c 
+                                        FROM Employee_Reimbursement__c 
+                                        WHERE Contact_Id__r.Manager__c =:contactId 
+                                        AND (Month__c=:WrapperUtils.getLastMonthValue(-1) 
+                                                OR Month__c=:WrapperUtils.getLastMonthValue(-2) 
+                                                OR Month__c=:WrapperUtils.getLastMonthValue(-3))
+                                        WITH SECURITY_ENFORCED];
         }
         return JSON.serialize(reimbursementList);
         }
     
         /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
-    @description getEmployeeDetails is used to built EmployeeDetails Wrapper object from Contact.
-    @param currentContact currentContact is the Single Contact from which you want to Built Wrapper. 
+    @description getEmployeeDetails is used to built EmployeeDetails Wrapper object FROM Contact.
+    @param currentContact currentContact is the Single Contact FROM which you want to Built Wrapper. 
     @return EmployeeDetails built by the method.
     */
     public static EmployeeDetails getEmployeeDetails(Contact currentContact, Decimal avgReim, Decimal avgMileage) {
@@ -45,7 +78,7 @@ public with sharing class WrapperUtils
             currentEmployeeDetail.firstName= '';
             currentEmployeeDetail.name = '';
         }
-        //Megha : changed from "currentEmployeeDetail.IsDeactivated" to "currentEmployeeDetail.deactivateUser"
+        //Megha : changed FROM "currentEmployeeDetail.IsDeactivated" to "currentEmployeeDetail.deactivateUser"
         currentEmployeeDetail.deactivateUser = currentContact.IsDeactivated__c;
         if(currentContact.lastName  !=  null) {
             currentEmployeeDetail.lastName=currentContact.lastName;
@@ -208,10 +241,10 @@ public with sharing class WrapperUtils
     }
     
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
-    @description getContact is used to built Contact from EmployeeDetails Wrapper object.
-    @param currentEmployeeDetail currentEmployeeDetail is the Single EmployeeDetails from which you want to Built Contact. 
+    @description getContact is used to built Contact FROM EmployeeDetails Wrapper object.
+    @param currentEmployeeDetail currentEmployeeDetail is the Single EmployeeDetails FROM which you want to Built Contact. 
     @return Contact built by the method.
     */
     public static Contact getContact(EmployeeDetails currentEmployeeDetail)
@@ -470,7 +503,7 @@ public with sharing class WrapperUtils
             currentEmployeeMileage.originalOriginName = employeeMileage.Original_Origin_Name__c;
         }
         if(employeeMileage.Original_Destination_Name__c != null) {
-            currentEmployeeMileage.OriginalDestinationName = employeeMileage.Original_Destination_Name__c;
+            currentEmployeeMileage.originalDestinationName = employeeMileage.Original_Destination_Name__c;
         }
         currentEmployeeMileage.emailaddress = employeeMileage.EmployeeReimbursement__r.Contact_Id__r.External_Email__c;
         
@@ -521,6 +554,7 @@ public with sharing class WrapperUtils
         currentEmployeeMileage.reimbursementid  = employeeMileage.EmployeeReimbursement__c;
         currentEmployeeMileage.driverid = employeeMileage.EmployeeReimbursement__r.Contact_Id__c;
         currentEmployeeMileage.highRiskMileage = employeeMileage.High_Risk_Mileage__c;
+        currentEmployeeMileage.approvalName = employeeMileage.Approval_Name__c;
         return currentEmployeeMileage;
     }
     public static Contact getNewContact(EmployeeDetails currentEmployeeDetail) {
@@ -664,10 +698,10 @@ public with sharing class WrapperUtils
         return currentContact;      
     }
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
-    @description getEmployeeReimbursements is used to built EmployeeReimbursements from Employee_Reimbursement__c object.
-    @param currentEmployeeReimbursement currentEmployeeReimbursement is the Single Employee_Reimbursement__c from which you want to Built EmployeeReimbursements. 
+    @description getEmployeeReimbursements is used to built EmployeeReimbursements FROM Employee_Reimbursement__c object.
+    @param currentEmployeeReimbursement currentEmployeeReimbursement is the Single Employee_Reimbursement__c FROM which you want to Built EmployeeReimbursements. 
     @return EmployeeReimbursements built by the method.
     */
     public static EmployeeReimbursements getEmployeeReimbursements(Employee_Reimbursement__c currentEmployeeReimbursement, Double sumTotalReim, Integer count)
@@ -811,7 +845,7 @@ public with sharing class WrapperUtils
         return currentReimbursement;
     }
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
     @description getMonthName is used get Month's name. Ex: 01 =>January.
     @param monthname monthname is the String value which is passed as string value of 01. 
@@ -825,7 +859,7 @@ public with sharing class WrapperUtils
                 return monthNameMap.get(monthname);
     }
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
     @description getMonthName is used get Month's name. Ex: 01 =>January.
     @param monthname monthname is the String value which is passed as string value of 01. 
@@ -843,7 +877,7 @@ public with sharing class WrapperUtils
     
     
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
     @description getMonthName is used get Month's Integer.
     @param monthname monthname is the String value which is passed as string value of 01. 
@@ -856,7 +890,7 @@ public with sharing class WrapperUtils
         return 0;
     }
         /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
     @description getMonthno is used get Month's No. Ex: January => 01.
     @param monthname monthname is the String value which is passed as January. 
@@ -872,11 +906,11 @@ public with sharing class WrapperUtils
         return '';
     }
     /**
-    @author Natavar Ghodasara
+    @authOR Natavar Ghodasara
     @date 22nd Jan 2019
-    @description getMonthandYear is used get Month's No. Ex: January => 01 and then Proccess it with current year. Ex. : Current year is 2019 and you are passing month as parameter as string value Of 01
+    @description getMonthandYear is used get Month's No. Ex: January => 01 AND then Proccess it with current year. Ex. : Current year is 2019 AND you are passing month as parameter as string value Of 01
     @param clickedMonth clickedMonth is the String value which is passed as January. 
-    @return String as 01-2019 where 2019 is the current year.
+    @return String as 01-2019 WHERE 2019 is the current year.
     */
     public static String getMonthandYear(String clickedMonth) {
         String month = getMonthno(clickedMonth);
@@ -901,7 +935,7 @@ public with sharing class WrapperUtils
     public static List<String> getPacketandMeetingDetails(String did) {
         List<String> driverPlanInfoList = new List<String>();
         List<Contact> currentDriver = new List<Contact>();       
-        for(Contact con : [Select id,name,Meeting__c,Packet__c from Contact where id =:did]){
+        for(Contact con : [SELECT id,name,Meeting__c,Packet__c FROM Contact WHERE id =:did]){
             currentDriver.add(con);
         }
         if(currentDriver.size()>0) {
@@ -912,10 +946,10 @@ public with sharing class WrapperUtils
     
     public static List<string> getComplianceCalculation(String did,String year) {
         Decimal totalmileages1 = 0;
-        Double TotalActualReimbursements = 0;
-        Double TotalApprovedMileages = 0;
-        Double MaximumAllowable = 0;
-        Double AnnualTaxLiability = 0;
+        Double totalActualReimbursements = 0;
+        Double totalApprovedMileages = 0;
+        Double maximumAllowable = 0;
+        Double annualTaxLiability = 0;
         
         Contact currentDriver=[SELECT id, name,FirstName, account.Motor_Vehicle_Record_Check_Document__c, email, Insurance_Attachment_Id__c, 
                                MVR_Attachment_Id__c,monthly_compliance_status__c,Compliance_Mileage__c,Avg_Mileage__c  FROM contact WHERE id =: did limit 1];   
@@ -987,7 +1021,7 @@ public with sharing class WrapperUtils
             if((currentReimbursement.Month__c != null)&&(currentReimbursement.Month__c.contains('-')) && currentReimbursement.IRS_Mileage_Rate__c !=null) {
                 riembursementMonthSplitted = currentReimbursement.Month__c.split('-');
                 
-                //For Quater 1 - Calculation and Assign Value using Wrapper
+                //FOR Quater 1 - Calculation AND Assign Value using Wrapper
               
                 if((Integer.valueOf(riembursementMonthSplitted[0]) == 12)||(Integer.valueOf(riembursementMonthSplitted[0])<=2)) {
                     if(quaterWiseWrapperTaxMap.containsKey(1)) {
@@ -1049,7 +1083,7 @@ public with sharing class WrapperUtils
                     quaterWiseWrapperTaxMap.put(1,wrapppertaxQuater1);
                   
                 }
-                //For Quater 2 - Calculation and Assign Value using Wrapper
+                //FOR Quater 2 - Calculation AND Assign Value using Wrapper
                 else if((Integer.valueOf(riembursementMonthSplitted[0])>=3)&&(Integer.valueOf(riembursementMonthSplitted[0])<=5)) {
                     if(quaterWiseWrapperTaxMap.containsKey(2)) {
                         wrapppertaxQuater2 =  quaterWiseWrapperTaxMap.get(2);
@@ -1105,7 +1139,7 @@ public with sharing class WrapperUtils
                     quaterWiseWrapperTaxMap.put(2,wrapppertaxQuater2);
                     
                 }
-                //For Quater 3 - Calculation and Assign Value using Wrapper
+                //FOR Quater 3 - Calculation AND Assign Value using Wrapper
                 else if((Integer.valueOf(riembursementMonthSplitted[0])>=6)&&(Integer.valueOf(riembursementMonthSplitted[0])<=8)) {
                     if(quaterWiseWrapperTaxMap.containsKey(3)) {
                         wrapppertaxQuater3 =  quaterWiseWrapperTaxMap.get(3);
@@ -1161,7 +1195,7 @@ public with sharing class WrapperUtils
                     quaterWiseWrapperTaxMap.put(3,wrapppertaxQuater3);
                     
                 }
-                //For Quater 4 - Calculation and Assign Value using Wrapper 
+                //FOR Quater 4 - Calculation AND Assign Value using Wrapper 
                 else if((Integer.valueOf(riembursementMonthSplitted[0])>=9)&&(Integer.valueOf(riembursementMonthSplitted[0])<=11)) {
                     if(quaterWiseWrapperTaxMap.containsKey(4)) {
                         wrapppertaxQuater4 =  quaterWiseWrapperTaxMap.get(4);
@@ -1266,45 +1300,45 @@ public with sharing class WrapperUtils
         }
         String message='';       
         
-         //Use For Quater - 1 
+         //Use FOR Quater - 1 
         if(quaterWiseWrapperTaxMap.containsKey(1)) {
-            TotalActualReimbursements =quaterWiseWrapperTaxMap.get(1).Reimbursements;
-            TotalApprovedMileages = quaterWiseWrapperTaxMap.get(1).Mileages;
-            MaximumAllowable =  quaterWiseWrapperTaxMap.get(1).MaxIRSrate;
-            AnnualTaxLiability =quaterWiseWrapperTaxMap.get(1).ImputedAmount; 
+            totalActualReimbursements =quaterWiseWrapperTaxMap.get(1).Reimbursements;
+            totalApprovedMileages = quaterWiseWrapperTaxMap.get(1).Mileages;
+            maximumAllowable =  quaterWiseWrapperTaxMap.get(1).MaxIRSrate;
+            annualTaxLiability =quaterWiseWrapperTaxMap.get(1).ImputedAmount; 
             if(quaterWiseWrapperTaxMap.get(1).Mileages != null) {
                 totalmileages1 = quaterWiseWrapperTaxMap.get(1).Mileages;
             }  
         }
         
-         //Use For Quater - 2 
+         //Use FOR Quater - 2 
         if(quaterWiseWrapperTaxMap.containsKey(2)) {
-            TotalActualReimbursements =TotalActualReimbursements+quaterWiseWrapperTaxMap.get(2).Reimbursements;
-            TotalApprovedMileages = TotalApprovedMileages + quaterWiseWrapperTaxMap.get(2).Mileages;
-            MaximumAllowable = MaximumAllowable  +quaterWiseWrapperTaxMap.get(2).MaxIRSrate;
-            AnnualTaxLiability =AnnualTaxLiability+quaterWiseWrapperTaxMap.get(2).ImputedAmount;
+            totalActualReimbursements =totalActualReimbursements+quaterWiseWrapperTaxMap.get(2).Reimbursements;
+            totalApprovedMileages = totalApprovedMileages + quaterWiseWrapperTaxMap.get(2).Mileages;
+            maximumAllowable = maximumAllowable  +quaterWiseWrapperTaxMap.get(2).MaxIRSrate;
+            annualTaxLiability =annualTaxLiability+quaterWiseWrapperTaxMap.get(2).ImputedAmount;
             if(quaterWiseWrapperTaxMap.get(2).Mileages != null) {
                 totalmileages1 =totalmileages1+quaterWiseWrapperTaxMap.get(2).Mileages;
             }            
         }
         
-         //Use For Quater - 3 
+         //Use FOR Quater - 3 
         if(quaterWiseWrapperTaxMap.containsKey(3)) {
-            TotalActualReimbursements =TotalActualReimbursements+quaterWiseWrapperTaxMap.get(3).Reimbursements;
-            TotalApprovedMileages = TotalApprovedMileages + quaterWiseWrapperTaxMap.get(3).Mileages;
-            MaximumAllowable = MaximumAllowable  +quaterWiseWrapperTaxMap.get(3).MaxIRSrate;
-            AnnualTaxLiability =AnnualTaxLiability+quaterWiseWrapperTaxMap.get(3).ImputedAmount; 
+            totalActualReimbursements =totalActualReimbursements+quaterWiseWrapperTaxMap.get(3).Reimbursements;
+            totalApprovedMileages = totalApprovedMileages + quaterWiseWrapperTaxMap.get(3).Mileages;
+            maximumAllowable = maximumAllowable  +quaterWiseWrapperTaxMap.get(3).MaxIRSrate;
+            annualTaxLiability =annualTaxLiability+quaterWiseWrapperTaxMap.get(3).ImputedAmount; 
             if(quaterWiseWrapperTaxMap.get(3).Mileages != null) {
                 totalmileages1 =totalmileages1+quaterWiseWrapperTaxMap.get(3).Mileages; 
             }
         }
         
-        //Use For Quater - 4 
+        //Use FOR Quater - 4 
         if(quaterWiseWrapperTaxMap.containsKey(4)) {
-            TotalActualReimbursements =TotalActualReimbursements+quaterWiseWrapperTaxMap.get(4).Reimbursements;
-            TotalApprovedMileages = TotalApprovedMileages + quaterWiseWrapperTaxMap.get(4).Mileages;
-            MaximumAllowable = MaximumAllowable  +quaterWiseWrapperTaxMap.get(4).MaxIRSrate;
-            AnnualTaxLiability =AnnualTaxLiability+quaterWiseWrapperTaxMap.get(4).ImputedAmount;
+            totalActualReimbursements =totalActualReimbursements+quaterWiseWrapperTaxMap.get(4).Reimbursements;
+            totalApprovedMileages = totalApprovedMileages + quaterWiseWrapperTaxMap.get(4).Mileages;
+            maximumAllowable = maximumAllowable  +quaterWiseWrapperTaxMap.get(4).MaxIRSrate;
+            annualTaxLiability =annualTaxLiability+quaterWiseWrapperTaxMap.get(4).ImputedAmount;
             if(quaterWiseWrapperTaxMap.get(4).Mileages != null) {
                 totalmileages1 =totalmileages1+quaterWiseWrapperTaxMap.get(4).Mileages; 
             }                     
@@ -1455,12 +1489,12 @@ public with sharing class WrapperUtils
             }
         }
         
-        //For Annual Tax Liability Summary Report
-        AnnualTaxLiability = AnnualTaxLiability < 0 ? 0 : AnnualTaxLiability ;
-        currentDriverTaxReport.imputedincome=AnnualTaxLiability;
+        //FOR Annual Tax Liability Summary Report
+        annualTaxLiability = annualTaxLiability < 0 ? 0 : annualTaxLiability ;
+        currentDriverTaxReport.imputedincome=annualTaxLiability;
         taxSummaryReport.add(currentDriverTaxReport);
         
-        //For Annual Tax Liability Detail Report
+        //FOR Annual Tax Liability Detail Report
         List<String> complianceCalculationList = new List<String>();
         complianceCalculationList.add(JSON.serialize(String.valueOf(currentDriver.name)));
         complianceCalculationList.add(JSON.serialize(message));        
@@ -1468,10 +1502,10 @@ public with sharing class WrapperUtils
             complianceCalculationList.add(JSON.serialize(wrapppertaxList));
             complianceCalculationList.add(JSON.serialize(quaterWiseWrapperTaxList));
             complianceCalculationList.add(JSON.serialize(taxSummaryReport));         
-            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(TotalActualReimbursements).setScale(2)))); 
-            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(MaximumAllowable).setScale(2))));          
-            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(AnnualTaxLiability).setScale(2)))); 
-            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(TotalApprovedMileages).setScale(2))));  
+            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(totalActualReimbursements).setScale(2)))); 
+            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(maximumAllowable).setScale(2))));          
+            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(annualTaxLiability).setScale(2)))); 
+            complianceCalculationList.add(JSON.serialize(String.valueOf(Decimal.valueOf(totalApprovedMileages).setScale(2))));  
         }   
         return complianceCalculationList;
     }
@@ -1552,23 +1586,23 @@ public with sharing class WrapperUtils
     
     public static String getManager(String did, String accid) {        
         List<Contact> managerList = new List<Contact>();
-        managerList = [SELECT id, Name, Email,Accountid FROM Contact WHERE Accountid =: accid and (Deactivated_Date__c = null OR Deactivated_Date__c > TODAY) and (Role__c='Manager' OR Role__c='Driver/Manager')];
+        managerList = [SELECT id, Name, Email,Accountid FROM Contact WHERE Accountid =: accid AND (Deactivated_Date__c = null OR Deactivated_Date__c > TODAY) AND (Role__c='Manager' OR Role__c='Driver/Manager')];
         return JSON.serialize(managerList);
     }
     
     public static String getadminname(String did) {
-        Contact adminContact = [select Id,Name from Contact where id =: did];
+        Contact adminContact = [SELECT Id,Name FROM Contact WHERE id =: did];
         return JSON.serialize(adminContact.Name);
     }
     // AdminDashboard Class Methods END
     // ManagerDashboard Class Methods Starts
     
-    public static String getDriverGasPrice(String MailingState,String MailingCity) {   
+    public static String getDriverGasPrice(String strMailingState,String strMailingCity) {   
         String gaspriceyearmonth = '';
         if(System.today().month() == 1) {
-            gaspriceyearmonth = MailingCity + MailingState + 12+ String.valueOf(System.today().year()-1); 
+            gaspriceyearmonth = strMailingCity + strMailingState + 12+ String.valueOf(System.today().year()-1); 
         } else {
-            gaspriceyearmonth = MailingCity + MailingState + String.valueOf(System.today().month()-1) + String.valueOf(System.today().year()); 
+            gaspriceyearmonth = strMailingCity + strMailingState + String.valueOf(System.today().month()-1) + String.valueOf(System.today().year()); 
         }
         List<Gas_Prices__c> gasPriceList = new List<Gas_Prices__c>();
         gasPriceList = [SELECT id,Fuel_Price__c FROM Gas_Prices__c WHERE Month_State_City__c =: gaspriceyearmonth];
@@ -1578,7 +1612,7 @@ public with sharing class WrapperUtils
         String lastMonth = Utils.fetchMonths(1, 0)[0];       
         String fuelVariableRate = '';
         List<Employee_Reimbursement__c> reimList = new List<Employee_Reimbursement__c>();     
-        for(Employee_Reimbursement__c reim : [SELECT id,Fuel_Variable_Rate__c FROM Employee_Reimbursement__c WHERE Contact_Id__c =: conId and Month__c =: lastMonth and Fuel_Variable_Rate__c != null]){
+        for(Employee_Reimbursement__c reim : [SELECT id,Fuel_Variable_Rate__c FROM Employee_Reimbursement__c WHERE Contact_Id__c =: conId AND Month__c =: lastMonth AND Fuel_Variable_Rate__c != null]){
             fuelVariableRate = String.valueOf(reim.Fuel_Variable_Rate__c);
             return fuelVariableRate;
         }
@@ -1586,7 +1620,7 @@ public with sharing class WrapperUtils
     }
         /*EMC-260 
     Added a new field : Total_Approved__c,Total_Mileage__c, Total_Pending__c  
-    Author : Sanket Goswami */
+    AuthOR : Sanket Goswami */
     public Static String getAllReimbursements(String year,String did,String accid) {
         String query=''; 
         List<String> monthList = new List<String>();
@@ -1606,14 +1640,14 @@ public with sharing class WrapperUtils
         List<Contact> conList = [SELECT id,Deactivated_Date__c,Account.Bi_Weekly_Pay_Period__c   FROM Contact   WHERE id =: did    AND (Deactivated_Date__c = null  AND ( Driver_Type__c != 'Driver - Full Time'  AND Driver_Type__c != 'Driver - Part Time' AND Driver_Type__c != 'Driver - Salary'  AND Account.Bi_Weekly_Pay_Period__c = false))];
         if((monthList.size() > 0 && conList.isEmpty()) || (monthList.size() > 0 && !conList.isEmpty() && System.today().Month() == 1) || (monthList.size() > 0 && !conList.isEmpty() && Integer.valueOf(year) != System.today().year())) {
             editedquery = setQueryParameters(monthList);
-            query = 'Select id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Contact_Email__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Driver_Type__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c from Employee_Reimbursement__c where Contact_Id__c=\''+did+'\' and Month__c IN '+ editedquery+'Order by Reimbursement_Month__c asc';
+            query = 'SELECT id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Contact_Email__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Driver_Type__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+did+'\' AND Month__c IN '+ editedquery+'Order by Reimbursement_Month__c asc';
         } 
         else if(monthList.size() > 0 && !conList.isEmpty() ) {
             monthlist.remove(monthList.size()-1);
             editedquery = setQueryParameters(monthList);
-            query = 'Select id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Contact_Email__c,Contact_Id__r.Driver_Type__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c from Employee_Reimbursement__c where Contact_Id__c=\''+did+'\' and Month__c IN '+ editedquery+'Order by Reimbursement_Month__c asc';
+            query = 'SELECT id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Contact_Email__c,Contact_Id__r.Driver_Type__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+did+'\' AND Month__c IN '+ editedquery+'Order by Reimbursement_Month__c asc';
         } else {
-            query = 'Select id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Month__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Contact_Id__r.Driver_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Contact_Email__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c from Employee_Reimbursement__c where Contact_Id__c=\''+did+'\''+'Order by Reimbursement_Month__c asc';
+            query = 'SELECT id,Reimbursement_Month__c,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,Lock_Date_User__c,Month__c,Total_Monthly_Reimbursement_BiWeek__c,Contact_Id__r.Reimbursement_Frequency__c,Contact_Id__r.Reimbursement_Type__c,Contact_Id__r.Driver_Type__c,Total_Approved__c,Monthly_Fixed_Amount__c,Number_of_Pay_Period__c,Half_Fixed_Amount__c,Contact_Email__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c,MPG__c,Maintenance_and_Tires__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+did+'\''+'Order by Reimbursement_Month__c asc';
         }
         
         List<EmployeeReimbursements> reimbursementList =  new List<EmployeeReimbursements>();
@@ -1636,15 +1670,15 @@ public with sharing class WrapperUtils
         String currentMonth = Utils.fetchMonths(1, 0)[0];
         String query ='';
         
-        List<contact> conList = [SELECT id,Deactivated_Date__c FROM contact where id =: driverid ];
+        List<contact> conList = [SELECT id,Deactivated_Date__c FROM contact WHERE id =: driverid ];
         if(conList[0].Deactivated_Date__c != null && String.isNotEmpty(status)){
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Status__c != \''+status+'\' and Total_Pending__c > 0' ;
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Status__c != \''+status+'\' AND Total_Pending__c > 0' ;
         } else if(conList[0].Deactivated_Date__c != null && String.isEmpty(status)) {
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Total_Pending__c > 0 '; 
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Total_Pending__c > 0 '; 
         } else if(String.isNotEmpty(status)){
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Status__c != \''+status+'\' and Month__c=\''+currentMonth+'\' and Total_Pending__c > 0 ' ;
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Status__c != \''+status+'\' AND Month__c=\''+currentMonth+'\' AND Total_Pending__c > 0 ' ;
         } else {
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Month__c=\''+currentMonth+'\' and Total_Pending__c > 0 '; 
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Month__c=\''+currentMonth+'\' AND Total_Pending__c > 0 '; 
         }
         
         List<Employee_Reimbursement__c> reimbursementList =  new List<Employee_Reimbursement__c>();
@@ -1779,7 +1813,7 @@ public with sharing class WrapperUtils
         Set<String> years = new Set<String>();
         List<String> yearsTobeReturned = new List<String>();
         String editedquery = setQueryParameters(lastYear);
-        query = 'Select id,Year__c from Employee_Reimbursement__c where Contact_Id__c=\''+drid+'\' and Month__c IN '+ editedquery ;
+        query = 'SELECT id,Year__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+drid+'\' AND Month__c IN '+ editedquery ;
         for(Employee_Reimbursement__c currentReimbursement : (List<Employee_Reimbursement__c>)ExecuteQueryUtil.getRecordListFromsObject(query)) {
             years.add(String.valueOf(currentReimbursement.Year__c));
         }
@@ -1823,9 +1857,9 @@ public with sharing class WrapperUtils
             editedquery = setQueryParameters(monthList);
         }
         if(String.isNotBlank(editedquery)) {
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Status__c != \''+status+'\' and Total_Pending__c > 0 and Month__c IN '+ editedquery ;
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Status__c != \''+status+'\' AND Total_Pending__c > 0 AND Month__c IN '+ editedquery ;
         } else {
-            query = 'Select id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c from Employee_Reimbursement__c where Contact_Id__c=\''+driverid+'\' and Status__c != \''+status+'\''; 
+            query = 'SELECT id,Month__c,Total_Variable_Rate__c,Fuel_Price__c,Total_Mileage__c,Fixed_Amount__c,Variable_Rate__c,Total_Monthly_Reimbursement__c,Contact_Id__c,Approved_Date__c,Status__c,Total_Pending__c,Monthly_Variable_Amount__c,Total_Monthly_Approved_Variable__c FROM Employee_Reimbursement__c WHERE Contact_Id__c=\''+driverid+'\' AND Status__c != \''+status+'\''; 
         }
         List<Employee_Reimbursement__c> reimbursementList =  new List<Employee_Reimbursement__c>();
         reimbursementList = (List<Employee_Reimbursement__c>)ExecuteQueryUtil.getRecordListFromsObject(query);
@@ -1840,7 +1874,7 @@ public with sharing class WrapperUtils
         List<Employee_Reimbursement__c> employeeReimbursementList = new List<Employee_Reimbursement__c>();
         if(reimbursements!=null) {
             reimbursementList = (List<EmployeeReimbursements>)JSON.deserialize(reimbursements,List<EmployeeReimbursements>.Class);
-            for (EmployeeReimbursements obj_current_reimbursment : reimbursementList)  {
+            for(EmployeeReimbursements obj_current_reimbursment : reimbursementList)  {
                 employeeReimbursementList.add(WrapperUtils.approveReimbursementofDriver(obj_current_reimbursment));
             }
             if(employeeReimbursementList.size() > 0)  {
@@ -1852,7 +1886,7 @@ public with sharing class WrapperUtils
     }
     // my New methods
     public static string getUnapprovedReimbursements(String contactId, String accountId,boolean showteam,String role) {
-        // its replacement of getAllDriversLastMonthUpdatedUnapprovedReimburseClone and getAllDriversLastMonthUnapprovedReimbursementsClone
+        // its replacement of getAllDriversLastMonthUpdatedUnapprovedReimburseClone AND getAllDriversLastMonthUnapprovedReimbursementsClone
         Map<String,EmployeeMileagesForCalculation> employeeReimbursementMap = new Map<String,EmployeeMileagesForCalculation>();
         String currentMonth = Utils.fetchMonths(1, -1)[0];
         List<Employee_Reimbursement__c> employeeReimbursementList = new List<Employee_Reimbursement__c>();
@@ -1860,13 +1894,13 @@ public with sharing class WrapperUtils
             employeeReimbursementList =[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid, Contact_Id__r.Manager__r.Name, Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Monthly_Mileage_Limit__c,  Total_Approved__c, Total_Mileage__c, Status__c, Total_Variable_Rate__c, Total_Pending__c,High_Risk_Total_Pending__c, Total_Approved_Pending_Mileage__c, Reimbursement_Approval__c,Mileage_Approver__c,Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c,Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  WHERE Approved_Date__c = null AND Status__c='Pending'  AND Contact_Id__r.Accountid =: accountId AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) Order by Total_Pending__c desc];
         }
         else if(showteam!=null && showteam == false && (role=='Admin' || role == StaticValues.roleAdminDriver)) {
-            employeeReimbursementList =[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid, Contact_Id__c, Contact_Id__r.Manager__r.Name, Contact_Id__r.name, Contact_Id__r.Monthly_Mileage_Limit__c,  Total_Approved__c, Total_Mileage__c, Status__c, Total_Approved_Pending_Mileage__c,High_Risk_Total_Pending__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  where Approved_Date__c = null  AND Status__c='Pending'  AND Contact_Id__r.Accountid =: accountId AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) Order by Total_Pending__c desc];
+            employeeReimbursementList =[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid, Contact_Id__c, Contact_Id__r.Manager__r.Name, Contact_Id__r.name, Contact_Id__r.Monthly_Mileage_Limit__c,  Total_Approved__c, Total_Mileage__c, Status__c, Total_Approved_Pending_Mileage__c,High_Risk_Total_Pending__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  WHERE Approved_Date__c = null  AND Status__c='Pending'  AND Contact_Id__r.Accountid =: accountId AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)) Order by Total_Pending__c desc];
         }
         else if(showteam!=null && showteam == true && (role=='Manager' || role=='Driver/Manager')) {
-            employeeReimbursementList =[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid,  Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Manager__r.Name, Contact_Id__r.Monthly_Mileage_Limit__c,  Total_Approved__c, Total_Mileage__c, Status__c,Total_Approved_Pending_Mileage__c,High_Risk_Total_Pending__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  where Approved_Date__c = null  AND Status__c='Pending'  AND Contact_Id__r.Accountid =: accountId AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND ((Contact_Id__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =: contactId)) Order by Total_Pending__c desc];
+            employeeReimbursementList =[SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid,  Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Manager__r.Name, Contact_Id__r.Monthly_Mileage_Limit__c,  Total_Approved__c, Total_Mileage__c, Status__c,Total_Approved_Pending_Mileage__c,High_Risk_Total_Pending__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  WHERE Approved_Date__c = null  AND Status__c='Pending'  AND Contact_Id__r.Accountid =: accountId AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND ((Contact_Id__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =: contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =: contactId)) Order by Total_Pending__c desc];
         }
         else if(showteam != null && showteam == false && (role == 'Manager' || role =='Driver/Manager')) {
-            employeeReimbursementList = [SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid,  Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Manager__r.Name, Contact_Id__r.Manager__c, Contact_Id__r.Monthly_Mileage_Limit__c, Total_Approved__c, Total_Mileage__c, Status__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c,High_Risk_Total_Pending__c,  Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  where Approved_Date__c = null  AND Status__c='Pending' AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND Contact_Id__r.Accountid =: accountId  AND (Contact_Id__r.Manager__c =: contactId) Order by Total_Pending__c desc];
+            employeeReimbursementList = [SELECT id, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__r.Accountid,  Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Manager__r.Name, Contact_Id__r.Manager__c, Contact_Id__r.Monthly_Mileage_Limit__c, Total_Approved__c, Total_Mileage__c, Status__c,  Total_Variable_Rate__c, Total_Pending__c, Reimbursement_Approval__c, Mileage_Approver__c,High_Risk_Total_Pending__c,  Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c,High_Risk_Total_Mileages__c,High_Risk_Total_Rejected__c,High_Risk_Total_Approved__c, Contact_Id__r.External_Email__c,Contact_Id__r.Account.Triplog_API__c,Contact_Email__c,Fuel_Price__c, MPG__c, Maintenance_and_Tires__c,Contact_Id__r.Reimbursement_Frequency__c FROM Employee_Reimbursement__c  WHERE Approved_Date__c = null  AND Status__c='Pending' AND (Month__c !=: currentMonth OR Contact_Id__r.Deactivated_Date__c = THIS_YEAR) AND Contact_Id__r.Accountid =: accountId  AND (Contact_Id__r.Manager__c =: contactId) Order by Total_Pending__c desc];
         }
         System.debug('employeeReimbursementList=='+employeeReimbursementList );
         for(Employee_Reimbursement__c currentReimbursement : employeeReimbursementList) {
@@ -1947,13 +1981,13 @@ public with sharing class WrapperUtils
                 employeeReimbursementList =[SELECT ID, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__c, Contact_Id__r.name, Contact_Id__r.Monthly_Mileage_Limit__c, Contact_Id__r.Manager__r.Name, Total_Approved__c, Total_Mileage__c, Status__c, Reimbursement_Approval__c, Mileage_Approver__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Month__c = :currentAccount.Last_Reimbursement_Created__c AND Contact_Id__r.Deactivated_Date__c = null ];
             }
             else if(showteam!=null && showteam == false && (role=='Admin' || role == StaticValues.roleAdminDriver)) {
-                employeeReimbursementList = [SELECT ID, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__c, Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c, Status__c, Reimbursement_Approval__c,  Mileage_Approver__c, Contact_Id__r.Manager_External_Email__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  and Month__c = :currentAccount.Last_Reimbursement_Created__c AND Contact_Id__r.Deactivated_Date__c = null  and ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId))];
+                employeeReimbursementList = [SELECT ID, Name, Month__c, Total_Rejected__c, Approved_Date__c, Contact_Id__c, Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c, Status__c, Reimbursement_Approval__c,  Mileage_Approver__c, Contact_Id__r.Manager_External_Email__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Month__c = :currentAccount.Last_Reimbursement_Created__c AND Contact_Id__r.Deactivated_Date__c = null  AND ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId))];
             } else if(showteam!=null && showteam == true && (role=='Manager' || role=='Driver/Manager')) {
-                employeeReimbursementList = [SELECT ID,  Name,  Month__c,  Total_Rejected__c,  Approved_Date__c,  Contact_Id__c,  Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c, Contact_Id__r.Manager__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c,  Status__c, Reimbursement_Approval__c,                                                                                         Mileage_Approver__c,Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Contact_Id__r.Deactivated_Date__c = null and Month__c = :currentAccount.Last_Reimbursement_Created__c  and ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId))];
+                employeeReimbursementList = [SELECT ID,  Name,  Month__c,  Total_Rejected__c,  Approved_Date__c,  Contact_Id__c,  Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c, Contact_Id__r.Manager__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c,  Status__c, Reimbursement_Approval__c,                                                                                         Mileage_Approver__c,Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Contact_Id__r.Deactivated_Date__c = null AND Month__c = :currentAccount.Last_Reimbursement_Created__c  AND ((Contact_Id__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId)  OR (Contact_Id__r.Manager__r.Manager__r.Manager__r.Manager__r.Manager__c =:contactId))];
             } else if(showteam != null && showteam == false && (role == 'Manager' || role == 'Driver/Manager')) {
                 employeeReimbursementList = [SELECT ID,  Name,  Month__c,  Total_Rejected__c,  Approved_Date__c,  Contact_Id__c,  Contact_Id__r.name,  Contact_Id__r.Monthly_Mileage_Limit__c,  Contact_Id__r.Manager__c, Contact_Id__r.Manager__r.Name, Total_Approved__c,  Total_Mileage__c,  Status__c, Contact_Id__r.Manager__r.External_Email__c,Mileage_Lock_Date__c, Reimbursement_Approval__c, Mileage_Approver__c,Contact_Id__r.Manager_External_Email__c  FROM Employee_Reimbursement__c  WHERE Contact_Id__r.Accountid = :accountId  AND Contact_Id__r.Deactivated_Date__c = null AND Month__c = :currentAccount.Last_Reimbursement_Created__c  AND (Contact_Id__r.Manager__c =:contactId)];
             }
-            for (Employee_Reimbursement__c currentReimbursement : employeeReimbursementList) {
+            for(Employee_Reimbursement__c currentReimbursement : employeeReimbursementList) {
                 reimbursementList.add(getEmployeeReimbursementDetails(currentReimbursement));
             }
         }
@@ -2028,7 +2062,7 @@ public with sharing class WrapperUtils
         }
         return JSON.serialize(reimbursement).unescapeHtml4();
     }
-    //method is use for fatch mileages from triplog 
+    //method is use fOR fatch mileages FROM triplog 
     //AI-000429
     public static String TripCallout(Id driverId, String month, String year, String fuel, String maintTyre, Id empReID,String mpg,String status){
         System.debug('driverID'+ driverId);
@@ -2040,8 +2074,8 @@ public with sharing class WrapperUtils
         System.debug('status'+ status);
 
         String result = 'Something wrong while fetching driver information.';
-        List<contact> obj_currect_contact1 = new List<contact>();
-        obj_currect_contact1 = [SELECT id, Email, Account.Triplog_API__c,Biweek_Reimbursement__c,Reimbursement_Frequency__c 
+        List<contact> objCurrentcontact = new List<contact>();
+        objCurrentcontact = [SELECT id, Email, Account.Triplog_API__c,Biweek_Reimbursement__c,Reimbursement_Frequency__c 
                                 FROM Contact 
                                 WHERE id =: driverId];
         
@@ -2052,16 +2086,16 @@ public with sharing class WrapperUtils
                 String priMin =  year+'-'+monthNumberMap.get(month) + '-1';    
                 String priMax = String.valueOf(Date.valueOf(priMin).addDays(date.daysInMonth(Integer.valueOf(year), Integer.valueOf(monthNumberMap.get(month))) - 1));
         
-        String apiToken = obj_currect_contact1[0].Account.Triplog_API__c ;
-        //Boolean checkBiWeek = obj_currect_contact1[0].Biweek_Reimbursement__c;
-        Boolean checkBiWeek = obj_currect_contact1[0].Reimbursement_Frequency__c != null && obj_currect_contact1[0].Reimbursement_Frequency__c == 'Monthly Reimbursement' ? false : true;
+        String apiToken = objCurrentcontact[0].Account.Triplog_API__c ;
+        //Boolean checkBiWeek = objCurrentcontact[0].Biweek_Reimbursement__c;
+        Boolean checkBiWeek = objCurrentcontact[0].Reimbursement_Frequency__c != null && objCurrentcontact[0].Reimbursement_Frequency__c == 'Monthly Reimbursement' ? false : true;
         if(apiToken != null && !Test.isRunningTest() ){
-            result = GetTripCallout.GetTripCalloutForMileage(empReID, obj_currect_contact1[0].Email,obj_currect_contact1[0].id,priMin,priMax,fuel,mpg,maintTyre,apiToken,status,false,checkBiWeek,null);
+            result = GetTripCallout.GetTripCalloutForMileage(empReID, objCurrentcontact[0].Email,objCurrentcontact[0].id,priMin,priMax,fuel,mpg,maintTyre,apiToken,status,false,checkBiWeek,null);
         }
         return result;
     }
     
-    //method is use for change reimbursement status 
+    //method is use fOR change reimbursement status 
     //AI-000429
     public static string UpdateReimbursementStatus(Id empReID){
         system.debug('ReimId---'+ empReID);
@@ -2085,7 +2119,7 @@ public with sharing class WrapperUtils
             for(Employee_Mileage__c mileage : [SELECT id,Trip_Status__c,Trip_Id__c,High_Risk_Mileage__c 
                                                FROM Employee_Mileage__c 
                                                WHERE EmployeeReimbursement__c =: empReID 
-                                               AND Trip_Status__c = 'Not Approved Yet' and Trip_Id__c != null]){
+                                               AND Trip_Status__c = 'Not Approved Yet' AND Trip_Id__c != null]){
                                                    mileageList.add(mileage);
                                                }
             if(!mileageList.isEmpty()){
@@ -2118,7 +2152,7 @@ public with sharing class WrapperUtils
                                                           reimbursementList.add(objReimb);
                                                       }
             List<Report_Accessibility__c> reportList = new List<Report_Accessibility__c>();
-            for(Report_Accessibility__c objReport : [select id,Name,Mileage_Lock_Date__c from Report_Accessibility__c where Custom_Report__r.Show_Lock_Date__c =true and User__r.Contact.AccountId =: accountId]){
+            for(Report_Accessibility__c objReport : [SELECT id,Name,Mileage_Lock_Date__c FROM Report_Accessibility__c WHERE Custom_Report__r.Show_Lock_Date__c =true AND User__r.Contact.AccountId =: accountId]){
                                                          objReport.Mileage_Lock_Date__c = String.valueof(System.today());
                                                          reportList.add(objReport);
                                                      }
@@ -2140,667 +2174,6 @@ public with sharing class WrapperUtils
             if(!reportList.isEmpty() ){
                 update reportList;
             }
-            if(Test.isRunningTest()){
-                integer i=0;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                 i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                 i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-                i++;
-            }
         }
     }
     @AuraEnabled
@@ -2814,7 +2187,7 @@ public with sharing class WrapperUtils
             
             String lastMonth = Utils.fetchMonths(1, 0)[0];            
             List<Employee_Reimbursement__c> reimlist = new List<Employee_Reimbursement__c>();
-            for(Employee_Reimbursement__c reimbursement : [select id,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,name from Employee_Reimbursement__c where Month__c =: lastMonth And Contact_Id__r.AccountId =: accId]){                
+            for(Employee_Reimbursement__c reimbursement : [SELECT id,Mileage_Lock_Date__c,Reimbursement_Lock_Time__c,name FROM Employee_Reimbursement__c WHERE Month__c =: lastMonth AND Contact_Id__r.AccountId =: accId]){                
                 reimbursement .Mileage_Lock_Date__c=null;
                 reimbursement .Reimbursement_Lock_Time__c=null;
                 reimlist.add(reimbursement );
@@ -2824,7 +2197,7 @@ public with sharing class WrapperUtils
             }
             
             List<Report_Accessibility__c> reportlist = new List<Report_Accessibility__c> ();
-            for(Report_Accessibility__c Report: [select id,Name,Mileage_Lock_Date__c from Report_Accessibility__c where Custom_Report__r.Show_Lock_Date__c =true and User__r.Contact.AccountId =: accId]){
+            for(Report_Accessibility__c Report: [SELECT id,Name,Mileage_Lock_Date__c FROM Report_Accessibility__c WHERE Custom_Report__r.Show_Lock_Date__c =true AND User__r.Contact.AccountId =: accId]){
                 Report.Mileage_Lock_Date__c = null;
                 reportlist.add(Report);
             }
