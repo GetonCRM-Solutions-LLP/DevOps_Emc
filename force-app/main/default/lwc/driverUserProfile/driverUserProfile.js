@@ -1,4 +1,3 @@
-/* eslint-disable @lwc/lwc/no-async-operation */
 import { LightningElement, api, wire } from 'lwc';
 import carImage from '@salesforce/resourceUrl/EmcCSS';
 import resourceImage from '@salesforce/resourceUrl/mBurseCss';
@@ -423,7 +422,7 @@ export default class DriverUserProfile extends LightningElement {
             month: "short"
           });
         let  initialMonth = dateInitial.getMonth(), month;
-        if(initialMonth === day){
+        if(initialMonth >= day){
           month = formatter.format(
             new Date(date.getFullYear(), date.getMonth() + 1)
           );
@@ -931,9 +930,9 @@ export default class DriverUserProfile extends LightningElement {
             // let clickedPeriod = "Pay Period " + this.startDate + " - " + this.endDate;
             let fileName = this.contactName +  '\'s ' + this.thisMonth + ' Mileage Report ' + this.dateTime(new Date());
             let sheetName = (this.thisMonth) ? this.thisMonth + ' Month Mileage Report' : 'This Month Mileage Report';
-            mileage.push(["Contact Email", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status"])
+            mileage.push(["Email", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status"])
             this.lastModelList.forEach((item)=>{
-                mileage.push([item.emailaddress,  item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.mileage, item.status])
+                mileage.push([item.emailaddress,  item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status])
             })
             this.excelToExport(mileage, fileName, sheetName);
         }else{
@@ -942,14 +941,14 @@ export default class DriverUserProfile extends LightningElement {
             let fileName = this.contactName + '\'s ' + this.lastMonth + ' Mileage Report ' + this.dateTime(new Date());
             let sheetName = (this.lastMonth) ? this.lastMonth + ' Month Mileage Report' : 'Last Month Mileage Report';
             if(this.isNotIRS){
-                mileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage",  "Variable Rate", "Amount", "Notes", "Tags"])
+                mileage.push(["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags" ,"Notes", "Maint/Tires", "Fuel Rate", "Variable Rate", "Amount"])
                 this.lastModelList.forEach((item)=>{
-                    mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.mileage, item.variablerate, item.variableamount,item.notes, item.tag])
+                    mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate, item.approvalName, item.tag, item.notes, item.maintTyre, item.fuelVariableRate, item.variablerate, item.variableamount])
                 })
             }else{
-                mileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination",  "Status", "Date Submitted", "Date Approved", "Mileage", "Variable Rate", "Amount", "Notes", "Tags"])
+                mileage.push(["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Variable Rate", "Amount"])
                 this.lastModelList.forEach((item)=>{
-                    mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount,item.notes, item.tag])
+                    mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate,  item.approvalName, item.tag, item.notes, item.variablerate, item.variableamount])
                 })
             }
            
@@ -958,15 +957,10 @@ export default class DriverUserProfile extends LightningElement {
     }
 
     daysBetweenActivation(dateInitial, dateFinal){
-        let  initialMonth = dateInitial.getMonth();
-        let  initialYear = dateInitial.getFullYear();
-        let  currentMonth = dateFinal.getMonth();
-        let  currentYear = dateFinal.getFullYear();
-        if(initialMonth === currentMonth && initialYear === currentYear){
+        if(dateInitial >= dateFinal){
           return true
         }
           return false
-        
     }
 
     downloadAllRecord(){
@@ -1208,7 +1202,7 @@ export default class DriverUserProfile extends LightningElement {
         this.lastMonth = (previousMonthNo > 0) ? this.getMonthName(previousMonthNo) : this.getMonthName(11);
         this.thismonthAbbr = (this.thisMonth) ? (this.thisMonth).substring(0, 3) : '';
         this.lastmonthAbbr = (this.lastMonth) ? (this.lastMonth).substring(0, 3) : '';
-        this.daysAfterActivation = this.daysBetweenActivation(new Date(this.activationDate), new Date(currDate.getFullYear(), currDate.getMonth(), 4));
+        this.daysAfterActivation = this.daysBetweenActivation(new Date(this.activationDate), new Date(currDate.getFullYear(), currDate.getMonth(), 1));
         //this.messageForNextBatch = (this.currentMonth()) ? 'Updated ' + this.currentMonth() + '. 4' : false;
        // console.log(this.thisMonth, this.lastMonth)
         if(this.chartInfo){
@@ -1286,7 +1280,7 @@ export default class DriverUserProfile extends LightningElement {
                 mpg: this.mpgThisMonth,
                 status: 'U'
               })
-              .then((res)=>{
+              .then(()=>{
                 this.template.querySelector('c-user-profile-modal').hide();
                 this.spinner = false;
                 this.isChecked = false;

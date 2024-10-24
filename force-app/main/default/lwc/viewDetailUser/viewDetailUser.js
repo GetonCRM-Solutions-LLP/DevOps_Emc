@@ -81,8 +81,6 @@ export default class ViewDetailUser extends LightningElement {
         sec = yd.getSeconds();
         ydd = (ydd < 10) ? ('0' + ydd) : ydd;
         ymm = (ymm < 10) ? ('0' + ymm) : ymm;
-        console.log(ymm + ydd);
-        console.log(yy.toString(), hh.toString(), min.toString(), sec.toString());
         return  ymm.toString() + ydd.toString() + yy.toString() + hh.toString() + min.toString() + sec.toString();
     }
 
@@ -149,12 +147,12 @@ export default class ViewDetailUser extends LightningElement {
             let fileName = this.userName + '\'s Mileage ' + this.dateTime(new Date());
             let sheetName = 'Mileage Report';
             let excelList = this.sort(this.modelList, "tripdate");
-            mileage.push(["Contact Email", "Tracking Method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status", "Date Submitted", "Maint/Tires", "Fuel Rate", "Variable Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
+            mileage.push(["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"])
             excelList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime = this.timeConversion(item.totaltime);
-                mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.mileage, item.status, item.submitteddate, item.maintTyre, item.fuelVariableRate, item.variablerate, (parseInt(item.variableamount, 10)).toFixed(2), item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
+                mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate, item.approvalName, item.notes, item.tag, item.maintTyre, item.fuelVariableRate, item.variablerate, item.drivingtime, item.staytime, item.totaltime, (parseInt(item.variableamount, 10)).toFixed(2)])
             })
             this.excelToExport(mileage, fileName, sheetName);
     }

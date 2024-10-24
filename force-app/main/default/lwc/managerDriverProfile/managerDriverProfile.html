@@ -5,7 +5,7 @@
     </template>
     <template lwc:else>
         <template lwc:if={contactInformation}>
-            <c-driver-reimbursement-profile contact-id={_contactId}  account-id={_accountId} my-trip={isTrip} role-user={role} is-archive={archive} is-svg-btn="true" time-attendance={isAttendance} driver-details={contactInformation} reimbursement-ytd={ytdList} excel-ytd={excelYtdList} onopen={myTripDetail} ontoast={handleToastEvent} onmessage={handleToastEvent} onshow={showSpinner} onback={revertHandler}></c-driver-reimbursement-profile>
+            <c-driver-reimbursement-profile contact-id={_contactId}  account-id={_accountId} my-trip={isTrip} role-user={role} is-archive={archive} is-svg-btn="true" time-attendance={isAttendance} activation-date={activationDate} driver-details={contactInformation} reimbursement-ytd={ytdList} excel-ytd={excelYtdList} onopen={myTripDetail} ontoast={handleToastEvent} onmessage={handleToastEvent} onshow={showSpinner} onback={revertHandler}></c-driver-reimbursement-profile>
         </template>
     </template>
 </template>

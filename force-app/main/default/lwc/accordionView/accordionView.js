@@ -1,19 +1,27 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 /* eslint-disable no-useless-escape */
+/*
+ * @Author: GetonCRM Solutions Pvt Ltd - Megha Sachania 
+ * @Date: 2024-10-18 16:56:27 
+ * @Modification logs
+ * ========================================================================================================================
+ * @Last Modified by: Megha Sachania
+ * @Last Modified time: 2024-10-22 17:33:11
+ * @Description: Reimbursement View & Archive View Accordion
+ */
+
 import { LightningElement, api, track } from "lwc";
-import resourceImage from '@salesforce/resourceUrl/mBurseCss';
-import mBurseCss from '@salesforce/resourceUrl/LwcDesignImage';
-import getAllReimbursements from "@salesforce/apex/DriverDashboardLWCController.getAllReimbursements";
-import getMileages  from '@salesforce/apex/DriverDashboardLWCController.getMileages';
-import getMileagesData from '@salesforce/apex/DriverDashboardLWCController.getMileagesData';
-import getBiweekMileages  from '@salesforce/apex/DriverDashboardLWCController.getBiweekMileages';
-import getAllMileages  from '@salesforce/apex/DriverDashboardLWCController.getAllMileages';
+import { createExportDetailList } from 'c/commonLib';
+import { events, toastEvents } from 'c/utils';
 import biweeklyMileage from "@salesforce/apex/DriverDashboardLWCController.biweeklyMileage";
-import TimeAttendance from "@salesforce/apex/DriverDashboardLWCController.TimeAttendance";
+import getAllMileages from '@salesforce/apex/DriverDashboardLWCController.getAllMileages';
+import getAllReimbursements from "@salesforce/apex/DriverDashboardLWCController.getAllReimbursements";
+import getBiweekMileages from '@salesforce/apex/DriverDashboardLWCController.getBiweekMileages';
+import getMileages from '@salesforce/apex/DriverDashboardLWCController.getMileages';
 import getMileagesBasedTandAtt from "@salesforce/apex/DriverDashboardLWCController.getMileagesBasedTandAtt";
-import {
-  events, toastEvents
-} from 'c/utils';
+import getMileagesData from '@salesforce/apex/DriverDashboardLWCController.getMileagesData';
+import mBurseCss from '@salesforce/resourceUrl/LwcDesignImage';
+import resourceImage from '@salesforce/resourceUrl/mBurseCss';
+import timeAttendance from "@salesforce/apex/DriverDashboardLWCController.TimeAttendance";
 export default class AccordionView extends LightningElement {
   @api accordionData;
   @api activationDate;
@@ -25,28 +33,29 @@ export default class AccordionView extends LightningElement {
   @api isDownloadAll;
   @api isIrs;
   @api showArrowIcon;
-  systemLoader = mBurseCss + '/Resources/PNG/Green/6.png';
-  loadingGif = resourceImage + '/mburse/assets/mBurse-Icons/Bar-style.gif';
+  @track accordionList = [];
+  @track listVisible = false;
+  systemLoader = `${mBurseCss}/Resources/PNG/Green/6.png`;
+  loadingGif = `${resourceImage}/mburse/assets/mBurse-Icons/Bar-style.gif`;
   defaultYear = '';
   isReimbursementView = false;
   isScrollable = false;
   listOfRecord = false;
   daysAfterActivation;
   noMessage = 'No data available';
- @track listVisible = false;
   isRowDn = true;
   sortable =  false;
   name;
-  @track accordionList = [];
   accordionKeyFields;
   accordionListColumn;
   paginated = false;
   keyFields;
   isPayperiod = false;
   column;
-  _RkeyFields;
-  _Rcolumn;
-  downloadIcon = resourceImage + '/mburse/assets/mBurse-Icons/download-all.png';
+  rKeyFields;
+  rColumn;
+  downloadIcon = `${resourceImage}/mburse/assets/mBurse-Icons/download-all.png`;
+  
   proxyToObject(e) {
     return JSON.parse(e);
   }
@@ -65,7 +74,7 @@ export default class AccordionView extends LightningElement {
   }
 
   sortByMonthDesc(data, colName) {
-    let months = [
+    const months = [
       "January",
       "February",
       "March",
@@ -79,1073 +88,480 @@ export default class AccordionView extends LightningElement {
       "November",
       "December"
     ];
-    data.sort((a, b) => {
-      return months.indexOf(b[colName]) - months.indexOf(a[colName]);
+    data.sort((af, bf) => {
+      return months.indexOf(bf[colName]) - months.indexOf(af[colName]);
     });
     return data;
   }
 
   sortByDateDesc(data, colName) {
-    data.sort((a, b) => {
-      a = a[colName] ? new Date(a[colName].toLowerCase()) : "";
-      b = b[colName] ? new Date(b[colName].toLowerCase()) : "";
-      return a > b ? -1 : 1;
+    data.sort((af, bf) => {
+      af = af[colName] ? new Date(af[colName].toLowerCase()) : "";
+      bf = bf[colName] ? new Date(bf[colName].toLowerCase()) : "";
+      return af > bf ? -1 : 1;
     });
     return data;
   }
 
   currentMonth(){
-    const date = new Date();
-    var day = date.getDate();
-    const formatter = new Intl.DateTimeFormat("default", {
+    const date = new Date(), day = date.getDate(), first = 1, fourth = 4,
+    formatter = new Intl.DateTimeFormat("default", {
         month: "short"
-      });
-    let month = formatter.format(
+    }),
+    month = formatter.format(
         new Date(date.getFullYear(), date.getMonth())
     );
 
-    if(day >= 1 && day < 4 ){
+    if(day >= first && day < fourth ){
         return month;
     }
   }
 
   nextMonth(){
-    const date = new Date(), dateInitial = new Date(this.activationDate);
-    var day = date.getMonth();
-    const formatter = new Intl.DateTimeFormat("default", {
+    const date = new Date(), day = date.getMonth(), dateInitial = new Date(this.activationDate),
+    formatter = new Intl.DateTimeFormat("default", {
         month: "short"
-      });
-    let  initialMonth = dateInitial.getMonth(), month;
-    if(initialMonth === day){
-      month = formatter.format(
-        new Date(date.getFullYear(), date.getMonth() + 1)
-      );
-    }else{
-      month = formatter.format(
-        new Date(date.getFullYear(), date.getMonth())
-      );
-    }
-    
-
+    }), 
+    month = (dateInitial.getMonth() === day) ? formatter.format(new Date(date.getFullYear(), date.getMonth() + 1)) : formatter.format(new Date(date.getFullYear(), date.getMonth()));
    return month;
   }
 
   getMonthLong(){
-    const date = new Date();
-    const formatter = new Intl.DateTimeFormat("default", {
+    const date = new Date(), formatter = new Intl.DateTimeFormat("default", {
         month: "long"
-      });
-    let month = formatter.format(
-        new Date(date.getFullYear(), date.getMonth())
+     }),
+     month = formatter.format(
+       new Date(date.getFullYear(), date.getMonth())
     );
 
     return month
   }
 
   isToday(){
-      const date = new Date();
-      var day = date.getDate();
-      const formatter = new Intl.DateTimeFormat("default", {
+      const date = new Date(), day = date.getDate(), first = 1, fourth = 4,
+      formatter = new Intl.DateTimeFormat("default", {
           month: "long"
-        });
-      let prevMonth = formatter.format(
+        }), prevMonth = formatter.format(
           new Date(date.getFullYear(), date.getMonth() - 1)
       );
 
-      if(day >= 1 && day < 4 ){
+      if(day >= first && day < fourth ){
           return prevMonth;
       }
       return 'none'
   }
 
+  buildModel(element, keyFields) {
+    let model = [];
+    Object.keys(element).forEach((key) => {
+      if (keyFields.includes(key) !== false) {
+        let singleValue = this.createSingleValue(element, key);
+        model.push(singleValue);
+      }
+    });
+    return model;
+  }
+
   dynamicBinding(data, keyFields) {
     data.forEach((element) => {
-      let model = [];
-      Object.keys(element).forEach(key => {
-        // let key = entry[0];
-        // let value = entry[1];
-        let singleValue = {};
-        if (keyFields.includes(key) !== false) {
-          if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
-            singleValue.id = element.biweekId;
-            singleValue.eDate = element.endDate;
-            singleValue.sDate = element.startDate;
-          }
-          singleValue.key = key;
-          singleValue.value = (element[key] === "null" || element[key] === null) ? "" : (key === "variableRate" || key === "varibleAmount" || key === 'fixed1' || key === 'fixed2' ||
-            key === 'fixed3' ||
-            key === 'totalFixedAmount' || key === "totalReimbursements") ? element[key].replace(/\$/g, "").replace(/\s/g, "") : element[key];
-          singleValue.icon = (!this.isTandA) ? (key === "month" || key === "startDate") ? true : false : false;
-          singleValue.bold = (key === "totalReimbursements" || key === "totalReim") ? true : false;
-          singleValue.twoDecimal = (key === "mileage" || key === "totalMileage") ? true : false;
-          singleValue.isDate = (key === "startDate" || key === "endDate" || key === "approvalDate") && (element[key] !== null) ? true : false;
-          singleValue.isfourDecimalCurrency = (key === 'variableRate' || key === 'VariableRate')  && (element[key] !== null) ? true : false;
-          singleValue.istwoDecimalCurrency = (key === "fuel" ||
-            key === "fixedAmount" ||
-            key === "fixed1" ||
-            key === "fixed2" ||
-            key === "fixed3" ||
-            key === "totalReimbursements" ||
-            key === "varibleAmount" ||
-            key === "totalReim" ||
-            key === "variable") ? (element[key] === "null" || element[key] === null) ? false : true : false;
-          singleValue.hasLeadingZero = ((key === "fuel" ||
-            key === "fixedAmount" ||
-            key === "totalReimbursements" ||
-            key === "variableRate" ||
-            key === "varibleAmount" ||
-            key === "totalReim" ||
-            key === "variable" || key === "mileage" || key === "totalMileage" ||
-            key === "fixed1" || key === "fixed2" ||
-            key === "fixed3") && ((element[key] !== "null" || element[key] !== null) && (singleValue.value !== '0.00') && (singleValue.value !== '0.0000')) && (/^0+/).test(singleValue.value) === true) ? (singleValue.value).replace(/^0+/, '') : null;
-            if(key === 'fuel' || key === 'variableRate'){
-              if(parseInt(this.defaultYear) === (new Date()).getFullYear()){
-                const nextUpdate = (this.currentMonth()) ? 'Updated ' + this.currentMonth() + '. 4' : false;
-                console.log("inside activation--", this.daysAfterActivation, nextUpdate)
-                if(nextUpdate){
-                      if(element['month'] === this.isToday()){
-                          singleValue.istwoDecimalCurrency = false
-                          singleValue.isfourDecimalCurrency = false
-                          singleValue.value = nextUpdate
-                      } 
-                }else{
-                  if(this.daysAfterActivation){
-                      const nextUpdateDay = (this.nextMonth()) ? 'Updated ' + this.nextMonth() + '. 4' : false;
-                      if(nextUpdateDay){
-                        if(element['month'] === this.getMonthLong()){
-                          console.log("month--", this.getMonthLong())
-                          singleValue.istwoDecimalCurrency = false
-                          singleValue.isfourDecimalCurrency = false
-                          singleValue.value = nextUpdateDay
-                        }
-                      }
-                  }
-                }
-              }
-            }
-          model.push(singleValue);
-        }
-        //use key and value here
-      });
-      if (!this.isTandA) {
-        if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
-          element.id = element.biweekId;
-        } else {
-          element.id = element.employeeReimbursementId;
-        }
-      }
-
+      let model = this.buildModel(element, keyFields);
+      this.assignId(element);
       element.keyFields = this.mapOrder(model, keyFields, "key");
     });
   }
 
-  filter(data, keyId){
-    let object
-    data.forEach(e => {
-        if(e.id === keyId){
-          object = e
+  createSingleValue(element, key) {
+    let singleValue = {};
+    if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
+      singleValue.id = element.biweekId;
+      singleValue.eDate = element.endDate;
+      singleValue.sDate = element.startDate;
+    }
+    singleValue.key = key;
+    singleValue.value = (element[key] === "null" || element[key] === null) ? "" : this.formatValue(key, element[key]);
+    singleValue.icon = (!this.isTandA && (key === "month" || key === "startDate"));
+    singleValue.bold = (key === "totalReimbursements" || key === "totalReim");
+    singleValue.twoDecimal = (key === "mileage" || key === "totalMileage");
+    singleValue.isDate = (key === "startDate" || key === "endDate" || key === "approvalDate") && (element[key] !== null);
+    singleValue.isfourDecimalCurrency = (key === 'variableRate' || key === 'VariableRate') && (element[key] !== null);
+    singleValue.istwoDecimalCurrency = this.isTwoDecimalCurrency(key, element[key]);
+    singleValue.hasLeadingZero = this.hasLeadingZero(key, element[key], singleValue.value);
+    this.updateFuelVariableRate(singleValue, key, element);
+    return singleValue;
+  }
+
+  formatValue(key, value) {
+    return (key === "variableRate" || key === "varibleAmount" || key === 'fixed1' || key === 'fixed2' ||
+      key === 'fixed3' || key === 'totalFixedAmount' || key === "totalReimbursements") ? value.replace(/\$/g, "").replace(/\s/g, "") : value;
+  }
+
+  isTwoDecimalCurrency(key, value) {
+    return (key === "fuel" || key === "fixedAmount" || key === "fixed1" || key === "fixed2" || key === "fixed3" ||
+      key === "totalReimbursements" || key === "varibleAmount" || key === "totalReim" || key === "variable") && value !== "null" && value !== null;
+  }
+
+  hasLeadingZero(key, value, formattedValue) {
+    return ((key === "fuel" || key === "fixedAmount" || key === "totalReimbursements" || key === "variableRate" ||
+      key === "varibleAmount" || key === "totalReim" || key === "variable" || key === "mileage" || key === "totalMileage" ||
+      key === "fixed1" || key === "fixed2" || key === "fixed3") && value !== "null" && value !== null &&
+      formattedValue !== '0.00' && formattedValue !== '0.0000' && /^0+/.test(formattedValue)) ? formattedValue.replace(/^0+/, '') : null;
+  }
+
+  updateFuelVariableRate(singleValue, key, element) {
+    if (key === 'fuel' || key === 'variableRate') {
+      if (parseInt(this.defaultYear) === (new Date()).getFullYear()) {
+        const nextUpdate = this.currentMonth() ? 'Updated ' + this.currentMonth() + '. 4' : false;
+        if (nextUpdate && element['month'] === this.isToday()) {
+          singleValue.istwoDecimalCurrency = false;
+          singleValue.isfourDecimalCurrency = false;
+          singleValue.value = nextUpdate;
+        } else if (this.daysAfterActivation) {
+          const nextUpdateDay = this.nextMonth() ? 'Updated ' + this.nextMonth() + '. 4' : false;
+          if (nextUpdateDay && element['month'] === this.getMonthLong()) {
+            singleValue.istwoDecimalCurrency = false;
+            singleValue.isfourDecimalCurrency = false;
+            singleValue.value = nextUpdateDay;
+          }
         }
-      })
-      return object
+      }
+    }
+  }
+
+  assignId(element) {
+    if (!this.isTandA) {
+      if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
+        element.id = element.biweekId;
+      } else {
+        element.id = element.employeeReimbursementId;
+      }
+    }
+  }
+
+  filter(data, keyId) {
+    return data.find(el => el.id === keyId);
   }
 
   getBiweekReimbursement(viewList, yearTo) {
     if (viewList) {
-      this.isReimbursementView = true;
-      // this.dispatchEvent(
-      //   new CustomEvent("show", {
-      //     detail: "isShow"
-      //   })
-      // );
-      this._RkeyFields = [
-        "startDate",
-        "endDate",
-        "mileage",
-        "variableRate",
-        "variable",
-        "totalReim"
-      ];
-      this._Rcolumn = [
-        {
-          id: 1,
-          name: "Start Date",
-          colName: "startDate"
-        },
-        {
-          id: 2,
-          name: "End Date",
-          colName: "endDate"
-        },
-        {
-          id: 3,
-          name: "Mileage",
-          colName: "mileage"
-        },
-        {
-          id: 4,
-          name: "Mi Rate",
-          colName: "variableRate"
-        },
-        {
-          id: 5,
-          name: "Variable",
-          colName: "variable"
-        },
-        {
-          id: 6,
-          name: "Total",
-          colName: "totalReim"
-        }
-      ];
-
-      this.keyFields = this._RkeyFields;
-      this.column = this._Rcolumn;
+      this.prepareReimbursementView();
     }
-    if (this.keyFields !== undefined && this.column !== undefined) {
+
+    if (this.keyFields && this.column) {
       biweeklyMileage({
         conId: this.contactId,
-        year: yearTo
+        year: yearTo,
       })
         .then((result) => {
-          let resultBiweek = this.proxyToObject(result);
-          this.accordionList = this.sortByDateDesc(resultBiweek, "startDate");
-        //  this.listVisible = this.accordionList.length > 0 ? true : false;
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-          const accordionItem =
-          this.template.querySelectorAll(".accordion-item");
-          accordionItem.forEach((el) =>
-            el.addEventListener("click", () => {
-              if (el.classList.contains("active")) {
-                if(this.showArrowIcon){
-                  el.classList.remove("active");
-                  this.isDownloadAll = false;
-                  this.hrClass = false;
-                }
-              } else {
-                accordionItem.forEach((el2) =>  {
-                  if(this.showArrowIcon){
-                    el2.classList.remove("active");
-                    this.isDownloadAll = false;
-                    this.hrClass = false;
-                  }
-                });
-                el.classList.add("active");
-                this.isDownloadAll = true;
-                this.hrClass = true;
-              }
-            })
-          );
-          console.log("getBiweekReimbursement ----", result);
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
+          this.processResult(result);
+          this.setupAccordion();
         })
         .catch((error) => {
-          console.log("getBiweekReimbursement error", error);
+          console.error("getBiweekReimbursement error", error);
         });
     }
+  }
+
+  prepareReimbursementView() {
+    this.isReimbursementView = true;
+    this.rKeyFields = [
+      "startDate",
+      "endDate",
+      "mileage",
+      "variableRate",
+      "variable",
+      "totalReim",
+    ];
+    this.rColumn = [
+      { id: 1, name: "Start Date", colName: "startDate" },
+      { id: 2, name: "End Date", colName: "endDate" },
+      { id: 3, name: "Mileage", colName: "mileage" },
+      { id: 4, name: "Mi Rate", colName: "variableRate" },
+      { id: 5, name: "Variable", colName: "variable" },
+      { id: 6, name: "Total", colName: "totalReim" },
+    ];
+    this.keyFields = this.rKeyFields;
+    this.column = this.rColumn;
+  }
+
+  processResult(result) {
+    let resultBiweek = this.proxyToObject(result);
+    this.accordionList = this.sortByDateDesc(resultBiweek, "startDate");
+    this.isDownloadAll = this.accordionList.length > 0;
+    this.accordionListColumn = this.column;
+    this.accordionKeyFields = this.keyFields;
+    this.dynamicBinding(this.accordionList, this.accordionKeyFields);
+    this.listOfRecord = this.accordionList.length > 0;
+  }
+
+  setupAccordion() {
+    const accordionItems = this.template.querySelectorAll(".accordion-item");
+    accordionItems.forEach((el) =>
+      el.addEventListener("click", () => {
+        if (el.classList.contains("active")) {
+          if (this.showArrowIcon) {
+            el.classList.remove("active");
+            this.isDownloadAll = false;
+            this.hrClass = false;
+            this.listVisible = false;
+          }
+        } else {
+          accordionItems.forEach((el2) => {
+            if (this.showArrowIcon) {
+              el2.classList.remove("active");
+              this.isDownloadAll = false;
+              this.hrClass = false;
+              this.listVisible = false;
+            }
+          });
+          el.classList.add("active");
+          this.isDownloadAll = true;
+          this.hrClass = true;
+        }
+      })
+    );
+    this.dispatchEvent(
+      new CustomEvent("show", { detail: "isHide" })
+    );
+  }
+
+  setupView(viewList, yearTo) {
+    this.defaultYear = yearTo;
+    this.isReimbursementView = true;
+    const configurations = this.getViewConfiguration(viewList);
+    if (configurations) {
+      this.keyFields = configurations.keyFields;
+      this.column = configurations.column;
+    } else {
+      this.isReimbursementView = false;
+    }
+  }
+
+  setupAttendanceView() {
+    this.isReimbursementView = true;
+    this.rKeyFields = ["startDate", "endDate", "totaldrivingTime", "totalStayTime", "totalTime", "approvalDate", "totalMileage"];
+    this.rColumn = [
+      { id: 1, name: "Start Date", colName: "startDate" },
+      { id: 2, name: "End Date", colName: "endDate" },
+      { id: 3, name: "Drive Time", colName: "totaldrivingTime" },
+      { id: 4, name: "Stay Time", colName: "totalStayTime" },
+      { id: 5, name: "Total Time", colName: "totalTime" },
+      { id: 6, name: "Approval Date", colName: "approvalDate" },
+      { id: 7, name: "Mileage", colName: "totalMileage" }
+    ];
+    this.keyFields = this.rKeyFields;
+    this.column = this.rColumn;
+  }
+
+  getViewConfiguration(viewList) {
+    const biWeeklyConfig = {
+      keyFields: [
+        "month", "fuel", "mileage", "variableRate", "varibleAmount",
+        "fixed1", "fixed2", "fixed3", "totalReimbursements"
+      ],
+      column: [
+        { id: 1, name: "Month", colName: "month" },
+        { id: 2, name: "Fuel", colName: "fuel" },
+        { id: 3, name: "Mileage", colName: "mileage" },
+        { id: 4, name: "Mi Rate", colName: "variableRate" },
+        { id: 5, name: "Variable", colName: "varibleAmount" },
+        { id: 6, name: "Fixed 1", colName: "fixed1" },
+        { id: 7, name: "Fixed 2", colName: "fixed2" },
+        { id: 8, name: "Fixed 3", colName: "fixed3" },
+        { id: 9, name: "Total", colName: "totalReimbursements" }
+      ]
+    };
+
+    const monthlyFavrConfig = {
+      keyFields: [
+        "month", "fuel", "mileage", "variableRate", "varibleAmount",
+        "fixedAmount", "totalReimbursements"
+      ],
+      column: [
+        { id: 1, name: "Month", colName: "month" },
+        { id: 2, name: "Fuel", colName: "fuel" },
+        { id: 3, name: "Mileage", colName: "mileage" },
+        { id: 4, name: "Mi Rate", colName: "variableRate" },
+        { id: 5, name: "Variable", colName: "varibleAmount" },
+        { id: 6, name: "Fixed", colName: "fixedAmount" },
+        { id: 7, name: "Total", colName: "totalReimbursements" }
+      ]
+    };
+
+    const monthlyFavrIrsConfig = {
+      keyFields: [
+        "month", "mileage", "variableRate", "totalReimbursements"
+      ],
+      column: [
+        { id: 1, name: "Month", colName: "month" },
+        { id: 2, name: "Mileage", colName: "mileage" },
+        { id: 3, name: "Mi Rate", colName: "variableRate" },
+        { id: 4, name: "Total", colName: "totalReimbursements" }
+      ]
+    };
+
+    const monthlyMileageConfig = {
+      keyFields: [
+        "month", "mileage", "variableRate", "varibleAmount", "totalReimbursements"
+      ],
+      column: [
+        { id: 1, name: "Month", colName: "month" },
+        { id: 2, name: "Mileage", colName: "mileage" },
+        { id: 3, name: "Mi Rate", colName: "variableRate" },
+        { id: 4, name: "Variable", colName: "varibleAmount" },
+        { id: 5, name: "Total", colName: "totalReimbursements" }
+      ]
+    };
+
+    if (viewList.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR') {
+      return biWeeklyConfig;
+    } else if (viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR') {
+      return this.isIrs ? monthlyFavrIrsConfig : monthlyFavrConfig;
+    } else if (viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'Mileage Rate') {
+      return monthlyMileageConfig;
+    } else {
+      return null;
+    }
+  }
+
+  async fetchReimbursements(yearTo) {
+    return getAllReimbursements({
+      year: yearTo,
+      contactId: this.contactId,
+      accountId: this.accountId
+    });
+  }
+
+  processReimbursements(result) {
+    const reimbursementList = this.proxyToObject(result[0]);
+    this.accordionList = this.sortByMonthDesc(reimbursementList, "month");
+    this.isDownloadAll = this.accordionList.length > 0;
+    this.accordionListColumn = this.column;
+    this.accordionKeyFields = this.keyFields;
+    this.dynamicBinding(this.accordionList, this.accordionKeyFields);
+    this.listOfRecord = this.accordionList.length > 0;
+  }
+
+  processAttendanceResult(result) {
+    let resultTA = this.proxyToObject(result);
+    this.accordionList = this.sortByDateDesc(resultTA, "startDate");
+    this.isDownloadAll = this.accordionList.length > 0;
+    this.accordionListColumn = this.column;
+    this.accordionKeyFields = this.keyFields;
+    this.dynamicBinding(this.accordionList, this.accordionKeyFields);
+    this.listOfRecord = this.accordionList.length > 0;
   }
 
   async getReimbursementFromApex(viewList, yearTo) {
     if (viewList) {
-      // this.dispatchEvent(
-      //   new CustomEvent("show", {
-      //     detail: "isShow"
-      //   })
-      // );
-      this.defaultYear = yearTo;
-      this.isReimbursementView = true;
-      if (viewList.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR') {
-        /* Bi-weekly fixed and Monthly variable */  // This is for Bi_Week_Fixed_Amount__c
-        this._RkeyFields = [
-          "month",
-          "fuel",
-          "mileage",
-          "variableRate",
-          "varibleAmount",
-          "fixed1",
-          "fixed2",
-          "fixed3",
-          "totalReimbursements"
-        ];
-        this._Rcolumn = [
-          {
-            id: 1,
-            name: "Month",
-            colName: "month"
-          },
-          {
-            id: 2,
-            name: "Fuel",
-            colName: "fuel"
-          },
-          {
-            id: 3,
-            name: "Mileage",
-            colName: "mileage"
-          },
-          {
-            id: 4,
-            name: "Mi Rate",
-            colName: "variableRate"
-          },
-          {
-            id: 5,
-            name: "Variable",
-            colName: "varibleAmount"
-          },
-          {
-            id: 6,
-            name: "Fixed 1",
-            colName: "fixed1"
-          },
-          {
-            id: 7,
-            name: "Fixed 2",
-            colName: "fixed2"
-          },
-          {
-            id: 8,
-            name: "Fixed 3",
-            colName: "fixed3"
-          },
-          {
-            id: 9,
-            name: "Total",
-            colName: "totalReimbursements"
-          }
-        ];
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      } else if (viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR' ) { //This is for Monthly_Reimbursement__c
-        /* Monthly fixed and variable */
-        if(!this.isIrs){
-          this._RkeyFields = [
-            "month",
-            "fuel",
-            "mileage",
-            "variableRate",
-            "varibleAmount",
-            "fixedAmount",
-            "totalReimbursements"
-          ];
-          this._Rcolumn = [
-            {
-              id: 1,
-              name: "Month",
-              colName: "month"
-            },
-            {
-              id: 2,
-              name: "Fuel",
-              colName: "fuel"
-            },
-            {
-              id: 3,
-              name: "Mileage",
-              colName: "mileage"
-            },
-            {
-              id: 4,
-              name: "Mi Rate",
-              colName: "variableRate"
-            },
-            {
-              id: 5,
-              name: "Variable",
-              colName: "varibleAmount"
-            },
-            {
-              id: 6,
-              name: "Fixed",
-              colName: "fixedAmount"
-            },
-            {
-              id: 7,
-              name: "Total",
-              colName: "totalReimbursements"
-            }
-          ];
-        }else{
-          this._RkeyFields = [
-            "month",
-            "mileage",
-            "variableRate",
-            "totalReimbursements"
-          ];
-          this._Rcolumn = [
-            {
-              id: 1,
-              name: "Month",
-              colName: "month"
-            },
-            {
-              id: 2,
-              name: "Mileage",
-              colName: "mileage"
-            },
-            {
-              id: 3,
-              name: "Mi Rate",
-              colName: "variableRate"
-            },
-            {
-              id: 4,
-              name: "Total",
-              colName: "totalReimbursements"
-            }
-          ];
-        }
-       
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      } else if (viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'Mileage Rate' ) {
-        /* Monthly mileage rate */
-        this._RkeyFields = [
-          "month",
-          "mileage",
-          "variableRate",
-          "varibleAmount",
-          "totalReimbursements"
-        ];
-        this._Rcolumn = [
-          {
-            id: 1,
-            name: "Month",
-            colName: "month"
-          },
-          {
-            id: 2,
-            name: "Mileage",
-            colName: "mileage"
-          },
-          {
-            id: 3,
-            name: "Mi Rate",
-            colName: "variableRate"
-          },
-          {
-            id: 4,
-            name: "Variable",
-            colName: "varibleAmount"
-          },
-          {
-            id: 5,
-            name: "Total",
-            colName: "totalReimbursements"
-          }
-        ];
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      }else{
-        this.isReimbursementView = false;
-        console.log("inside list")
-      }
+      this.setupView(viewList, yearTo);
     }
-
-    if (this.keyFields !== undefined && this.column !== undefined) {
-      return new Promise(async (resolve, reject) =>{
-        var result = await getAllReimbursements({
-          year: yearTo,
-          contactId: this.contactId,
-          accountId: this.accountId
-        });
-        resolve(result)
-				console.log("REsult", result)
-        if(result){
-          let reimbursementList = this.proxyToObject(result[0]);
-          this.accordionList = this.sortByMonthDesc(reimbursementList, "month");
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-          const accordionItem =
-            this.template.querySelectorAll(".accordion-item");
-            accordionItem.forEach((el) =>
-              el.addEventListener("click", () => {
-                if (el.classList.contains("active")) {
-                  if(this.showArrowIcon){
-                    el.classList.remove("active");
-                    this.hrClass = false;
-                    this.isDownloadAll = false;
-                    this.listVisible = false;
-                  }
-            
-                } else {
-                  accordionItem.forEach((el2) =>  {
-                    if(this.showArrowIcon){
-                      el2.classList.remove("active");
-                      this.hrClass = false;
-                      this.isDownloadAll = false;
-                      this.listVisible = false;
-                    }
-                  });
-                  el.classList.add("active");
-                  this.hrClass = true;
-                  this.isDownloadAll = true;
-                }
-              })
-            );
-          console.log("getAllReimbursements ----", result, this.hrClass);
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
-        }else{
-          console.log("getAllReimbursements error", error);
+    if (this.keyFields && this.column) {
+      try {
+        const result = await this.fetchReimbursements(yearTo);
+        if (result) {
+          this.processReimbursements(result);
+          this.setupAccordion();
+          this.dispatchEvent(new CustomEvent("show", { detail: "isHide" }));
+        } else {
+          console.error("getAllReimbursements error", result);
         }
-      })
-      
+      } catch (error) {
+        console.error("getReimbursementFromApex error", error);
+      }
     }
   }
 
   getBiweekReim(viewList, yearTo) {
-    this.defaultYear = yearTo;
-    this.isReimbursementView = true;
-    // this.dispatchEvent(
-    //   new CustomEvent("show", {
-    //     detail: "isShow"
-    //   })
-    // );
     if (viewList) {
-      this._RkeyFields = [
-        "startDate",
-        "endDate",
-        "mileage",
-        "variableRate",
-        "variable",
-        "totalReim"
-      ];
-      this._Rcolumn = [
-        {
-          id: 1,
-          name: "Start Date",
-          colName: "startDate"
-        },
-        {
-          id: 2,
-          name: "End Date",
-          colName: "endDate"
-        },
-        {
-          id: 3,
-          name: "Mileage",
-          colName: "mileage"
-        },
-        {
-          id: 4,
-          name: "Mi Rate",
-          colName: "variableRate"
-        },
-        {
-          id: 5,
-          name: "Variable",
-          colName: "variable"
-        },
-        {
-          id: 6,
-          name: "Total",
-          colName: "totalReim"
-        }
-      ];
-
-      this.keyFields = this._RkeyFields;
-      this.column = this._Rcolumn;
+      this.prepareReimbursementView();
     }
-    if (this.keyFields !== undefined && this.column !== undefined) {
+
+    if (this.keyFields && this.column) {
       biweeklyMileage({
         conId: this.contactId,
-        year: yearTo
+        year: yearTo,
       })
         .then((result) => {
-          let resultBiweek = this.proxyToObject(result);
-          this.accordionList = this.sortByDateDesc(resultBiweek, "startDate");
-          //this.listVisible = this.accordionList.length > 0 ? true : false;
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
-          console.log("getBiweekReimbursement ----", result);
+          this.processResult(result);
         })
         .catch((error) => {
-          console.log("getBiweekReimbursement error", error);
+          console.error("getBiweekReimbursement error", error);
         });
     }
   }
 
  async getReimbursement(viewList, yearTo) {
-    this.defaultYear = yearTo;
-    // this.dispatchEvent(
-    //   new CustomEvent("show", {
-    //     detail: "isShow"
-    //   })
-    // );
     if (viewList) {
-      this.isReimbursementView = true;
-      if (viewList.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR') {
-        /* Bi-weekly fixed and Monthly variable */
-        this._RkeyFields = [
-          "month",
-          "fuel",
-          "mileage",
-          "variableRate",
-          "varibleAmount",
-          "fixed1",
-          "fixed2",
-          "fixed3",
-          "totalReimbursements"
-        ];
-        this._Rcolumn = [
-          {
-            id: 1,
-            name: "Month",
-            colName: "month"
-          },
-          {
-            id: 2,
-            name: "Fuel",
-            colName: "fuel"
-          },
-          {
-            id: 3,
-            name: "Mileage",
-            colName: "mileage"
-          },
-          {
-            id: 4,
-            name: "Mi Rate",
-            colName: "variableRate"
-          },
-          {
-            id: 5,
-            name: "Variable",
-            colName: "varibleAmount"
-          },
-          {
-            id: 6,
-            name: "Fixed 1",
-            colName: "fixed1"
-          },
-          {
-            id: 7,
-            name: "Fixed 2",
-            colName: "fixed2"
-          },
-          {
-            id: 8,
-            name: "Fixed 3",
-            colName: "fixed3"
-          },
-          {
-            id: 9,
-            name: "Total",
-            colName: "totalReimbursements"
-          }
-        ];
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      } else if (viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'FAVR') {
-        /* Monthly fixed and variable */
-        if(!this.isIrs){
-          this._RkeyFields = [
-            "month",
-            "fuel",
-            "mileage",
-            "variableRate",
-            "varibleAmount",
-            "fixedAmount",
-            "totalReimbursements"
-          ];
-          this._Rcolumn = [
-            {
-              id: 1,
-              name: "Month",
-              colName: "month"
-            },
-            {
-              id: 2,
-              name: "Fuel",
-              colName: "fuel"
-            },
-            {
-              id: 3,
-              name: "Mileage",
-              colName: "mileage"
-            },
-            {
-              id: 4,
-              name: "Mi Rate",
-              colName: "variableRate"
-            },
-            {
-              id: 5,
-              name: "Variable",
-              colName: "varibleAmount"
-            },
-            {
-              id: 6,
-              name: "Fixed",
-              colName: "fixedAmount"
-            },
-            {
-              id: 7,
-              name: "Total",
-              colName: "totalReimbursements"
-            }
-          ];
-        }else{
-          this._RkeyFields = [
-            "month",
-            "mileage",
-            "variableRate",
-            "totalReimbursements"
-          ];
-          this._Rcolumn = [
-            {
-              id: 1,
-              name: "Month",
-              colName: "month"
-            },
-            {
-              id: 2,
-              name: "Mileage",
-              colName: "mileage"
-            },
-            {
-              id: 3,
-              name: "Mi Rate",
-              colName: "variableRate"
-            },
-            {
-              id: 4,
-              name: "Total",
-              colName: "totalReimbursements"
-            }
-          ];
+      this.setupView(viewList, yearTo);
+    }
+    if (this.keyFields && this.column) {
+      try {
+        const result = await this.fetchReimbursements(yearTo);
+        if (result) {
+          this.processReimbursements(result);
+          this.dispatchEvent(new CustomEvent("show", { detail: "isHide" }));
+        } else {
+          console.error("getAllReimbursements error", result);
         }
-       
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      } else if(viewList.Reimbursement_Frequency__c === 'Monthly Reimbursement' && viewList.Reimbursement_Type__c === 'Mileage Rate'){
-        /* Monthly mileage rate */
-        this._RkeyFields = [
-          "month",
-          "mileage",
-          "variableRate",
-          "varibleAmount",
-          "totalReimbursements"
-        ];
-        this._Rcolumn = [
-          {
-            id: 1,
-            name: "Month",
-            colName: "month"
-          },
-          {
-            id: 2,
-            name: "Mileage",
-            colName: "mileage"
-          },
-          {
-            id: 3,
-            name: "Mi Rate",
-            colName: "variableRate"
-          },
-          {
-            id: 4,
-            name: "Variable",
-            colName: "varibleAmount"
-          },
-          {
-            id: 5,
-            name: "Total",
-            colName: "totalReimbursements"
-          }
-        ];
-
-        this.keyFields = this._RkeyFields;
-        this.column = this._Rcolumn;
-      }else{
-        this.isReimbursementView = false;
+      } catch (error) {
+        console.error("getReimbursementFromApex error", error);
       }
-    }
-
-    if (this.keyFields !== undefined && this.column !== undefined) {
-      return new Promise(async (resolve, reject) =>{
-      var result = await getAllReimbursements({
-        year: yearTo,
-        contactId: this.contactId,
-        accountId: this.accountId
-      })
-      resolve(result)
-			console.log("REsult", result)
-      if(result){
-          let reimbursementList = this.proxyToObject(result[0]);
-          this.accordionList = this.sortByMonthDesc(reimbursementList, "month");
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          console.log("Default--", this.defaultYear)
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
-          console.log("getAllReimbursements ----", result);
-        }else {
-          console.log("getAllReimbursements error", error);
-        }
-      });
-    }
-  }
-
-  getTAndA(viewList, yearTo){
-    this.defaultYear = yearTo;
-    this.isReimbursementView = true;
-    // this.dispatchEvent(
-    //   new CustomEvent("show", {
-    //     detail: "isShow"
-    //   })
-    // );
-    if (viewList) {
-      this._RkeyFields = [
-        "startDate",
-        "endDate",
-        "totaldrivingTime",
-        "totalStayTime",
-        "totalTime",
-        "approvalDate",
-        "totalMileage"
-      ];
-      this._Rcolumn = [
-        {
-          id: 1,
-          name: "Start Date",
-          colName: "startDate"
-        },
-        {
-          id: 2,
-          name: "End Date",
-          colName: "endDate"
-        },
-        {
-          id: 3,
-          name: "Drive Time",
-          colName: "totaldrivingTime"
-        },
-        {
-          id: 4,
-          name: "Stay Time",
-          colName: "totalStayTime"
-        },
-        {
-          id: 5,
-          name: "Total Time",
-          colName: "totalTime"
-        },
-        {
-          id: 6,
-          name: "Approval Date",
-          colName: "approvalDate"
-        },{
-          id: 7,
-          name: "Mileage",
-          colName: "totalMileage"
-        }
-      ];
-
-      this.keyFields = this._RkeyFields;
-      this.column = this._Rcolumn;
-    }
-    if (this.keyFields !== undefined && this.column !== undefined) {
-      TimeAttendance({
-        conId: this.contactId,
-        year: yearTo
-      })
-        .then((result) => {
-          console.log("getTA ----", result);
-          let resultTA= this.proxyToObject(result);
-          this.accordionList = this.sortByDateDesc(resultTA, "startDate");
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
-        })
-        .catch((error) => {
-          console.log("getTA error", error);
-        });
     }
   }
 
   getTimeAndAttendance(viewList, yearTo) {
     if (viewList) {
-      this.isReimbursementView = true;
-      // this.dispatchEvent(
-      //   new CustomEvent("show", {
-      //     detail: "isShow"
-      //   })
-      // );
-      this._RkeyFields = [
-        "startDate",
-        "endDate",
-        "totaldrivingTime",
-        "totalStayTime",
-        "totalTime",
-        "approvalDate",
-        "totalMileage"
-      ];
-      this._Rcolumn = [
-        {
-          id: 1,
-          name: "Start Date",
-          colName: "startDate"
-        },
-        {
-          id: 2,
-          name: "End Date",
-          colName: "endDate"
-        },
-        {
-          id: 3,
-          name: "Drive Time",
-          colName: "totaldrivingTime"
-        },
-        {
-          id: 4,
-          name: "Stay Time",
-          colName: "totalStayTime"
-        },
-        {
-          id: 5,
-          name: "Total Time",
-          colName: "totalTime"
-        },
-        {
-          id: 6,
-          name: "Approval Date",
-          colName: "approvalDate"
-        },
-        {
-          id: 7,
-          name: "Mileage",
-          colName: "totalMileage"
-        }
-      ];
-
-      this.keyFields = this._RkeyFields;
-      this.column = this._Rcolumn;
+      this.setupAttendanceView();
     }
-    if (this.keyFields !== undefined && this.column !== undefined) {
-      TimeAttendance({
-        conId: this.contactId,
-        year: yearTo
-      })
+    if (this.keyFields && this.column) {
+      timeAttendance({ conId: this.contactId, year: yearTo })
         .then((result) => {
-          console.log("getTA ----", result);
-          let resultTA= this.proxyToObject(result);
-          this.accordionList = this.sortByDateDesc(resultTA, "startDate");
-          this.isDownloadAll = this.accordionList.length > 0 ? true : false;
-          this.accordionListColumn = this.column;
-          this.accordionKeyFields = this.keyFields;
-          this.dynamicBinding(this.accordionList, this.accordionKeyFields);
-          this.listOfRecord = this.accordionList.length > 0 ? true : false;
-         const accordionItem =
-            this.template.querySelectorAll(".accordion-item");
-          accordionItem.forEach((el) =>
-            el.addEventListener("click", () => {
-              if (el.classList.contains("active")) {
-                if(this.showArrowIcon){
-                  el.classList.remove("active");
-                  this.hrClass = false;
-                  this.isDownloadAll = false;
-                  this.listVisible = false;
-                }
-              } else {
-                accordionItem.forEach((el2) =>  {
-                  if(this.showArrowIcon){
-                    el2.classList.remove("active");
-                    this.hrClass = false;
-                    this.isDownloadAll = false;
-                    this.listVisible = false;
-                  }
-                });
-                el.classList.add("active");
-                this.isDownloadAll = true;
-                this.hrClass = true;
-              }
-            })
-          );
-          this.dispatchEvent(
-            new CustomEvent("show", {
-              detail: "isHide"
-            })
-          );
+          this.processAttendanceResult(result);
+          this.setupAccordion();
+          this.dispatchEvent(new CustomEvent("show", { detail: "isHide" }));
         })
         .catch((error) => {
-          console.log("getTA error", error);
+          console.error("getTA error", error);
+        });
+    }
+  }
+
+  getTAndA(viewList, yearTo) {
+    if (viewList) {
+      this.setupAttendanceView();
+    }
+    if (this.keyFields && this.column) {
+      timeAttendance({ conId: this.contactId, year: yearTo })
+        .then((result) => {
+          this.processAttendanceResult(result);
+          this.dispatchEvent(new CustomEvent("show", { detail: "isHide" }));
+        })
+        .catch((error) => {
+          console.error("getTA error", error);
         });
     }
   }
 
   fetchReimbursement(event) {
-    console.log("this.showArrowIcon", this.showArrowIcon)
-    if(this.showArrowIcon){
+      if (!this.showArrowIcon) return;
       this.accordionList = [];
-      this.listOfRecord = this.accordionList.length > 0 ? true : false;
-      let lastYear = event ? event.currentTarget.dataset.year : "";
+      this.listOfRecord = this.accordionList.length > 0;
+      const lastYear = event ? event.currentTarget.dataset.year : "";
       if(this.isTandA){
-        this.getTAndA(
-          this.contactInfo,
-          lastYear
-        );
-      }else{
-          if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
-            this.getBiweekReim(this.contactInfo, lastYear);
-          } else {
-            this.getReimbursement(this.contactInfo, lastYear);
-          }
+        this.getTAndA(this.contactInfo, lastYear);
+      }else {
+        const { Reimbursement_Frequency__c, Reimbursement_Type__c } = this.contactInfo;
+        if (Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && Reimbursement_Type__c === 'Mileage Rate') {
+          this.getBiweekReim(this.contactInfo, lastYear);
+        } else {
+          this.getReimbursement(this.contactInfo, lastYear);
+        }
       }
-    }
   }
 
   daysBetweenActivation(dateInitial, dateFinal){
-    console.log(dateInitial, dateFinal)
-    let  initialMonth = dateInitial.getMonth();
-    let  initialYear = dateInitial.getFullYear();
-    let  currentMonth = dateFinal.getMonth();
-    let  currentYear = dateFinal.getFullYear();
-    if(initialMonth === currentMonth && initialYear === currentYear){
-      return true
-    }else{
-      return false
-    }
+    return dateInitial.getMonth() === dateFinal.getMonth() && 
+    dateInitial.getFullYear() === dateFinal.getFullYear();
  }
 
   escapeSpecialChars(str){
@@ -1157,209 +573,165 @@ export default class AccordionView extends LightningElement {
 
   connectedCallback() {
     this.name = this.contactInfo;
-    let currDate = new Date();
-    console.log("Date---",this.activationDate)
+    const currDate = new Date();
     this.daysAfterActivation = this.daysBetweenActivation(new Date(this.activationDate), new Date(currDate.getFullYear(), currDate.getMonth(), 4));
-    if(this.isTandA){
-      if(this.accordionData){
-        if(this.accordionData[0].yearName){
-          this.getTimeAndAttendance(
-            this.contactInfo,
-            this.accordionData[0].yearName
-          );
-        }
-      }
-    }else{
-      if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') { // !this.contactInfo.Biweek_Reimbursement__c
-          this.isPayperiod = (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') ? true : false //this.contactInfo.Biweek_Reimbursement__c;
-          console.log("inside biweek done")
-        if(this.accordionData){
-          if(this.accordionData[0].yearName){
-            this.getBiweekReimbursement(
-              this.contactInfo,
-              this.accordionData[0].yearName
-            );
-          }
-        }
-      } else {
-        console.log("inside biweek")
-        if(this.accordionData){
-          if(this.accordionData[0].yearName){
-            this.getReimbursementFromApex(
-              this.contactInfo,
-              this.accordionData[0].yearName
-            );
-          }
+    if (this.accordionData?.[0]?.yearName) {
+      if (this.isTandA) {
+        this.getTimeAndAttendance(this.contactInfo, this.accordionData[0].yearName);
+      }else{
+        const { Reimbursement_Frequency__c, Reimbursement_Type__c } = this.contactInfo;
+        this.isPayperiod = Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && Reimbursement_Type__c === 'Mileage Rate';
+        if (this.isPayperiod) {
+          this.getBiweekReimbursement(this.contactInfo, this.accordionData[0].yearName);
+        } else {
+          this.getReimbursementFromApex(this.contactInfo, this.accordionData[0].yearName);
         }
       }
     }
   }
 
   compareArray(a, b) {
-      var dateA = (a.startDate == null) ? '' : new Date(a.startDate.toLowerCase()),
-          dateB = (b.startDate == null) ? '' : new Date(b.startDate.toLowerCase())
-      if (dateA < dateB) {
-          return -1;
-      }
-      if (dateA > dateB) {
-          return 1;
-      }
-      return 0;
+    const dateA = a.startDate ? new Date(a.startDate.toLowerCase()) : '';
+    const dateB = b.startDate ? new Date(b.startDate.toLowerCase()) : '';
+    return dateA - dateB;
   }
 
   excelToExport(data, file, sheet){
     this.template.querySelector('c-export-excel').download(data, file, sheet);
   }
 
-  downloadAllTrips(event){
-    event.stopPropagation();
-    if(this.isTandA){
-      let exportDetailList = [];
-      const downloadList = [...this.accordionList]; // does not mutuate original array
-      downloadList.sort(this.compareArray);
-      let lengthOfReimb = downloadList.length;
-      let stDate = downloadList[0].startDate;
-      let enDate = downloadList[lengthOfReimb - 1].endDate;
-      getAllMileages({
-        startdate: stDate,
-        enddate: enDate,
-        contactId: this.contactId
-      }).then(result => {
-        console.log(result);
-        if (result != null) {
-          if (result !== '') {
-              let escapeChar = this.escapeSpecialChars(result[0]);
-              let detailList = this.proxyToObject(escapeChar);
-              if(detailList.length > 0){
-                  let excelFileName = this.contactInfo.Name + '\'s Detail Report';
-                  let excelSheetName = 'Detail Report';
-                  if(!this.isIrs){
-                    exportDetailList.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination",  "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"]);
-                    detailList.forEach(function (item) {
-                      exportDetailList.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.mileage, item.variablerate, item.variableamount, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag]);
-                    });
-                  }else{
-                    exportDetailList.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination",  "Status", "Date Submitted", "Date Approved", "Mileage", "Mi Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"]);
-                    detailList.forEach(function (item) {
-                      exportDetailList.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag]);
-                    });
-                  }
-                this.excelToExport(exportDetailList, excelFileName, excelSheetName)
-              }else{
-                toastEvents(this, 'No mileage')
-              }
-          }
-          else {
-            console.log("Error", result)
-          }
-      }
-      }).catch(error=>{
-        console.log("error", error)
-      })
-    }else{
-      if(this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate'){
-        let exportReimDetailList = [];
-        const downloadList = [...this.accordionList]; // does not mutuate original array
-        downloadList.sort(this.compareArray);
-        let lengthOfReimb = downloadList.length;
-        let stDate = downloadList[0].startDate;
-        let enDate = downloadList[lengthOfReimb - 1].endDate;
-        getAllMileages({
-          startdate: stDate,
-          enddate: enDate,
-          contactId: this.contactId
-        }).then(result => {
-          console.log(result);
-          if (result != null) {
-            if (result !== '') {
-                let escapeChar = this.escapeSpecialChars(result[0]);
-                let biDetailList = this.proxyToObject(escapeChar);
-                if(biDetailList.length > 0){
-                    let excelFileName = this.contactInfo.Name + '\'s Detail Report';
-                    let excelSheetName = 'Detail Report';
-                    if(!this.isIrs){
-                      exportReimDetailList.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount", "Fixed Amount", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"]);
-                      biDetailList.forEach(function (item) {
-                          exportReimDetailList.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate,  item.mileage, item.variablerate, item.variableamount, item.halfFixedAmount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag]);
-                      });
-                    }else{
-                      exportReimDetailList.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Mileage", "Mi Rate", "Amount", "Fixed Amount", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"]);
-                      biDetailList.forEach(function (item) {
-                          exportReimDetailList.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount, item.halfFixedAmount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag]);
-                      });
-                    }
-                   
-                  this.excelToExport(exportReimDetailList, excelFileName, excelSheetName)
-                }else{
-                  toastEvents(this, 'No mileage')
-                }
-            }
-            else {
-              console.log("Error", result)
-            }
-        }
-        }).catch(error=>{
-          console.log("error", error)
-        })
-      }else{
-        let exportBiweekList = [];
-        getMileagesData({
-          // eslint-disable-next-line radix
-          year: parseInt(this.defaultYear),
-          contactId: this.contactId
-        }).then(result => {
-          console.log("result", result)
-          if (result != null) {
-            if (result !== '') {
-                let biweekList = this.proxyToObject(result);
-                if(biweekList.length > 0){
-                  let fileName = this.contactInfo.Name + '\'s Detail Report';
-                  let sheetName = 'Detail Report';
-                  if(!this.isIrs){
-                    exportBiweekList.push(["Contact Email", "Month", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount", "Notes", "Tags"]);
-                    biweekList.forEach(function (item) {
-                      exportBiweekList.push([item.email, item.reimMonth, item.tracingStyle, item.dayOfWeek, item.tripDate, item.starttime, item.endtime, item.originName, item.destinationName, item.tripStatus, item.submitteddate, item.approvedDate, item.maintTyre, item.fuelVaraibleRate,  item.mileage, item.varaibleRate, item.varaibleAmount, item.notes, item.tag]);
-                    });
-                  }else{
-                    exportBiweekList.push(["Contact Email", "Month", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Mileage", "Mi Rate", "Amount", "Notes", "Tags"]);
-                    biweekList.forEach(function (item) {
-                      exportBiweekList.push([item.email, item.reimMonth, item.tracingStyle, item.dayOfWeek, item.tripDate, item.starttime, item.endtime, item.originName, item.destinationName, item.tripStatus, item.submitteddate, item.approvedDate,  item.mileage, item.varaibleRate, item.varaibleAmount, item.notes, item.tag]);
-                    });
-                  }
-                 
-                  this.excelToExport(exportBiweekList, fileName, sheetName)
-                }else{
-                  toastEvents(this, 'No mileage')
-                }
-            }
-            else {
-              console.log("Error", result)
-            }
-        }
-        }).catch(error=>{
-          console.log("error", error)
-        })
-      }
+  exportTAData(dataList, sheetName) {
+    const excelFileName = `${this.contactInfo.Name}'s Detail Report`;
+    let headers, keys;
+    
+    if (!this.isIrs) {
+      headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"];
+      keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime", "variableamount"];
+    } else {
+      headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"];
+      keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "variablerate", "drivingtime", "staytime", "totaltime", "variableamount"];
     }
+  
+    const exportDetailList = createExportDetailList(dataList, headers, keys);
+    this.excelToExport(exportDetailList, excelFileName, sheetName);
+  }
+
+  exportData(dataList, sheetName) {
+    const excelFileName = `${this.contactInfo.Name}'s Detail Report`;
+    let headers, keys;
+    
+    if (!this.isIrs) {
+      headers = ["Email", "Month", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Amount"];
+      keys = ["email", "reimMonth", "tracingStyle", "dayOfWeek", "tripDate", "starttime", "endtime", "originName", "origin", "destinationName", "destination", "mileage", "tripStatus", "submitteddate", "approvedDate", "approvalName", "tag", "notes", "maintTyre", "fuelVaraibleRate", "varaibleRate", "varaibleAmount"];
+    } else {
+      headers = ["Email", "Month", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate",  "Amount"];
+      keys = ["email", "reimMonth", "tracingStyle", "dayOfWeek", "tripDate", "starttime", "endtime", "originName", "origin", "destinationName", "destination", "mileage", "tripStatus", "submitteddate", "approvedDate", "approvalName", "tag", "notes", "varaibleRate", "varaibleAmount"];
+    }
+  
+    const exportDetailList = createExportDetailList(dataList, headers, keys);
+    this.excelToExport(exportDetailList, excelFileName, sheetName);
+  }
+
+  exportBiweekData(biweekList, sheetName) {
+    const excelFileName = `${this.contactInfo.Name}'s Detail Report`;
+    let headers, keys;
+    biweekList.forEach((item)=>{
+      item.drivingtime = this.timeConversion(item.drivingtime);
+      item.staytime = this.timeConversion(item.staytime);
+      item.totaltime =this.timeConversion(item.totaltime);
+    })
+    if (!this.isIrs) {
+      headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount", "Fixed Amount"];
+      keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime","tripActivity", "variableamount", "halfFixedAmount"];
+    } else {
+      headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount"];
+      keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "variablerate", "drivingtime", "staytime", "totaltime","tripActivity", "variableamount"]
+    }
+  
+    const exportDetailList = createExportDetailList(biweekList, headers, keys);
+    this.excelToExport(exportDetailList, excelFileName, sheetName);
+  }
+
+  downloadAllTrips(event) {
+    event.stopPropagation();
+  
+    if (this.isTandA) {
+      this.processTandA();
+    } else if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' &&
+               this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
+      this.processBiweeklyMileage();
+    } else {
+      this.processDefault();
+    }
+  }
+  
+  processTandA() {
+    const downloadList = [...this.accordionList].sort(this.compareArray);
+    const { startDate: stDate } = downloadList[0];
+    const { endDate: enDate } = downloadList[downloadList.length - 1];
+  
+    getAllMileages({ startdate: stDate, enddate: enDate, contactId: this.contactId })
+      .then(result => {
+        if (result && result !== '') {
+          const detailList = this.proxyToObject(this.escapeSpecialChars(result[0]));
+          if (detailList.length > 0) {
+            this.exportTAData(detailList, 'Detail Report');
+          } else {
+            toastEvents(this, 'No mileage');
+          }
+        } else {
+          console.error("Error", result);
+        }
+      })
+      .catch(error => console.error("error", error));
+  }
+  
+  processBiweeklyMileage() {
+    const downloadList = [...this.accordionList].sort(this.compareArray);
+    const { startDate: stDate } = downloadList[0];
+    const { endDate: enDate } = downloadList[downloadList.length - 1];
+  
+    getAllMileages({ startdate: stDate, enddate: enDate, contactId: this.contactId })
+      .then(result => {
+        if (result && result !== '') {
+          const biDetailList = this.proxyToObject(this.escapeSpecialChars(result[0]));
+          if (biDetailList.length > 0) {
+            this.exportBiweekData(biDetailList, 'Detail Report');
+          } else {
+            toastEvents(this, 'No mileage');
+          }
+        } else {
+          console.error("Error", result);
+        }
+      })
+      .catch(error => console.error("error", error));
+  }
+  
+  processDefault() {
+    getMileagesData({ year: parseInt(this.defaultYear), contactId: this.contactId })
+      .then(result => {
+        if (result && result !== '') {
+          const biweekList = this.proxyToObject(result);
+          if (biweekList.length > 0) {
+            this.exportData(biweekList, 'Detail Report');
+          } else {
+            toastEvents(this, 'No mileage');
+          }
+        } else {
+          console.error("Error", result);
+        }
+      })
+      .catch(error => console.error("error", error));
   }
 
   getTrips(event) {
-    if (this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate') {
-      let tripList = {
-        boolean : true,
-        trip: event.detail
-      }
-      //console.log('from table---', JSON.stringify(event.detail), this.contactInfo.Biweek_Reimbursement__c)
-      events(this, tripList)
-    }else{
-      let tripDetail = {
-        boolean: false,
-        month: event.detail,
-        year: this.defaultYear
-      }
-      //console.log('from table---', event.detail, this.defaultYear, tripDetail)
-      events(this, tripDetail)
-    }
+    const isBiWeeklyMileage = this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate';
+
+    const tripInfo = isBiWeeklyMileage 
+    ? { boolean: true, trip: event.detail }
+    : { boolean: false, month: event.detail, year: this.defaultYear };
+
+    events(this, tripInfo);
   }
 
   dateTime(date){
@@ -1388,8 +760,7 @@ export default class AccordionView extends LightningElement {
   }
 
   downloadTrips(event){
-    console.log(event.detail)
-    let _biweekId, _month, message, stDate, enDate;
+    let biweekId, month, message, stDate, enDate;
     let element = this.filter(this.accordionList, event.detail);
     if(this.isTandA){
         stDate = element.startDate;
@@ -1402,21 +773,18 @@ export default class AccordionView extends LightningElement {
           if (result !== '') {
             let escapeChar = this.escapeSpecialChars(result);
             let detailedList = JSON.parse(escapeChar);
-            console.log("getMileagesTA excel----", result);
             if(detailedList.length > 0){
               let excelTA = [];
               let excelFileName = this.contactInfo.Name + '\'s Time And Attendance Report ' + this.dateTime(new Date());
               let excelSheetName = 'T and A Report';
               if(!this.isIrs){
-                excelTA.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
-                detailedList.forEach((item)=>{
-                  excelTA.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.mileage, item.variablerate, item.variableamount, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
-                })
+                let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"],
+                    keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime", "variableamount"]
+                excelTA = createExportDetailList(detailedList, headers, keys);
               }else{
-                excelTA.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved",  "Mileage", "Mi Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
-                detailedList.forEach((item)=>{
-                  excelTA.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
-                })
+                let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"],
+                keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "variablerate", "drivingtime", "staytime", "totaltime", "variableamount"]
+                excelTA = createExportDetailList(detailedList, headers, keys);
               }
              
               this.excelToExport(excelTA, excelFileName, excelSheetName);
@@ -1429,9 +797,9 @@ export default class AccordionView extends LightningElement {
         })
     }else{
       if(this.contactInfo.Reimbursement_Frequency__c === 'Bi-Weekly Reimbursement' && this.contactInfo.Reimbursement_Type__c === 'Mileage Rate'){
-        _biweekId = element.biweekId
+        biweekId = element.biweekId
         getBiweekMileages({
-            biweekId: _biweekId
+            biweekId: biweekId
         }).then(result => {
           let escapeChar = this.escapeSpecialChars(result[0]);
           let biweekList = JSON.parse(escapeChar);
@@ -1440,21 +808,23 @@ export default class AccordionView extends LightningElement {
             let excelFileName = this.contactInfo.Name + '\'s Mileage Report ' + this.dateTime(new Date());
             let excelSheetName = 'Mileage Report';
             if(!this.isIrs){
-              excelReimbursement.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
               biweekList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime =this.timeConversion(item.totaltime);
-                excelReimbursement.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.mileage, item.variablerate, item.variableamount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
               })
+              let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount", "Fixed Amount"],
+              keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime","tripActivity", "variableamount", "halfFixedAmount"]
+              excelReimbursement = createExportDetailList(biweekList, headers, keys);
             }else{
-              excelReimbursement.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Mileage", "Mi Rate", "Amount", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
               biweekList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime =this.timeConversion(item.totaltime);
-                excelReimbursement.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname,  item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
               })
+              let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount"],
+              keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "variablerate", "drivingtime", "staytime", "totaltime","tripActivity", "variableamount"]
+              excelReimbursement = createExportDetailList(biweekList, headers, keys);
             }
            
             this.excelToExport(excelReimbursement, excelFileName, excelSheetName);
@@ -1462,7 +832,6 @@ export default class AccordionView extends LightningElement {
             toastEvents(this, 'No mileage')
           }
 
-          console.log("getBiweekMileages excel----", result);
         }).catch(error => {
           if (Array.isArray(error.body)) {
             message = error.body.map((e) => e.message).join(", ");
@@ -1474,37 +843,33 @@ export default class AccordionView extends LightningElement {
         })
       }
      else{
-        _month = element.month;
+        month = element.month;
         getMileages({
-          clickedMonth: _month,
+          clickedMonth: month,
           year: this.defaultYear,
           contactId: this.contactId
         }).then(result=>{
-          console.log("getMileages excel----", result);
           let escapeChar = this.escapeSpecialChars(result[0]);
           let mileageList = JSON.parse(escapeChar);
-          console.log("mileageList excel----", result);
           if(mileageList.length > 0){
             let excelMileage = [];
             let excelFileName = this.contactInfo.Name + '\'s Mileage Report ' + this.dateTime(new Date());
             let excelSheetName = 'Mileage Report';
             if(!this.isIrs){
-              excelMileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Total Time", "Trip Origin", "Trip Destination", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Mileage", "Mi Rate", "Amount",  "Notes", "Tags"])
-              mileageList.forEach((item)=>{
-                excelMileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.totaltime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.mileage, item.variablerate, item.variableamount, item.notes, item.tag])
-              })
+              let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Amount"],
+              keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "variableamount"]
+              excelMileage = createExportDetailList(mileageList, headers, keys);
+              
             }else{
-              excelMileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Total Time", "Trip Origin", "Trip Destination",  "Status", "Date Submitted", "Date Approved", "Mileage", "Mi Rate", "Amount", "Notes", "Tags"])
-              mileageList.forEach((item)=>{
-                excelMileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.totaltime, item.originname, item.destinationname, item.status, item.submitteddate, item.approveddate, item.mileage, item.variablerate, item.variableamount, item.notes, item.tag])
-              })
+              let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Mi Rate", "Amount"],
+              keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "variablerate", "variableamount"]
+              excelMileage = createExportDetailList(mileageList, headers, keys);
             }
            
             this.excelToExport(excelMileage, excelFileName, excelSheetName);
           }else{
             toastEvents(this, 'No mileage')
           }
-          console.log("getMileages excel----", result);
         }).catch(error => {
           if (Array.isArray(error.body)) {
             message = error.body.map((e) => e.message).join(", ");
@@ -1512,11 +877,9 @@ export default class AccordionView extends LightningElement {
             message = error.body.message;
           }
 
-          console.log("Error getMileages", message)
         })
       }
     }
-    console.log("element----", JSON.stringify(element))
   }
 
   insideClick(event){

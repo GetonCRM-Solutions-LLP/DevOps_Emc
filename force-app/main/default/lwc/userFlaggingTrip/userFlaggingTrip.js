@@ -1,10 +1,7 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 /* eslint-disable no-restricted-globals */
-/* eslint-disable @lwc/lwc/no-async-operation */
 /* eslint-disable vars-on-top */
 import { LightningElement,api,track } from 'lwc';
 import resourceImage from '@salesforce/resourceUrl/mBurseCss';
-import MassSyncTripsForBiweek from "@salesforce/apex/ManagerDashboardController.MassSyncTripsForBiweek";
 import GetTripCalloutForCommuteMileage from '@salesforce/apex/GetTripCalloutforCommute.GetTripCalloutForCommuteMileage';
 import {
     toastEvents, syncEvents
@@ -261,7 +258,6 @@ export default class UserFlaggingTrip extends LightningElement {
     flagPerPage() {
         var data = [], count = 0;
         this._flag = true;
-        console.log(this.searchmodelList.search, this.searchmodelList)
         data = this.template.querySelector('c-user-preview-table').returnPageList();
         for (let i = 0; i < data.length; i++) {
             if(data[i].driverid !== this.contactId){
@@ -285,9 +281,7 @@ export default class UserFlaggingTrip extends LightningElement {
 
     checkUncheckRow(id, value, table) {
         var _tbody = table
-        //console.log("inside check", _tbody)
         for (let i = 0; i < _tbody.length; i++) {
-            console.log("List of rows-----", _tbody[i].id, id, _tbody[i]);
             _tbody[i].isChecked = (_tbody[i].id === id) ? value : _tbody[i].isChecked;
             if( _tbody[i].isChecked === false  &&  _tbody[i].isSelected === false) {
                 _tbody[i].isUnapprove = true;
@@ -296,8 +290,6 @@ export default class UserFlaggingTrip extends LightningElement {
             }
         }
         this.template.querySelector('c-user-preview-table').resetView(_tbody, 'id')
-        //this.template.querySelector('c-user-preview-table').defaultSort('tripdate', 'Date', 'desc');
-        //console.log("Gotooo---",  this.template.querySelector('c-user-preview-table').returnList())
         return true;
     }
 
@@ -306,7 +298,6 @@ export default class UserFlaggingTrip extends LightningElement {
         checkbox = event.detail.isChecked;
         target = event.detail.targetId;
         this.modelList = this.template.querySelector('c-user-preview-table').returnList();
-        console.log("Model", this.modelList)
        // content = this.modelList;
        content = (this.searchmodelList.content) ? (this.searchmodelList.content.length > 0) ? this.searchmodelList.content : this.modelList : this.modelList;
         boolean = this.checkUncheckRow(target, checkbox, content);
@@ -323,22 +314,6 @@ export default class UserFlaggingTrip extends LightningElement {
             }
         }
         this.isSubmitVisible = (count > 0) ? true : false;
-    //     if (count > 0) {
-    //    //     this.flagMileage = this.removeDuplicateValue(this.flagMileage);
-    //         if (checkbox === false) {
-    //             this.flagMileage.forEach((el) => {
-    //                 if (el === target) {
-    //                     let index = this.flagMileage.map((a) => {
-    //                         return a
-    //                     }).indexOf(target);
-    //                    // console.log("index", el, target);
-    //                     this.flagMileage.splice(index, 1);
-    //                 }
-    //             });
-    //         }
-    //     } else {
-    //         this.flagMileage = [];
-    //     }
     }
 
     revertHandler(){
@@ -354,13 +329,11 @@ export default class UserFlaggingTrip extends LightningElement {
         var data = [], count = 0;
         this._flag = flagValue;
         this.modelList = this.template.querySelector('c-user-preview-table').returnList();
-        // console.log(this.searchmodelList.search, flagValue)
         if (this.searchmodelList.search && flagValue === false) {
             data = this.searchmodelList.content;
         } else {
             data = this.modelList;
         }
-        //console.log("approveAll---", data)
         this.flagMileage = [];
         this.template.querySelector('c-user-preview-table').checkUncheckAll(this._flag);
         for (let i = 0; i < data.length; i++) {
@@ -369,7 +342,6 @@ export default class UserFlaggingTrip extends LightningElement {
             }
         }
         this.template.querySelector('c-user-preview-table').resetView(data,  'id');
-      //  this.template.querySelector('c-user-preview-table').defaultSort('tripdate', 'Date', 'desc');
 
         for (let i = 0; i < data.length; i++) {
             if(data[i].driverid != this.contactId){
@@ -392,8 +364,6 @@ export default class UserFlaggingTrip extends LightningElement {
         sec = yd.getSeconds();
         ydd = (ydd < 10) ? ('0' + ydd) : ydd;
         ymm = (ymm < 10) ? ('0' + ymm) : ymm;
-        console.log(ymm + ydd);
-        console.log(yy.toString(), hh.toString(), min.toString(), sec.toString());
         return  ymm.toString() + ydd.toString() + yy.toString() + hh.toString() + min.toString() + sec.toString();
     }
 
@@ -409,7 +379,6 @@ export default class UserFlaggingTrip extends LightningElement {
             time = hours + ':' + min;
         }
       
-        //var time = (hours < 12) ? (hours-12 + ':' + min +' PM') : (hours + ':' + min +' AM');
         return time;
     }
 
@@ -422,12 +391,12 @@ export default class UserFlaggingTrip extends LightningElement {
             let fileName = this.headerName + '\'s Mileage ' + this.dateTime(new Date());
             let sheetName = 'Mileage Report';
             let excelList = this.sort(this.modelList, "tripdate");
-            mileage.push(["Contact Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status", "Date Submitted", "Maint/Tires", "Fuel Rate", "Variable Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
+            mileage.push(["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"])
             excelList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime = this.timeConversion(item.totaltime);
-                mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.mileage, item.status, item.submitteddate, item.maintTyre, item.fuelVariableRate, item.variablerate, (parseInt(item.variableamount, 10)).toFixed(2), item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
+                mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate, item.approvalName, item.tag, item.notes, item.maintTyre, item.fuelVariableRate, item.variablerate, item.drivingtime, item.staytime, item.totaltime, (parseInt(item.variableamount, 10)).toFixed(2)])
             })
             this.excelToExport(mileage, fileName, sheetName);
     }
@@ -448,20 +417,13 @@ export default class UserFlaggingTrip extends LightningElement {
             activityStatus: 'Business',
             checkByWeek: obj.biWeekValue,
             biWeekReimId: null
-        }).then((result)=>{
-            console.log("GetTripCalloutForCommuteMileage--", result)
+        }).then(()=>{
             if(index === (array - 1)){
-               // if(methodStatus === 'Completed'){
-                   // let toast = { type: "success", message: 'Mileage is being synced.' };
                     syncEvents(this, '')
                     setTimeout(()=>{
                         this.spinner = false;
                     }, 2000)
-                   // toastEvents(this, toast);
-               // }
             }
-//return (index === (array - 1)) ? 'Completed' : 'Pending'
-
         }).catch((error)=>{
             console.log('Error', error)
         })
@@ -470,20 +432,13 @@ export default class UserFlaggingTrip extends LightningElement {
     syncMileage(){
         let calloutInfo = this.proxyToObject(this.commuteList);
         this.spinner = true;
-       /* this.dispatchEvent(
-            new CustomEvent("show", {
-                detail: "spinner"
-            })
-        );*/
        if(this.isAccountBiweek) {
             DeleteMileages({
                 reimbursements: JSON.stringify(this.allReimbursementList)
             }).then(()=>{
                 if(calloutInfo.length > 0){
                     for(var i = 0 ; i < calloutInfo.length; i++){
-                        console.log("Inside Sync Callout", i)
                         this.syncCallout(calloutInfo[i], i, calloutInfo.length);
-                        //methodStatus = (i === (calloutInfo.length - 1)) ? 'Completed' : 'Pending'
                     }
                 }
             }).catch((error) => {
@@ -498,9 +453,7 @@ export default class UserFlaggingTrip extends LightningElement {
             }).then(()=>{
                 if(calloutInfo.length > 0){
                     for(var i = 0 ; i < calloutInfo.length; i++){
-                        console.log("Inside Sync Callout", i)
                         this.syncCallout(calloutInfo[i], i, calloutInfo.length);
-                        //methodStatus = (i === (calloutInfo.length - 1)) ? 'Completed' : 'Pending'
                     }
                 }
             }).catch((error) => {
@@ -520,7 +473,6 @@ export default class UserFlaggingTrip extends LightningElement {
                 detail: "spinner"
             })
         );
-        console.log("array--", arrayElement)
         approveTrip = arrayElement.filter(function (a) {
             return a.isSelected === true
         });
@@ -566,7 +518,6 @@ export default class UserFlaggingTrip extends LightningElement {
                     toast = { type: 'error', message: message }
                     toastEvents(this, toast);
                 }
-                console.log("List after flag", result);
             }else{
                 message = 'A system error has occurred'
                 this.dispatchEvent(
@@ -576,7 +527,6 @@ export default class UserFlaggingTrip extends LightningElement {
                 );
                 toast = { type: 'error', message: message }
                 toastEvents(this, toast);
-                console.log("List ---", result)
             }
         }).catch((error)=>{
             this.dispatchEvent(
@@ -595,10 +545,6 @@ export default class UserFlaggingTrip extends LightningElement {
             }
             console.log("Error--", error)
         })
-        
-        console.log("Approve", approveTrip);
-        console.log("Flag", flagTrip);
-        console.log("unapprove", unapproveTrip);
     }
 
     handleClearInput(){
@@ -636,12 +582,7 @@ export default class UserFlaggingTrip extends LightningElement {
           }
         }
         
-        console.log("lockdate--", lockdatecount, this.emailaddress)
         if (lockdatecount > 0) {
-            let lockDate = this.modelList[0].lockdate;
-            let currentDateLocked = new Date(lockDate);
-            console.log("date", lockDate, currentDateLocked)
-           // let lockedMonth = currentDateLocked.toLocaleString('default', { month: 'long' });
             this.islockdate = true;
             this.headerModalText = "Mileage Lock Date";
             this.modalClass = "slds-modal modal_info slds-fade-in-open";
@@ -665,11 +606,8 @@ export default class UserFlaggingTrip extends LightningElement {
         this.paginatedModal = true;
         this.isCheckbox = true;
         this.modelList = [];
-        console.log("Contact ---", this.contactList)
-        console.log("Version---", this.element)
         if (this.contactList) {
             this.modelList = this.proxyToObject(this.contactList);
-            console.log('inside modal list',JSON.stringify(this.modelList));
             this.originalModelList = this.proxyToObject(this.contactList);
             this.classToTable = this.modelList.length > 5 ? 'fixed-container' : 'fixed-container overflow-none'
             this.modalListColumn = this.unapproveTripColumn;

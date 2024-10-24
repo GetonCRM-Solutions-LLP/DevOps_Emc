@@ -2,6 +2,7 @@ import { LightningElement, api } from 'lwc';
 import getMileages  from '@salesforce/apex/DriverDashboardLWCController.getMileages';
 import resourceImage from '@salesforce/resourceUrl/mBurseCss';
 import getBiweekMileages  from '@salesforce/apex/DriverDashboardLWCController.getBiweekMileages';
+import { createExportDetailList } from 'c/commonLib';
 import {
     events
 } from 'c/utils';
@@ -187,8 +188,6 @@ export default class PreviewTrips extends LightningElement {
         sec = yd.getSeconds();
         ydd = (ydd < 10) ? ('0' + ydd) : ydd;
         ymm = (ymm < 10) ? ('0' + ymm) : ymm;
-        console.log(ymm + ydd);
-        console.log(yy.toString(), hh.toString(), min.toString(), sec.toString());
         return  ymm.toString() + ydd.toString() + yy.toString() + hh.toString() + min.toString() + sec.toString();
       }
 
@@ -197,36 +196,35 @@ export default class PreviewTrips extends LightningElement {
             let excelMileage = [];
             let excelFileName = this.contactInfo + '\'s ' + this.tripMonth + ' Mileage Report ' + this.dateTime(new Date());
             let excelSheetName = 'Mileage Report';
-            excelMileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Variable Rate", "Amount", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
             this.modelList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime =this.timeConversion(item.totaltime);
-            excelMileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.mileage, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.variablerate, item.variableamount, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
             })
+            let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Amount"],
+            keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime", "variableamount"]
+            excelMileage = createExportDetailList(this.modelList, headers, keys);
             this.excelToExport(excelMileage, excelFileName, excelSheetName);
         }else{
             let mileage = [];
-            // let clickedPeriod = "Pay Period " + this.startDate + " - " + this.endDate;
             let fileName = this.contactInfo + '\'s Mileage Report ' + this.dateTime(new Date());
             let sheetName = 'Mileage Report';
-            mileage.push(["Contact Email", "Tracking Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Variable Rate", "Amount", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"])
             this.modelList.forEach((item)=>{
                 item.drivingtime = this.timeConversion(item.drivingtime);
                 item.staytime = this.timeConversion(item.staytime);
                 item.totaltime =this.timeConversion(item.totaltime);
-                mileage.push([item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.destinationname, item.mileage, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.variablerate, item.variableamount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag])
             })
+            let headers = ["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount"],
+                keys = ["emailaddress", "tracingstyle", "dayofweek", "tripdate", "starttime", "endtime", "originname", "origin", "destinationname", "destination", "mileage", "status", "submitteddate", "approveddate", "approvalName", "tag", "notes", "maintTyre", "fuelVariableRate", "variablerate", "drivingtime", "staytime", "totaltime", "tripActivity", "variableamount"]
+            excelMileage = createExportDetailList(this.modelList, headers, keys);
             this.excelToExport(mileage, fileName, sheetName);
         }
-        console.log(this.tripMonth, this.startDate, this.endDate);
     }
 
     
     connectedCallback(){
         this.isScrollable = true;
         this.paginatedModal = true;
-        console.log("biweek --", this.biweekValue)
         if(!this.biweekValue){
           //  this.tripHeader = this.tripMonth;
             getMileages({
@@ -242,7 +240,6 @@ export default class PreviewTrips extends LightningElement {
                 this.modalKeyFields = this.monthKeyFields;
                 this.recordDisplay = (this.modelList.length > 0) ? true : false;
                 this.dynamicBinding(this.modelList, this.modalKeyFields)
-                console.log("Driver getMileages", data)
             })
             .catch((error)=>{
                     console.log("getMileages error", error)
@@ -260,7 +257,6 @@ export default class PreviewTrips extends LightningElement {
                 this.modalKeyFields = this.monthKeyFields;
                 this.recordDisplay = (this.modelList.length > 0) ? true : false;
                 this.dynamicBinding(this.modelList, this.modalKeyFields)
-                console.log("Driver getBiweekMileages", data)
             })
             .catch((error)=>{
                     console.log("getBiweekMileages error", error)
