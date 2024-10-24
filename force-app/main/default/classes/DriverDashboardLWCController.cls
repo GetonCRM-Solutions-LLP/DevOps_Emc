@@ -17,12 +17,16 @@ global class DriverDashboardLWCController {
     public static String systemNotification {get;set;}
     public static String profileID {get;set;}
     global static String last2Month {get;set;}
-
+    public static String strOWEEmail {get;set;}
     // Constructor to initialize properties
     global DriverDashboardLWCController(){
         NewDashboardVideoLink__c videoCustomSetting = NewDashboardVideoLink__c.getOrgDefaults();
         videoCustom = json.serialize(videoCustomSetting );
-        List<Contact> conList = [SELECT id,FirstName,Role__c,Driving_States__c,account.Schedule_Goto_Meeting__c,Activation_Date__c, System_Notification__c FROM Contact WHERE id =: getContactid()];
+        List<Contact> conList = [SELECT id,FirstName,Role__c,Driving_States__c,
+                                            account.Schedule_Goto_Meeting__c,Activation_Date__c, 
+                                            System_Notification__c 
+                                        FROM Contact 
+                                        WHERE id =: getContactid() WITH SECURITY_ENFORCED];
         if(conList.size() > 0){
             scheduleGotoMeeting = conList[0].account.Schedule_Goto_Meeting__c != null ? conList[0].account.Schedule_Goto_Meeting__c : '' ;
             drivingStates = Json.serialize(String.valueOf(conList[0].Driving_States__c));
@@ -37,7 +41,6 @@ global class DriverDashboardLWCController {
         
     last2Month = String.escapeSingleQuotes(WrapperUtils.getpastYearReimbursement(getContactid()));
     }
-    
     // Method to get the contact ID from the current page parameters
     public static String getContactid() {
         if(ApexPages.currentPage().getParameters().containsKey('id') && String.isNotBlank(ApexPages.currentPage().getParameters().get('id'))) {
@@ -50,9 +53,12 @@ global class DriverDashboardLWCController {
     // Method to count user logins based on contact ID
     public static Integer countUserLogin(String contactId){
         integer countLogin = 0;
-        User userObj = [SELECT id from User where ContactId =: contactId limit 1];
+        User userObj = [SELECT id FROM User WHERE ContactId =: contactId limit 1];
         if(userObj != null){
-            for(LoginHistory objLogin : [SELECT id,Status from LoginHistory where LoginUrl = 'https://mburse--partialdev.sandbox.my.site.com/app/adminlogin' and UserId =: userObj.Id]){
+            for(LoginHistory objLogin : [SELECT id,Status 
+                                                FROM LoginHistory 
+                                                WHERE LoginUrl = 'https://mburse--partialdev.sandbox.my.site.com/app/adminlogin' 
+                                                    AND UserId =: userObj.Id]){
                 if(objLogin.Status == 'Success'){
                     countLogin = countLogin + 1;
                 }
@@ -70,7 +76,25 @@ global class DriverDashboardLWCController {
     @AuraEnabled(cacheable=true)
     public static String getDriverDetails(String contactId) {
         List<contact> driverDataList = new List<contact>();
-        driverDataList = [SELECT id, Name, FirstName, MailingPostalCode,MailingState,External_Email__c, MailingCity,Driver_Type__c,Driving_States__c,Expiration_Date__c,Compliance_Mileage__c, Vehicle_Value__c,Time_Attandance__c, Fixed_Amount__c, compliancestatus__c, Car_Image__c,Notification_Message__c,Contact_Picture__c,Insurance_Plan__c,Plan_Years__c,Vehicle_Type__c,Insurance_Upload_Date__c,Insurance_Attachment_Id__c, Total_Approved_Mileages__c,Total_Annual_Reimbursement__c,Total_reimbursment__c,Monthly_Reimbursement__c, Biweek_Reimbursement__c, Bi_Week_Fixed_Amount__c, Monthly_Mileage_Rate__c,Maintenance__c,Tires__c, Insurance_Rate__c, License_Ragistration__c, Taxes__c, Depreciation__c, Total_Monthly_Costs__c, Business_Use__c,Fixed_Cost_Adjustment__c,Vehicle_Value_Check__c,Mileage_Meet__c,Vehicle_Age__c,Insurance__c, Notification_Date__c, Account.Bodily_Injury__c, Account.Uninsured_Motorist__c, Account.Property_Damage__c,Map_Country__c, Account.Comprehensive__c, Account.Collision__c,Account.Umbrella_Coverage__c,Triplog_UserID__c,Reimbursement_Type__c,Reimbursement_Frequency__c, Account.Reimbursement_Type__c,MobilePhone,monthly_compliance_status__c,Avg_Mileage__c,Sync_Feature__c,Role__c FROM Contact  WHERE id =: contactId];
+        driverDataList = [SELECT id, Name, FirstName, MailingPostalCode,MailingState,External_Email__c, MailingCity,Driver_Type__c,
+                                        Driving_States__c,Expiration_Date__c,Compliance_Mileage__c, Vehicle_Value__c,
+                                        Time_Attandance__c, Fixed_Amount__c, monthly_compliance_status__c, Car_Image__c,
+                                        Notification_Message__c,Contact_Picture__c,Insurance_Plan__c,Plan_Years__c,
+                                        Vehicle_Type__c,Insurance_Upload_Date__c,Insurance_Attachment_Id__c, 
+                                        Total_Approved_Mileages__c,Total_Annual_Reimbursement__c,Total_reimbursment__c,
+                                        Monthly_Reimbursement__c, Biweek_Reimbursement__c, Bi_Week_Fixed_Amount__c,
+                                        Monthly_Mileage_Rate__c,Maintenance__c,Tires__c, Insurance_Rate__c, 
+                                        License_Ragistration__c, Taxes__c, Depreciation__c, Total_Monthly_Costs__c,
+                                        Business_Use__c,Fixed_Cost_Adjustment__c,Vehicle_Value_Check__c,Mileage_Meet__c,
+                                        Vehicle_Age__c,Insurance__c, Notification_Date__c, Account.Bodily_Injury__c,
+                                        Account.Uninsured_Motorist__c, Account.Property_Damage__c,Map_Country__c,
+                                        Account.Comprehensive__c, Account.Collision__c,Account.Umbrella_Coverage__c,
+                                        Triplog_UserID__c,Reimbursement_Type__c,Reimbursement_Frequency__c,
+                                        Account.Reimbursement_Type__c,MobilePhone,Avg_Mileage__c,Sync_Feature__c,
+                                        Role__c 
+                                    FROM Contact  
+                                    WHERE id =: contactId
+                                    WITH SECURITY_ENFORCED];
         
         return JSON.serialize(driverDataList ).unescapeHtml4();
     }
@@ -79,7 +103,22 @@ global class DriverDashboardLWCController {
     @AuraEnabled
     public static String getDriverDetailsClone(String contactId) {
         List<contact> driverDataList = new List<contact>();
-        driverDataList = [SELECT id, Name, FirstName, MailingPostalCode, MailingState,External_Email__c, MailingCity,Driver_Type__c,Driving_States__c,Expiration_Date__c,Compliance_Mileage__c, Vehicle_Value__c,Time_Attandance__c, Fixed_Amount__c, compliancestatus__c, Car_Image__c,Notification_Message__c,Contact_Picture__c,Insurance_Plan__c,Plan_Years__c,Vehicle_Type__c,Insurance_Upload_Date__c,Insurance_Attachment_Id__c, Total_Approved_Mileages__c,Total_Annual_Reimbursement__c,Total_reimbursment__c,Monthly_Reimbursement__c, Biweek_Reimbursement__c, Bi_Week_Fixed_Amount__c, Monthly_Mileage_Rate__c,Maintenance__c,Tires__c, Insurance_Rate__c, License_Ragistration__c, Taxes__c, Depreciation__c, Total_Monthly_Costs__c, Business_Use__c,Fixed_Cost_Adjustment__c,Vehicle_Value_Check__c,Mileage_Meet__c,Vehicle_Age__c,Insurance__c, Notification_Date__c,Account.Bodily_Injury__c, Account.Uninsured_Motorist__c, Account.Property_Damage__c,Map_Country__c, Account.Comprehensive__c, Account.Collision__c,Account.Umbrella_Coverage__c,Triplog_UserID__c,Reimbursement_Type__c,Reimbursement_Frequency__c, Account.Reimbursement_Type__c,Sync_Feature__c,Role__c,monthly_compliance_status__c,is_Manual_Entry_User__c FROM Contact  WHERE id =: contactId];
+        driverDataList = [SELECT id, Name, FirstName, MailingPostalCode, MailingState,External_Email__c, MailingCity,
+                                        Driver_Type__c,Driving_States__c,Expiration_Date__c,Compliance_Mileage__c, 
+                                        Vehicle_Value__c,Time_Attandance__c, Fixed_Amount__c, monthly_compliance_status__c, 
+                                        Car_Image__c,Notification_Message__c,Contact_Picture__c,Insurance_Plan__c,Plan_Years__c,
+                                        Vehicle_Type__c,Insurance_Upload_Date__c,Insurance_Attachment_Id__c, Total_Approved_Mileages__c,
+                                        Total_Annual_Reimbursement__c,Total_reimbursment__c,Monthly_Reimbursement__c, Biweek_Reimbursement__c, 
+                                        Bi_Week_Fixed_Amount__c, Monthly_Mileage_Rate__c,Maintenance__c,Tires__c, Insurance_Rate__c, 
+                                        License_Ragistration__c, Taxes__c, Depreciation__c, Total_Monthly_Costs__c, Business_Use__c,
+                                        Fixed_Cost_Adjustment__c,Vehicle_Value_Check__c,Mileage_Meet__c,Vehicle_Age__c,Insurance__c, 
+                                        Notification_Date__c,Account.Bodily_Injury__c, Account.Uninsured_Motorist__c, Account.Property_Damage__c,
+                                        Map_Country__c, Account.Comprehensive__c, Account.Collision__c,Account.Umbrella_Coverage__c,
+                                        Triplog_UserID__c,Reimbursement_Type__c,Reimbursement_Frequency__c, Account.Reimbursement_Type__c,
+                                        Sync_Feature__c,Role__c,is_Manual_Entry_User__c 
+                                    FROM Contact
+                                    WHERE id =: contactId
+                                    WITH SECURITY_ENFORCED];
         return JSON.serialize(driverDataList ).unescapeHtml4();
     }
     
@@ -87,7 +126,7 @@ global class DriverDashboardLWCController {
     @AuraEnabled
     public static String getDrivingState(String contactId) {
         List<contact> driverDataList = new List<contact>();
-        driverDataList = [SELECT id, Name, Driving_States__c FROM Contact  WHERE id =: contactId];
+        driverDataList = [SELECT id, Name, Driving_States__c FROM Contact  WHERE id =: contactId WITH SECURITY_ENFORCED];
         return JSON.serialize(driverDataList ).unescapeHtml4();
     }
 
@@ -95,7 +134,7 @@ global class DriverDashboardLWCController {
     @AuraEnabled(cacheable=true)
     public static String getCompanyLogoUrl(String accountId) {
         String imageURL;
-        Account acc = [SELECT Id,Name,Logo_Document_Id__c FROM Account WHERE id =:accountId];
+        Account acc = [SELECT Id,Name,Logo_Document_Id__c FROM Account WHERE id =:accountId WITH SECURITY_ENFORCED];
         if(acc.Logo_Document_Id__c != null){
             imageURL = acc.Logo_Document_Id__c;
         }else{
@@ -113,59 +152,71 @@ global class DriverDashboardLWCController {
     //method to get the mileage data for the given contact for the given year
     @AuraEnabled
     public static String getMileagesData(Integer year,String contactId) {
-        List<mileageValueWrapper> mileageData = new List<mileageValueWrapper>();
-        for(Employee_Mileage__c empMileagelst : [SELECT Id,StartTime__c, EndTime__c,CreatedDate, Contact_Email_Id__c, Tracing_Style__c, Day_Of_Week__c,  Trip_Date__c, Origin_Name__c, Destination_Name__c, Mileage__c, Trip_Status__c, Approved_Date__c, ConvertedStartTime__c,ConvertedEndTime__c, Fuel_Variable_Rate__c, Variable_Rate__c,Variable__c,Maintenance_and_Tires__c ,EmployeeReimbursement__r.Month__c ,Total_Time__c,  Notes__c, Tag__c  FROM Employee_Mileage__c  WHERE EmployeeReimbursement__r.Contact_Id__c =: contactId AND EmployeeReimbursement__r.Year__c =:year  ORDER BY Trip_Date__c  DESC]){
+        List<mileageValueWrapper> lstMileageValueWrappers = new List<mileageValueWrapper>();
+        for(Employee_Mileage__c lstEmployeeMileages : [SELECT Id,StartTime__c, EndTime__c,CreatedDate, Contact_Email_Id__c,
+                                                                    Tracing_Style__c, Day_Of_Week__c,  Trip_Date__c, Origin_Name__c,
+                                                                    Destination_Name__c, Mileage__c, Trip_Status__c, Approved_Date__c,
+                                                                    ConvertedStartTime__c,ConvertedEndTime__c, Fuel_Variable_Rate__c,
+                                                                    Variable_Rate__c,Variable__c,Maintenance_and_Tires__c ,
+                                                                    EmployeeReimbursement__r.Month__c ,Total_Time__c,
+                                                                    Notes__c, Tag__c,Approval_Name__c
+                                                                FROM Employee_Mileage__c 
+                                                                WHERE EmployeeReimbursement__r.Contact_Id__c =: contactId 
+                                                                    AND EmployeeReimbursement__r.Year__c =:year 
+                                                                    WITH SECURITY_ENFORCED
+                                                                    ORDER BY Trip_Date__c  DESC]){
             
-            String MonthVal = empMileagelst.EmployeeReimbursement__r.Month__c.split('-').get(0);
-            String MonthStr = WrapperUtils.getMonthNamefromno(Integer.valueOf(MonthVal));
-            mileageValueWrapper empMileWrap = new mileageValueWrapper ();
-            empMileWrap.reimMonth = MonthStr;
-            empMileWrap.id = String.valueOf(empMileagelst.Id);
-            if(empMileagelst.ConvertedStartTime__c != null ) {
-                DateTime startTime = empMileagelst.ConvertedStartTime__c;
-                empMileWrap.starttime = startTime.format('h:mm a','America/Panama');
+            String strstrMonthVal = lstEmployeeMileages.EmployeeReimbursement__r.Month__c.split('-').get(0);
+            String strMonth = WrapperUtils.getMonthNamefromno(Integer.valueOf(strstrMonthVal));
+            mileageValueWrapper objMileageValueWrapper = new mileageValueWrapper ();
+            objMileageValueWrapper.reimMonth = strMonth;
+            objMileageValueWrapper.id = String.valueOf(lstEmployeeMileages.Id);
+            if(lstEmployeeMileages.ConvertedStartTime__c != null ) {
+                DateTime employeMileageStartTime = lstEmployeeMileages.ConvertedStartTime__c;
+                objMileageValueWrapper.starttime = employeMileageStartTime.format('h:mm a','America/Panama');
             }
-            if(empMileagelst.ConvertedEndTime__c != null) {
-                DateTime endTime = empMileagelst.ConvertedEndTime__c ;
-                empMileWrap.endTime = endTime.format('h:mm a','America/Panama');
+            if(lstEmployeeMileages.ConvertedEndTime__c != null) {
+                DateTime employeMileageEndTime = lstEmployeeMileages.ConvertedEndTime__c ;
+                objMileageValueWrapper.endTime = employeMileageEndTime.format('h:mm a','America/Panama');
             }
-            empMileWrap.email = String.valueOf(empMileagelst.Contact_Email_Id__c);
-            empMileWrap.tracingStyle = String.valueOf(empMileagelst.Tracing_Style__c);
-            empMileWrap.dayOfWeek = String.valueOf(empMileagelst.Day_Of_Week__c);
+            objMileageValueWrapper.email = String.valueOf(lstEmployeeMileages.Contact_Email_Id__c);
+            objMileageValueWrapper.tracingStyle = String.valueOf(lstEmployeeMileages.Tracing_Style__c);
+            objMileageValueWrapper.dayOfWeek = String.valueOf(lstEmployeeMileages.Day_Of_Week__c);
             
-            Date dTrip = empMileagelst.Trip_Date__c;
-            DateTime dt = DateTime.newInstance(dTrip.year(), dTrip.month(),dTrip.day());
-            String dateStrforTrip = dt.format('MM/dd/yy');
+            Date employeMileageTripDate = lstEmployeeMileages.Trip_Date__c;
+            DateTime dt = DateTime.newInstance(employeMileageTripDate.year(), employeMileageTripDate.month(),employeMileageTripDate.day());
+            String strDateTrip = dt.format('MM/dd/yy');
 
-            empMileWrap.tripDate = dateStrforTrip;
-            empMileWrap.originName = String.valueOf(empMileagelst.Origin_Name__c);
-            empMileWrap.destinationName = String.valueOf(empMileagelst.Destination_Name__c);
-            empMileWrap.mileage = String.valueOf(empMileagelst.Mileage__c);
-            empMileWrap.tripStatus = String.valueOf(empMileagelst.Trip_Status__c);
-            if(empMileagelst.Approved_Date__c != null ){
-                Date dApprove = empMileagelst.Approved_Date__c;
-                DateTime dt2 = DateTime.newInstance(dApprove.year(), dApprove.month(),dApprove.day());
-                String dateStrforApprove = dt2.format('MM/dd/yy');
-                empMileWrap.approvedDate = dateStrforApprove;
+            objMileageValueWrapper.tripDate = strDateTrip;
+            objMileageValueWrapper.originName = String.valueOf(lstEmployeeMileages.Origin_Name__c);
+            objMileageValueWrapper.destinationName = String.valueOf(lstEmployeeMileages.Destination_Name__c);
+            objMileageValueWrapper.mileage = String.valueOf(lstEmployeeMileages.Mileage__c);
+            objMileageValueWrapper.tripStatus = String.valueOf(lstEmployeeMileages.Trip_Status__c);
+            if(lstEmployeeMileages.Approved_Date__c != null ){
+                Date employeMileageApproveDate = lstEmployeeMileages.Approved_Date__c;
+                DateTime approvedDateTime = DateTime.newInstance(employeMileageApproveDate.year(), employeMileageApproveDate.month(),employeMileageApproveDate.day());
+                String strApprovedDate = approvedDateTime.format('MM/dd/yy');
+                objMileageValueWrapper.approvedDate = strApprovedDate;
             }
         
-            empMileWrap.fuelVaraibleRate = String.valueOf(empMileagelst.Fuel_Variable_Rate__c);
-            empMileWrap.varaibleRate = empMileagelst.Variable_Rate__c != null ? String.valueOf(empMileagelst.Variable_Rate__c) : '0';
-            empMileWrap.varaibleAmount = String.valueOf(empMileagelst.Variable__c);
-            empMileWrap.maintTyre = String.valueOf(empMileagelst.Maintenance_and_Tires__c);
-            empMileWrap.totalTime = String.valueOf(empMileagelst.Total_Time__c);
-            empMileWrap.notes = String.valueOf(empMileagelst.Notes__c);
-            empMileWrap.tag = String.valueOf(empMileagelst.Tag__c);
+            objMileageValueWrapper.fuelVaraibleRate = String.valueOf(lstEmployeeMileages.Fuel_Variable_Rate__c);
+            objMileageValueWrapper.varaibleRate = lstEmployeeMileages.Variable_Rate__c != null ? String.valueOf(lstEmployeeMileages.Variable_Rate__c) : '0';
+            objMileageValueWrapper.varaibleAmount = String.valueOf(lstEmployeeMileages.Variable__c);
+            objMileageValueWrapper.maintTyre = String.valueOf(lstEmployeeMileages.Maintenance_and_Tires__c);
+            objMileageValueWrapper.totalTime = String.valueOf(lstEmployeeMileages.Total_Time__c);
+            objMileageValueWrapper.notes = String.valueOf(lstEmployeeMileages.Notes__c);
+            objMileageValueWrapper.tag = String.valueOf(lstEmployeeMileages.Tag__c);
 
-            Date createddate = Date.valueOf(empMileagelst.CreatedDate);
+            Date createddate = Date.valueOf(lstEmployeeMileages.CreatedDate);
             if(String.valueOf(createddate).contains('-')) {
-                List<String> createdDateSplitted = new List<String>();
-                createdDateSplitted = String.valueOf(createddate).split('-');
-                empMileWrap.submitteddate =  createdDateSplitted[1]+'/'+createdDateSplitted[2]+'/'+createdDateSplitted[0].substring(2,4);
+                List<String> lstCreatedDateSplitted = new List<String>();
+                lstCreatedDateSplitted = String.valueOf(createddate).split('-');
+                objMileageValueWrapper.submitteddate =  lstCreatedDateSplitted[1]+'/'+lstCreatedDateSplitted[2]+'/'+lstCreatedDateSplitted[0].substring(2,4);
             }
-            mileageData.add(empMileWrap);
+            objMileageValueWrapper.approvalName = String.valueOf(lstEmployeeMileages.Approval_Name__c);
+            lstMileageValueWrappers.add(objMileageValueWrapper);
         }
-        return JSON.serialize(mileageData).unescapeHtml4();
+        return JSON.serialize(lstMileageValueWrappers).unescapeHtml4();
     }
     //wrapper class to manage the data to send in frontend
     public class mileageValueWrapper {
@@ -190,6 +241,7 @@ global class DriverDashboardLWCController {
         public string tag {get;set;}
         public string maintTyre {get;set;}
         public string submitteddate {get;set;}
+        public string approvalName {get;set;}
     }
 
     //method to access the charts in the dashboard
@@ -285,12 +337,12 @@ global class DriverDashboardLWCController {
         reaimMonthList = LWCWrapperUtils.monthList(String.valueOf(System.today().Year()),true);
         String lastMonth = Utils.fetchMonths(1, 0)[0];
         for(Employee_Reimbursement__c empReimLst : [SELECT Id,Month__c,Fuel_Price__c,Variable_Rate__c,Fuel_Variable_Rate__c,Contact_Id__r.MailingCity,Contact_Id__r.MailingState   FROM Employee_Reimbursement__c WHERE Month__c =: reaimMonthList AND Contact_Id__c =: contactId]){
-            String MonthVal = empReimLst.Month__c.split('-').get(0);
-            String MonthStr = WrapperUtils.getMonthNamefromno(Integer.valueOf(MonthVal));
+            String strMonthVal = empReimLst.Month__c.split('-').get(0);
+            String strMonth = WrapperUtils.getMonthNamefromno(Integer.valueOf(strMonthVal));
             reaimValueWrapper reimWrap = new reaimValueWrapper ();
-            reimWrap.ReimMonth = MonthStr;
+            reimWrap.reimMonth = strMonth;
             reimWrap.fuelPrice = empReimLst.Fuel_Price__c != null ? String.valueOf(empReimLst.Fuel_Price__c) : '0';
-            reimWrap.VariableRate = empReimLst.Variable_Rate__c != null ? String.valueOf(empReimLst.Variable_Rate__c) : '0';
+            reimWrap.variableRate = empReimLst.Variable_Rate__c != null ? String.valueOf(empReimLst.Variable_Rate__c) : '0';
             reimValue.add(reimWrap);
         }
         return Json.serialize(reimValue);
@@ -339,13 +391,13 @@ global class DriverDashboardLWCController {
     }
     //fuel and variable rates
     @AuraEnabled
-    public static String getFuelVariableRate(String contactId) {
-        return WrapperUtils.getDriverFuelVariableRate(contactId);
+    public static String getFuelvariableRate(String contactId) {
+        return WrapperUtils.getDriverFuelvariableRate(contactId);
     }
     public class reaimValueWrapper {
-        public string ReimMonth {get;set;}
+        public string reimMonth {get;set;}
         public string fuelPrice {get;set;}
-        public string VariableRate {get;set;}
+        public string variableRate {get;set;}
     }
     //get reimbursement data
     @AuraEnabled(cacheable=true)
@@ -387,27 +439,33 @@ global class DriverDashboardLWCController {
     public static String getPlanParameter (String contactId) {
         planParameterWrap wrapObj = new planParameterWrap ();
         List<Attachment> driverPacketAttachmentList = new List<Attachment>();
-        for (Attachment att : [select id,Name from Attachment where ParentId =: contactId and (Name LIKE '%Signed Document%' OR Name LIKE '%Driver_Packet%' OR Name LIKE'%MVR%' OR Name Like '%Driver Agreement.pdf%')]){
+        for (Attachment att : [select id,Name FROM Attachment WHERE ParentId =: contactId AND (Name LIKE '%Signed Document%' OR Name LIKE '%Driver_Packet%' OR Name LIKE'%MVR%' OR Name Like '%Driver Agreement.pdf%')]){
             driverPacketAttachmentList.add(att);
         }
         if(driverPacketAttachmentList.size() > 0){
             for(Attachment objPacket: driverPacketAttachmentList ){
-                String Name = objPacket.Name;
-                if(Name.contains('MVR') ){
+                String strName = objPacket.Name;
+                if(strName.contains('MVR') ){
                     wrapObj.driverMVR = objPacket.Id;
                 }
-                if(Name.contains('Signed Document') || Name.contains('Driver_Packet') || Name.contains('Driver Agreement.pdf') ) {
+                if(strName.contains('Signed Document') || strName.contains('Driver_Packet') || strName.contains('Driver Agreement.pdf') ) {
                     wrapObj.driverPacketId = objPacket.Id;
                 }
             }
         }
         try{
-            List<ContentDocumentLink> contentDocLink = [SELECT ContentDocumentId,LinkedEntityId FROM ContentDocumentLink where LinkedEntityId  =: contactId];
+            List<ContentDocumentLink> contentDocLink = [SELECT ContentDocumentId,LinkedEntityId 
+                                                                FROM ContentDocumentLink 
+                                                                WHERE LinkedEntityId  =: contactId];
             Set<Id> ids = new Set<Id>();
             for(ContentDocumentLink obj:  contentDocLink){
                 ids.add(obj.ContentDocumentId);
             }
-            ContentDistribution contentDist = [SELECT id,ContentDownloadUrl from ContentDistribution where ContentDocumentId in : ids and (Name=: Constants.signedDocument OR Name LIKE '%Driver Agreement.pdf%'  ) order by createddate desc limit 1];
+            ContentDistribution contentDist = [SELECT id,ContentDownloadUrl 
+                                                        FROM ContentDistribution
+                                                        WHERE ContentDocumentId in : ids
+                                                            AND (Name=: Constants.signedDocument OR Name LIKE '%Driver Agreement.pdf%')
+                                                            ORDER BY createddate DESC limit 1];
             wrapObj.obj_content_version = contentDist.ContentDownloadUrl;
         }catch(Exception e)
             {System.debug('Exception:-->'+e.getmessage()+'--'+e.getLineNumber());}
@@ -455,7 +513,10 @@ global class DriverDashboardLWCController {
     
     @AuraEnabled
     public static String updateStateList(String contactId, String listOfStates){
-        Contact contactList = [SELECT id, Name, External_Email__c, Driving_States__c FROM Contact WHERE id =: contactId];
+        Contact contactList = [SELECT id, Name, External_Email__c, Driving_States__c 
+                                        FROM Contact 
+                                        WHERE id =: contactId
+                                        WITH SECURITY_ENFORCED];
         if(contactList != null){
            if(listOfStates != null || listOfStates != ''){
                 contactList.Driving_States__c = listOfStates;
@@ -473,8 +534,12 @@ global class DriverDashboardLWCController {
     ********************************************
     */
     @AuraEnabled
-    public static void sendDrivingStateEmail(String id, String drivingStates){
-        OrgWideEmailAddress[] owea = [SELECT Id, Address FROM OrgWideEmailAddress where Address = 'driverservices@mburse.com'];
+    public static void sendDrivingStateEmail(String id, String drivingStates)
+    {
+        strOWEEmail = System.Label.Driver_Service_OWE;
+        OrgWideEmailAddress[] owea = [SELECT Id, Address 
+                                                FROM OrgWideEmailAddress 
+                                                WHERE Address =: strOWEEmail];
         String adminName;
         String driverName;
         String adminEmail;
@@ -494,7 +559,11 @@ global class DriverDashboardLWCController {
                                     Manager__r.Manager__r.External_Email__c, 
                                     Manager__r.Manager__r.Manager__r.External_Email__c ,
                                     Manager__r.Manager__r.Manager__r.Manager__r.External_Email__c,
-                                    Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.External_Email__c FROM Contact WHERE ID =: id AND Deactivated_Date__c = null]){
+                                    Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.External_Email__c
+                                FROM Contact 
+                                WHERE ID =: id 
+                                    AND Deactivated_Date__c = null
+                                WITH SECURITY_ENFORCED]){
                 driverName = conObj.FirstName;
                 adminName = (conObj.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Name : (conObj.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Name : (conObj.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.Name : (conObj.Manager__r.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.Manager__r.Name : (conObj.Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.Name : null;
                 adminEmail = (conObj.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.External_Email__c : (conObj.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.External_Email__c : (conObj.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.External_Email__c : (conObj.Manager__r.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.Manager__r.External_Email__c : (conObj.Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.Role__c == 'Admin') ? conObj.Manager__r.Manager__r.Manager__r.Manager__r.Manager__r.External_Email__c : '';
@@ -508,7 +577,10 @@ global class DriverDashboardLWCController {
         String adminId = '';
         List<String> toAddress = new List<String>();
         List<String> drivingStatesSplitted = new List<String>(); 
-        templateId = [SELECT Id, Subject, HtmlValue, body FROM EmailTemplate WHERE developerName = 'SendAdminDrivingState' Limit 1];
+        templateId = [SELECT Id, Subject, HtmlValue, body 
+                                FROM EmailTemplate 
+                                WHERE developerName = 'SendAdminDrivingState' 
+                               	Limit 1];
         if(templateId != null){
             newEmailBody = templateId.HtmlValue;
             String subjectModify;
@@ -516,7 +588,10 @@ global class DriverDashboardLWCController {
             if(adminName != null && adminEmail != null){
                 newEmailBody = newEmailBody.replace('{!ContactName}', adminName);
                 newEmailBody = newEmailBody.replace('{!Driver.Name}', driverName);
-                List<Contact> conList = [SELECT id, External_Email__c FROM Contact WHERE External_Email__c =: adminEmail];
+                List<Contact> conList = [SELECT id, External_Email__c 
+                                                    FROM Contact 
+                                                    WHERE External_Email__c =: adminEmail
+                                                    WITH SECURITY_ENFORCED];
                 adminId = (conList.size() != 0) ? conList[0].id : '';
                 if(drivingStates != null){
                         drivingStatesSplitted = drivingStates.split(';');   

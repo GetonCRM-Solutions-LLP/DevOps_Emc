@@ -1,7 +1,16 @@
+/**
+ * @description       : 
+ * @author            : Vatsal Bhalani
+ * @group             : 
+ * @last modified on  : 23-10-2024
+ * @last modified by  : Harsita
+**/
 @istest
 public class BiWeeklyWrapperUtilsTest {
 
     @testSetup static void setupmethod() {
+        Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
+        Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
         IRS_Mileage_Rate__c irsRateObj = TestDataFactory.createIRSRate(true,0);
         TrueDialog_Keys__c tdKeys = TestDataFactory.createTrueDialog(true);
         TriggerConfig__c customSetting =  new TriggerConfig__c();
@@ -29,10 +38,10 @@ public class BiWeeklyWrapperUtilsTest {
         veh.Year__c = '2019';
         insert veh;
         
-        UserRole userRole_1 = [SELECT Id FROM UserRole WHERE DeveloperName = 'EMD' LIMIT 1];
-        Profile profile_1 = [SELECT Id FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
-        User admin = [SELECT Id, Username, UserRoleId FROM User WHERE Profile.Name = 'System Administrator' AND UserRoleId = :userRole_1.Id LIMIT 1];
-        User user_1;
+        UserRole objUserRole = [SELECT Id FROM UserRole WHERE DeveloperName = 'EMD' LIMIT 1];
+        Profile objProfile = [SELECT Id FROM Profile WHERE Name = 'Customer Community Login User' LIMIT 1];
+        User admin = [SELECT Id, Username, UserRoleId FROM User WHERE Profile.Name = 'System Administrator' AND UserRoleId = :objUserRole.Id LIMIT 1];
+        User objUser;
         
         Account acc = new Account();
        
@@ -100,9 +109,9 @@ public class BiWeeklyWrapperUtilsTest {
             con.Manager__c = con1.id;
             insert con;
             
-            user_1 = new User( 
+            objUser = new User( 
                 Email = 'yourusername@gmail.com',
-                ProfileId = profile_1.Id, 
+                ProfileId = objProfile.Id, 
                 UserName = 'yourusername@gmail.com', 
                 Alias = 'Test',
                 TimeZoneSidKey = 'America/New_York',
@@ -114,7 +123,7 @@ public class BiWeeklyWrapperUtilsTest {
                 FirstName = 'Firstname',
                 LastName = 'Lastname'
             );
-            insert user_1;
+            insert objUser;
         }   
 
         Decimal days = acc.Pay_Period_Days__c;
@@ -225,6 +234,7 @@ public class BiWeeklyWrapperUtilsTest {
     @istest 
     public static void testMethod1() {
     
+        Test.startTest();
         TrueDialog_Keys__c tdKeys = TestDataFactory.createTrueDialog(true);
         List<Account> acc = [select id from Account limit 1];
         List<Contact> con = [select id from Contact where accountId =: acc[0].Id limit 1];
@@ -249,11 +259,15 @@ public class BiWeeklyWrapperUtilsTest {
         BiWeeklyWrapperUtils.getLastMonthReimbursements(string.valueOf(con[0].Id), string.valueOf(acc[0].Id),false,'Driver/Admin');
       //  BiWeeklyWrapperUtils.getLastMonthReimbursements(string.valueOf(con[0].Id), string.valueOf(acc[0].Id),true,'Manager');
         BiWeeklyWrapperUtils.sendInsuranceEmail (string.valueOf(con[0].Id),'TestContact','test123@email.com');
-        
+        Test.stopTest();
     }
 
     @istest 
     public static void testMethod2() {
+        
+        Test.startTest();
+        Test.setMock(HttpCalloutMock.class, new UploadBulkLocationAPIMock());
+        Test.setMock(HttpCalloutMock.class, new TrueDialogMockCallout());
     
         TrueDialog_Keys__c tdKeys = TestDataFactory.createTrueDialog(true);
         List<Account> acc = [select id from Account limit 1];
@@ -268,7 +282,7 @@ public class BiWeeklyWrapperUtilsTest {
                                             Bi_Weekly_Reimbursement__r.Total_Mileage__c,Bi_Weekly_Reimbursement__r.Contact__c,Driving_Time__c,Total_Time__c,
                                             CreatedDate,Rejected__c,Origin_Name__c,Tracing_Style__c,StartTime__c,EndTime__c,Mileage_Lock_Date__c,
                                             Day_Of_Week__c,Destination_Name__c,Bi_Weekly_Reimbursement__r.Contact__r.External_Email__c,Bi_Weekly_Reimbursement__r.Half_Fixed_Amount__c,
-                                            Maintenance_and_Tires__c,Fuel_price__c,Bi_Weekly_Reimbursement__r.Total_Variable_Rate__c,ConvertedStartTime__c,ConvertedEndTime__c, 
+                                            Maintenance_and_Tires__c,Fuel_price__c,Bi_Weekly_Reimbursement__r.Total_Variable_Rate__c,ConvertedStartTime__c,ConvertedEndTime__c, Approval_Name__c,
                                             Bi_Weekly_Reimbursement__r.Total_Rejected__c,Notes__c,Bi_Weekly_Reimbursement__r.Mileage_Lock_Date__c,Activity__c,High_Risk_Mileage__c,EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c 
                                         from Employee_Mileage__c where EmployeeReimbursement__c =: er[0].Id ];
 
@@ -287,6 +301,7 @@ public class BiWeeklyWrapperUtilsTest {
         // public static Map<String, Id> getBiweeklyReimMap (String contactId,Date minTripdate, Date maxTripDate, Boolean checkBiweekAcc)
         BiWeeklyWrapperUtils.getBiweeklyReimMap(string.valueOf(con[0].Id),system.today().addDays(-1),system.today(),true);
         BiWeeklyWrapperUtils.getBiweeklyReimMap(string.valueOf(con[0].Id),system.today().addDays(-1),system.today(),false);
+        Test.stopTest();
     }
         
 }

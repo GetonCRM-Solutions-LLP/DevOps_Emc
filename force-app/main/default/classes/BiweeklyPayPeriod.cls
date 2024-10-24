@@ -1,5 +1,19 @@
-public with sharing class BiweeklyPayPeriod {
-    public BiweeklyPayPeriod() { }
+/**
+ * @description       : 
+ * @author            : Harsita
+ * @group             : 
+ * @last modified on  : 23-10-2024
+ * @last modified by  : Harsita
+ * Modifications Log
+ * Ver   Date         Author    Modification
+ * 1.0   17-10-2024   Harsita   Initial Version
+**/
+public with sharing class BiweeklyPayPeriod 
+{
+    public BiweeklyPayPeriod() 
+    {
+        System.debug('BiweeklyPayPeriod Method Started');
+     }
 
     public static List<TimeAttedanceWrap> getTimeAndAttendance(String contactid,String year) {
         List<String> dateRange = new List<String>();
@@ -115,7 +129,7 @@ public with sharing class BiweeklyPayPeriod {
                 enddt = enddt +numberOfDays+1;
                 if(startdt.year() == year){
                     dateString = dateString + String.valueOf(startdt)+' to '+String.valueOf(enddt)+',';
-            }
+                }
         }
         if(startdt.year() == year){
             dateString = dateList+','+dateString;
@@ -134,7 +148,7 @@ public with sharing class BiweeklyPayPeriod {
                                                     FROM Bi_Weekly_Reimbursement__c
                                                     WHERE  Contact__c =: contactid
                                                         AND Start_Date__c >= : Date.valueOf(startdates)
-                                                        AND End_Date__c <= : Date.valueOf(enddates)]){
+                                                        AND End_Date__c <= : Date.valueOf(enddates) WITH SECURITY_ENFORCED]){
                 
                                                             objWrap = new TimeAttedanceWrap();
                 objWrap.startDate = startdates;
@@ -178,7 +192,7 @@ public with sharing class BiweeklyPayPeriod {
         public String approvalDate { get; set; }
         public String totalMileage { get; set; }
     }
-    
+    /* code commented by Harsita - Its not been used any where
     public static List<BiweeklyWrap> getBiweeklyMileage(String contactid,Integer years) {
         system.debug('contactid=='+ contactid);
         system.debug('years=='+ years);
@@ -229,7 +243,7 @@ public with sharing class BiweeklyPayPeriod {
                                     AND Trip_Date__c >= : Date.valueOf(startdates)
                                     AND Trip_Date__c <= : Date.valueOf(enddates) 
                                     AND Trip_Status__c = 'Approved' 
-                                    AND Approved_Date__c != null group by EmployeeReimbursement__r.Contact_Id__c ]) {
+                                    AND Approved_Date__c != null WITH SECURITY_ENFORCED GROUP BY EmployeeReimbursement__r.Contact_Id__c ]) {
                                         variableMap.put((Id)ar.get('cid'),(Decimal)ar.get('vtotal'));  
                                         mileageMap.put((Id)ar.get('cid'),(Decimal)ar.get('rtotal'));                     
         }
@@ -238,7 +252,7 @@ public with sharing class BiweeklyPayPeriod {
                                                     Total_Mileage__c 
                                                 FROM Employee_Reimbursement__c 
                                                 WHERE (Month__c =: reimStartMonth OR Month__c =: reimEndMonth)
-                                                AND Contact_Id__c =: contactid ]){
+                                                AND Contact_Id__c =: contactid WITH SECURITY_ENFORCED]){
             reimList.add(reim);
         }
         BiweeklyWrap objWrap = new BiweeklyWrap();
@@ -249,7 +263,7 @@ public with sharing class BiweeklyPayPeriod {
                                                 AND Approved_Date__c = null
                                                 AND Trip_Date__c >= : Date.valueOf(startdates)
                                                 AND Trip_Date__c <= : Date.valueOf(enddates)
-                                                AND EmployeeReimbursement__r.Contact_Id__c =: contactid ]){   
+                                                AND EmployeeReimbursement__r.Contact_Id__c =: contactid WITH SECURITY_ENFORCED]){   
             objWrap.checkPendingTrip = mil.Mileage_Lock_Date__c == null ?  true : false;                          
         }
         objWrap.startDate = startdates.trim();
@@ -262,7 +276,7 @@ public with sharing class BiweeklyPayPeriod {
             objWrap.totalReim = variableMap.containskey(contactid) ?  String.valueof(reimList[0].Half_Fixed_Amount__c + variableMap.get(contactid)) : String.valueof(reimList[0].Half_Fixed_Amount__c + 0);           
         }        
         return objWrap;
-    }
+    } */
     
     public class BiweeklyWrap {
         public string biweekId { get; set; }
@@ -286,7 +300,7 @@ public with sharing class BiweeklyPayPeriod {
                                                         Total_Mileage__c,Total_Monthly_Approved_Variable__c,
                                                         Total_Monthly_Reimbursement__c,Mileage_Lock_Date__c                                             
                                                     FROM Bi_Weekly_Reimbursement__c 
-                                                    WHERE Contact__c =:contactid ]){
+                                                    WHERE Contact__c =:contactid WITH SECURITY_ENFORCED]){
             if(biweekReim.Start_Date__c != null && biweekReim.Start_Date__c.year() == years){
                 
                 BiweeklyWrap objWrap = new BiweeklyWrap();
@@ -320,6 +334,7 @@ public with sharing class BiweeklyPayPeriod {
     }
     /* This method is used to get Mileage and reimbursement data based on startdate and end date of trips and contact id.
     Author : Sanket Goswami */
+    /* Code commented by harsita - Its not been used anywhere
     public static List<String> getMileages1(date startdate,date enddate,String contactId)
     {
        
@@ -347,7 +362,7 @@ public with sharing class BiweeklyPayPeriod {
                                                         FROM Employee_Mileage__c 
                                                         WHERE Trip_Date__c >=: startdate 
                                                             AND Trip_Date__c <=: enddate 
-                                                            AND EmployeeReimbursement__r.Contact_Id__c =: contactId order by ConvertedStartTime__c asc] ;
+                                                            AND EmployeeReimbursement__r.Contact_Id__c =: contactId WITH SECURITY_ENFORCED ORDER BY ConvertedStartTime__c asc] ;
         System.Debug(employeeMileageList);
         List<String> mileagesList = new List<String>();    
         double mileages=0;
@@ -367,7 +382,7 @@ public with sharing class BiweeklyPayPeriod {
         } else {
             return mileagesList;
         }
-    }
+    } */
     /* This method is used to get Mileage and biweekly reimbursement data based on biweekly reimbursement Id.
     Author : Sanket Goswami */
     public static List<String> getBiweekMileages1(String biWeekId)
@@ -390,9 +405,9 @@ public with sharing class BiweeklyPayPeriod {
                                                             TimeZone__c,Bi_Weekly_Reimbursement__r.Mileage_Lock_Date__c,
                                                             ConvertedStartTime__c,ConvertedEndTime__c,Driving_Time__c,Original_Destination_Name__c,
                                                             Total_Time__c,Tag__c,Mileage_Lock_Date__c,EmployeeReimbursement__c,High_Risk_Mileage__c,
-                                                            EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c 
+                                                            EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c,Approval_Name__c
                                                         FROM Employee_Mileage__c 
-                                                        WHERE  Bi_Weekly_Reimbursement__c =: biWeekId order by ConvertedStartTime__c asc] ;
+                                                        WHERE  Bi_Weekly_Reimbursement__c =: biWeekId ORDER BY ConvertedStartTime__c asc] ;
         System.Debug(employeeMileageList);
         List<String> mileagesList = new List<String>();    
         double mileages = 0;
@@ -419,7 +434,7 @@ public with sharing class BiweeklyPayPeriod {
     {
         List<Employee_Mileage__c> employeeMileageList = [SELECT id,Name,Trip_Date__c,Trip_Origin__c,Original_Origin_Name__c,Original_Destination_Name__c,
                                                             Stay_Time__c,Trip_Destination__c,Mileage__c,
-                                                            Variable__c,Trip_Status__c,Approved_Date__c,
+                                                            Variable__c,Trip_Status__c,Approved_Date__c,Approval_Name__c,
                                                             Bi_Weekly_Reimbursement__c,Bi_Weekly_Reimbursement__r.month__c,
                                                             Bi_Weekly_Reimbursement__r.Contact__c,CreatedDate,
                                                             Rejected__c,Bi_Weekly_Reimbursement__r.Total_Variable_Rate__c,
@@ -438,7 +453,7 @@ public with sharing class BiweeklyPayPeriod {
                                                         FROM Employee_Mileage__c 
                                                         WHERE Trip_Date__c >=: startdate 
                                                                 AND Trip_Date__c <=: enddate 
-                                                                AND Bi_Weekly_Reimbursement__r.Contact__c =: contactId order by ConvertedStartTime__c asc] ;
+                                                                AND Bi_Weekly_Reimbursement__r.Contact__c =: contactId ORDER BY ConvertedStartTime__c asc] ;
         System.Debug(employeeMileageList);
         List<String> mileagesList = new List<String>();    
         double mileages = 0;
@@ -461,11 +476,12 @@ public with sharing class BiweeklyPayPeriod {
     }
     /* This method is used to approve biweekly reimbursement.
     Author : Sanket Goswami */
+    
     public static string ApproveBiWeekTrips(String biWeekId){
         List<Bi_Weekly_Reimbursement__c> reimToApprove = new List<Bi_Weekly_Reimbursement__c>();
         for(Bi_Weekly_Reimbursement__c mileage : [SELECT id,Approved_Date__c,Status__c 
                                             FROM Bi_Weekly_Reimbursement__c 
-                                            WHERE Id =: biWeekId]) {
+                                            WHERE Id =: biWeekId WITH SECURITY_ENFORCED]) {
                                                 mileage.Status__c = 'Approved';
                                                 mileage.Approved_Date__c = System.today();
             reimToApprove.add(mileage);
@@ -477,6 +493,8 @@ public with sharing class BiweeklyPayPeriod {
     }
     /* This method is used to approve mileages.
     Author : Sanket Goswami */
+
+    /* Code commmented by Harsita Its not been used anywhere
     public static string ApproveTrips(date startdate,date enddate,String contactId){
         List<String> approvedIdList = new List<String>();
         List<Employee_Mileage__c> mileagesToApprove = new List<Employee_Mileage__c>();
@@ -485,7 +503,7 @@ public with sharing class BiweeklyPayPeriod {
                                             WHERE Trip_Date__c >=: startdate 
                                                 AND Trip_Date__c <=: enddate 
                                                 AND Trip_Status__c = 'Not Approved Yet'
-                                                AND EmployeeReimbursement__r.Contact_Id__c =: contactId order by ConvertedStartTime__c asc]){
+                                                AND EmployeeReimbursement__r.Contact_Id__c =: contactId WITH SECURITY_ENFORCED ORDER BY ConvertedStartTime__c asc]){
             approvedIdList.add(mileage.id);
         }
         if(approvedIdList.size() > 0 ){
@@ -496,7 +514,7 @@ public with sharing class BiweeklyPayPeriod {
             update mileagesToApprove;
         }
         return 'sucess';
-    }
+    }*/
     
      public static List<String> getPayPeriodDates (String contactid,Integer years){
         List<String> dateRange = new List<String>();
@@ -504,7 +522,7 @@ public with sharing class BiweeklyPayPeriod {
         date activationdate;
         List <Contact> conList = [SELECT id,Activation_Date__c,Deactivated_Date__c,Account.Pay_Period_Start_Date__c 
                                         FROM Contact 
-                                        WHERE Id =: contactid ];
+                                        WHERE Id =: contactid WITH SECURITY_ENFORCED];
         if(conList[0].Account.Pay_Period_Start_Date__c != null && conList[0].Activation_Date__c != null){
             startDate = String.valueOf(conList[0].Account.Pay_Period_Start_Date__c);
             activationdate = date.valueOf(conList[0].Activation_Date__c);
@@ -532,7 +550,7 @@ public with sharing class BiweeklyPayPeriod {
      @AuraEnabled
     public static string payPeriodDateList(String accId){
         String dateList;
-        Account acc = [Select Id,Name,Pay_Period_Start_Date__c,Pay_Period_Days__c FROM Account where Id =: accId];
+        Account acc = [Select Id,Name,Pay_Period_Start_Date__c,Pay_Period_Days__c FROM Account where Id =: accId WITH SECURITY_ENFORCED];
         Date startDt = acc.Pay_Period_Start_Date__c;
         Integer days = Integer.valueOf(acc.Pay_Period_Days__c);
         Integer yearVal = System.today().year();
