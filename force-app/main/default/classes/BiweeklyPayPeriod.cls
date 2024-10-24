@@ -407,7 +407,7 @@ public with sharing class BiweeklyPayPeriod
                                                             Total_Time__c,Tag__c,Mileage_Lock_Date__c,EmployeeReimbursement__c,High_Risk_Mileage__c,
                                                             EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c,Approval_Name__c
                                                         FROM Employee_Mileage__c 
-                                                        WHERE  Bi_Weekly_Reimbursement__c =: biWeekId WITH SECURITY_ENFORCED ORDER BY ConvertedStartTime__c asc] ;
+                                                        WHERE  Bi_Weekly_Reimbursement__c =: biWeekId ORDER BY ConvertedStartTime__c asc] ;
         System.Debug(employeeMileageList);
         List<String> mileagesList = new List<String>();    
         double mileages = 0;
@@ -453,7 +453,7 @@ public with sharing class BiweeklyPayPeriod
                                                         FROM Employee_Mileage__c 
                                                         WHERE Trip_Date__c >=: startdate 
                                                                 AND Trip_Date__c <=: enddate 
-                                                                AND Bi_Weekly_Reimbursement__r.Contact__c =: contactId WITH SECURITY_ENFORCED ORDER BY ConvertedStartTime__c asc] ;
+                                                                AND Bi_Weekly_Reimbursement__r.Contact__c =: contactId ORDER BY ConvertedStartTime__c asc] ;
         System.Debug(employeeMileageList);
         List<String> mileagesList = new List<String>();    
         double mileages = 0;

@@ -53,12 +53,12 @@ global class DriverDashboardLWCController {
     // Method to count user logins based on contact ID
     public static Integer countUserLogin(String contactId){
         integer countLogin = 0;
-        User userObj = [SELECT id FROM User WHERE ContactId =: contactId WITH SECURITY_ENFORCED limit 1];
+        User userObj = [SELECT id FROM User WHERE ContactId =: contactId limit 1];
         if(userObj != null){
             for(LoginHistory objLogin : [SELECT id,Status 
                                                 FROM LoginHistory 
                                                 WHERE LoginUrl = 'https://mburse--partialdev.sandbox.my.site.com/app/adminlogin' 
-                                                    AND UserId =: userObj.Id WITH SECURITY_ENFORCED]){
+                                                    AND UserId =: userObj.Id]){
                 if(objLogin.Status == 'Success'){
                     countLogin = countLogin + 1;
                 }
@@ -456,8 +456,7 @@ global class DriverDashboardLWCController {
         try{
             List<ContentDocumentLink> contentDocLink = [SELECT ContentDocumentId,LinkedEntityId 
                                                                 FROM ContentDocumentLink 
-                                                                WHERE LinkedEntityId  =: contactId 
-                                                                WITH SECURITY_ENFORCED];
+                                                                WHERE LinkedEntityId  =: contactId];
             Set<Id> ids = new Set<Id>();
             for(ContentDocumentLink obj:  contentDocLink){
                 ids.add(obj.ContentDocumentId);
@@ -466,7 +465,6 @@ global class DriverDashboardLWCController {
                                                         FROM ContentDistribution
                                                         WHERE ContentDocumentId in : ids
                                                             AND (Name=: Constants.signedDocument OR Name LIKE '%Driver Agreement.pdf%')
-                                                            WITH SECURITY_ENFORCED
                                                             ORDER BY createddate DESC limit 1];
             wrapObj.obj_content_version = contentDist.ContentDownloadUrl;
         }catch(Exception e)
@@ -541,8 +539,7 @@ global class DriverDashboardLWCController {
         strOWEEmail = System.Label.Driver_Service_OWE;
         OrgWideEmailAddress[] owea = [SELECT Id, Address 
                                                 FROM OrgWideEmailAddress 
-                                                WHERE Address =: strOWEEmail
-                                                WITH SECURITY_ENFORCED];
+                                                WHERE Address =: strOWEEmail];
         String adminName;
         String driverName;
         String adminEmail;
@@ -583,7 +580,7 @@ global class DriverDashboardLWCController {
         templateId = [SELECT Id, Subject, HtmlValue, body 
                                 FROM EmailTemplate 
                                 WHERE developerName = 'SendAdminDrivingState' 
-                                WITH SECURITY_ENFORCED Limit 1];
+                               	Limit 1];
         if(templateId != null){
             newEmailBody = templateId.HtmlValue;
             String subjectModify;

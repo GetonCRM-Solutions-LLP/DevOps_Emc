@@ -42,7 +42,7 @@ public class WrapperUtils_Test {
         System.runAs(objAdmin) {
             
             objAccount1 = TestDataFactory.createAccount(true,'Delta account',true);
-            
+
             lstVehicleValue = TestDataFactory.createVehicleValue(true, objAccount1.Id, objVehicleUrlMap.Id);
             
             lstContact1 = TestDataFactory.createDriverContact(true, objAccount1.Id, 'Driver', objVehicleUrlMap.Name, 'paras.dhanani',  1);
@@ -129,7 +129,7 @@ public class WrapperUtils_Test {
     static void getComplianceCalculationTest2(){
         
         List<Account> lstAccounts = [SELECT Id FROM Account WHERE Name = 'Delta account' LIMIT 1];
-        List<Contact> lstDriverContact = [SELECT Id,monthly_compliance_status__c, Compliance_Mileage__c, Avg_Mileage__c FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
+        List<Contact> lstDriverContact = [SELECT Id,monthly_compliance_status__c, Compliance_Mileage__c, Avg_Mileage__c, AccountId FROM Contact WHERE Role__c = 'Driver' AND AccountId = :lstAccounts[0].id];
         
         
         List<Contact> lstAdminContact = [SELECT Id, showTeamRecord__c FROM Contact WHERE Role__c = 'Admin' AND AccountId = :lstAccounts[0].id];

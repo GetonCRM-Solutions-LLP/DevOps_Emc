@@ -296,7 +296,6 @@ public with sharing class ConfirmTripTimeERMIController {
                                                 EmployeeReimbursement__r.Contact_Id__r.Account.Bi_Weekly_Pay_Period__c,High_Risk_Mileage__c,Approval_Name__c
                                          FROM Employee_Mileage__c 
                                          WHERE Bi_Weekly_Reimbursement__c =: biweekReim 
-                                         WITH SECURITY_ENFORCED
                                          ORDER BY ConvertedStartTime__c asc])
                                          {
                                              mileages.add(BiWeeklyWrapperUtils.getMileagesOfReimbursement(miles));
