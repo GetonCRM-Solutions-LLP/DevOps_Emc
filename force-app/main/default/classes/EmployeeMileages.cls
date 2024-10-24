@@ -1,3 +1,13 @@
+/**
+ * @description       : 
+ * @author            : Harsita
+ * @group             : 
+ * @last modified on  : 22-10-2024
+ * @last modified by  : Harsita
+ * Modifications Log
+ * Ver   Date         Author    Modification
+ * 1.0   22-10-2024   Harsita   Initial Version
+**/
 public with sharing class EmployeeMileages 
 {    
     public string maintTyre {get;set;}
@@ -13,7 +23,7 @@ public with sharing class EmployeeMileages
     public String origin {get;set;}
     public String originname {get;set;}
     public String originalOriginName {get;set;}
-    public String OriginalDestinationName {get;set;}
+    public String originalDestinationName {get;set;}
     public String destination {get;set;}
     public String destinationname {get;set;}
     public String mileage {get;set;}
@@ -50,6 +60,6 @@ public with sharing class EmployeeMileages
     public String originalReimbursementid {get;set;}
     public EmployeeMileages() 
     {
-        
+        System.debug('EmployeeMileages Class Started');
     }
 }
