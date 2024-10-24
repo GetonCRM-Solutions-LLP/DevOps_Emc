@@ -78,14 +78,16 @@ export default class DriverManualEntry extends LightningElement {
     displayMileage = 0.00;
     exportFields = [
         {
-            "name": "activity",
-            "label": "Activity"
-        }, {
+            "name": "tracingStyle",
+            "label": "Tracking method"
+        },
+        {
+            "name": "day",
+            "label": "Day Of Week"
+        },
+        {
             "name": "tripDate",
             "label": "Trip Date"
-        }, {
-            "name": "day",
-            "label": "Day"
         }, {
             "name": "startTime",
             "label": "Start Time"
@@ -94,43 +96,31 @@ export default class DriverManualEntry extends LightningElement {
             "label": "End Time"
         }, {
             "name": "originName",
-            "label": "From Location Name"
+            "label": "Origin Name"
         }, {
             "name": "origin",
-            "label": "From Location Address"
+            "label": "Origin Address"
         }, {
             "name": "destinationName",
-            "label": "To Location Name"
+            "label": "Destination Name"
         }, {
             "name": "destination",
-            "label": "To Location Address"
-        }, {
-            "name": "mileage",
-            "label": this.mapCountry == 'CANADA' ? "Mileage (km)" : "Mileage (mi)"
-        }, {
-            "name": "tripStatus",
-            "label": "Status"
+            "label": "Destination Address"
+        },{
+            "name": "createdDate",
+            "label": "Date Entered"
+        },{
+            "name": "processDate",
+            "label": "Date Processed"
         }, {
             "name": "processBy",
-            "label": "Process By"
-        }, {
-            "name": "processDate",
-            "label": "Process Date"
-        }, {
-            "name": "state",
-            "label": this.mapCountry == 'CANADA' ? "Province" : "State"
+            "label": "Processed By"
         }, {
             "name": "tags",
             "label": "Tags"
         }, {
             "name": "notes",
             "label": "Notes"
-        }, {
-            "name": "createdDate",
-            "label": "Date Entered"
-        }, {
-            "name": "tracingStyle",
-            "label": "Tracking Method"
         }
     ];
 
@@ -175,7 +165,6 @@ export default class DriverManualEntry extends LightningElement {
             this.isDeleteAllVisivble = false;
             this.mileagesToDelete = [];
         }
-        console.log("this.mileagesToDelete : " + JSON.stringify(this.mileagesToDelete));
     }
 
     connectedCallback() {
@@ -202,13 +191,10 @@ export default class DriverManualEntry extends LightningElement {
     getMonthTrips(month) {
         this.totalMileage = 0.00;
         this.displayMileage = 0.00;
-        console.log("month : " + month);
-        console.log("this.contactId : " + this.contactId);
         this.showSpinner();
         getTrips({ contactId: this.contactId, selectedMonth: month })
         .then(result => {
             let convRes = JSON.parse(result);
-            console.log("Result from getTrips : " + JSON.stringify(convRes));
             if(convRes == 'No trips found for current month.') {
                 this.noTrips = true;
                 this.isMainCheckBoxVisible = false;
@@ -251,7 +237,6 @@ export default class DriverManualEntry extends LightningElement {
             }
         })
         .catch(error => {
-            console.log("Error from getTrips : " + JSON.stringify(error));
             this.hideSpinner();
             this.noTrips = true;
             this.isMainCheckBoxVisible = false;
@@ -349,8 +334,8 @@ export default class DriverManualEntry extends LightningElement {
         let dataToSort = this.tripsForOperations;
         let sortedData = dataToSort.slice().sort((a, b) => {
             if (this.colType === "Decimal") {
-                a[this.colName] = (typeof a[this.colName] === 'string') ? ((a[this.colName].indexOf('$') > -1) ? a[this.colName].replace(/\$/g, "") : a[this.colName]) : a[colName];
-                b[this.colName] = (typeof b[this.colName] === 'string') ? ((b[this.colName].indexOf('$') > -1) ? b[this.colName].replace(/\$/g, "") : b[this.colName]) : b[colName];
+                a[this.colName] = (typeof a[this.colName] === 'string') ? ((a[this.colName].indexOf('$') > -1) ? a[this.colName].replace(/\$/g, "") : a[this.colName]) : a[this.colName];
+                b[this.colName] = (typeof b[this.colName] === 'string') ? ((b[this.colName].indexOf('$') > -1) ? b[this.colName].replace(/\$/g, "") : b[this.colName]) : b[this.colName];
                 a = (a[this.colName] == null || a[this.colName] === 'null') ? '' : parseFloat(a[this.colName])
                 b = (b[this.colName] == null || b[this.colName] === 'null') ? '' : parseFloat(b[this.colName])
                 return a > b ? 1 * isReverse : -1 * isReverse;
@@ -478,8 +463,6 @@ export default class DriverManualEntry extends LightningElement {
                 this.dynamicBinding(this.tripsForOperations, this.headerData);
                 this.noTrips = false;
                 this.searchVisible = true;
-                console.log("After operation trips : " + JSON.stringify(this.allTrips));
-
                 let allUnapprovedTrips = this._tripsToDisplay.filter(record => record.isCheckbox == true);
                 let anyUnchecked;
                 if(allUnapprovedTrips.length > 0) {
@@ -565,7 +548,6 @@ export default class DriverManualEntry extends LightningElement {
     onNext = () => {
         var pageNo = this.pageNumber + 1;
         this.handleButtonNext()
-        //  console.log(this.paginate.length, pageNo)
         if (this.paginate.length > this.shortPaginate) {
             if (pageNo > 10) {
                 this.nextPrevChange(pageNo);
@@ -576,7 +558,6 @@ export default class DriverManualEntry extends LightningElement {
         var nextPage = this.pageNumber + 1;
         var maxPages = Math.ceil(this.totalRecords / this.pageSize);
         var pageBlock = this.template.querySelectorAll('.page-num-block');
-        //console.log("HANDLE NEXT");
         if (nextPage > 0 && nextPage <= maxPages) {
             pageBlock.forEach(item => {
                 if (item.dataset.id) {
@@ -604,7 +585,6 @@ export default class DriverManualEntry extends LightningElement {
             } else {
                 this.pages.splice(1, inclen, '...');
             }
-            //console.log("pages",JSON.stringify(this.pages));
         }
     }
     noPageChange(index) {
@@ -647,7 +627,6 @@ export default class DriverManualEntry extends LightningElement {
             })
             this.gotoPage(nowPage, this.tripsForOperations);
         }
-        // console.log("pagecount", nowPage, this.maxPages)
     }
     paginateChange(index) {
         var totalpage = this.paginate.length;
@@ -663,7 +642,6 @@ export default class DriverManualEntry extends LightningElement {
                 this.pages.splice(1, this.minPage, '...');
             }
         }
-        //console.log(this.pages);
     }
     reverseEndPaginate(index, nextClick) {
         if (nextClick === undefined) {
@@ -671,7 +649,6 @@ export default class DriverManualEntry extends LightningElement {
         }
         if (index < nextClick) {
             if (index >= 10) {
-                //  console.log("inside paginateChange")
                 this.paginateChange(index);
             } else {
                 this.maxPage = 10;
@@ -690,30 +667,12 @@ export default class DriverManualEntry extends LightningElement {
             }
 
         }
-        //  console.log('reverse:-', index, nextClick);
     }
     onLastPage(index) {
         let pageSkip = index - 10;
         this.pages = this.paginate.slice();
         this.pages.splice(1, pageSkip, '...');
     }
-    // paginateHelper() {
-    //     this._tripsToDisplay = [];
-    //     this.totalPages = Math.ceil(this.totalRecords / this.pageSize);
-    //     if (this.pageNumber <= 1) {
-    //         this.pageNumber = 1;
-    //     } else if (this.pageNumber >= this.totalPages) {
-    //         this.pageNumber = this.totalPages;
-    //     }
-    //     for (let i = (this.pageNumber - 1) * this.pageSize; i < this.pageNumber * this.pageSize; i++) {
-    //         if (i === this.totalRecords) {
-    //             break;
-    //         }
-    //         this._tripsToDisplay.push(this.originalTrips[i]);
-    //     }
-    //     console.log("this._tripsToDisplay : " + this._tripsToDisplay.length);
-    //     console.log('Total pages : ' + this.totalPages);
-    // }
 
     handleMonthChange(event) {
         this.searchkey = "";
@@ -795,9 +754,7 @@ export default class DriverManualEntry extends LightningElement {
 		mileageList.forEach(trip => {
 			let singleRecord = [];
 			for (const field of excelField) {
-                if(field == 'activity') {
-                    singleRecord.push('Business');
-                } else if(field == 'day') {
+                if(field == 'day') {
                     let date = new Date(trip.tripDate);
                     let dayOfWeek = date.toLocaleString('en-US', { weekday: 'short' });
                     singleRecord.push(dayOfWeek);
@@ -824,17 +781,11 @@ export default class DriverManualEntry extends LightningElement {
 			};
 			mileageToExport.push(singleRecord);
 		});
-		console.log('mileageToExport : ' + JSON.stringify(mileageToExport));
 		this.template.querySelector("c-export-excel").download(mileageToExport, filename, sheetName);
     }
 
     handleTripAccordian(event) {
-        let d = new Date();
-        let selectedDate = new Date(`${this.selectedMonth.label} 1, 2000`);
-        this.monthDifference = d.getMonth() - selectedDate.getMonth();
-
         let tripId = event.currentTarget.dataset.id;
-        console.log('tripId : ' + tripId);
         this._tripsToDisplay = this._tripsToDisplay.map(record => {
             if(record.id === tripId) {
                 return { ...record, isEditMode: !record.isEditMode };
@@ -853,32 +804,9 @@ export default class DriverManualEntry extends LightningElement {
             }
             return record;
         });
-        // if(event.currentTarget.rowIndex % 2 != 0) {
-        //     event.currentTarget.style.setProperty('border', '1px solid #E4E4E4', 'important');
-        //     event.currentTarget.style.setProperty('border-radius', '10px', 'important');
-        //     // let allChild = event.currentTarget.childNodes;
-        //     // for (let i = 0; i < allChild.length; i++) {
-        //     //     allChild[i].style.setProperty('border', '1px solid #E4E4E4', 'important');
-        //     //     if(i == 0) {
-        //     //         allChild[i].style.setProperty('border-left', '1px solid #E4E4E4', 'important');
-        //     //         allChild[i].style.setProperty('border-right', 'none', 'important');
-        //     //         allChild[i].style.setProperty('border-top-left-radius', '10px', 'important');
-        //     //         allChild[i].style.setProperty('border-bottom-left-radius', '10px', 'important');
-        //     //     } else if(i == (allChild.length - 1)) {
-        //     //         allChild[i].style.setProperty('border-right', '1px solid #E4E4E4', 'important');
-        //     //         allChild[i].style.setProperty('border-left', 'none', 'important');
-        //     //         allChild[i].style.setProperty('border-top-right-radius', '10px', 'important');
-        //     //         allChild[i].style.setProperty('border-bottom-right-radius', '10px', 'important');
-        //     //     } else {
-        //     //         allChild[i].style.setProperty('border-left', 'none', 'important');
-        //     //         allChild[i].style.setProperty('border-right', 'none', 'important');
-        //     //     }
-        //     // }
-        // }
     }
 
     handleCloseTrip(event) {
-        console.log("event in main compo : " + JSON.stringify(event.detail));
         let isNewTrip = event.detail.tripType;
         if(isNewTrip == true) {
             this.showNewTrip = true;
@@ -1099,7 +1027,6 @@ export default class DriverManualEntry extends LightningElement {
     }
 
     dynamicAddTrip(event) {
-        console.log('Trip at addition : ' + JSON.stringify(event.detail.tripNew));
         let date = new Date();
         let day = date.getDate();
         let month = date.getMonth() + 1;
@@ -1152,21 +1079,15 @@ export default class DriverManualEntry extends LightningElement {
             this._tripsToDisplay.push(newTrip);
             this.originalTrips.push(newTrip);
             this.tripsForOperations.push(newTrip);
-            // this.dynamicBinding(this._tripsToDisplay, this.headerData);
-            // this.dynamicBinding(this.originalTrips, this.headerData);
-            // this.dynamicBinding(this.tripsForOperations, this.headerData);
-            // this._tripsToDisplay = JSON.parse(JSON.stringify(this._tripsToDisplay));
             this.totalMileage += parseFloat(newTrip.mileage);
 
             this.gotoPage(this.pageNumber, this.tripsForOperations);
             this.setPages();
             this.defaultSort();
         }
-        console.log("After addition trips : " + JSON.stringify(this.allTrips));
     }
 
     dynamicUpdateTrip(event) {
-        console.log('Trip at updation : ' + JSON.stringify(event.detail));
         let updtTrip = {
             id: event.detail.Id,
             tripStatus: event.detail.Trip_Status__c,
@@ -1222,7 +1143,6 @@ export default class DriverManualEntry extends LightningElement {
         this.dynamicBinding(this.originalTrips, this.headerData);
         this.dynamicBinding(this.tripsForOperations, this.headerData);
         this._tripsToDisplay = JSON.parse(JSON.stringify(this._tripsToDisplay));
-        console.log("After updation trips : " + JSON.stringify(this.allTrips));
     }
 
     dynamicDeleteTrip(event) {
@@ -1240,10 +1160,6 @@ export default class DriverManualEntry extends LightningElement {
         if (indexOfOperationTrips !== -1) {
             this.tripsForOperations.splice(indexOfOperationTrips, 1);
         }
-        // this.dynamicBinding(this._tripsToDisplay, this.headerData);
-        // this.dynamicBinding(this.originalTrips, this.headerData);
-        // this.dynamicBinding(this.tripsForOperations, this.headerData);
-        // this._tripsToDisplay = JSON.parse(JSON.stringify(this._tripsToDisplay));
 
         this.totalRecords = this.originalTrips.length;
         if(this.totalRecords <= 0) {

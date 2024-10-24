@@ -1,19 +1,15 @@
-:host{
-    --color-white: #ffffff;
-    --color-light: #ededed;
-    --color-border: #D7D7D7;
-    --color-dark: #454545;
-    --color-blue: #1a9de1;
-    --color-green: #7ABB4A;
-}
-
 @keyframes animFw {
-    0% { width: 0}
-    100% { width:100%}
+    0% {
+        width: 0
+    }
+
+    100% {
+        width: 100%
+    }
 }
 
-*{
-    font-family: 'Proxima Nova' !important;
+* {
+    font-family: var(--app-light-font);
 }
 
 .fa,
@@ -31,112 +27,100 @@
 }
 
 .container {
-    /* max-width: 80rem; */
     width: 100%;
     height: auto;
-    /* margin: 0 auto;
-    padding: 0 2rem; */
-  }
-  
- 
-.accordion {
-      max-width: 100%;
-      height: auto;
-      /* position: relative; */
-      /* margin: 0 auto;
-      padding: 4rem 0 2rem 0; */
-}
-  
- .accordion-item {
-        overflow: hidden;
-        outline: none;
-        border: 1px solid #d7d7d7;
-        border-radius: 20px;
-        justify-content: space-between;
-        /* padding: 1em; */
-        margin: 0 0 1em 0;
- }
-  
-.accordion-item  .title {
-          display: flex;
-          /* justify-content: space-between; */
-          align-items: center;
-          cursor: pointer;
-          font-family: 'Proxima Nova Bold' !important;
-          font-size: 18px;
-          line-height: 18px;
-          color: var(--color-green);
 }
 
-.title span{
+
+.accordion {
+    max-width: 100%;
+    height: auto;
+}
+
+.accordion-item {
+    overflow: hidden;
+    outline: none;
+    border: 1px solid #d7d7d7;
+    border-radius: 20px;
+    justify-content: space-between;
+    margin: 0 0 1em 0;
+}
+
+.accordion-item .title {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--app-bold-font);
+    font-size: 18px;
+    line-height: 18px;
+    color: var(--app-green-color);
+}
+
+.title span {
     width: fit-content;
     padding-right: 22px;
-    /* width: 13em; */
 }
 
-.title-TA span{
+.title-TA span {
     width: 4em;
 }
 
-.accordion-item  .title  i.fas {
-            font-size: 0.9rem;
-            line-height: 0.5 !important;
-            padding-top: 2.5px;
-            color: var(--color-green);
-            transform: translateX(-50%) rotate(0);
-            transition: transform 0.15s ease;
-}
-
-.accordion-item  .title-TA {
-    display: flex;
-    /* justify-content: space-between; */
-    align-items: center;
-    cursor: pointer;
-    font-family: 'Proxima Nova Bold' !important;
-    font-size: 18px;
-    line-height: 18px;
-    color: var(--color-green);
-}
-
-.accordion-text{
-    font-family: 'Proxima Nova Bold' !important;
-}
-
-.accordion-item .title-TA  i.fas {
+.accordion-item .title i.fas {
     font-size: 0.9rem;
     line-height: 0.5 !important;
-    color: var(--color-green);
+    padding-top: 2.5px;
+    color: var(--app-green-color);
+    transform: translateX(-50%) rotate(0);
+    transition: transform 0.15s ease;
+}
+
+.accordion-item .title-TA {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-family: var(--app-bold-font);
+    font-size: 18px;
+    line-height: 18px;
+    color: var(--app-green-color);
+}
+
+.accordion-text {
+    font-family: var(--app-bold-font);
+}
+
+.accordion-item .title-TA i.fas {
+    font-size: 0.9rem;
+    line-height: 0.5 !important;
+    color: var(--app-green-color);
     transform: translateX(-50%) rotate(90deg);
     transition: transform 0.15s ease;
 }
 
 .accordion-item .paragraph {
-          font-family: inherit;
-          font-size: 1rem;
-          font-weight: normal;
-          line-height: inherit;
-          color: var(--color-dark);
-          /* position: relative; */
-          display: none;
-          padding: 0 1em 1em 1em;
-          /* padding: 0.5rem 0; */
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: normal;
+    line-height: inherit;
+    color: var(--color-dark);
+    display: none;
+    padding: 0 1em 1em 1em;
 }
 
 .accordion-item.active .title i.fas {
-    color: var(--color-green);
+    color: var(--app-green-color);
     transform: translateX(-50%) rotate(90deg);
 }
 
 .accordion-item.active .title-TA i.fas {
-    color: var(--color-green);
+    color: var(--app-green-color);
     transform: translateX(-50%) rotate(0deg);
 }
-       
+
 .accordion-item.active .paragraph {
-        display: block;
+    display: block;
 }
 
-.accordion-item.active .accordion-head{
+.accordion-item.active .accordion-head {
     border-bottom: 1px solid #E4E4E4;
 }
 
@@ -144,16 +128,15 @@
     display: none;
 }
 
-.accordion-item.active .btn-trip{
-   display: flex;
+.accordion-item.active .btn-trip {
+    display: flex;
 }
 
-.accordion-head{
+.accordion-head {
     display: flex;
     padding: 1em;
     background: #F1F8EC;
     position: relative;
-    /* border-bottom: 1px solid #E4E4E4; */
 }
 
 .accordion-item .paragraphTA {
@@ -166,14 +149,11 @@
 }
 
 .slds-btn {
-    /* margin: .375rem; */
     word-wrap: break-word;
     white-space: normal;
     cursor: pointer;
     border: 0;
     border-radius: .125rem;
-    /* -webkit-box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
-    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%); */
 }
 
 .waves-effect:focus {
@@ -187,14 +167,7 @@
     font-size: 14px;
 }
 
-.btn-trip{
-    /* border-radius: 10px;
-    display: flex;
-    flex-direction: row;
-    gap: 8px;
-    align-items: center;
-    text-decoration: none !important;
-    color: var(--color-white) !important; */
+.btn-trip {
     display: inline-block;
     text-align: center;
     white-space: nowrap;
@@ -212,28 +185,28 @@
 
 .bc-green {
     background: none !important;
-    background-color: var(--color-green)!important;
-    font-family: 'Proxima Nova Bold' !important;
-    color: var(--color-white);
+    background-color: var(--app-green-color) !important;
+    font-family: var(--app-bold-font);
+    color: var(--app-white-color);
 }
 
-.systemText{
-    font-family: 'Proxima Nova Bold' !important;
+.systemText {
+    font-family: var(--app-bold-font);
     font-size: 24px;
-    color: var(--color-green);
+    color: var(--app-green-color);
 }
 
-.emc-flex{
+.emc-flex {
     display: flex;
     flex-flow: column;
 }
 
-.loader-img{
+.loader-img {
     width: 90px;
     padding-top: 8px;
 }
 
-.download-svg{
+.download-svg {
     margin-right: 6px;
     margin-top: 3px;
 }

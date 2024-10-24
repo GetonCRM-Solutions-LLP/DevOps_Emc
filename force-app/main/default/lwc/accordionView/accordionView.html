@@ -6,7 +6,6 @@
                     <template for:each={accordionData} for:item="accList">
                         <div class={accList.classType} key={accList.Id} data-year={accList.yearName}
                             onclick={fetchReimbursement} style="position: relative;">
-                            <!-- <template lwc:if={isRecord}> -->
                             <template lwc:if={hrClass}>
                                 <div lwc:if={listOfRecord} id={accList.Id} style="position: absolute;
                                                                                     top: 112px;
@@ -14,7 +13,6 @@
                                                                                     z-index: 1;
                                                                                     width: 100vw;
                                                                                     margin-left: -20px;"></div>
-                                <!-- <c-hr-custom key={accList.Id} class="border-head"></c-hr-custom> -->
                             </template>
                             <div class="accordion-head">
                                 <h3 class="title slds-p-vertical_x-small slds-p-left_small">
@@ -55,49 +53,10 @@
                                         is-sortable={sortable}></c-user-preview-table>
                                 </div>
                             </template>
-                            <!-- </template> -->
-                            <!-- <template lwc:else>
-                                            <div class="slds-align_absolute-center slds-m-around_xx-large">
-                                                <div class="emc-flex" style="width: 100%; height: calc(100vh - 34rem);
-                                                                                    justify-content: center;">
-                                                    <div class="loader-img slds-align_absolute-center">
-                                                        <img src={loadingGif} />
-                                                    </div>
-                                                    <div class="systemText slds-align_absolute-center slds-p-around_small"> Please wait, while
-                                                        historical data is processing...</div>
-                                                </div>
-                                        
-                                            </div>
-                                        </template> -->
                         </div>
                     </template>
                 </template>
-
-                <!-- <div class="accordion-item" onclick={toggleList}>
-                            <h3 class="title">
-                                <span>Second accordion item</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </h3>
-                            <p class="paragraph">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Blanditiis asperiores sit, optio
-                                odio assumenda laudantium quis culpa. Rerum eveniet, ipsum neque sunt laudantium, tempora
-                                consequatur maxime quibusdam doloribus, pariatur magni rem minus ducimus sint aliquam
-                                reprehenderit distinctio. Iusto obcaecati nemo ipsam corporis excepturi quos illo, error,
-                                voluptate enim. Velit, incidunt.
-                            </p>
-                        </div> -->
-                <!-- <div class="accordion-item">
-                            <h3 class="title">
-                                <span>Third accordion item</span>
-                                <i class="fas fa-chevron-down"></i>
-                            </h3>
-                            <p class="paragraph">
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque obcaecati molestiae
-                                asperiores, quo provident velit perferendis facere ullam. Voluptas, inventore.
-                            </p>
-                        </div> -->
             </div>
-
         </div>
     </div>
 

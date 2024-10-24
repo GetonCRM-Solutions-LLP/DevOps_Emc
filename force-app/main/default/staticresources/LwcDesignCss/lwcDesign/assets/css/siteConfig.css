@@ -11,6 +11,9 @@
     --app-border-color: #E4E4E4;
     --app-blue-color: #00AFE8;
     --app-box-shadow-none: none;
+    --app-bold-font: 'Proxima Nova Bold';
+    --app-light-font: 'Proxima Nova';
+    --app-semi-bold-font: 'Proxima Nova Semibold';
 }
 
 .header-title, .header-title--v1, .download-th, .header-checkbox, .preview-holder, .preview-cell{

@@ -1,4 +1,3 @@
-/* eslint-disable @lwc/lwc/no-async-operation */
 /* eslint-disable no-undef */
 /* eslint-disable no-restricted-globals */
 import { LightningElement, api, track } from 'lwc';
@@ -86,8 +85,6 @@ export default class WeeklyTimesheet extends LightningElement {
         var requestInfo = [], driverDash;
         this.showSpinner();
         let element = this.getElement(this.biweekList, 0);
-        // adminDash = "/app/adminProfileDashboard?accid="+this.accountId+"&id="+this.contactId+"&admindriver="+this.admindriver+"&showteam="+this.showteam;
-        // managerDash = "/app/managerProfileDashboard?accid="+this.accountId+"&id="+this.contactId+"&showteam="+this.showteam;
         driverDash = "/app/driverProfileDashboard?accid="+this.accountId+"&id="+this.contactId;
         element.countErrorCheck =  (element.errorCheck === true) ? ((element.countErrorCheck) + 1) : element.countErrorCheck;
         this.biweekList.forEach(function(md){
@@ -112,7 +109,6 @@ export default class WeeklyTimesheet extends LightningElement {
         }).then((data) => {
             if(data === 'Success'){
                 this.hideSpinner();
-                console.log( JSON.stringify(requestInfo));
                 if (requestInfo[0].errorCheck === true && requestInfo[0].countErrorCheck < 4) {
                     this.isTimesheet = false;
                } else {
@@ -136,7 +132,6 @@ export default class WeeklyTimesheet extends LightningElement {
                     }
                 }
             }
-            console.log(data)
         }).catch(err=> {
             this.hideSpinner();
             console.log(this.parseError(err));
@@ -144,40 +139,34 @@ export default class WeeklyTimesheet extends LightningElement {
     }
 
     submitRequestSync(){
-        var  _stDate , _endDate, _splitList, search;
+        var  stDate , endDate, splitList, search;
         this.showSpinner();
         let element = this.getElement(this.biweekList, 0);
         let params = new URL(document.location).searchParams;
         search = params.get("sync");
-        _splitList =   element.biWeekPayperiod.split(" to ");
-        _stDate = _splitList[0];
-        _endDate = _splitList[1];
+        splitList =   element.biWeekPayperiod.split(" to ");
+        stDate = splitList[0];
+        endDate = splitList[1];
         deleteTripsForErmi({
             contactId: this.contactId,
-            startdate: _stDate,
-            enddate: _endDate
+            startdate: stDate,
+            enddate: endDate
         }).then((result) => {
             if(result === 'success'){
                 syncTripsForErmi({
                     contactId: this.contactId,
-                    startdate: _stDate,
-                    enddate: _endDate
+                    startdate: stDate,
+                    enddate: endDate
                 }).then((data) => {
                     if(data === 'sucess'){
-                       // this.hideSpinner();
-                       console.log("/app/driverDashboardWeekly" + (location.search).replace(`&sync=${search}`, '') +"&sync="+element.countErrorCheck)
                        window.location.href =  "/app/driverDashboardWeekly" + (location.search).replace(`&sync=${search}`, '') +"&sync="+element.countErrorCheck;
                     }
-                    console.log(result)
-                }).catch(err=> {
+                }).catch(()=>{
                     this.hideSpinner();
-                    console.log(this.parseError(err));
                 })
             }
-            console.log(result)
-        }).catch(err=> {
+        }).catch(()=> {
             this.hideSpinner();
-            console.log(this.parseError(err));
         })
     }
 
@@ -190,10 +179,10 @@ export default class WeeklyTimesheet extends LightningElement {
         let fileName = this.driverName + '\'s Detail Report';
         let sheetName = "Weekly Report";
         let excelList = this.excelList;
-        mileage.push(["Contact Email", "Tracing Style", "Day Of Week", "Trip Date", "Start Time", "End Time", "Trip Origin", "Trip Destination", "Mileage", "Status", "Date Submitted", "Date Approved", "Maint/Tires", "Fuel Rate", "Variable Rate", "Variable", "Trip Type", "Drive Time", "Stay Time", "Total Time", "Notes", "Tags"]);
+        mileage.push(["Email", "Tracking method", "Day Of Week", "Trip Date", "Start Time", "End Time", "Origin Name", "Origin Address", "Destination Name", "Destination Address", "Mileage", "Status", "Date Submitted", "Date Processed", "Processed By", "Tags", "Notes", "Maint/Tires", "Fuel Rate", "Mi Rate", "Drive Time", "Stay Time", "Total Time", "Trip Type", "Amount"]);
         excelList.forEach((item) => {
           mileage.push([
-            item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.origin, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate, item.maintTyre, item.fuelVariableRate, item.variablerate, item.variableamount, item.tripActivity, item.drivingtime, item.staytime, item.totaltime, item.notes, item.tag
+            item.emailaddress, item.tracingstyle, item.dayofweek, item.tripdate, item.starttime, item.endtime, item.originname, item.origin, item.destinationname, item.destination, item.mileage, item.status, item.submitteddate, item.approveddate, item.approvalName, item.tag, item.notes, item.maintTyre, item.fuelVariableRate, item.variablerate, item.drivingtime, item.staytime, item.totaltime, item.tripActivity, item.variableamount
           ]);
         });
         this.excelToExport(mileage, fileName, sheetName);
@@ -203,7 +192,6 @@ export default class WeeklyTimesheet extends LightningElement {
     async connectedCallback(){
         if(this.mileageList){
             this.biweekList = this.proxyToObject(this.mileageList);
-           // this.downloadBtn = (this.biweekId !== undefined || this.biweekId !== "") ? true : false;
             this.headerTitle = (this.driverType) ? (this.driverType !== 'Driver - Salary') ? 'Weekly Time Sheet' : 'Weekly Mileage Approval' : this.headerTitle;
             this.confirmMessage = (this.driverType) ? (this.driverType !== 'Driver - Salary') ? 'This week’s hours/mileage is correct' : 'This week’s mileage is correct' : this.confirmMessage;
             this.errorMessage = (this.driverType) ? (this.driverType !== 'Driver - Salary') ? 'There are errors with my time/mileage' : 'There are errors on my mileage'  : this.errorMessage;
@@ -214,9 +202,9 @@ export default class WeeklyTimesheet extends LightningElement {
                 }
             }
             else {
-                    if (this.biweekList[0] !== undefined &&  this.biweekList[0].countErrorCheck === 3) {//2
-                        this.errorMessage = "There are still errors with my mileage Contact Support"
-                    }
+                if (this.biweekList[0] !== undefined &&  this.biweekList[0].countErrorCheck === 3) {//2
+                    this.errorMessage = "There are still errors with my mileage Contact Support"
+                }
             }
         }
 
@@ -225,10 +213,8 @@ export default class WeeklyTimesheet extends LightningElement {
         }).then((result) => {
             if(result){
                 this.excelList = this.proxyToObject(result);
-                console.log(this.excelList)
                 this.downloadBtn = (this.biweekId !== undefined || this.biweekId !== "") && (this.excelList.length > 0) ? true : false;
             }
-            console.log('reimMileages--', result)
         }).catch(err=> {
             console.log(this.parseError(err));
         })

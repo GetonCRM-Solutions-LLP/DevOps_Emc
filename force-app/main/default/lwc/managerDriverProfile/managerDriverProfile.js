@@ -12,13 +12,12 @@ export default class ManagerDriverProfile extends LightningElement {
   @api accountId;
   @api redirectDashboard;
   @api role;
+  activationDate;
   tripView = false;
   archive = false;
   ytdList;
   excelYtdList;
   mileageList;
-  _contactId;
-  _accountId;
   startDt;
   endDt;
   biweekId;
@@ -30,7 +29,7 @@ export default class ManagerDriverProfile extends LightningElement {
   dateOfExpiration;
 
   handleToast() {
-    let toast = { type: 'error', message: 'No mileage' }
+    const toast = { message: 'No mileage', type: 'error' }
     toastEvents(this, toast);
   }
 
@@ -44,14 +43,14 @@ export default class ManagerDriverProfile extends LightningElement {
     this.tripView = false;
   }
 
-  proxyToObject(e) {
-    return JSON.parse(e);
+  proxyToObject(el) {
+    this.evt = el;
+    return JSON.parse(this.evt);
   }
 
 
 
   showSpinner(event) {
-    console.log("navigate spin")
     this.dispatchEvent(
         new CustomEvent("profile", {
                 detail: event.detail
@@ -61,14 +60,13 @@ export default class ManagerDriverProfile extends LightningElement {
 
   myTripDetail(event) {
     this.biweek = event.detail.boolean;
-    console.log("biweek", this.biweek)
-    if (event.detail.boolean !== undefined) {
+    if (event.detail.boolean) {
         if (event.detail.boolean === false) {
             this.monthOfTrip = event.detail.month;
             this.yearOfTrip = event.detail.year;
             this.tripView = true;
         } else {
-            let listVal = event.detail.trip;
+            const listVal = event.detail.trip;
             this.startDt = listVal.startDate;
             this.endDt = listVal.endDate;
             this.biweekId = listVal.id;
@@ -79,7 +77,7 @@ export default class ManagerDriverProfile extends LightningElement {
 
 
   revertHandler(){
-    let backTo = (this.redirectDashboard) ? 'Dashboard' : '';
+    const backTo = (this.redirectDashboard) ? 'Dashboard' : '';
     this.dispatchEvent(
         new CustomEvent("back", {
             detail: backTo
@@ -88,17 +86,12 @@ export default class ManagerDriverProfile extends LightningElement {
   }
 
   connectedCallback() {
-    var currentDay = new Date(),
-      currentYear = "",
-      selectedYear = "";
+    const currentDay = new Date(), first = 1, index = 0;
+    let currentYear = "", selectedYear = "";
     this.currentDate = validateDate(new Date());
-    //this.currentDate = 'null';
-    console.log("contactId", this.contactId)
-    this._contactId = this.contactId;
-    this._accountId = this.accountId;
     this.isHomePage = false;
-    if (currentDay.getMonth() === 0) {
-      currentYear = currentDay.getFullYear() - 1;
+    if (currentDay.getMonth() === index) {
+      currentYear = currentDay.getFullYear() - first;
       selectedYear = currentYear.toString();
     } else {
       currentYear = currentDay.getFullYear();
@@ -107,15 +100,15 @@ export default class ManagerDriverProfile extends LightningElement {
 
   
     getAllReimbursements({
-      year: selectedYear,
-      contactId: this._contactId,
-      accountId: this._accountId
+      accountId: this.accountId,
+      contactId: this.contactId,
+      year: selectedYear
     })
       .then((result) => {
-        let reimbursementList = this.proxyToObject(result[0]);
+        const reimbursementList = this.proxyToObject(result[index]);
         this.mileageList = reimbursementList;
-        this.excelYtdList = this.proxyToObject(result[1]);
-        this.ytdList = this.proxyToObject(result[1]);
+        this.excelYtdList = this.proxyToObject(result[first]);
+        this.ytdList = this.proxyToObject(result[first]);
         if (this.ytdList) {
           this.ytdList.varibleAmountCalc = this.ytdList.varibleAmountCalc
             ? this.ytdList.varibleAmountCalc.replace(/\$/g, "")
@@ -131,22 +124,19 @@ export default class ManagerDriverProfile extends LightningElement {
             ? this.ytdList.totalAVGCalc.replace(/\$/g, "")
             : this.ytdList.totalAVGCalc;
         }
-        console.log("getAllReimbursement", result);
         getDriverDetails({
-          contactId: this._contactId
+          contactId: this.contactId
         })
           .then((data) => {
             if (data) {
-              let contactList = this.proxyToObject(data);
+              const contactList = this.proxyToObject(data);
               this.contactInformation = data;
-              console.log("contact--->", this.contactInformation);
-              this.userTriplogId = contactList[0].Triplog_UserID__c;
-              this.userEmail = contactList[0].External_Email__c;
-              this.userName = contactList[0].Name;
-              this.firstName = contactList[0].FirstName;
-              this.dateOfExpiration = contactList[0].Expiration_Date__c;
-              console.log("Name", this.userName, this.userEmail);
-              // this.driverNotification(contactList[0].Notification_Message__c, contactList[0].Notification_Date__c, contactList[0].Insurance_Upload_Date__c);
+              this.userTriplogId = contactList[index].Triplog_UserID__c;
+              this.userEmail = contactList[index].External_Email__c;
+              this.userName = contactList[index].Name;
+              this.firstName = contactList[index].FirstName;
+              this.dateOfExpiration = contactList[index].Expiration_Date__c;
+              this.activationDate = contactList[index].Activation_Date__c;
             }
           })
           .catch((error) => {

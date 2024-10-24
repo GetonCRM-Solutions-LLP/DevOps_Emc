@@ -39,6 +39,24 @@ const typeOfTrip = (list, adId) => {
   listType.accApi = list.TripLogApi;
   return listType;
 }
+
+const createExportDetailList = (detailList, headers, keys) => {
+  const exportDetailList = [];
+  
+  // Add the header row
+  exportDetailList.push(headers);
+
+  // Use map to transform the detailList into the desired format
+  const details = detailList.map(item => 
+      keys.map(key => item[key])
+  );
+
+  // Concatenate the details to the exportDetailList
+  exportDetailList.push(...details);
+
+  return exportDetailList;
+}
+
 const formatData = (data, pID, aID) => {
     var  tripData = [];
     data.forEach((row) => {
@@ -391,5 +409,6 @@ export
     typeOfTrip,
     formatList,
     toDate,
+    createExportDetailList,
     sessionRemoval
 }

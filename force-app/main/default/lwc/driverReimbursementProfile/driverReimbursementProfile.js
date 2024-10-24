@@ -1,4 +1,3 @@
-/* eslint-disable @lwc/lwc/no-api-reassignments */
 import { LightningElement, api, wire } from "lwc";
 import carImage from "@salesforce/resourceUrl/EmcCSS";
 import resourceImage from "@salesforce/resourceUrl/mBurseCss";
@@ -508,12 +507,7 @@ export default class DriverReimbursementProfile extends LightningElement {
   }
 
   daysBetweenActivation(dateInitial, dateFinal){
-    console.log(dateInitial, dateFinal)
-    let  initialMonth = dateInitial.getMonth();
-    let  initialYear = dateInitial.getFullYear();
-    let  currentMonth = dateFinal.getMonth();
-    let  currentYear = dateFinal.getFullYear();
-    if(initialMonth === currentMonth && initialYear === currentYear){
+    if(dateInitial >= dateFinal){
       return true
     }else{
       return false
@@ -642,7 +636,7 @@ export default class DriverReimbursementProfile extends LightningElement {
         month: "short"
       });
     let  initialMonth = dateInitial.getMonth(), month;
-    if(initialMonth === day){
+    if(initialMonth >= day){
       month = formatter.format(
         new Date(date.getFullYear(), date.getMonth() + 1)
       );
@@ -689,7 +683,6 @@ export default class DriverReimbursementProfile extends LightningElement {
 
   isTodayBefore(){
     const date = new Date();
-    var day = date.getDate();
     const formatter = new Intl.DateTimeFormat("default", {
         month: "long"
       });
@@ -1155,12 +1148,14 @@ export default class DriverReimbursementProfile extends LightningElement {
       let fileName = this.contactName +  '\'s ' + this.thisMonth + ' Mileage Report ' + this.dateTime(new Date());
       let sheetName = (this.thisMonth) ? this.thisMonth + ' Month Mileage Report' : 'This Month Mileage Report';
       mileage.push([
-        "Contact Email",
+        "Email",
         "Trip Date",
         "Start Time",
         "End Time",
-        "Trip Origin",
-        "Trip Destination",
+        "Origin Name",
+        "Origin Address",
+        "Destination Name",
+        "Destination Address",
         "Mileage",
         "Status"
       ]);
@@ -1171,6 +1166,7 @@ export default class DriverReimbursementProfile extends LightningElement {
           item.starttime,
           item.endtime,
           item.originname,
+          item.origin,
           item.destinationname,
           item.mileage,
           item.status
@@ -1184,24 +1180,27 @@ export default class DriverReimbursementProfile extends LightningElement {
       let sheetName = (this.lastMonth) ? this.lastMonth + ' Month Mileage Report' : 'Last Month Mileage Report';
       if(this.isNotIRS){
         mileage.push([
-          "Contact Email",
-          "Tracking Style",
+          "Email",
+          "Tracking method",
           "Day Of Week",
           "Trip Date",
           "Start Time",
           "End Time",
-          "Trip Origin",
-          "Trip Destination",
+          "Origin Name",
+          "Origin Address",
+          "Destination Name",
+          "Destination Address",
           "Mileage",
           "Status",
           "Date Submitted",
-          "Date Approved",
+          "Date Processed",
+          "Processed By",
+          "Tags",
+          "Notes",
           "Maint/Tires",
           "Fuel Rate",
           "Variable Rate",
-          "Amount",
-          "Notes",
-          "Tags"
+          "Amount"
         ]);
         this.lastModelList.forEach((item) => {
           mileage.push([
@@ -1212,37 +1211,43 @@ export default class DriverReimbursementProfile extends LightningElement {
             item.starttime,
             item.endtime,
             item.originname,
+            item.origin,
             item.destinationname,
+            item.destination,
             item.mileage,
             item.status,
             item.submitteddate,
             item.approveddate,
+            item.approvalName,
+            item.tag,
+            item.notes,
             item.maintTyre,
             item.fuelVariableRate,
             item.variablerate,
-            item.variableamount,
-            item.notes,
-            item.tag
+            item.variableamount
           ]);
         });
       }else{
         mileage.push([
-          "Contact Email",
-          "Tracking Style",
+          "Email",
+          "Tracking method",
           "Day Of Week",
           "Trip Date",
           "Start Time",
           "End Time",
-          "Trip Origin",
-          "Trip Destination",
+          "Origin Name",
+          "Origin Address",
+          "Destination Name",
+          "Destination Address",
           "Mileage",
           "Status",
           "Date Submitted",
-          "Date Approved",
-          "Variable Rate",
-          "Amount",
+          "Date Processed",
+          "Processed By",
+          "Tags",
           "Notes",
-          "Tags"
+          "Variable Rate",
+          "Amount"
         ]);
         this.lastModelList.forEach((item) => {
           mileage.push([
@@ -1253,15 +1258,18 @@ export default class DriverReimbursementProfile extends LightningElement {
             item.starttime,
             item.endtime,
             item.originname,
+            item.origin,
             item.destinationname,
+            item.destination,
             item.mileage,
             item.status,
             item.submitteddate,
             item.approveddate,
-            item.variablerate,
-            item.variableamount,
+            item.approvalName,
+            item.tag,
             item.notes,
-            item.tag
+            item.variablerate,
+            item.variableamount
           ]);
         });
       }
@@ -1809,7 +1817,7 @@ export default class DriverReimbursementProfile extends LightningElement {
     let previousMonthNo = currentDate.getMonth() - 1;
     this.year = currentDate.getFullYear();
     this.thisMonth = this.getMonthName(monthNo);
-    this.daysAfterActivation = this.daysBetweenActivation(new Date(this.activationDate), new Date(currDate.getFullYear(), currDate.getMonth(), 4));
+    this.daysAfterActivation = this.daysBetweenActivation(new Date(this.activationDate), new Date(currDate.getFullYear(), currDate.getMonth(), 1));
     this.lastMonth =
       previousMonthNo >= 0
         ? this.getMonthName(previousMonthNo)
